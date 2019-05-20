@@ -1,0 +1,13 @@
+<?php
+
+namespace App\models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Agency extends Model
+{
+    protected $connection = "2019";
+
+    protected $fillable = ["HOST_COUNTRY_ID", "ACRONYM", "AGENCYNAME", "POBOX", "LOCATION", "PHY_ADDRESS", "HCA", "PIN_NO", "DATE_ACCREDITED", "EMAIL", "OFFICE_NO", "FOCAL_POINT", "FP_EMAIL", "FP_MOBILE_NO"];
+    
+}
