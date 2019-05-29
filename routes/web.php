@@ -14,4 +14,6 @@
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/sample', 'Test\SampleController@index');
+Route::get('/pmauthentication', 'Test\SampleController@pmauth');
 Route::get('/{any}', 'Api\AppController@index')->where('any', '.*');

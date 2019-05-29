@@ -323,7 +323,7 @@
 	import { Datetime } from 'vue-datetime'
 	import ContractDetails from './principal/ContractDetails'
 	import VehicleList from './vehicle/VehicleList'
-	import Passports from './dependent/passports'
+	import Passports from './dependent/Passports'
 	export default {
 		components: { datetime: Datetime, ContractDetails, VehicleList, Passports },
 		data() {
