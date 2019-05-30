@@ -34,6 +34,8 @@ Route::prefix('principal')->group(function(){
 	Route::post('/dependent/add', 'Api\PrincipalController@addDependent');
 	Route::post('/dependent/edit', 'Api\PrincipalController@editDependent');
 	Route::delete('/dependent', 'Api\PrincipalController@deleteDependent');
+
+	Route::get('/search', 'Api\PrincipalController@searchPrincipal');
 });
 
 Route::prefix('agencies')->group(function(){

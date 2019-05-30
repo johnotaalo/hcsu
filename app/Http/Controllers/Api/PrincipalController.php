@@ -77,6 +77,10 @@ class PrincipalController extends Controller
     	];
     }
 
+    function searchPrincipal(Request $request){
+        return Principal::all();
+    }
+
     function add(Request $request){
         $principal = new Principal();
         $imagePath = null;

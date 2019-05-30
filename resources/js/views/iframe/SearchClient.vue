@@ -61,6 +61,7 @@
 					{ text: "Staff Member", value: 'staff-member' }
 				],
 				agencies: [],
+				staffMembers: [],
 				selectedAgency: {},
 				selectedStaff: {},
 				host_country_id: 0
@@ -71,10 +72,21 @@
 				loading(true)
 				this.search(loading, search, this)
 			},
+			onStaffSearch(search, loading){
+				loading(true)
+				this.staffSearch(loading, search, this)
+			},
 			search: _.debounce( (loading, search, vm) => { 
 				axios(`/api/agencies/search?q=${escape(search)}`)
 				.then((res) => {
 					vm.agencies = res.data
+					loading(false)
+				})
+			}, 350),
+			staffSearch: _.debounce( (loading, search, vm) => {
+				axios(`/api/principal/search?q=${escape(search)}`)
+				.then((res) => {
+					vm.staffMembers = res.data
 					loading(false)
 				})
 			}, 350)
