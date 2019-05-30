@@ -21,7 +21,7 @@
 			</div>
 		</nav>
  -->
-		<nav class="navbar navbar-expand-lg navbar-light" id="topnav">
+		<nav v-if="!iframe" class="navbar navbar-expand-lg navbar-light" id="topnav">
 			<div class="container">
 
 				<!-- Toggler -->
@@ -116,8 +116,8 @@
 
         </div> <!-- / .container -->
       </nav>
-		<main class="py-4">
-			<div class="container">
+		<main v-bind:class="{'py-4': !iframe}">
+			<div v-bind:class="{ container: !iframe}">
 				<router-view></router-view>
 				<notifications group="foo" />
 			</div>
@@ -126,5 +126,9 @@
 	</div>
 </template>
 <script type="text/javascript">
-	export default {}
+	export default {
+		props: {
+			iframe: { type: Boolean, default: false }
+		}
+	}
 </script>

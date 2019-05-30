@@ -76,6 +76,7 @@ import ViewPrincipal from './views/ViewPrincipal'
 import Agencies from './views/Agencies'
 import AddAgency from './views/AddAgency'
 import Vehicles from './views/Vehicles'
+import SearchClient from './views/iframe/SearchClient'
 
  const router = new VueRouter({
  	mode: 'history',
@@ -115,6 +116,11 @@ import Vehicles from './views/Vehicles'
 	 		path: '/vehicles',
 	 		name: 'vehicles',
 	 		component: Vehicles
+	 	},
+	 	{
+	 		path: '/client/search',
+	 		name: 'search-clients',
+	 		component: SearchClient
 	 	}
  	]
  });

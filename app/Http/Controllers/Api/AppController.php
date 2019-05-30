@@ -15,8 +15,14 @@ use App\models\ContractDesignation;
 
 class AppController extends Controller
 {
-    function index(){
-    	return view('app.main');
+    function index(Request $request){
+        $data = [];
+        $data['iframe'] = false;
+        // echo $request->query('type');die;
+        if ($request->query('type') == "iframe") {
+            $data['iframe'] = true;
+        }
+    	return view('app.main')->with($data);
     }
 
     function getAgencies(){

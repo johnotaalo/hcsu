@@ -38,6 +38,7 @@ Route::prefix('principal')->group(function(){
 
 Route::prefix('agencies')->group(function(){
 	Route::get('/', 'Api\AppController@getAgencies');
+	Route::get('/search', 'Api\AgenciesController@searchAgencies');
 });
 
 Route::get('passport-types', 'Api\AppController@getPassportTypes');

@@ -19,7 +19,7 @@
 </head>
 <body>
     <div id="app">
-        <app></app>
+        <app {!! $iframe ? ':iframe = "true"' : '' !!}></app>
     </div>
 </body>
 </html>
