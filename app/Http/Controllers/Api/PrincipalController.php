@@ -78,7 +78,7 @@ class PrincipalController extends Controller
     }
 
     function searchPrincipal(Request $request){
-        return Principal::all();
+        return Principal::limit(10)->get();
     }
 
     function add(Request $request){

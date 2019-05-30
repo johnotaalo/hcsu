@@ -38,11 +38,11 @@
 						</template>
 
 						<template slot="option" slot-scope="option">
-							<!-- <img style="width: 50px;height: 50px;" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}] -->
+							<img style="width: 50px;height: 50px;" /> {{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
 						</template>
 
 						<template slot="selected-option" slot-scope="option">
-							<!-- <span v-if="option.AGENCYNAME"><img style="width: 50px;height: 50px;" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}]</span> -->
+							<span v-if="option.LAST_NAME"><img style="width: 50px;height: 50px;" /> {{ option.LAST_NAME }} {{ option.OTHER_NAMES }}</span>
 						</template>
 					</v-select>
 				</div>
