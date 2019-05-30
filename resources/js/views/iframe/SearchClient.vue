@@ -51,7 +51,7 @@
 			</div>
 
 			<div v-if="host_country_id != 0" class="mt-5">
-				<center><button class="btn btn-primary">Proceed with selected client</button></center>
+				<center><button class="btn btn-primary" id = "proceed-button">Proceed with selected client</button></center>
 			</div>
 		</b-card>
 	</div>
@@ -71,6 +71,7 @@
 				selectedAgency: {},
 				selectedStaff: {},
 				host_country_id: 0,
+				finalisedHCSUID: 0,
 				no_avatar_img: "/images/no_avatar.svg"
 			}
 		},
