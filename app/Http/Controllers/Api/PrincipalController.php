@@ -78,7 +78,14 @@ class PrincipalController extends Controller
     }
 
     function searchPrincipal(Request $request){
-        return Principal::limit(10)->get();
+        $query = $request->q;
+        return Principal::
+                where('LAST_NAME', 'LIKE', "%{$query}%")
+                ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
+                ->orWhere('PIN', 'LIKE', "%{$query}%")
+                ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
+                ->limit(10)
+                ->get();
     }
 
     function add(Request $request){
