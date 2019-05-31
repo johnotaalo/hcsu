@@ -18,7 +18,7 @@ class PrincipalDependent extends Model
     }
 
     public function getRelationshipAttribute(){
-    	$relationship = \App\Models\relationship::where('REL_ID', $this->RELATIONSHIP_ID)->first();
+    	$relationship = \App\Models\Relationship::where('REL_ID', $this->RELATIONSHIP_ID)->first();
         return $relationship;
     }
 
