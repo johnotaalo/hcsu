@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\models\Agency;
-use App\models\PassportType;
-use App\models\Country;
-use App\models\ContractType;
-use App\models\Grade;
-use App\models\Relationship;
-use App\models\ContractDesignation;
+use App\Models\Agency;
+use App\Models\PassportType;
+use App\Models\Country;
+use App\Models\ContractType;
+use App\Models\Grade;
+use App\Models\Relationship;
+use App\Models\ContractDesignation;
 
 use Storage;
 

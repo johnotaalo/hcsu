@@ -14,7 +14,7 @@ class PrincipalContractRenewal extends Model
     protected $appends = ['grade'];
 
     public function getGradeAttribute(){
-    	$grade = \App\Models\GRADE::where('ID', $this->GRADE_ID)->first();
+    	$grade = \App\Models\Grade::where('ID', $this->GRADE_ID)->first();
         return $grade;
     }
 }
