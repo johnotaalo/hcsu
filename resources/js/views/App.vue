@@ -128,7 +128,8 @@
 <script type="text/javascript">
 	export default {
 		props: {
-			iframe: { type: Boolean, default: false }
+			iframe: { type: Boolean, default: false },
+			case: { type: String, default: null, required: false }
 		}
 	}
 </script>

@@ -13,15 +13,23 @@ use App\models\Grade;
 use App\models\Relationship;
 use App\models\ContractDesignation;
 
+use Storage;
+
 class AppController extends Controller
 {
     function index(Request $request){
         $data = [];
         $data['iframe'] = false;
+        $data['case_no'] = "";
         // echo $request->query('type');die;
         if ($request->query('type') == "iframe") {
             $data['iframe'] = true;
         }
+
+        if($request->query('case_no') != ""){
+            $data['case_no'] = $request->query('case_no');
+        }
+
     	return view('app.main')->with($data);
     }
 
@@ -65,5 +73,26 @@ class AppController extends Controller
         $response['designations'] = $this->getDesignations();
 
     	return $response;
+    }
+
+    function updateHostCountryID(Request $request){
+        $case = $request->case_no;
+        $del_index = 1;
+        $variable_name = "host_country_id";
+        $host_country_id = $request->host_country_id;
+
+
+        $url = "http://10.104.104.87/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+
+        $data = [
+            $variable_name => $host_country_id,
+            $variable_name . '_label' => $host_country_id
+        ];
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+
+        $response = \Processmaker::executeREST($url, "PUT", $data, $authenticationData->access_token);
+
+        return $response;
+        echo $url;die;
     }
 }

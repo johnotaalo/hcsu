@@ -38,6 +38,10 @@ Route::prefix('principal')->group(function(){
 	Route::get('/search', 'Api\PrincipalController@searchPrincipal');
 });
 
+Route::prefix('client')->group(function(){
+	Route::post('/update', 'Api\AppController@updateHostCountryID');
+});
+
 Route::prefix('agencies')->group(function(){
 	Route::get('/', 'Api\AppController@getAgencies');
 	Route::get('/search', 'Api\AgenciesController@searchAgencies');

@@ -33,13 +33,19 @@ class ProcessMaker {
 			];
 		}
 
-		$res = $client->request($method, $url, $params);
-
-		if ($res->getStatusCode() == 200) {
-			return json_decode($res->getBody());
-		}else{
-			return ['error' => 'There was an error'];
+		if (!empty($data)) {
+			$params['form_params'] = $data;
 		}
+
+		try{
+			$res = $client->request($method, $url, $params);
+			// die($res->getStatusCode());
+			return json_decode($res->getBody());
+		}catch(ClientErrorResponseException $exception){
+			return $exception->getResponse()->getBody(true);
+		}
+
+		
 	}
 
 	private function refreshToken(){

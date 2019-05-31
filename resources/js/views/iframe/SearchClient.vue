@@ -51,7 +51,7 @@
 			</div>
 
 			<div v-if="host_country_id != 0" class="mt-5">
-				<center><button class="btn btn-primary" id = "proceed-button">Proceed with selected client</button></center>
+				<center><button class="btn btn-primary" v-on:click="proceedClient" id = "proceed-button">Proceed with selected client</button></center>
 			</div>
 		</b-card>
 	</div>
@@ -59,6 +59,9 @@
 
 <script type="text/javascript">
 	export default {
+		props: {
+			case: { type: String, default: null, required: false }
+		},
 		data: function(){
 			return {
 				clientType: '',
@@ -74,6 +77,8 @@
 				finalisedHCSUID: 0,
 				no_avatar_img: "/images/no_avatar.svg"
 			}
+		},
+		mounted(){
 		},
 		methods: {
 			onAgencySearch(search, loading){
@@ -97,7 +102,19 @@
 					vm.staffMembers = res.data
 					loading(false)
 				})
-			}, 350)
+			}, 350),
+			proceedClient: function(){
+				axios.post('/api/client/update', {
+					case_no: this.$parent.case,
+					host_country_id: this.host_country_id
+				})
+				.then( (res) => {
+					console.log(res)
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+			}
 		},
 		watch: {
 			selectedAgency: function(newVal, oldVal){
