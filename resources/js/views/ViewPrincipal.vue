@@ -3,12 +3,12 @@
 		<div class="header">
 
 			<!-- Image -->
-			<img src="../../../public/img/covers/profile-cover-1.jpg" class="header-img-top" alt="...">
+			<img v-if="!iframe" src="../../../public/img/covers/profile-cover-1.jpg" class="header-img-top" alt="...">
 
 			<div class="container-fluid">
 
 				<!-- Body -->
-				<div class="header-body mt-n5 mt-md-n6">
+				<div class="header-body" :class="{'mt-n5 mt-md-n6' : !iframe}">
 					<div class="row align-items-end">
 						<div class="col-auto">
 
@@ -105,14 +105,14 @@
 											</div>
 										</div>
 									</div>
-									<b-button @click="updatePrincipalData" size="sm" variant="primary">Update Data</b-button>
+									<b-button @click="updatePrincipalData" size="sm" variant="primary" v-if="!iframe">Update Data</b-button>
 								</b-tab>
 								<b-tab title="Passports">
 									<template slot="title">
 										<i class="fe fe-book mr-2"></i>Passports <b-badge variant="success">{{ principal.passports.length }}</b-badge>
 									</template>
 
-									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-passport><i class="fe fe-plus mr-1"></i>Add Passport</b-button>
+									<b-button v-if="!iframe" class="mb-3" variant="success" size="sm" v-b-modal.modal-passport><i class="fe fe-plus mr-1"></i>Add Passport</b-button>
 									<b-table :fields="passports.table.fields" :items="principal.passports">
 										<template slot="PASSPORT_TYPE" slot-scope="data">
 											{{ data.item.type.PPT_TYPE }}
@@ -127,8 +127,10 @@
 										</template>
 
 										<template slot="ACTIONS" slot-scope="row">
+											<span v-if="!iframe">
 											<b-button variant = "info" size="sm" @click="editPassport(row.index)" v-b-modal.modal-passport><i class="fe fe-edit mr-1"></i>Edit</b-button>
 											<b-button variant = "danger" size="sm" @click="removePassport(row.index)"><i class="fe fe-trash mr-1"></i>Remove</b-button>
+											</span>
 										</template>
 									</b-table>
 								</b-tab>
@@ -137,7 +139,7 @@
 									<template slot="title">
 										<i class="fe fe-file mr-2"></i> Contracts <b-badge variant="warning">{{ principal.contracts.length }}</b-badge>
 									</template>
-									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-contract><i class="fe fe-plus mr-1"></i>Add Contract</b-button>
+									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-contract v-if="!iframe"><i class="fe fe-plus mr-1"></i>Add Contract</b-button>
 									<b-table :fields="contracts.table.fields" :items="principal.contracts">
 										<template slot="AGENCY" slot-scope="data">
 											{{ data.item.contract_agency.ACRONYM }}
@@ -156,14 +158,16 @@
 										</template>
 
 										<template slot="ACTIONS" slot-scope="row">
-											<b-button variant="primary" size="sm" @click="editContract(row.index)" v-b-modal.modal-contract><i class = "fe fe-edit mr-1"></i>Edit</b-button>
-											<b-button variant="danger" size="sm" @click="removeContract(row.index)"><i class = "fe fe-trash mr-1"></i>Delete</b-button>
+											<span v-if="!iframe">
+												<b-button variant="primary" size="sm" @click="editContract(row.index)" v-b-modal.modal-contract><i class = "fe fe-edit mr-1"></i>Edit</b-button>
+												<b-button variant="danger" size="sm" @click="removeContract(row.index)"><i class = "fe fe-trash mr-1"></i>Delete</b-button>
+											</span>
 										</template>
 									</b-table>
 								</b-tab>
 
 								<b-tab title="Dependents">
-									<b-button class="mb-3" variant="success" size="sm" v-b-modal.dependent-modal><i class="fe fe-plus mr-1"></i>Add Dependent</b-button>
+									<b-button v-if="!iframe" class="mb-3" variant="success" size="sm" v-b-modal.dependent-modal><i class="fe fe-plus mr-1"></i>Add Dependent</b-button>
 									<template slot="title">
 										<i class="fe fe-users mr-2"></i>Dependents <b-badge variant="warning">{{ principal.dependents.length }}</b-badge>
 									</template>
@@ -185,7 +189,7 @@
 										</template>
 
 										<template slot = "ACTIONS" slot-scope="row">
-											<div class="dropdown mr-3">
+											<div class="dropdown mr-3" v-if="!iframe">
 												<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButtonTwo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												Actions
 												</button>
@@ -460,7 +464,8 @@
 					},
 					editIndex: -1
 				},
-				principalImageProps: { blank: false, blankColor: '#777', width: 100, height: 100, class: 'm1' }
+				principalImageProps: { blank: false, blankColor: '#777', width: 100, height: 100, class: 'm1' },
+				iframe: false
 			}
 		},
 		mounted() {
@@ -479,6 +484,8 @@
 
 			this.activeTitle.contract = this.titles.contract.add
 			this.activeTitle.passport = this.titles.passport.add
+
+			this.iframe = this.$parent.iframe
 			// this.$root.$refs.$toastr.e("ERROR MESSAGE")
 		},
 		watch: {
