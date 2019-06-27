@@ -76,9 +76,10 @@ let routes = [
  		meta: {
  			title: 'Search Client'
  		}
- 	}];
+ }];
 
 let router = new VueRouter({
+	mode: "history",
 	linkExactActiveClass: "active", 
 	routes: routes ,
 	scrollBehavior (to, from, savedPosition) {

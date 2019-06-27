@@ -176,6 +176,7 @@ class DocusignAPIController extends Controller
 
 		$document = \App\Helpers\HCSU\PMDocusign::getSignedDocument($envelope_id, $envelope->CASE_NUMBER);
 
+		// \Storage::disk('local')->put('file.txt', $document['data']);
 
 		if($document){
 			header("Content-Type: {$document['mimetype']}");

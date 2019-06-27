@@ -21,7 +21,7 @@ class AppController extends Controller
         $data = [];
         $data['iframe'] = false;
         $data['case_no'] = "";
-        // echo $request->query('type');die;
+        // echo "<pre>";print_r($request->url());die;
         if ($request->query('type') == "iframe") {
             $data['iframe'] = true;
         }

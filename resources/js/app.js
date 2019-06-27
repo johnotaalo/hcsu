@@ -66,9 +66,80 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import VueRouter from 'vue-router'
 
+Vue.use(VueRouter)
+
+// import App from './views/App'
+// import router from './router'
 import App from './views/App'
-import router from './router'
+import Home from './views/Home'
+import Principal from './views/Principal'
+import AddPrincipal from './views/AddPrincipal'
+import ViewPrincipal from './views/ViewPrincipal'
+import Agencies from './views/Agencies'
+import AddAgency from './views/AddAgency'
+import Vehicles from './views/Vehicles'
+import SearchClient from './views/iframe/SearchClient'
+
+ const router = new VueRouter({
+ 	mode: 'history',
+ 	linkExactActiveClass: "active",
+ 	routes: [
+	 	{
+	 		path: '/',
+	 		name: 'home',
+	 		component: Home
+	 	},
+	 	{
+	 		path: '/principal',
+	 		name: 'principal',
+	 		component: Principal
+	 	},
+	 	{
+	 		path: '/principal/add',
+	 		name: 'principal.add',
+	 		component: AddPrincipal
+	 	},
+	 	{
+	 		path: '/principal/view/:id',
+	 		name: 'principal.view',
+	 		component: ViewPrincipal
+	 	},
+	 	{
+	 		path: '/agencies',
+	 		name: 'agencies',
+	 		component: Agencies
+	 	},
+	 	{
+	 		path: '/agencies/add',
+	 		name: 'agencies.add',
+	 		component: AddAgency
+	 	},
+	 	{
+	 		path: '/vehicles',
+	 		name: 'vehicles',
+	 		component: Vehicles
+	 	},
+	 	{
+	 		path: '/client/search',
+	 		name: 'search-clients',
+	 		component: SearchClient
+	 	}
+ 	]
+ });
+
+ router.beforeResolve((to, from, next) => {
+ 	if (to.name) {
+ 		NProgress.start()
+ 	}
+
+ 	next()
+ });
+
+ router.afterEach((to, from) => {
+ 	NProgress.done()
+});
 
 const app = new Vue({
     el: '#app',
