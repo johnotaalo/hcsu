@@ -5,9 +5,22 @@ namespace App\Helpers\HCSU;
 class PMDocusign{
 	public static $authFile = "docusign_auth.json";
 
-	function refreshToken(){
-		$expiry = (new self)::checkExpiry();
-		var_dump($expiry);die;
+	public static function refreshToken(){
+		$stillValid = self::checkExpiry();
+		$provider = self::getProvider();
+		$authData = self::getAuthData();
+
+		$newAccessToken = $provider->getAccessToken('refresh_token', [
+			'refresh_token'	=>	$authData->ds_refresh_token
+		]);
+
+		$session_data = [
+			'ds_access_token'	=>	$newAccessToken->getToken(),
+			'ds_refresh_token'	=>	$newAccessToken->getRefreshToken(),
+			'ds_expiration'		=>	$newAccessToken->getExpires()
+		];
+
+		self::updateAuthData($session_data);
 	}
 
 	public static function getProvider(){
@@ -44,9 +57,9 @@ class PMDocusign{
 	}
 
 	public static function checkExpiry(){
-		$authData = (new self)::getAuthData();
-		$accessToken = \Session::get('ds_access_token');
-		$expiration = \Session::get('ds_expiration');
+		$authData = self::getAuthData();
+		$accessToken = $authData->ds_access_token;
+		$expiration = $authData->ds_expiration;
 
 		$ok = isset($accessToken) && isset($expiration);
 		$ok = $ok && (($expiration - (60 * 60)) > time());

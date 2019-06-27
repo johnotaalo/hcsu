@@ -1,5 +1,9 @@
 <template>
 	<div>
+		<loading 
+		:active.sync="isLoading" 
+        :can-cancel="false"
+        :is-full-page="fullPage"></loading>
 		<b-card>
 			<b-form-group label="Type of Client">
 				<b-form-radio-group
@@ -58,12 +62,15 @@
 </template>
 
 <script type="text/javascript">
+
 	export default {
 		props: {
 			case: { type: String, default: null, required: false }
 		},
 		data: function(){
 			return {
+				isLoading: false,
+                fullPage: true,
 				clientType: '',
 				clientTypes: [
 					{ text: "Agency", value: 'agency' },
@@ -104,14 +111,17 @@
 				})
 			}, 350),
 			proceedClient: function(){
+				this.isLoading = true;
 				axios.post('/api/client/update', {
 					case_no: this.$parent.case,
 					host_country_id: this.host_country_id
 				})
 				.then( (res) => {
+					this.isLoading = false
 					console.log(res)
 				})
 				.catch((error) => {
+					this.isLoading = false
 					console.log(error)
 				})
 			}

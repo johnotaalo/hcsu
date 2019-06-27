@@ -56,7 +56,7 @@ class DocusignAPIController extends Controller
 
 				\App\Helpers\HCSU\PMDocusign::updateAuthData($current_data);
 
-				return redirect()->route('default');
+				return redirect()->route('default', ['any' => '']);
 			}catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
 				exit($e->getMessage());
 			}
@@ -64,6 +64,9 @@ class DocusignAPIController extends Controller
 	}
 
 	function generateSigningDocument(Request $request){
+		if(!\App\Helpers\HCSU\PMDocusign::checkExpiry()){
+			\App\Helpers\HCSU\PMDocusign::refreshToken();
+		}
 		$user = $request->query("user");
 		$process = $request->query("process");
 		$task = $request->query('task');
@@ -171,6 +174,9 @@ class DocusignAPIController extends Controller
 	}
 
 	function downloadDocument(Request $request){
+		if(!\App\Helpers\HCSU\PMDocusign::checkExpiry()){
+			\App\Helpers\HCSU\PMDocusign::refreshToken();
+		}
 		$envelope_id = $request->envelope_id;
 		$envelope = \App\Models\DocusignEnvelope::where('envelope_id', $envelope_id)->first();
 
@@ -314,6 +320,9 @@ class DocusignAPIController extends Controller
 	}
 
 	function afterSignature(Request $request){
+		if(!\App\Helpers\HCSU\PMDocusign::checkExpiry()){
+			\App\Helpers\HCSU\PMDocusign::refreshToken();
+		}
 		$case = $request->case;
 		$process = $request->process;
 		$task = $request->task;

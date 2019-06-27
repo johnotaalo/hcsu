@@ -27,6 +27,8 @@ import '../../public/fonts/feather/feather.min.css'
 import '../../public/css/theme.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'vue-datetime/dist/vue-datetime.css'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 require('vue-toastr/src/vue-toastr.scss');
 
 
@@ -46,6 +48,7 @@ Vue.use(VuePaginate)
 library.add({faCoffee, faCogs, faMoneyBill, faUserFriends, faPen, faEye })
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('loading', Loading);
 
 
 /**
