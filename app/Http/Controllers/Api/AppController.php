@@ -93,6 +93,5 @@ class AppController extends Controller
         $response = \Processmaker::executeREST($url, "PUT", $data, $authenticationData->access_token);
 
         return $response;
-        echo $url;die;
     }
 }

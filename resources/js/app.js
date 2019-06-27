@@ -9,14 +9,13 @@ require('./bootstrap');
 window.instance = require('./http')
 
 import BootstrapVue from 'bootstrap-vue';
-import VueRouter from 'vue-router'
 import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCoffee, faUserFriends, faCogs, faMoneyBill, faPen, faEye } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import appEvent from './core/AppEvent'
 import vSelect from 'vue-select'
-import VCalendar from 'v-calendar';
+import VCalendar from 'v-calendar'
 import VueSwal from 'vue-swal'
 import Toastr from 'vue-toastr'
 import Notifications from 'vue-notification'
@@ -30,8 +29,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'vue-datetime/dist/vue-datetime.css'
 require('vue-toastr/src/vue-toastr.scss');
 
+
 window.Vue = require('vue');
-Vue.use(VueRouter)
 Vue.use(BootstrapVue);
 Vue.use(ServerTable, {}, false, 'bootstrap4', 'default');
 Vue.component('v-select', vSelect)
@@ -69,73 +68,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 import App from './views/App'
-import Home from './views/Home'
-import Principal from './views/Principal'
-import AddPrincipal from './views/AddPrincipal'
-import ViewPrincipal from './views/ViewPrincipal'
-import Agencies from './views/Agencies'
-import AddAgency from './views/AddAgency'
-import Vehicles from './views/Vehicles'
-import SearchClient from './views/iframe/SearchClient'
-
- const router = new VueRouter({
- 	mode: 'history',
- 	linkExactActiveClass: "active",
- 	routes: [
-	 	{
-	 		path: '/',
-	 		name: 'home',
-	 		component: Home
-	 	},
-	 	{
-	 		path: '/principal',
-	 		name: 'principal',
-	 		component: Principal
-	 	},
-	 	{
-	 		path: '/principal/add',
-	 		name: 'principal.add',
-	 		component: AddPrincipal
-	 	},
-	 	{
-	 		path: '/principal/view/:id',
-	 		name: 'principal.view',
-	 		component: ViewPrincipal
-	 	},
-	 	{
-	 		path: '/agencies',
-	 		name: 'agencies',
-	 		component: Agencies
-	 	},
-	 	{
-	 		path: '/agencies/add',
-	 		name: 'agencies.add',
-	 		component: AddAgency
-	 	},
-	 	{
-	 		path: '/vehicles',
-	 		name: 'vehicles',
-	 		component: Vehicles
-	 	},
-	 	{
-	 		path: '/client/search',
-	 		name: 'search-clients',
-	 		component: SearchClient
-	 	}
- 	]
- });
-
- router.beforeResolve((to, from, next) => {
- 	if (to.name) {
- 		NProgress.start()
- 	}
-
- 	next()
- });
-
- router.afterEach((to, from) => {
- 	NProgress.done()
- });
+import router from './router'
 
 const app = new Vue({
     el: '#app',
