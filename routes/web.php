@@ -22,4 +22,16 @@ Route::get('/docusign/callback', 'Api\DocusignAPIController@loginCallback');
 Route::get('/docusign/afterSignature/{case}/{process}/{task}', 'Api\DocusignAPIController@afterSignature')->name('after-signature');
 Route::get('/docusign/document-sign', 'Api\DocusignAPIController@generateSigningDocument');
 Route::get('/docusign/document-download/{envelope_id}', 'Api\DocusignAPIController@downloadDocument')->name('download-docusigned-doc');
+
+Route::prefix('focal-point')->group(function(){
+	Route::get('/password/reset/{token}', 'Auth\FocalPointAuthController@resetPassword')->name('focalpoint-reset-password');
+	Route::post('/password/reset/{token}', 'Auth\FocalPointAuthController@changePassword');
+});
+
+Auth::routes();
+
 Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
+
+
+
+Route::get('/home', 'HomeController@index')->name('home');

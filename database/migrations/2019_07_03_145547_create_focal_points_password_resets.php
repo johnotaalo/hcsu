@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPhotoToDependent extends Migration
+class CreateFocalPointsPasswordResets extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddPhotoToDependent extends Migration
      */
     public function up()
     {
-        Schema::table('principal_dependent', function (Blueprint $table) {
-            $table->text('IMAGE')->nullable();
+        Schema::create('focal_points_password_resets', function (Blueprint $table) { 
+            $table->string('email')->index();
+            $table->string('token')->index();
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -25,8 +27,6 @@ class AddPhotoToDependent extends Migration
      */
     public function down()
     {
-        Schema::table('principal_dependent', function (Blueprint $table) {
-            $table->dropColumn('IMAGE');
-        });
+        Schema::dropIfExists('focal_points_password_resets');
     }
 }

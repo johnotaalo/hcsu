@@ -4,13 +4,13 @@
 			<div class="col">
 				<div class="form-group">
 					<label>Last Name<span class="text-danger">*</span></label>
-					<b-input placeholder="Enter Last Name" v-model="data.last_name" />
+					<b-input placeholder="Enter Last Name" v-model="value.last_name" />
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
 					<label>Other Names<span class="text-danger">*</span></label>
-					<b-input placeholder="Enter First Name" v-model="data.other_names" />
+					<b-input placeholder="Enter First Name" v-model="value.other_names" />
 				</div>
 			</div>
 		</div>
@@ -19,7 +19,7 @@
 			<div class="col-md-6">
 				<div class="form-group">
 					<label>Index No</label>
-					<b-input placeholder="Enter Index No" v-model="data.index_no" />
+					<b-input placeholder="Enter Index No" v-model="value.index_no" />
 				</div>
 			</div>
 		</div>
@@ -28,13 +28,13 @@
 			<div class="col">
 				<div class="form-group">
 					<label>Extension/Office No</label>
-					<b-input placeholder="Enter Extension/Office No" v-model="data.extension" />
+					<b-input placeholder="Enter Extension/Office No" v-model="value.extension" />
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
 					<label>Mobile No<span class="text-danger">*</span></label>
-					<b-input placeholder="Enter Mobile No" v-model="data.mobile_no" />
+					<b-input placeholder="Enter Mobile No" v-model="value.mobile_no" />
 				</div>
 			</div>
 		</div>
@@ -42,7 +42,7 @@
 
 		<div class="form-group">
 			<label>Email Address<span class="text-danger">*</span></label>
-			<b-input placeholder="Enter Email Address" v-model="data.email_address" />
+			<b-input placeholder="Enter Email Address" v-model="value.email_address" />
 		</div>
 	</div>
 </template>
@@ -65,14 +65,8 @@
 				}
 			}
 		},
-		watch:{
-			data(){
-				this.value
-			}
-		},
 		created(){
-			console.log(this.data)
-			this.$emit('on-data', this.data)
+			
 		}
 	}
 </script>

@@ -96,8 +96,14 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 4320,
         ],
+        'focalPoints'   =>  [
+            'provider'      =>  'ref_agency_focal_points',
+            'connection'    =>  '2019',
+            'table'         =>  'password_resets',
+            'expire'        =>  4320
+        ]
     ],
 
 ];
