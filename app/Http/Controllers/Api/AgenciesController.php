@@ -54,12 +54,20 @@ class AgenciesController extends Controller
 				];
 
 				$createdFP = AgencyFocalPoint::create($fpdata);
+				$user = \App\User::create([
+					'name'		=>	$createdFP->full_name,
+					'email'		=>	$createdFP->EMAIL,
+					'password'	=>	$createdFP->PASSWORD,
+					'username'	=>	$createdFP->USERNAME,
+					'user_type'	=>	\App\Enums\UserType::FocalPoint,
+					'ext_id'	=>	$createdFP->ID
+				]);
 
-				$token = app(\Illuminate\Auth\Passwords\PasswordBroker::class)->createToken($createdFP);
+				$user->save();
 
-				$notification = Notification::send($createdFP, new FocalPointPassword($createdFP, $token));
+				$token = app(\Illuminate\Auth\Passwords\PasswordBroker::class)->createToken($user);
 
-				dd($notification);
+				$notification = new FocalPointPassword($createdFP, $token);
 
 				Notification::send($createdFP, $notification);
 			}

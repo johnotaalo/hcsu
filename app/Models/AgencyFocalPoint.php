@@ -14,6 +14,8 @@ class AgencyFocalPoint extends Authenticatable
 	protected $connection = "2019";
     protected $table = "ref_agency_focal_points";
 
+    protected $primaryKey = "ID"; 
+
     protected $fillable = ["AGENCY_HOST_COUNTRY_ID","INDEX_NO","LAST_NAME","OTHER_NAMES","EXTENSION","MOBILE_NO","EMAIL","STATUS", "USERNAME", "PASSWORD"];
     protected $hidden = ["PASSWORD", "remember_token"];
 

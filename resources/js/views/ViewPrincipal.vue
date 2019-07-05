@@ -14,7 +14,7 @@
 
 							<!-- Avatar -->
 							<div class="avatar avatar-xxl header-avatar-top">
-								<b-img v-if="principal.image_link != '/storage/'" class ="avatar-img border border-4 border-body" rounded="circle" :alt="fullname" :src="principal.image_link" style="background: #FCE4EC;"></b-img>
+								<b-img v-if="principal.image_link != '/storage/'" class ="avatar-img border border-4 border-body" rounded="circle" :alt="fullname" :src="principalImage" style="background: #FCE4EC;"></b-img>
 								<b-img v-else class ="avatar-img border border-4 border-body" rounded="circle" alt="Circle image" src="/images/no_avatar.svg"></b-img>
 							</div>
 
@@ -511,6 +511,9 @@
 			}
 		},
 		computed: {
+			principalImage: function(){
+				return '/photos/principal/' + this.principal.HOST_COUNTRY_ID
+			},
 			fullname: function(){
 				if(typeof(this.principal.LAST_NAME) != "undefined")
 					return this.principal.LAST_NAME + ", " + this.principal.OTHER_NAMES;

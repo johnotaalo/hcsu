@@ -178,7 +178,7 @@ return [
 
         // Custom Helpers
         App\Providers\ProcessmakerServiceProvider::class,
-        App\Providers\FocalPointPasswordResetServiceProvider::class,
+        // App\Providers\FocalPointPasswordResetServiceProvider::class,
 
     ],
 

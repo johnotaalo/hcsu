@@ -14,6 +14,22 @@
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/photos/principal/{host_country_id}', function($host_country_id){
+	$principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $host_country_id)->first();
+	$filename = $principal->IMAGE;
+
+	if (!\Storage::exists($filename)) {
+		abort(404);
+	}
+
+	$file = \Storage::get($filename);
+	$type = \Storage::mimeType($filename);
+
+	$response = Response::make($file, 200);
+	$response->header("Content-Type", $type);
+
+	return $response;
+})->name('principal-photo');
 Route::get('/sample', 'Test\SampleController@index');
 Route::get('/pmauthentication', 'Test\SampleController@pmauth');
 Route::get('/docusign', 'Api\DocusignAPIController@index')->name('docusign-client');
@@ -24,6 +40,8 @@ Route::get('/docusign/document-sign', 'Api\DocusignAPIController@generateSigning
 Route::get('/docusign/document-download/{envelope_id}', 'Api\DocusignAPIController@downloadDocument')->name('download-docusigned-doc');
 
 Route::prefix('focal-point')->group(function(){
+	Route::get('/', 'FocalPoints\DashboardController@index')->name('focalpoints-home');
+	Route::get('/login', 'Auth\FocalPointAuthController@login')->name('focalpoints-login');
 	Route::get('/password/reset/{token}', 'Auth\FocalPointAuthController@resetPassword')->name('focalpoint-reset-password');
 	Route::post('/password/reset/{token}', 'Auth\FocalPointAuthController@changePassword');
 });

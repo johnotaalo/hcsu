@@ -58,3 +58,9 @@ Route::prefix('vehicle')->group(function(){
 	Route::get('/', 'Api\VehicleController@getVehicles');
 	Route::get('/{host_country_id}', 'Api\VehicleController@getVehicles');
 });
+
+Route::prefix('data')->group(function(){
+	Route::prefix('suppliers')->group(function(){
+		Route::get('/search', 'Api\SupplierController@searchSupplier');
+	});
+});
