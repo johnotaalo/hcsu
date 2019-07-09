@@ -38,6 +38,10 @@ Route::prefix('principal')->group(function(){
 	Route::get('/search', 'Api\PrincipalController@searchPrincipal');
 });
 
+Route::prefix('template')->group(function(){
+	Route::post('/add', 'Api\AppController@addTemplate');
+});
+
 Route::prefix('client')->group(function(){
 	Route::post('/update', 'Api\AppController@updateHostCountryID');
 });
@@ -46,6 +50,7 @@ Route::prefix('agencies')->group(function(){
 	Route::get('/', 'Api\AppController@getAgencies');
 	Route::get('/search', 'Api\AgenciesController@searchAgencies');
 	Route::post('/add', 'Api\AgenciesController@addAgencies');
+	Route::get('/get/{agency_id}', 'Api\AgenciesController@getAgency');
 });
 
 Route::get('passport-types', 'Api\AppController@getPassportTypes');
@@ -62,5 +67,10 @@ Route::prefix('vehicle')->group(function(){
 Route::prefix('data')->group(function(){
 	Route::prefix('suppliers')->group(function(){
 		Route::get('/search', 'Api\SupplierController@searchSupplier');
+	});
+
+	Route::prefix('processes')->group(function(){
+		Route::get('/', 'Api\AppController@getProcessList');
+		Route::get('/{process}/tasks', 'Api\AppController@getProcessTasks');
 	});
 });

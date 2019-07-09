@@ -14,6 +14,7 @@ use App\Models\Relationship;
 use App\Models\ContractDesignation;
 
 use Storage;
+use mikehaertl\pdftk\Pdf;
 
 class AppController extends Controller
 {
@@ -93,5 +94,39 @@ class AppController extends Controller
         $response = \Processmaker::executeREST($url, "PUT", $data, $authenticationData->access_token);
 
         return $response;
+    }
+
+    function addTemplate(Request $request){
+        $process = $request->input('process');
+        $task = $request->input('task');
+        $template = $request->file('file')->store("templates/{$process['prj_uid']}/{$task['act_uid']}");
+        
+
+        $pdf = new Pdf(storage_path($template));
+        $data = $pdf->getDataFields();
+        echo "<pre>";print_r($data);die;
+        try{
+            $res = $pdf->fillForm(['F[0].P1[0].#field[0]' => 'UNEP'])->needAppearances()->saveAs('pdffile.pdf');
+            var_dump( $res );
+        }catch(\Exception $ex){
+            dd($ex);
+        }
+        
+    }
+
+    function getProcessList(){
+        $url = "http://10.104.104.87/api/1.0/workflow/project";
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+        $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
+
+        return $response;
+    }
+
+    function getProcessTasks(Request $request){
+        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+        $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
+
+        return $response->diagrams[0]->activities;
     }
 }

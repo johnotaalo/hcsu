@@ -57,7 +57,7 @@
 										</b-button>
 									</div>
 									<div class="col-md">
-										<b-button block variant="success" size="sm">
+										<b-button block variant="success" size="sm" @click="viewAgency(agency.HOST_COUNTRY_ID)">
 											<font-awesome-icon icon="eye"/>
 											View
 										</b-button>
@@ -126,6 +126,9 @@
 		methods: {
 			chuckAgencies(){
 				console.log(this.pagination.perPage)
+			},
+			viewAgency(id){
+				console.log(this.$router.push({ name: 'agencies.view', params: { id: id } }))
 			}
 		}
 	}

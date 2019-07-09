@@ -36,7 +36,7 @@ class SampleController extends Controller
 			die("There was an error getting the access token");
 		}
 		$postParams = array(
-	  		 'grant_type'    => 'authorization_code',
+	  		'grant_type'    => 'authorization_code',
 	   		'code'          => $request->query('code'),
 	   		'client_id'     => env('PM_CLIENT_ID'),
 	   		'client_secret' => env('PM_CLIENT_SECRET')

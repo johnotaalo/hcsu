@@ -76,6 +76,12 @@ class AgenciesController extends Controller
 		return $agency;
     }
 
+    function getAgency(Request $request){
+    	$host_country_id = $request->agency_id;
+
+    	return Agency::where('HOST_COUNTRY_ID', $host_country_id)->with('focalPoints')->first();
+    }
+
     function generateUsername($othernames, $lastname, $index_no = null){
 		$username = "";
 		$firstLetter = $othernames[0];

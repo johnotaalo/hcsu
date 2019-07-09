@@ -82,8 +82,10 @@ import AddPrincipal from './views/AddPrincipal'
 import ViewPrincipal from './views/ViewPrincipal'
 import Agencies from './views/Agencies'
 import AddAgency from './views/AddAgency'
+import ViewAgency from './views/agency/ViewAgency'
 import Vehicles from './views/Vehicles'
 import SearchClient from './views/iframe/SearchClient'
+import SettingsIndex from './views/settings/SettingsIndex'
 
  const router = new VueRouter({
  	mode: 'history',
@@ -120,6 +122,11 @@ import SearchClient from './views/iframe/SearchClient'
 	 		component: AddAgency
 	 	},
 	 	{
+	 		path: '/agencies/view/:id',
+	 		name: 'agencies.view',
+	 		component: ViewAgency
+	 	},
+	 	{
 	 		path: '/vehicles',
 	 		name: 'vehicles',
 	 		component: Vehicles
@@ -128,6 +135,11 @@ import SearchClient from './views/iframe/SearchClient'
 	 		path: '/client/search',
 	 		name: 'search-clients',
 	 		component: SearchClient
+	 	},
+	 	{
+	 		path: '/settings',
+	 		name: 'settings',
+	 		component: SettingsIndex
 	 	}
  	]
  });
