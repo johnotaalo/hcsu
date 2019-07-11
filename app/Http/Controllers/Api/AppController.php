@@ -180,6 +180,7 @@ class AppController extends Controller
             //     ->saveAs("{$filename}.pdf");
             // $pdf->send("{$filename}", true);
             $pdf->fillForm($data)
+                ->flatten()
                 ->execute();
 
             $content = file_get_contents($pdf->getTmpFile());
