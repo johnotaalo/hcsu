@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use Storage;
 
 class ProcessMaker {
-	public static function executeREST($url, $method="GET", $data = [], $accessToken = ''){
+	public static function executeREST($url, $method="GET", $data = [], $accessToken = '', $useCurl = false){
 		$authenticationData = json_decode(Storage::get("pmauthentication.json"));
 		$tokenExpiry = $authenticationData->expiry;
 		\Log::debug("Checking token expiry...");
@@ -38,9 +38,43 @@ class ProcessMaker {
 		}
 
 		try{
-			$res = $client->request($method, $url, $params);
+			if(!$useCurl){
+				$res = $client->request($method, $url, $params);
+				// dd($res->getBody());
+				return json_decode($res->getBody());
+			}else{
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $accessToken));
+				// curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$method = strtoupper($method);
+
+				switch ($method) {
+					case "GET":
+						break;
+					case "DELETE":
+						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+						break;
+					case "PUT":
+						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+					case "POST":
+						curl_setopt($ch, CURLOPT_POST, 1);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+						break;
+					default:
+						throw new Exception("Error: Invalid HTTP method '$method' $endpoint");
+						return null;
+				}
+
+				$oResponse = json_decode(curl_exec($ch));
+				$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				curl_close($ch);
+
+				return $oResponse;
+			}
 			// die($res->getStatusCode());
-			return json_decode($res->getBody());
+			
 		}catch(ClientErrorResponseException $exception){
 			return $exception->getResponse()->getBody(true);
 		}
@@ -83,4 +117,6 @@ class ProcessMaker {
 			return false;
 		}
 	}
+
+
 }

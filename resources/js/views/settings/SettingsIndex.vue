@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<b-card>
-			
 			<div class="form-group row">
 				<div class="col-md">
 					<label>Process</label>
@@ -22,6 +21,12 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<b-input placeholder="Enter Input Document UID" label="Input Document UID" v-model = "form.input_document"></b-input>
+			</div>
+			<div class="form-group">
+				<b-input placeholder="Enter Template name" label="Template Name" v-model = "form.name"></b-input>
+			</div>
+			<div class="form-group">
 				<label>Template</label>
 				<b-form-file v-model="form.file"></b-form-file>
 			</div>
@@ -40,8 +45,10 @@
 				processes: [],
 				processTasks: [],
 				form: new Form({
+					name: "",
 					process: "",
 					task: "",
+					input_document: "",
 					file: ""
 				})
 			}

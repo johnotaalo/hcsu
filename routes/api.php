@@ -74,3 +74,7 @@ Route::prefix('data')->group(function(){
 		Route::get('/{process}/tasks', 'Api\AppController@getProcessTasks');
 	});
 });
+
+Route::prefix('documents')->group(function(){
+	Route::get('/generate/{case_no}', 'Api\AppController@generateDocument');
+});
