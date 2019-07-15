@@ -24,17 +24,17 @@ class VATExemptionForm{
 
 	function data(){
 		return [
-			'F[0].P1[0].#field[0]' 			=>	$this->mission,
-			'F[0].P1[0].DateTimeField[0]'	=>	$this->date,
-			'F[0].P1[0].#field[3]'			=>	$this->nameTitle,
-			'F[0].P1[0].#field[4]'			=>	$this->supplierName,
-			'F[0].P1[0].#field[5]'			=>	$this->supplierAddress,
-			'F[0].P1[0].#field[6]'			=>	$this->supplierVAT,
-			'F[0].P1[0].DateTimeField[1]'	=>	$this->clientArrival,
-			'F[0].P1[0].#field[8]'			=>	$this->goodsDescription,
-			'F[0].P1[0].#field[10]'			=>	$this->pfNo,
-			'F[0].P1[0].#field[11]'			=>	$this->vatAmount
-			// 'F[0].P1[0].#field[12]'			=>	$this->ref
+			'agency' 			=>	$this->mission,
+			'today'				=>	$this->date,
+			'name_title'		=>	$this->nameTitle,
+			'supplier_name'		=>	$this->supplierName,
+			'supplier_address'	=>	$this->supplierAddress,
+			'supplier_vat'		=>	$this->supplierVAT,
+			'doa_dip_id_no'		=>	$this->clientArrival,
+			'goods_desc'		=>	$this->goodsDescription,
+			'invoice_no'		=>	$this->pfNo,
+			'vat_amt'			=>	$this->vatAmount,
+			'serial_no'			=>	$this->ref
 		];
 	}
 

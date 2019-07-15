@@ -34,20 +34,24 @@ class VATExemptionForm{
         $invoice_numbers = $this->generateCombinedString($invoiceNumbersArray);
         $totalVAT = ($vat_data->invoices)->sum('VAT_AMOUNT');
 
-        $mission = $client_name = "";
+        $mission = $client_name = $arrival = "";
 
         if($firstIDChar == "1"){
             $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$vat_data->HOST_COUNTRY_ID})"))->first();
             $principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
+
+            // die($principal->current_arrival);
             $name = strtoupper($principal->LAST_NAME). ", " . ucwords(strtolower($principal->OTHER_NAMES)) ;
             $client_name = $name;
             $name = $name . "; " . $contract->DESIGNATION;
             $mission = $contract->ACRONYM;
+            $arrival = "{$principal->current_arrival->ARRIVAL} (Dip. Id No: {$principal->latest_diplomatic_card->DIP_ID_NO})";
         }else if ($firstIDChar == "3"){
             $agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
             $name = $agency->ACRONYM;
             $mission = $name;
             $client_name = $name;
+            $arrival = "N/A";
         }
 
         $date = date('F d, Y', strtotime($vat_data->CREATED_AT));
@@ -62,7 +66,8 @@ class VATExemptionForm{
             'supplierVAT'       =>  $vat_data->supplier->PIN,
             'goodsDescription'  =>  $goods,
             'pfNo'              =>  $invoice_numbers,
-            'vatAmount'         =>  number_format($totalVAT, 2)
+            'vatAmount'         =>  number_format($totalVAT, 2),
+            'clientArrival'     =>  $arrival
         ];
 
         $template = new \App\Helpers\HCSU\PDFTK\Templates\VATExemptionForm($tabData);
