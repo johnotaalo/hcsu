@@ -2023,7 +2023,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    dashboard: {
+      type: Boolean,
+      default: true
+    }
+  },
   created: function created() {},
   computed: {
     pageTitle: function pageTitle() {
@@ -69122,122 +69130,137 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "nav",
-      {
-        staticClass:
-          "navbar navbar-vertical fixed-left navbar-expand-md navbar-light",
-        attrs: { id: "sidebar" }
-      },
-      [
-        _c("div", { staticClass: "container-fluid" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1),
-          _vm._v(" "),
-          _vm._m(2),
-          _vm._v(" "),
+    _vm.dashboard
+      ? _c("div", [
           _c(
-            "div",
+            "nav",
             {
-              staticClass: "collapse navbar-collapse",
-              attrs: { id: "sidebarCollapse" }
+              staticClass:
+                "navbar navbar-vertical fixed-left navbar-expand-md navbar-light",
+              attrs: { id: "sidebar" }
             },
             [
-              _c("ul", { staticClass: "navbar-nav" }, [
-                _c(
-                  "li",
-                  { staticClass: "nav-item" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link",
-                        attrs: { to: { name: "dashboard" } }
-                      },
-                      [
-                        _c("i", { staticClass: "fe fe-home" }),
-                        _vm._v(" Dashboard")
-                      ]
-                    )
-                  ],
-                  1
-                ),
+              _c("div", { staticClass: "container-fluid" }, [
+                _vm._m(0),
                 _vm._v(" "),
-                _c("li", { staticClass: "nav-item" }, [
-                  _vm._m(3),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass: "collapse ",
-                      attrs: { id: "sidebarComponents" }
-                    },
-                    [
-                      _c("ul", { staticClass: "nav nav-sm flex-column" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _vm._m(2),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "collapse navbar-collapse",
+                    attrs: { id: "sidebarCollapse" }
+                  },
+                  [
+                    _c("ul", { staticClass: "navbar-nav" }, [
+                      _c(
+                        "li",
+                        { staticClass: "nav-item" },
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "nav-link",
+                              attrs: { to: { name: "dashboard" } }
+                            },
+                            [
+                              _c("i", { staticClass: "fe fe-home" }),
+                              _vm._v(" Dashboard")
+                            ]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("li", { staticClass: "nav-item" }, [
+                        _vm._m(3),
+                        _vm._v(" "),
                         _c(
-                          "li",
-                          { staticClass: "nav-item" },
+                          "div",
+                          {
+                            staticClass: "collapse ",
+                            attrs: { id: "sidebarComponents" }
+                          },
                           [
                             _c(
-                              "router-link",
-                              {
-                                staticClass: "nav-link",
-                                attrs: {
-                                  to: { name: "applications.normal-vat" }
-                                }
-                              },
-                              [_vm._v("Normal VAT Application")]
+                              "ul",
+                              { staticClass: "nav nav-sm flex-column" },
+                              [
+                                _c(
+                                  "li",
+                                  { staticClass: "nav-item" },
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "nav-link",
+                                        attrs: {
+                                          to: {
+                                            name: "applications.normal-vat"
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Normal VAT Application")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
                             )
-                          ],
-                          1
+                          ]
                         )
                       ])
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "mt-auto" }),
-              _vm._v(" "),
-              _vm._m(4)
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mt-auto" }),
+                    _vm._v(" "),
+                    _vm._m(4)
+                  ]
+                )
+              ])
             ]
-          )
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "main-content" }, [
-      _c("div", { staticClass: "header" }, [
-        _c("div", { staticClass: "container-fluid" }, [
-          _c("div", { staticClass: "header-body" }, [
-            _c("div", { staticClass: "row align-items-end" }, [
-              _c("div", { staticClass: "col" }, [
-                _c("h6", { staticClass: "header-pretitle" }, [
-                  _vm._v(
-                    "\n\t\t\t\t\t\t\t\t" +
-                      _vm._s(_vm.pageSubtitle) +
-                      "\n\t\t\t\t\t\t\t"
-                  )
-                ]),
-                _vm._v(" "),
-                _c("h1", { staticClass: "header-title" }, [
-                  _vm._v(
-                    "\n\t\t\t\t\t\t\t\t" +
-                      _vm._s(_vm.pageTitle) +
-                      "\n\t\t\t\t\t\t\t"
-                  )
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "main-content" }, [
+            _c("div", { staticClass: "header" }, [
+              _c("div", { staticClass: "container-fluid" }, [
+                _c("div", { staticClass: "header-body" }, [
+                  _c("div", { staticClass: "row align-items-end" }, [
+                    _c("div", { staticClass: "col" }, [
+                      _c("h6", { staticClass: "header-pretitle" }, [
+                        _vm._v(
+                          "\n\t\t\t\t\t\t\t\t\t" +
+                            _vm._s(_vm.pageSubtitle) +
+                            "\n\t\t\t\t\t\t\t\t"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("h1", { staticClass: "header-title" }, [
+                        _vm._v(
+                          "\n\t\t\t\t\t\t\t\t\t" +
+                            _vm._s(_vm.pageTitle) +
+                            "\n\t\t\t\t\t\t\t\t"
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-auto" })
+                  ])
                 ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-auto" })
-            ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "container-fluid" },
+              [_c("router-view")],
+              1
+            )
           ])
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "container-fluid" }, [_c("router-view")], 1)
-    ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -69360,7 +69383,7 @@ var staticRenderFns = [
       },
       [
         _c("i", { staticClass: "fe fe-book-open" }),
-        _vm._v(" Applications\n\t\t\t\t\t\t")
+        _vm._v(" Applications\n\t\t\t\t\t\t\t")
       ]
     )
   },
@@ -90831,14 +90854,16 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_4__["default"]({
     name: 'dashboard',
     component: _focalpoints_dashboard_Index__WEBPACK_IMPORTED_MODULE_7__["default"],
     meta: {
-      title: "Dashboard"
+      title: "Dashboard",
+      auth: true
     }
   }, {
     path: "/applications/normal-vat",
     name: "applications.normal-vat",
     meta: {
       title: "Normal VAT Application",
-      subtitle: 'Applications'
+      subtitle: 'Applications',
+      auth: true
     },
     component: _focalpoints_applications_FPNormalVAT__WEBPACK_IMPORTED_MODULE_8__["default"]
   }]
@@ -91072,7 +91097,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\hcsu\resources\js\fp.js */"./resources/js/fp.js");
+module.exports = __webpack_require__(/*! c:\xampp\htdocs\hcsu\resources\js\fp.js */"./resources/js/fp.js");
 
 
 /***/ })

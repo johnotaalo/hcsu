@@ -32,10 +32,12 @@
     },
     "dependencies": {
         "@enso-ui/tables": "^1.0.28",
+        "@websanova/vue-auth": "^2.21.14-beta",
         "accounting": "^0.4.1",
         "bootstrap-vue": "^2.0.0-rc.15",
         "bulma": "^0.7.4",
         "css-element-queries": "^1.1.1",
+        "es6-promise": "^4.2.8",
         "luxon": "^1.12.0",
         "moment": "^2.24.0",
         "v-calendar": "^0.9.7",

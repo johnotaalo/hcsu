@@ -13,9 +13,18 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('auth')->group(function(){
+	Route::post('login', 'Auth\AuthController@login');
+	Route::get('refresh', 'Auth\AuthController@refresh');
+	Route::group(['middleware' => 'auth:api'], function(){
+		Route::get('user', 'Auth\AuthController@user');
+        Route::post('logout', 'Auth\AuthController@logout');
+	});
+	Route::middleware('auth:api')->get('/user', function (Request $request) {
+	    return $request->user();
+	});
 });
+
 
 Route::prefix('principal')->group(function(){
 	Route::get('/', 'Api\PrincipalController@getPrincipal');
@@ -40,6 +49,7 @@ Route::prefix('principal')->group(function(){
 
 Route::prefix('template')->group(function(){
 	Route::post('/add', 'Api\AppController@addTemplate');
+	Route::get('/nv/data-fields', 'Api\AppController@getNVDataFields');
 });
 
 Route::prefix('client')->group(function(){
@@ -77,4 +87,5 @@ Route::prefix('data')->group(function(){
 
 Route::prefix('documents')->group(function(){
 	Route::get('/generate/{case_no}', 'Api\AppController@generateDocument');
+	Route::get('/get/note_verbal/{process}/{case_no}', 'Api\AppController@generateNoteVerbal');
 });

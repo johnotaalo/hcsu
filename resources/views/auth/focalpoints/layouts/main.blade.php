@@ -36,10 +36,12 @@
 				<p class="text-muted text-center mb-5">
 					@yield('subheading')
 				</p>
-
-				@yield('content')
+				<div id="app">
+					@yield('content')
+				</div>
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript" src="{{ asset('js/hcsu-auth.js') }}"></script>
 </body>
 </html>

@@ -2,5 +2,6 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/fp.css": "/css/fp.css",
-    "/js/fp.js": "/js/fp.js"
+    "/js/fp.js": "/js/fp.js",
+    "/js/hcsu-auth.js": "/js/hcsu-auth.js"
 }

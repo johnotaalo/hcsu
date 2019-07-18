@@ -26,14 +26,16 @@ const router = new VueRouter({
 		name: 'dashboard',
 		component: Dashboard,
 		meta: {
-			title: "Dashboard"
+			title: "Dashboard",
+			auth: true
 		}
 	}, {
 		path: "/applications/normal-vat",
 		name: "applications.normal-vat",
 		meta: {
 			title: "Normal VAT Application",
-			subtitle: 'Applications'
+			subtitle: 'Applications',
+			auth: true
 		},
 		component: FPNormalVAT
 	}]

@@ -127,6 +127,24 @@ class AppController extends Controller
         return $data;
     }
 
+    function getNVDataFields(){
+        $config = [];
+
+        if (env('PDFTK_COMMAND')) {
+            $config = [
+                'command'   =>  env('PDFTK_COMMAND'),
+                'useExec'   =>  true
+            ];
+        }
+
+        $template = public_path('templates/NV.pdf');
+        $pdf = new Pdf($template, $config);
+        $data = $pdf->getDataFields();
+        Storage::disk('local')->put("templates/note-verbal.json", json_encode($data));
+
+        die(json_encode($data));
+    }
+
     function getProcessList(){
         $url = "http://10.104.104.87/api/1.0/workflow/project";
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
@@ -195,6 +213,54 @@ class AppController extends Controller
         else{
             abort(404);
         }
+    }
+
+    function generateNoteVerbal(Request $request){
+        $path = public_path();
+
+        $case = $this->getCaseInformation($request->case_no);
+        $creator = $case->app_init_usr_username;
+        $creatorFrags = explode(" ", $creator);
+
+        $initials = "";
+        if (count($creatorFrags) > 0) {
+            if (count($creatorFrags) == 1) {
+                $initials = strtoupper($creatorFrags[0][0] . $creatorFrags[0][1]);
+            }elseif (count($creatorFrags) == 2) {
+                $initials = strtoupper($creatorFrags[0][0] . $creatorFrags[1][0]);
+            }elseif(count($creatorFrags) > 2){
+                $initials = strtoupper($creatorFrags[0][0] . end($creatorFrags)[0]);
+            }
+        }
+
+        $data = new \StdClass;
+
+        switch($request->process){
+            case 'vat':
+                $data = \App\Helpers\HCSU\Data\VATData::get($case->app_number);
+            break;
+        }
+
+        // dd($data);
+
+        $noteVerbal = new \App\Helpers\HCSU\PDFTK\NoteVerbal($request->process, $data, $initials);
+
+        $config = [];
+        if (env('PDFTK_COMMAND')) {
+            $config = [
+                'command'   =>  env('PDFTK_COMMAND'),
+                'useExec'   =>  true
+            ];
+        }
+
+        $pdf = new Pdf(public_path('templates/NV.pdf'), $config);
+        $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
+                ->flatten()
+                ->execute();
+
+        $content = file_get_contents($pdf->getTmpFile());
+        $localFile = "note-verbals/{$request->process}/{$request->case_no}.pdf";
+        \Storage::put($localFile, $content);
     }
 
     function uploadGeneratedForm($case_no, $task_id, $document, $localFile){
