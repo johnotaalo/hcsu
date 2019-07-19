@@ -261,6 +261,7 @@ class AppController extends Controller
         $content = file_get_contents($pdf->getTmpFile());
         $localFile = "note-verbals/{$request->process}/{$request->case_no}.pdf";
         \Storage::put($localFile, $content);
+        return \Storage::download($localFile);
     }
 
     function uploadGeneratedForm($case_no, $task_id, $document, $localFile){
