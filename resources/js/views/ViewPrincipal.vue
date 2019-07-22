@@ -13,9 +13,23 @@
 						<div class="col-auto">
 
 							<!-- Avatar -->
-							<div class="avatar avatar-xxl header-avatar-top">
+							<div class="avatar avatar-xxl header-avatar-top principal-avatar" @click="handleFileUpload">
 								<b-img v-if="principal.image_link != '/storage/'" class ="avatar-img border border-4 border-body" rounded="circle" :alt="fullname" :src="principalImage" style="background: #FCE4EC;"></b-img>
 								<b-img v-else class ="avatar-img border border-4 border-body" rounded="circle" alt="Circle image" src="/images/no_avatar.svg"></b-img>
+								<div class="image-upload-btn">
+									<!-- <div class="text">John Doe</div> -->
+									<i class = "fe fe-camera"></i>
+								</div>
+
+								<input type="file"
+								ref="principalFile"
+								name="principalFile"
+								@change="onPrincipalFileChange(
+								$event.target.name, $event.target.files)"
+								style="display:none">
+							</div>
+							<div v-if="form.principal.image.url" class="mt-1">
+								<center><b-button size="sm" variant="danger" @click="cancelPrincipalUpload">Cancel</b-button></center>
 							</div>
 
 						</div>
@@ -328,8 +342,24 @@
 	import ContractDetails from './principal/ContractDetails'
 	import VehicleList from './vehicle/VehicleList'
 	import Passports from './dependent/Passports'
+	import vUploader from 'v-uploader'
+
+	const uploaderConfig = {
+		// file uploader service url
+		uploadFileUrl: '/api/data/upload/image',
+		// file delete service url
+		deleteFileUrl: '/api/data/upload/image',
+		// set the way to show upload message(upload fail message)
+		showMessage: (vue, message) => {
+		    //using v-dialogs to show message
+		    console.log(message)
+		}
+	};
+
+	// this.$root.app.use(vUploader, uploaderConfig);
+
 	export default {
-		components: { datetime: Datetime, ContractDetails, VehicleList, Passports },
+		components: { datetime: Datetime, ContractDetails, VehicleList, Passports, vUploader },
 		data() {
 			return {
 				userId: this.$route.params.id,
@@ -350,7 +380,10 @@
 						email: "",
 						officeNo: "",
 						Address: "",
-						residence: ""
+						residence: "",
+						image: {
+							url: ""
+						}
 					})
 				},
 				activeTitle: {
@@ -469,6 +502,7 @@
 			}
 		},
 		mounted() {
+			this.$parent.isContainer = false
 			this.getPrincipalData();
 			this.getFormOptions();
 
@@ -512,6 +546,9 @@
 		},
 		computed: {
 			principalImage: function(){
+				if(this.form.principal.image.url){
+					return this.form.principal.image.url
+				}
 				return '/photos/principal/' + this.principal.HOST_COUNTRY_ID
 			},
 			fullname: function(){
@@ -563,8 +600,37 @@
 			}
 		},
 		methods: {
+			handleFileUpload: function(){
+				this.$refs.principalFile.click();
+			},
 			launchFilePicker: function(){
 				this.$refs.file.click();
+			},
+			cancelPrincipalUpload: function(){
+				this.form.principal.image.url = ""
+				this.form.principal.image.file = ""
+			},
+			onPrincipalFileChange(fieldName, file){
+				const { maxSize } = this
+				let imageFile = file[0] 
+
+				//check if user actually selected a file
+				if (file.length>0) {
+					let size = imageFile.size / maxSize / maxSize
+					if (!imageFile.type.match('image.*')) {
+						alert("Please choose an image file");
+					} else if (size>1) {
+						// check whether the size is greater than the size limit
+						alert('Your file is too big! Please select an image under 1MB')
+					} else {
+						// Append file into FormData & turn file into image URL
+						let formData = new FormData()
+						let imageURL = URL.createObjectURL(imageFile)
+						this.form.principal.image.url = imageURL
+						this.form.principal.image.file = imageFile
+						this.options.imageProps.blank = false
+					}
+				}
 			},
 			onFileChange(fieldName, file) {
 				const { maxSize } = this
@@ -658,6 +724,8 @@
 				this.form.principal.post('/principal/update')
 				.then((res) => {
 					_this.principal = res
+					_this.form.principal.image.url = ""
+					_this.form.principal.image.file = ""
 				});
 			},
 			addPassport: function(){

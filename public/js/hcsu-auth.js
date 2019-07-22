@@ -49193,7 +49193,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! c:\xampp\htdocs\hcsu\resources\js\hcsu-auth.js */"./resources/js/hcsu-auth.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\hcsu\resources\js\hcsu-auth.js */"./resources/js/hcsu-auth.js");
 
 
 /***/ })

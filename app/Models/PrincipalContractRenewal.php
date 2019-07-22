@@ -17,4 +17,8 @@ class PrincipalContractRenewal extends Model
     	$grade = \App\Models\Grade::where('ID', $this->GRADE_ID)->first();
         return $grade;
     }
+
+		public function contract(){
+			return $this->belongsTo('\App\Models\PrincipalContract', 'ID', 'CONTRACT_ID');
+		}
 }

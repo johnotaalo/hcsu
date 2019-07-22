@@ -110,7 +110,8 @@
 				items: []
 			}
 		},
-		mounted(){			
+		mounted(){	
+			this.$parent.isContainer = true		
 		},
 		computed: {
 			rows() {

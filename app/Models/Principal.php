@@ -11,7 +11,7 @@ class Principal extends Model
     protected $primaryKey = "ID";
     protected $table = "PRINCIPAL";
 
-    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival"];
+    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract"];
 
     protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "GENDER", "ADDRESS", "RESIDENCE"];
 
@@ -50,7 +50,15 @@ class Principal extends Model
         }
 
         return null;
-        
+    }
+
+    public function getLatestContractAttribute(){
+      $contract = \App\Models\PrincipalContract::where('PRINCIPAL_ID', $this->HOST_COUNTRY_ID)
+                  ->whereHas('renewals', function($query){
+                    $query->orderBy('END_DATE', 'DESC');
+                  })
+                  ->first();
+      return $contract;
     }
 
     public function getLatestDiplomaticCardAttribute(){
@@ -79,6 +87,7 @@ class Principal extends Model
     }
 
     public function getImageLinkAttribute($value){
+        // return '/photos/principal/' . $this->IMAGE;
     	return Storage::url($this->IMAGE);
     }
 }

@@ -1,28 +1,8 @@
 <template>
 	<div>
-		<!-- <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-			<div class="container">
-				<router-link class="navbar-brand" :to="{ name: 'home' }">HCSU Data Manager</router-link>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
 
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav mr-auto">
-
-					</ul>
-					<ul class="navbar-nav ml-auto">
-						<li class="nav-item"><router-link class="nav-link" :to="{ name: 'home' }">Home</router-link></li>
-						<li class="nav-item"><router-link class="nav-link" :to="{ name: 'principal' }">Principals</router-link></li>
-						<li class="nav-item"><router-link class="nav-link" :to="{ name: 'agencies' }">Agencies</router-link></li>
-						<li class="nav-item"><router-link class="nav-link" :to="{ name: 'vehicles' }">Vehicles</router-link></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
- -->
 		<nav v-if="!iframe" class="navbar navbar-expand-lg navbar-light" id="topnav">
-			<div class="container">
+			<div class = "container">
 
 				<!-- Toggler -->
 				<button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +52,7 @@
 							</span>
 						</a>
 
-						
+
 
 					</div>
 
@@ -116,12 +96,12 @@
 
         </div> <!-- / .container -->
       </nav>
-		<main v-bind:class="{'py-4': !iframe}">
-			<div v-bind:class="{ container: !iframe}">
+		<main v-bind:class="{'py-4': showMainDIV}">
+			<div v-bind:class="{ container: showMainDIV }" >
 				<router-view></router-view>
 				<notifications group="foo" />
 			</div>
-			
+
 		</main>
 	</div>
 </template>
@@ -129,7 +109,29 @@
 	export default {
 		props: {
 			iframe: { type: Boolean, default: false },
-			case: { type: String, default: null, required: false }
+			case: { type: String, default: null, required: false },
+			// isContainer: { type: Boolean, default: true }
+		},
+		data(){
+			return {
+				isContainer: true
+			}
+		},
+		mounted(){
+			// console.log(typeof this.isContainer)
+		},
+		computed: {
+			showMainDIV: function(){
+				if (!this.iframe) {
+					if (this.isContainer) {
+						return true;
+					}else{
+						return false;
+					}
+				}else{
+					return false;
+				}
+			}
 		}
 	}
 </script>

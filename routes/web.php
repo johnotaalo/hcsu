@@ -19,7 +19,14 @@ Route::get('/photos/principal/{host_country_id}', function($host_country_id){
 	$filename = $principal->IMAGE;
 
 	if (!\Storage::exists($filename)) {
-		abort(404);
+		// die("No file name");
+		// abort(404);
+		$file = public_path('images/no_avatar.svg');
+		$type = \File::mimeType($file);
+
+		$headers = array('Content-Type: ' . $type);
+
+		return Response::download($file, 'no_avatar.svg',$headers);
 	}
 
 	$file = \Storage::get($filename);

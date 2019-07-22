@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Storage;
 class PrincipalDependent extends Model
 {
     protected $primaryKey = "ID";
-	protected $table = "PRINCIPAL_DEPENDENT";
-	protected $appends = ["image_link", "relationship", "passports"];
+	  protected $table = "PRINCIPAL_DEPENDENT";
+  	protected $appends = ["image_link", "relationship", "passports"];
 
     protected $fillable = ["HOST_COUNTRY_ID", "PRINCIPAL_ID", "INDEX_NO", "LAST_NAME", "OTHER_NAMES", "RELATIONSHIP_ID", "COUNTRY", "EMPLOYMENT_DETAILS", "PASSPORT_NO", "DATE_OF_BIRTH", "IMAGE"];
 
@@ -25,5 +25,13 @@ class PrincipalDependent extends Model
     public function getPassportsAttribute(){
         $passports = \App\Models\PrincipalPassport::where('PRINCIPAL_ID', $this->HOST_COUNTRY_ID)->get();
         return $passports;
+    }
+
+    public function principal(){
+      return $this->belongsTo('\App\Models\Principal', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
+    }
+
+    public function relationshipX(){
+      return $this->belongsTo('\App\Models\Relationship', 'RELATIONSHIP_ID', 'REL_ID');
     }
 }

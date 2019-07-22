@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<loading 
-		:active.sync="isLoading" 
+		<loading
+		:active.sync="isLoading"
         :can-cancel="false"
         :is-full-page="fullPage"></loading>
 		<b-card>
@@ -52,6 +52,41 @@
 						</template>
 					</v-select>
 				</div>
+
+				<div v-if="clientType == 'dependent'">
+					<label class="control-label">Please type to search for a dependent</label>
+					<v-select label = "LAST_NAME" :filterable="false" :options="dependents" @search="onDependentSearch" v-model="selectedDependent">
+						<template slot="no-options">
+							Type to search for a dependent
+						</template>
+
+						<template slot="option" slot-scope="option">
+							<div class = "row align-items-center">
+								<div class = "col-auto">
+									<img style="width: 50px;height: 50px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="option.image_link"/><img v-else style="width: 50px;height: 50px;" :src="no_avatar_img"/>
+								</div>
+								<div class="col ml-n2">
+									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+									<p class="card-text text-muted">{{ option.relationship_x.RELATIONSHIP }} of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.contract_agency.ACRONYM }})</p>
+								</div>
+							</div>
+						</template>
+
+						<template slot="selected-option" slot-scope="option">
+							<span v-if="option.LAST_NAME">
+								<div class = "row align-items-center">
+									<div class = "col-auto">
+										<img style="width: 50px;height: 50px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="option.image_link"/><img v-else style="width: 50px;height: 50px;" :src="no_avatar_img"/>
+									</div>
+									<div class="col ml-n2">
+										<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+										<p class="card-text text-muted">{{ option.relationship_x.RELATIONSHIP }} of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.contract_agency.ACRONYM }})</p>
+									</div>
+								</div>
+							</span>
+						</template>
+					</v-select>
+				</div>
 			</div>
 
 			<div v-if="host_country_id != 0" class="mt-5">
@@ -70,16 +105,19 @@
 		data: function(){
 			return {
 				isLoading: false,
-                fullPage: true,
+      	fullPage: true,
 				clientType: '',
 				clientTypes: [
 					{ text: "Agency", value: 'agency' },
-					{ text: "Staff Member", value: 'staff-member' }
+					{ text: "Staff Member", value: 'staff-member' },
+					{ text: "Dependent", value: 'dependent' }
 				],
 				agencies: [],
 				staffMembers: [],
+				dependents: [],
 				selectedAgency: {},
 				selectedStaff: {},
+				selectedDependent: {},
 				host_country_id: 0,
 				finalisedHCSUID: 0,
 				no_avatar_img: "/images/no_avatar.svg"
@@ -96,7 +134,11 @@
 				loading(true)
 				this.staffSearch(loading, search, this)
 			},
-			search: _.debounce( (loading, search, vm) => { 
+			onDependentSearch(search, loading){
+				loading(true)
+				this.dependentSearch(loading, search, this)
+			},
+			search: _.debounce( (loading, search, vm) => {
 				axios(`/api/agencies/search?q=${escape(search)}`)
 				.then((res) => {
 					vm.agencies = res.data
@@ -110,6 +152,13 @@
 					loading(false)
 				})
 			}, 350),
+			dependentSearch: _.debounce( (loading, search, vm) => {
+				axios(`/api/dependent/search?q=${escape(search)}`)
+				.then( (res) => {
+					vm.dependents = res.data
+					loading(false)
+				} )
+			}, 350 ),
 			proceedClient: function(){
 				this.isLoading = true;
 				axios.post('/api/client/update', {
@@ -118,11 +167,11 @@
 				})
 				.then( (res) => {
 					this.isLoading = false
-					console.log(res)
+					this.$swal("Success!", "The client's details have been sent to processmaker!", "success")
 				})
 				.catch((error) => {
 					this.isLoading = false
-					console.log(error)
+					this.$swal("Error", error.message, "error")
 				})
 			}
 		},
@@ -142,6 +191,13 @@
 					this.host_country_id = 0
 				}
 				// this.selectedAgency= {}
+			},
+			selectedDependent: function(newVal, oldVal){
+				if(newVal){
+					this.host_country_id = newVal.HOST_COUNTRY_ID
+				}else{
+					this.host_country_id = 0
+				}
 			}
 		}
 	}

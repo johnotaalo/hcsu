@@ -49,7 +49,7 @@ class PrincipalController extends Controller
     	$today = \Carbon\Carbon::now();
 
     	foreach ($principals as $key => $principal) {
-            $cleanedData[$key]['image'] = Storage::url($principal->IMAGE);
+            $cleanedData[$key]['image'] = ($principal->IMAGE) ? route('principal-photo', ['host_country_id' => $principal->HOST_COUNTRY_ID]) : "/storage/";
     		$cleanedData[$key]['last_name'] = $principal->LAST_NAME;
     		$cleanedData[$key]['other_names'] = $principal->OTHER_NAMES;
     		$cleanedData[$key]['email_address'] = $principal->EMAIL;
@@ -88,11 +88,26 @@ class PrincipalController extends Controller
                 ->get();
     }
 
+    function searchDependent(Request $request){
+      $query = $request->q;
+
+      return PrincipalDependent::
+              where('LAST_NAME', 'LIKE', "%{$query}%")
+              ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
+              ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
+              ->orWhereHas('principal', function ($modelQuery) use ($query) {
+                $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%");
+              })
+              ->limit(10)
+              ->with('relationshipX', 'principal')
+              ->get();
+    }
+
     function add(Request $request){
         $principal = new Principal();
         $imagePath = null;
         if(null !== $request->file('principalPhotoFile')){
-            $imagePath = $request->file('principalPhotoFile')->store('principal_photos');        
+            $imagePath = $request->file('principalPhotoFile')->store('principal_photos');
         }
 
         $principal->LAST_NAME = $request->input('lastName');
@@ -192,10 +207,14 @@ class PrincipalController extends Controller
     function update(Request $request){
         // $host_country_id = $request->id;
         // unset($request['id']);
-
-
-
         $principal = Principal::find($request->input('id'));
+
+        $new_path = null;
+        if (null != $request->file('image.file')) {
+            $new_path = $request->file('image.file')->store('principal_photos');
+
+            \Storage::delete($principal->IMAGE);
+        }
 
         $principal->LAST_NAME = $request->input('lastName');
         $principal->OTHER_NAMES = $request->input('otherNames');
@@ -208,11 +227,13 @@ class PrincipalController extends Controller
         $principal->ADDRESS = $request->input('Address');
         $principal->RESIDENCE = $request->input('residence');
 
+        $principal->IMAGE = $new_path;
+
         // echo "<pre>";print_r($principal);die;
 
         $principal->save();
 
-        return Principal::where('HOST_COUNTRY_ID', $principal->HOST_COUNTRY_ID)->with(['contracts', 'dependents', 'passports'])->first();
+        return Principal::where('HOST_COUNTRY_ID', $principal->HOST_COUNTRY_ID)->with(['contracts', 'dependents', 'passports', 'vehicles'])->first();
     }
 
     function get(Request $request){
