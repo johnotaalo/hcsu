@@ -96,7 +96,8 @@ class PrincipalController extends Controller
               ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
               ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
               ->orWhereHas('principal', function ($modelQuery) use ($query) {
-                $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%");
+                $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
+                ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
               })
               ->limit(10)
               ->with('relationshipX', 'principal')
