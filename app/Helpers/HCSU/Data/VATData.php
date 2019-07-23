@@ -9,7 +9,7 @@ use \App\Models\Agency;
 class VATData{
 	public static function get($case_no){
 		$data = [];
-		
+
 		$vat_data = VAT::where('CASE_NO', $case_no)->first();
 		$firstIDChar = substr($vat_data->HOST_COUNTRY_ID, 0, 1);
 
@@ -64,7 +64,25 @@ class VATData{
             $clientObj->organization = $mission;
             $clientObj->type = "agency";
             $clientObj->arrival = $arrival;
-        }
+        } else if ($firstIDChar == "2"){
+					$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
+
+					$relationship = $dependent->relationship->RELATIONSHIP;
+
+					$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
+
+					$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
+					$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
+					$mission = $dependent->principal->latest_contract->agency->ACRONYM;
+					$arrival = "{$dependent->principal->current_arrival->ARRIVAL} (Dip. Id No: {$dependent->principal->latest_diplomatic_card->DIP_ID_NO})";
+
+					$clientObj->name = $c_name;
+					$clientObj->designation = $dependent->principal->latest_contract->DESIGNATION;
+					$clientObj->organization = $mission;
+					$clientObj->index_no = $dependent->principal->latest_contract->INDEX_NO;
+					$clientObj->type = "dependent";
+					$clientObj->arrival = $arrival;
+				}
 
         $vatObj->supplierName = $vat_data->supplier->SUPPLIER_NAME;
         $vatObj->supplierAddress   =  $vat_data->supplier->SUPPLIER_ADDRESS;

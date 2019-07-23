@@ -25,7 +25,7 @@ class NoteVerbal {
 				break;
 		}
 
-		$this->header = "Your Ref: \n\nOur Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
+		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
 
 		return $this;
 	}
@@ -43,8 +43,8 @@ class NoteVerbal {
 				$body = "Details are as follows:\r";
 				$body .= str_pad("Serial No:", 15) . "{$this->data->case_no}\r";
 				$body .= str_pad("Name:", 15) . "{$this->data->client->name}\r";
-				if($this->data->client->type == "staff"){
-					$body .= str_pad("Organization:", 15) . "{$this->data->client->organization}\r";	
+				if($this->data->client->type == "staff" || $this->data->client->type == "dependent"){
+					$body .= str_pad("Organization:", 15) . "{$this->data->client->organization}\r";
 				}
 				$body .= str_pad("Invoice No:" , 15) . "{$this->data->vat->pfNo}\r";
 				$body .= str_pad("VAT Amount:" , 15) . "KSH. {$this->data->vat->vatAmount}\r";
@@ -59,6 +59,6 @@ class NoteVerbal {
 		$this->getFooter();
 		$this->getBody();
 
-		return  $this->header . $this->body . "\n\n" . $this->footer; 
+		return  $this->header . $this->body . "\n\n" . $this->footer;
 	}
 }
