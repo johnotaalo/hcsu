@@ -11,7 +11,7 @@ class Principal extends Model
     protected $primaryKey = "ID";
     protected $table = "PRINCIPAL";
 
-    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract"];
+    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname"];
 
     protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "GENDER", "ADDRESS", "RESIDENCE"];
 
@@ -32,6 +32,10 @@ class Principal extends Model
 
     public function arrivalDepartures(){
         return $this->hasMany('\App\PrincipalArrivalDeparture', 'HOST_COUNTRY_ID', 'HOST_COUNTRY_ID');
+    }
+
+    public function getFullnameAttribute(){
+      return strtoupper($this->LAST_NAME) . ", " . ucwords(strtolower($this->OTHER_NAMES));
     }
 
     public function getCurrentArrivalAttribute(){
@@ -57,6 +61,7 @@ class Principal extends Model
                   ->whereHas('renewals', function($query){
                     $query->orderBy('END_DATE', 'DESC');
                   })
+                  ->with('agency')
                   ->first();
       return $contract;
     }

@@ -104,6 +104,12 @@ class PrincipalController extends Controller
               ->get();
     }
 
+    function getDependent(Request $request){
+      $host_country_id = $request->host_country_id;
+
+      return PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->with('principal', 'relationshipX')->first();
+    }
+
     function add(Request $request){
         $principal = new Principal();
         $imagePath = null;

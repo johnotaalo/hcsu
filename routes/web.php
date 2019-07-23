@@ -37,6 +37,30 @@ Route::get('/photos/principal/{host_country_id}', function($host_country_id){
 
 	return $response;
 })->name('principal-photo');
+
+Route::get('/photos/dependent/{host_country_id}', function($host_country_id){
+	$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();
+	$filename = $dependent->IMAGE;
+
+	if (!\Storage::exists($filename)) {
+		// die("No file name");
+		// abort(404);
+		$file = public_path('images/no_avatar.svg');
+		$type = \File::mimeType($file);
+
+		$headers = array('Content-Type: ' . $type);
+
+		return Response::download($file, 'no_avatar.svg',$headers);
+	}
+
+	$file = \Storage::get($filename);
+	$type = \Storage::mimeType($filename);
+
+	$response = Response::make($file, 200);
+	$response->header("Content-Type", $type);
+
+	return $response;
+})->name('dependent-photo');
 Route::get('/sample', 'Test\SampleController@index');
 Route::get('/pmauthentication', 'Test\SampleController@pmauth');
 Route::get('/docusign', 'Api\DocusignAPIController@index')->name('docusign-client');

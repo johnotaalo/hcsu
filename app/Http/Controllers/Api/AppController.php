@@ -83,7 +83,6 @@ class AppController extends Controller
         $variable_name = "host_country_id";
         $host_country_id = $request->host_country_id;
 
-
         $url = "http://10.104.104.87/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
 
         $data = [

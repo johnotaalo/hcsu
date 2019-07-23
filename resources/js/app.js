@@ -80,6 +80,7 @@ import Home from './views/Home'
 import Principal from './views/Principal'
 import AddPrincipal from './views/AddPrincipal'
 import ViewPrincipal from './views/ViewPrincipal'
+import ViewDependent from './views/dependent/ViewDependent'
 import Agencies from './views/Agencies'
 import AddAgency from './views/AddAgency'
 import ViewAgency from './views/agency/ViewAgency'
@@ -110,6 +111,11 @@ import SettingsIndex from './views/settings/SettingsIndex'
 	 		path: '/principal/view/:id',
 	 		name: 'principal.view',
 	 		component: ViewPrincipal
+	 	},
+    {
+	 		path: '/dependent/view/:id',
+	 		name: 'dependent.view',
+	 		component: ViewDependent
 	 	},
 	 	{
 	 		path: '/agencies',

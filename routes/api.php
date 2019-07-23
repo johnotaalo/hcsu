@@ -79,6 +79,10 @@ Route::prefix('data')->group(function(){
 		Route::get('/search', 'Api\SupplierController@searchSupplier');
 	});
 
+	Route::prefix('dependent')->group(function(){
+		Route::get('/get/{host_country_id}', 'Api\PrincipalController@getDependent');
+	});
+
 	Route::prefix('processes')->group(function(){
 		Route::get('/', 'Api\AppController@getProcessList');
 		Route::get('/{process}/tasks', 'Api\AppController@getProcessTasks');
