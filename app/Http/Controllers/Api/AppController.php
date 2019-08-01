@@ -83,7 +83,7 @@ class AppController extends Controller
         $variable_name = "host_country_id";
         $host_country_id = $request->host_country_id;
 
-        $url = "http://10.104.104.87/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        $url = "http://10.100.86.1/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
 
         $data = [
             $variable_name => $host_country_id,
@@ -145,7 +145,7 @@ class AppController extends Controller
     }
 
     function getProcessList(){
-        $url = "http://10.104.104.87/api/1.0/workflow/project";
+        $url = "http://".env('PM_SERVER')."/api/1.0/workflow/project";
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 

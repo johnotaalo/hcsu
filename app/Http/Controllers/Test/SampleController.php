@@ -42,13 +42,14 @@ class SampleController extends Controller
 	   		'client_secret' => env('PM_CLIENT_SECRET')
 		);
 		
-		$ch = curl_init("http://10.104.104.87/workflow/oauth2/token");
+		$ch = curl_init("http://".env('PM_SERVER')."/workflow/oauth2/token");
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postParams);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	 
 		$result = json_decode(curl_exec($ch));
+		// dd($result);
 		$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($httpStatus != 200) {
 			print "Error in HTTP status code: $httpStatus\n";
