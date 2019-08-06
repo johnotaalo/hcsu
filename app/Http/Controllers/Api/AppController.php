@@ -258,8 +258,20 @@ class AppController extends Controller
                 ->execute();
 
         $content = file_get_contents($pdf->getTmpFile());
-        $localFile = "note-verbals/{$request->process}/{$request->case_no}.pdf";
+        $localFile = "note-verbals/{$request->process}/Note Verbal - {$case->app_number}.pdf";
         \Storage::put($localFile, $content);
+
+        $case = $this->getCaseInformation($request->case_no);
+        $process = $case->pro_uid;
+        $currentTask = $case->current_task[0]->tas_uid;
+        $document = FormTemplate::where([
+            'process'   =>  $process,
+            'task'      =>  $currentTask
+        ])->first();
+        if ($document->input_document != null) {
+            $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+        }
+
         return \Storage::download($localFile);
     }
 

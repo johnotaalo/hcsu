@@ -82,7 +82,7 @@
 											<div class="form-group">
 												<label for="dob">Date of Birth</label>
 												<datetime v-model="form.principal.dob" type="date" input-id="dob" input-class="form-control" :auto="dateAutoProp"></datetime>
-											</div>						
+											</div>
 										</div>
 									</div>
 									<hr>
@@ -226,7 +226,7 @@
 							</b-tabs>
 						</b-card>
 					</div>
-					
+
 				</div>
 			</div>
 		</div>
@@ -326,7 +326,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 		</b-modal>
 
 		<b-modal id="dependent-passport-modal" ref="dependent-modal" title="Dependent Passport" size="xl">
@@ -417,7 +417,7 @@
 						agency: "",
 						contractType: "",
 						indexNo: "",
-						designation: "", 
+						designation: "",
 						functionalTitle: "",
 						contractFrom: "",
 						contractTo: "",
@@ -441,17 +441,17 @@
 					})
 				},
 				options: {
-					marital_status: [{ 
-							value: "Single", 
+					marital_status: [{
+							value: "Single",
 							text: "Single"
-						},{ 
-							value: "Married", 
+						},{
+							value: "Married",
 							text: "Married"
-						},{ 
-							value: "Divorced", 
+						},{
+							value: "Divorced",
 							text: "Divorced"
-						},{ 
-							value: "Separated", 
+						},{
+							value: "Separated",
 							text: "Separated"
 						}
 					],
@@ -609,10 +609,11 @@
 			cancelPrincipalUpload: function(){
 				this.form.principal.image.url = ""
 				this.form.principal.image.file = ""
+				this.principal.image_link = "/storage/"
 			},
 			onPrincipalFileChange(fieldName, file){
 				const { maxSize } = this
-				let imageFile = file[0] 
+				let imageFile = file[0]
 
 				//check if user actually selected a file
 				if (file.length>0) {
@@ -628,13 +629,14 @@
 						let imageURL = URL.createObjectURL(imageFile)
 						this.form.principal.image.url = imageURL
 						this.form.principal.image.file = imageFile
+						this.principal.image_link = imageURL
 						this.options.imageProps.blank = false
 					}
 				}
 			},
 			onFileChange(fieldName, file) {
 				const { maxSize } = this
-				let imageFile = file[0] 
+				let imageFile = file[0]
 
 				//check if user actually selected a file
 				if (file.length>0) {
@@ -683,12 +685,12 @@
 					}));
 
 					this.options.passportTypes = _.map(res.data.passportTypes, type => ({
-						value: type.ID, 
+						value: type.ID,
 						text: type.PPT_TYPE
 					}));
 
 					this.options.agencies = _.map(res.data.agencies, agency => ({
-						id: agency.AGENCY_ID, 
+						id: agency.AGENCY_ID,
 						label: agency.ACRONYM + " - " + agency.AGENCYNAME
 					}));
 
@@ -820,7 +822,7 @@
 					}else{
 						errorMessage = error.request
 					}
-					
+
 					this.$notify({
 						group: 'foo',
 						title: 'Error',
@@ -884,7 +886,7 @@
 				_this.modal.contract.agency = agencyObj
 				_this.modal.contract.contractType = contractTypeObj
 				_this.modal.contract.indexNo = contractData.INDEX_NO
-				_this.modal.contract.designation = contractData.DESIGNATION 
+				_this.modal.contract.designation = contractData.DESIGNATION
 				_this.modal.contract.functionalTitle = contractData.FUNC_TITLE
 				_this.modal.contract.contractFrom = contractData.renewals.START_DATE
 				_this.modal.contract.contractTo = contractData.renewals.END_DATE
@@ -904,7 +906,7 @@
 				_this.modal.contract.agency = ""
 				_this.modal.contract.contractType = ""
 				_this.modal.contract.indexNo = ""
-				_this.modal.contract.designation = "" 
+				_this.modal.contract.designation = ""
 				_this.modal.contract.functionalTitle = ""
 				_this.modal.contract.contractFrom = ""
 				_this.modal.contract.contractTo = ""
@@ -954,7 +956,7 @@
 					}else{
 						errorMessage = error.request
 					}
-					
+
 					this.$notify({
 						group: 'foo',
 						title: 'Error',
@@ -1057,7 +1059,7 @@
 					}else{
 						errorMessage = error.request
 					}
-					
+
 					this.$notify({
 						group: 'foo',
 						title: 'Error',
