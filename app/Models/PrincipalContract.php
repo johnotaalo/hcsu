@@ -10,7 +10,7 @@ class PrincipalContract extends Model
     protected $table = "PRINCIPAL_CONTRACT";
     protected $appends = ['contract_agency', "type", "renewals"];
 
-    protected $fillable = ["PRINCIPAL_ID", "INDEX_NO", "AGENCY_ID", "DESIGNATION", "FUNC_TITLE", "CONTRACT_TYPE_ID"];
+    protected $fillable = ["PRINCIPAL_ID", "INDEX_NO", "AGENCY_ID", "DESIGNATION", "FUNC_TITLE", "CONTRACT_TYPE_ID", "GRADE_ID", "GRADE", "CONTRACT_FROM", "CONTRACT_TO"];
 
 
     public function principal(){

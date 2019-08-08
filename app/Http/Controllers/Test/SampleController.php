@@ -12,7 +12,7 @@ class SampleController extends Controller
     function  index(){
 		// $token = $this->getAccessToken();
 		// die($token);
-		$server = "http://10.104.104.87/api/1.0/workflow/cases/advanced-search";
+		$server = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/advanced-search";
 		$ch = curl_init($server);
 		$authVar = json_decode(Storage::get("pmauthentication.json"));
 		// echo date('d/m/Y h:i a', $authVar->expiry);

@@ -10,7 +10,7 @@ class StaffMember extends Model
     protected $table = "unon_staff_member";
     protected $primaryKey = "record_id";
 
-    protected $appends = ['pin', 'dl'];
+    protected $appends = ['pin', 'dl', 'principal_passports', 'principal_diplomatic_cards'];
 
     public function pins(){
       return $this->hasMany('App\Models\OLDPM\StaffPIN', 'index_no', 'index_no');
@@ -26,6 +26,22 @@ class StaffMember extends Model
 
     public function contracts(){
       return $this->hasMany('App\Models\OLDPM\StaffContract', 'index_no', 'index_no');
+    }
+
+    public function passports(){
+      return $this->hasMany('App\Models\OLDPM\StaffPassport', 'index_no', 'index_no');
+    }
+
+    public function diplomaticCards(){
+      return $this->hasMany('\App\Models\OLDPM\StaffDipID', 'index_no', 'index_no');
+    }
+
+    public function getPrincipalDiplomaticCardsAttribute(){
+      return $this->diplomaticCards()->whereIn('owner_code', ['01', ''])->get();
+    }
+
+    public function getPrincipalPassportsAttribute(){
+      return $this->passports()->whereIn('owner_code', ['01', ''])->get();
     }
 
     public function getPinAttribute(){
