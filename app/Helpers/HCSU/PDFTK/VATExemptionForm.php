@@ -45,7 +45,9 @@ class VATExemptionForm{
             $client_name = $name;
             $name = $name . "; " . $contract->DESIGNATION;
             $mission = $contract->ACRONYM;
-            $arrival = "{$principal->current_arrival->ARRIVAL} (Dip. Id No: {$principal->latest_diplomatic_card->DIP_ID_NO})";
+            $arrival_date = ($principal->current_arrival != null) ? $principal->current_arrival->ARRIVAL : "N/A";
+            $diplomaticCardNo = ($principal->latest_diplomatic_card != null) ? $principal->latest_diplomatic_card->DIP_ID_NO : "N/A";
+            $arrival = "{$arrival_date} (Dip. Id No: {$diplomaticCardNo})";
         }else if ($firstIDChar == "3"){
             $agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
             $name = $agency->ACRONYM;
