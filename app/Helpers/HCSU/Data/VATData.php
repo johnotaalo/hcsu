@@ -65,24 +65,24 @@ class VATData{
             $clientObj->type = "agency";
             $clientObj->arrival = $arrival;
         } else if ($firstIDChar == "2"){
-					$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
+			$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
 
-					$relationship = $dependent->relationship->RELATIONSHIP;
+			$relationship = $dependent->relationship->RELATIONSHIP;
 
-					$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
+			$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
 
-					$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
-					$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
-					$mission = $dependent->principal->latest_contract->agency->ACRONYM;
-					$arrival = "{$dependent->principal->current_arrival->ARRIVAL} (Dip. Id No: {$dependent->principal->latest_diplomatic_card->DIP_ID_NO})";
+			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
+			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
+			$mission = $dependent->principal->latest_contract->agency->ACRONYM;
+			$arrival = "{$dependent->principal->current_arrival->ARRIVAL} (Dip. Id No: {$dependent->principal->latest_diplomatic_card->DIP_ID_NO})";
 
-					$clientObj->name = $c_name;
-					$clientObj->designation = $dependent->principal->latest_contract->DESIGNATION;
-					$clientObj->organization = $mission;
-					$clientObj->index_no = $dependent->principal->latest_contract->INDEX_NO;
-					$clientObj->type = "dependent";
-					$clientObj->arrival = $arrival;
-				}
+			$clientObj->name = $c_name;
+			$clientObj->designation = $dependent->principal->latest_contract->DESIGNATION;
+			$clientObj->organization = $mission;
+			$clientObj->index_no = $dependent->principal->latest_contract->INDEX_NO;
+			$clientObj->type = "dependent";
+			$clientObj->arrival = $arrival;
+		}
 
         $vatObj->supplierName = $vat_data->supplier->SUPPLIER_NAME;
         $vatObj->supplierAddress   =  $vat_data->supplier->SUPPLIER_ADDRESS;

@@ -237,6 +237,8 @@ class AppController extends Controller
         switch($request->process){
             case 'vat':
                 $data = \App\Helpers\HCSU\Data\VATData::get($case->app_number);
+            case 'blanket':
+                $data = \App\Helpers\HCSU\Data\BlanketVATData::get($case->app_number);
             break;
         }
 
@@ -268,9 +270,13 @@ class AppController extends Controller
             'process'   =>  $process,
             'task'      =>  $currentTask
         ])->first();
-        if ($document->input_document != null) {
-            $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+        if($document){
+            if ($document->input_document != null) {
+                $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+            }
         }
+
+        return response()->file(storage_path("app/{$localFile}"));
 
         return \Storage::download($localFile);
     }
