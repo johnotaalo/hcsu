@@ -215,6 +215,7 @@ class AppController extends Controller
     }
 
     function generateNoteVerbal(Request $request){
+        $downloadType = ($request->query('download')) ? (bool)$request->query('download') : false;
         $path = public_path();
 
         $case = $this->getCaseInformation($request->case_no);
@@ -276,9 +277,10 @@ class AppController extends Controller
             }
         }
 
+        if($downloadType){
+            return \Storage::download($localFile);
+        }
         return response()->file(storage_path("app/{$localFile}"));
-
-        return \Storage::download($localFile);
     }
 
     function uploadGeneratedForm($case_no, $task_id, $document, $localFile){
