@@ -83,7 +83,7 @@ class AppController extends Controller
         $variable_name = "host_country_id";
         $host_country_id = $request->host_country_id;
 
-        $url = "http://10.100.86.1/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
 
         $data = [
             $variable_name => $host_country_id,
@@ -352,5 +352,11 @@ class AppController extends Controller
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
         return $response;
+    }
+
+    function downloadVATData(){
+        $vat_data = \App\Model\VAT::all();
+
+        return $vat_data;
     }
 }
