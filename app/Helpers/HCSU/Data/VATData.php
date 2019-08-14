@@ -25,6 +25,13 @@ class VATData{
             return $invoice->VAT_AMOUNT;
         })->toArray();
 
+        // if(count($vat_data->invoices) > 1){
+        //     echo $case_no;
+        //     dd($vat_data->invoices);die;
+        // }
+
+        $pfDate = $vat_data->invoices->min('DOCUMENT_DATE');
+
         $goods = self::generateCombinedString($goodsArray);
         $invoice_numbers = self::generateCombinedString($invoiceNumbersArray);
         $totalVAT = ($vat_data->invoices)->sum('VAT_AMOUNT');
@@ -44,7 +51,9 @@ class VATData{
             $client_name = $name;
             $name = $name . "; " . $contract->DESIGNATION;
             $mission = $contract->ACRONYM;
-            $arrival = "{$principal->current_arrival->ARRIVAL} (Dip. Id No: {$principal->latest_diplomatic_card->DIP_ID_NO})";
+            $arrivalDate = ($principal->current_arrival) ? $principal->current_arrival->ARRIVAL : "N/A";
+            $diplomaticCardNo = ($principal->latest_diplomatic_card) ? $principal->latest_diplomatic_card->DIP_ID_NO : "N/A";
+            $arrival = "{$arrivalDate} (Dip. Id No: {$diplomaticCardNo})";
 
             $clientObj->name = $client_name;
             $clientObj->designation = $contract->DESIGNATION;
@@ -74,7 +83,10 @@ class VATData{
 			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
 			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
 			$mission = $dependent->principal->latest_contract->agency->ACRONYM;
-			$arrival = "{$dependent->principal->current_arrival->ARRIVAL} (Dip. Id No: {$dependent->principal->latest_diplomatic_card->DIP_ID_NO})";
+            $arrivalDate = ($dependent->principal->current_arrival) ? $dependent->principal->current_arrival->ARRIVAL : "N/A";
+            $diplomaticCardNo = ($dependent->principal->latest_diplomatic_card) ? $dependent->principal->latest_diplomatic_card->DIP_ID_NO : "N/A";
+            $arrival = "{$arrivalDate} (Dip. Id No: {$diplomaticCardNo})";
+			// $arrival = ($dependent->principal->current_arrival) ? "{$dependent->principal->current_arrival->ARRIVAL} (Dip. Id No: {$dependent->principal->latest_diplomatic_card->DIP_ID_NO})" : "N/A";
 
 			$clientObj->name = $c_name;
 			$clientObj->designation = $dependent->principal->latest_contract->DESIGNATION;
@@ -90,6 +102,7 @@ class VATData{
         $vatObj->goodsDescription  =  $goods;
         $vatObj->pfNo              =  $invoice_numbers;
         $vatObj->vatAmount         =  number_format($totalVAT, 2);
+        $vatObj->pfDate            =  $pfDate;
 
         $data->case_no = $case_no;
         $data->ref = $vat_data->EXEMPTION_FORM_REF_NO;

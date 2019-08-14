@@ -96,6 +96,8 @@ Route::prefix('data')->group(function(){
 Route::prefix('documents')->group(function(){
 	Route::get('/generate/{case_no}', 'Api\AppController@generateDocument');
 	Route::get('/get/note_verbal/{process}/{case_no}', 'Api\AppController@generateNoteVerbal');
+
+	Route::get('/export/vat/normal/list', 'Api\Export@exportVAT');
 });
 
 Route::get('/dependent/search', 'Api\PrincipalController@searchDependent');

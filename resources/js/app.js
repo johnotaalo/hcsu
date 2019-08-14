@@ -87,6 +87,9 @@ import ViewAgency from './views/agency/ViewAgency'
 import Vehicles from './views/Vehicles'
 import SearchClient from './views/iframe/SearchClient'
 import SettingsIndex from './views/settings/SettingsIndex'
+import VAT from './views/vat/VAT'
+import BlanketVAT from './views/vat/components/BlanketVAT'
+import NormalVAT from './views/vat/components/NormalVAT'
 
  const router = new VueRouter({
  	mode: 'history',
@@ -112,7 +115,7 @@ import SettingsIndex from './views/settings/SettingsIndex'
 	 		name: 'principal.view',
 	 		component: ViewPrincipal
 	 	},
-    {
+    	{
 	 		path: '/dependent/view/:id',
 	 		name: 'dependent.view',
 	 		component: ViewDependent
@@ -146,6 +149,23 @@ import SettingsIndex from './views/settings/SettingsIndex'
 	 		path: '/settings',
 	 		name: 'settings',
 	 		component: SettingsIndex
+	 	},
+	 	{
+	 		path: '/vat',
+	 		name: 'vat',
+	 		component: VAT,
+	 		children: [
+	 			{
+	 				path: 'blanket',
+	 				component: BlanketVAT,
+	 				name: 'blanket'
+	 			},
+	 			{
+	 				path: 'normal',
+	 				component: NormalVAT,
+	 				name: 'normal-vat'
+	 			}
+	 		]
 	 	}
  	]
  });
