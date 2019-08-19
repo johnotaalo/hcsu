@@ -10,7 +10,7 @@ class VATController extends Controller
     function addBlanketBatch(Request $request){
     	// dd($request->input());
     	$validatedData = $request->validate([
-    		'batch_date'	=>	'required|unique:pm_data.vat_02_batches'
+    		'batch_date'	=>	'required|unique:pm_data.VAT_02_BATCHES'
     	]);
 
     	$res = \App\Models\BlanketVATBatch::create([
