@@ -101,3 +101,11 @@ Route::prefix('documents')->group(function(){
 });
 
 Route::get('/dependent/search', 'Api\PrincipalController@searchDependent');
+
+Route::prefix('/vat')->group(function(){
+	Route::prefix('blanket')->group(function(){
+		Route::get('batches', 'Api\VATController@getBlanketBatches');
+		Route::post('batch', 'Api\VATController@addBlanketBatch');
+		Route::delete('batch', 'Api\VATController@deleteBlanketBatch');
+	});
+});

@@ -35,6 +35,7 @@ require('vue-toastr/src/vue-toastr.scss');
 window.Vue = require('vue');
 Vue.use(BootstrapVue);
 Vue.use(ServerTable, {}, false, 'bootstrap4', 'default');
+Vue.use(ClientTable, {}, false, 'bootstrap4', 'default');
 Vue.component('v-select', vSelect)
 Vue.use(VCalendar);
 Vue.use(require('vue-moment'))
@@ -73,6 +74,12 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+Vue.filter('nullable', function (value) {
+	if (!value) return 'N/A'
+	return value
+})
+
+
 // import App from './views/App'
 // import router from './router'
 import App from './views/App'
@@ -88,7 +95,9 @@ import Vehicles from './views/Vehicles'
 import SearchClient from './views/iframe/SearchClient'
 import SettingsIndex from './views/settings/SettingsIndex'
 import VAT from './views/vat/VAT'
-import BlanketVAT from './views/vat/components/BlanketVAT'
+import BlanketVAT from './views/vat/BlanketVAT'
+// BlanketVATBatch
+import BlanketVATBatch from './views/vat/components/BlanketVATBatch'
 import NormalVAT from './views/vat/components/NormalVAT'
 
  const router = new VueRouter({
@@ -153,12 +162,29 @@ import NormalVAT from './views/vat/components/NormalVAT'
 	 	{
 	 		path: '/vat',
 	 		name: 'vat',
-	 		component: VAT,
+	 		// component: VAT,
 	 		children: [
 	 			{
 	 				path: 'blanket',
 	 				component: BlanketVAT,
 	 				name: 'blanket'
+	 			},
+	 			{
+	 				path: 'normal',
+	 				component: NormalVAT,
+	 				name: 'normal-vat'
+	 			}
+	 		]
+	 	},
+	 	{
+	 		path: '/blanket-vat',
+	 		name: 'blanket-vat',
+	 		component: BlanketVAT,
+	 		children: [
+	 			{
+	 				path: 'batches',
+	 				component: BlanketVATBatch,
+	 				name: 'blanket-vat-batches'
 	 			},
 	 			{
 	 				path: 'normal',
