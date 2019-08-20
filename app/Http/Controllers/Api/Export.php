@@ -28,4 +28,30 @@ class Export extends Controller
     	$exportData = new \App\Exports\VATExport($vatList);
     	return \Excel::download($exportData, 'VAT LIST.xlsx');
     }
+
+    function downloadBlanketVATList(Request $request){
+        $batch = \App\Models\BlanketVATBatch::find($request->batch);
+        $vat = \App\Models\BlanketVAT::where('BATCH_ID', $request->batch)->get();
+
+        $list = $vat->map(function($item, $key){
+            $data = \App\Helpers\HCSU\Data\BlanketVATData::get($item->CASE_NO);
+            // dd($data->vatObj->ipmis_log->CREATED_AT);
+
+            return [
+                'NO'                    =>  $key + 1,
+                'ORGANIZAITON'          =>  $data->client->organization,
+                'CASE_NO'               =>  $item->CASE_NO,
+                'DATE_APPLIED_AT_MFA'   =>  \Carbon\Carbon::parse($data->vatObj->ipmis_log->CREATED_AT)->format('d/m/Y'),
+                'DATE_APPLIED_AT_KRA'   =>  '',
+                'DATE_APPROVED'         =>  '',
+                'PIN'                   =>  $data->vatObj->supplier->PIN,
+                'SUPPLIER_NAME'         =>  $data->vatObj->supplier->NAME,
+                'INVOICE_NUMBER'        =>  $data->vatObj->INVOICE_NO,
+                'AMOUNT'                =>  $data->vatObj->VAT_AMOUNT
+            ];
+        });
+
+        $exportData = new \App\Exports\BlanketVATExport($list, $batch);
+        return \Excel::download($exportData, 'Blanket VAT List for Batch: ' . \Carbon\Carbon::parse($batch->batch_date)->format('d_m_Y') . '.xlsx');
+    }
 }

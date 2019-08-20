@@ -31,6 +31,10 @@ class VATExport implements FromCollection, WithHeadings, WithColumnFormatting, S
         return ['CASE_NO', 'AGENCY', 'PIN_NO', 'SUPPLIER', 'DESCRIPTION', 'PFNO', 'PFDATE', 'AMOUNT'];
     }
 
+    public function headingRow(): int {
+        return 1;
+    }
+
     public function columnFormats(): array
     {
         return [

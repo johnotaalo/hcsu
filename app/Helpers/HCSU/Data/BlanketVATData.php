@@ -27,6 +27,17 @@ class BlanketVATData{
             $clientObj->name = $client_name;
             $clientObj->type = "staff";
             $clientObj->organization = $mission;
+		}else if($firstIDChar == "3"){
+			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
+            $name = $agency->ACRONYM;
+            $mission = $name;
+            $client_name = $name;
+            $arrival = "N/A";
+
+            $clientObj->name = $name;
+            $clientObj->organization = $mission;
+            $clientObj->type = "agency";
+            $clientObj->arrival = $arrival;
 		}
 
 		$durationFrom = new \Carbon\Carbon($blanketData->DURATION_FROM);

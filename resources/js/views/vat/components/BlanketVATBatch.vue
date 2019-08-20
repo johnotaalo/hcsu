@@ -35,8 +35,8 @@
 								Actions <i class="fe fe-more-vertical"></i>
 							</a>
 							<div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-135px, 25px, 0px); top: 0px; left: 0px; will-change: transform;">
-								<a class="dropdown-item" v-if="data.row.cases.length > 0">
-									Download List
+								<a class="dropdown-item" v-if="data.row.cases.length > 0" @click="downloadVATList(data.row.id, data.row.batch_date)">
+									Download List {{ data.row.id }}
 								</a>
 								<a class="dropdown-item" v-if="data.row.cases.length == 0" @click="deleteBatch(data.index - 1)">
 									Delete
@@ -131,6 +131,22 @@
 				.catch(error => {
 					this.$swal("Error!", `Error: ${error.response.data.message}`, "error");
 				})
+			},
+			downloadVATList: function(batch_id, batch_date){
+				var url = `/api/vat/blanket/list/download/${batch_id}`
+				axios({
+					url: url, 
+					method: 'GET',
+					responseType: 'blob',
+				})
+				.then(res => {
+					const url = window.URL.createObjectURL(new Blob([res.data]));
+					const link = document.createElement('a');
+					link.href = url;
+					link.setAttribute('download', `BLANKET VAT LIST BATCH (${batch_date}).xlsx`); //or any other extension
+					document.body.appendChild(link);
+					link.click();
+				});
 			}
 		}
 	}
