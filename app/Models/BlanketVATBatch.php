@@ -12,6 +12,6 @@ class BlanketVATBatch extends Model
     protected $fillable = ['batch_date', 'comment', 'is_active'];
 
     public function cases(){
-    	return $this->hasMany(\App\Models\BlanketVATBatchCase::class, "batch_id");
+    	return $this->hasMany(\App\Models\BlanketVAT::class, "BATCH_ID");
     }
 }
