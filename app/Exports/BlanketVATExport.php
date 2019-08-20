@@ -11,8 +11,9 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithEvents
+class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormatting, ShouldAutoSize, WithEvents, WithTitle
 {
 	protected $data;
 	protected $batch;
@@ -46,6 +47,10 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
             'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
             'J' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
         ];
+    }
+
+    public function title(): string{
+        return 'List - ' . \Carbon\Carbon::parse($this->batch->batch_date)->format('d.m.Y');
     }
 
     public function registerEvents(): array
