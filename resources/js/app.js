@@ -100,6 +100,15 @@ import BlanketVAT from './views/vat/BlanketVAT'
 import BlanketVATBatch from './views/vat/components/BlanketVATBatch'
 import NormalVAT from './views/vat/components/NormalVAT'
 
+// Vehicles
+import VehicleHome from './views/vehicle/VehicleHome'
+import Plates from './views/vehicle/Plates'
+import Prefix from './views/vehicle/plates/Prefix'
+import PlatesOrder from './views/vehicle/plates/PlatesOrder'
+
+// Data
+import DataManagement from './views/data/DataManagement'
+
  const router = new VueRouter({
  	mode: 'history',
  	linkExactActiveClass: "active",
@@ -147,7 +156,31 @@ import NormalVAT from './views/vat/components/NormalVAT'
 	 	{
 	 		path: '/vehicles',
 	 		name: 'vehicles',
-	 		component: Vehicles
+	 		component: Vehicles,
+	 		children: [
+	 			{
+	 				path: '',
+	 				component: VehicleHome,
+	 				name: 'vehicle-home'
+	 			},
+	 			{
+	 				path: 'plates',
+	 				component: Plates,
+	 				name: 'vehicle-plates',
+	 				children: [
+	 					{
+	 						path: 'prefixes',
+	 						component: Prefix,
+	 						name: 'vehicle-plates-prefix'
+	 					},
+	 					{
+	 						path: 'order',
+	 						component: PlatesOrder,
+	 						name: 'vehicle-plates-orders'
+	 					}
+	 				]
+	 			}
+	 		]
 	 	},
 	 	{
 	 		path: '/client/search',
@@ -192,6 +225,11 @@ import NormalVAT from './views/vat/components/NormalVAT'
 	 				name: 'normal-vat'
 	 			}
 	 		]
+	 	},
+	 	{
+	 		path: '/data-management',
+	 		name: 'data-management',
+	 		component: DataManagement
 	 	}
  	]
  });

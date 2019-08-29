@@ -163,6 +163,7 @@ class Form {
   }
 
   onFail (error) {
+    // alert(error)
     // if (error.response.status === 422) {
     //   this.errors.record(error.response.data.errors)
     //   toastr['error'](error.response.data.message, 'Failed submitting form')

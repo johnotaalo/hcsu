@@ -90,6 +90,7 @@
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'principal' }">Principals</router-link></li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'agencies' }">Agencies</router-link></li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'vehicles' }">Vehicles</router-link></li>
+				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'data-management' }">Data</router-link></li>
 			</ul>
 
           </div>

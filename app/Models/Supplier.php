@@ -8,4 +8,8 @@ class Supplier extends Model
 {
     protected $connection = "2019";
     protected $table = "ref_suppliers";
+
+    protected $fillable = ['SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'SUPPLIER_SHORT_NAME', 'PIN'];
+
+    public $timestamps = false;
 }

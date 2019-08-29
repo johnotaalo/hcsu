@@ -60,7 +60,6 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
 
     	return [
     		AfterSheet::class 	=>	function(AfterSheet $event) use ($highestColumn, $totalRows){
-    			// $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
     			$event->sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
     			$event->sheet->getPageSetup()->setFitToWidth(1);
                 $event->sheet->getPageSetup()->setFitToHeight(0);

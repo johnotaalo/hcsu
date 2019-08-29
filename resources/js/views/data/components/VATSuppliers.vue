@@ -1,0 +1,147 @@
+<template>
+	<div>
+
+		<v-client-table :columns="columns" :data="suppliers" :options="options">
+			<div slot="afterFilter">
+				<b-button v-b-modal.manage-supplier>Add Supplier</b-button>
+			</div>
+			<template slot="#" slot-scope="props">
+				{{ props.index }}
+			</template>
+
+			<!-- <template slot="Supplier" slot-scope="props">
+				{{ props.row.SUPPLIER_NAME }}
+			</template> -->
+			<template slot="Address" slot-scope="props">
+				{{ props.row.SUPPLIER_ADDRESS }}
+			</template>
+			<template slot="VAT/PIN No" slot-scope="props">
+				{{ props.row.PIN }}
+			</template>
+
+			<template slot="Actions" slot-scope="props">
+				
+			</template>
+		</v-client-table>
+
+		<b-modal id="manage-supplier" title="Add Supplier" @ok="submitModal" @hidden="resetModal">
+			<b-alert v-model="modalLoader.error" variant="danger" dismissible>
+				<p>See the errors below:</p>
+				<p>{{ modalLoader.errorMessage }}</p>
+				<ul v-if="modalLoader.validationErrors">
+					<li v-for="(error, field) in modalLoader.validationErrors">
+						<span v-if="Array.isArray(error)">
+							{{ field }}
+							<ul>
+								<li v-for="e in error">{{ e }}</li>
+							</ul>
+						</span>
+						<span v-else>{{ error }}</span>
+					</li>
+				</ul>
+			</b-alert>
+			<loading
+			:active.sync="modalLoader.isLoading"
+	        :can-cancel="false"
+	        :is-full-page="false"></loading>
+			<b-form-group>
+				<label>Supplier Name</label>
+				<b-input v-model = "modal.SUPPLIER_NAME"></b-input>
+			</b-form-group>
+
+			<b-form-group>
+				<label>Supplier Short Name</label>
+				<b-input v-model = "modal.SUPPLIER_SHORT_NAME"></b-input>
+			</b-form-group>
+
+			<b-form-group>
+				<label>Supplier Address</label>
+				<b-textarea v-model = "modal.SUPPLIER_ADDRESS"></b-textarea>
+			</b-form-group>
+
+			<b-form-group>
+				<label>Supplier PIN</label>
+				<b-input v-model = "modal.PIN"></b-input>
+			</b-form-group>
+			
+		</b-modal>
+	</div>
+</template>
+
+<script type="text/javascript">
+	import Form from '../../../core/Form'
+	export default {
+		data(){
+			return {
+				suppliers: [],
+				columns: ['#', 'SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN', 'Actions'],
+				options: {
+					filterable: ['SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN'],
+					filterByColumn: true,
+				},
+				modal: new Form({
+					'SUPPLIER_NAME': '',
+					'SUPPLIER_SHORT_NAME': '',
+					'SUPPLIER_ADDRESS': '',
+					'PIN': ''
+				}),
+				modalLoader: {
+					isLoading: false,
+					error: false,
+					validationErrors: [],
+					errorMessage: ""
+				}
+			}
+		},
+		created(){
+			this.getSuppliers()
+		},
+		methods: {
+			getSuppliers(){
+				axios.get('/api/data/suppliers/all')
+				.then((res) => {
+					this.suppliers = res.data
+				})
+				.catch((error) => {
+					console.log(error)
+					// this.$toastr.error('There was an error fetching suppliers');
+				});
+			},
+			submitModal(event){
+				event.preventDefault()
+				this.modalLoader.isLoading = true
+				this.modal.post('data/suppliers')
+				.then(res => {
+					this.modalLoader.isLoading = false
+					this.$swal('Success!', "Successfully added supplier", "success")
+					this.$bvModal.hide('manage-supplier')
+				})
+				.catch(error => {
+					this.modalLoader.isLoading = false
+					this.modalLoader.error = true
+					this.modalLoader.errorMessage = error.message
+					if(error.errors){
+						this.modalLoader.validationErrors = error.errors
+					}
+					this.$swal({
+						title: 'ERROR', 
+						text: `Sorry there was an error while performing this request<br/>${error.message}`, 
+						icon: "error"
+					})
+				});
+
+			},
+			resetModal(){
+				this.modal.SUPPLIER_NAME = ''
+				this.modal.SUPPLIER_ADDRESS = ''
+				this.modal.SUPPLIER_SHORT_NAME = ''
+				this.modal.PIN = ''
+
+				this.modalLoader.isLoading = false
+				this.modalLoader.error = false
+				this.modalLoader.validationErrors = []
+				this.modalLoader.errorMessage = ""
+			}
+		}
+	}
+</script>

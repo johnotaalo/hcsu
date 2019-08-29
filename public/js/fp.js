@@ -96332,8 +96332,13 @@ module.exports = "/images/icon-status.svg?c971ca1909311eb4bd25cf62905f6d03";
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
@@ -96383,6 +96388,20 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('combineArray', function (value, key) {
+  if (typeof key == "undefined") {
+    return _.join(value, ', ');
+  } // var items = _.map(value, (item) => {
+  // 	return item[key]
+  // })
+  // console.log(items)
+  // return value.map(item => item[key]['AGENCY_NAME']).join(',')
+
+
+  return _.map(value, key).join(', ');
+});
 
 /***/ }),
 
@@ -96771,7 +96790,8 @@ function () {
     }
   }, {
     key: "onFail",
-    value: function onFail(error) {// if (error.response.status === 422) {
+    value: function onFail(error) {// alert(error)
+      // if (error.response.status === 422) {
       //   this.errors.record(error.response.data.errors)
       //   toastr['error'](error.response.data.message, 'Failed submitting form')
       // } else {

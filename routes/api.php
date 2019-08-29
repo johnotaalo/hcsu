@@ -72,10 +72,19 @@ Route::prefix('data')->group(function(){
 Route::prefix('vehicle')->group(function(){
 	Route::get('/', 'Api\VehicleController@getVehicles');
 	Route::get('/{host_country_id}', 'Api\VehicleController@getVehicles');
+
+	Route::get('plates/agency/prefixes', 'Api\VehicleController@getPrefixes');
+	Route::post('plates/prefix', 'Api\VehicleController@addPrefix');
+	Route::put('plates/prefix', 'Api\VehicleController@updatePrefix');
+
+	Route::post('plates/organization/prefix', 'Api\VehicleController@addOrganizationPrefix');
+	Route::delete('plates/organization/prefix/{id}', 'Api\VehicleController@removeOrganizationPrefix');
 });
 
 Route::prefix('data')->group(function(){
 	Route::prefix('suppliers')->group(function(){
+		Route::post('/', 'Api\SupplierController@create');
+		Route::get('/all', 'Api\SupplierController@all');
 		Route::get('/search', 'Api\SupplierController@searchSupplier');
 	});
 

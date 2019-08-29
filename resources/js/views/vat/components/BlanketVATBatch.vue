@@ -36,7 +36,7 @@
 							</a>
 							<div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-135px, 25px, 0px); top: 0px; left: 0px; will-change: transform;">
 								<a class="dropdown-item" v-if="data.row.cases.length > 0" @click="downloadVATList(data.row.id, data.row.batch_date)">
-									Download List {{ data.row.id }}
+									Download List
 								</a>
 								<a class="dropdown-item" v-if="data.row.cases.length == 0" @click="deleteBatch(data.index - 1)">
 									Delete
