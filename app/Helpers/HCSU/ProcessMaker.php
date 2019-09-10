@@ -58,6 +58,7 @@ class ProcessMaker {
 						break;
 					case "PUT":
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 					case "POST":
 						curl_setopt($ch, CURLOPT_POST, 1);
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -78,8 +79,12 @@ class ProcessMaker {
 		}catch(ClientErrorResponseException $exception){
 			return $exception->getResponse()->getBody(true);
 		}
+	}
 
-		
+	public static function routeCase($app_uid){
+		$url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/route-case";
+		$authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+		return Self::executeREST($url, "PUT", [], $authenticationData->access_token);
 	}
 
 	private function refreshToken(){

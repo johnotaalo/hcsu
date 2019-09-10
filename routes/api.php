@@ -13,18 +13,57 @@ use Illuminate\Http\Request;
 |
 */
 
+// Route::prefix('auth')->group(function(){
+// 	Route::post('login', 'Auth\AuthController@login');
+// 	Route::get('refresh', 'Auth\AuthController@refresh');
+// 	Route::group(['middleware' => 'auth:api'], function(){
+// 		Route::get('user', 'Auth\AuthController@user');
+//         Route::post('logout', 'Auth\AuthController@logout');
+// 	});
+// 	Route::middleware('auth:api')->get('/user', function (Request $request) {
+// 	    return $request->user();
+// 	});
+// });
+
 Route::prefix('auth')->group(function(){
 	Route::post('login', 'Auth\AuthController@login');
-	Route::get('refresh', 'Auth\AuthController@refresh');
 	Route::group(['middleware' => 'auth:api'], function(){
-		Route::get('user', 'Auth\AuthController@user');
-        Route::post('logout', 'Auth\AuthController@logout');
-	});
-	Route::middleware('auth:api')->get('/user', function (Request $request) {
-	    return $request->user();
+		Route::get('details', 'Auth\AuthController@details');
 	});
 });
 
+Route::get('test', function(){
+	$faker = \Faker\Factory::create();
+	$tests = \App\Test::insert([
+		['name' => $faker->name],
+		['name' => $faker->name]
+	]);
+
+	dd($tests);
+});
+
+Route::group(['middleware' => 'auth:api'], function(){
+	Route::prefix('principal')->group(function(){
+		Route::get('/', 'Api\PrincipalController@getPrincipal');
+		Route::post('/add', 'Api\PrincipalController@add');
+		Route::get('/get/{id}', 'Api\PrincipalController@get');
+		Route::post('/update', 'Api\PrincipalController@update');
+
+		Route::post('/passport/add', 'Api\PrincipalController@addPassport');
+		Route::post('/passport/edit', 'Api\PrincipalController@editPassport');
+		Route::delete('/passport', 'Api\PrincipalController@deletePassport');
+
+		Route::post('/contract/add', 'Api\PrincipalController@addContract');
+		Route::post('/contract/edit', 'Api\PrincipalController@editContract');
+		Route::delete('/contract', 'Api\PrincipalController@deleteContract');
+
+		Route::post('/dependent/add', 'Api\PrincipalController@addDependent');
+		Route::post('/dependent/edit', 'Api\PrincipalController@editDependent');
+		Route::delete('/dependent', 'Api\PrincipalController@deleteDependent');
+
+		Route::get('/search', 'Api\PrincipalController@searchPrincipal');
+	});
+});
 
 Route::prefix('principal')->group(function(){
 	Route::get('/', 'Api\PrincipalController@getPrincipal');
@@ -118,5 +157,13 @@ Route::prefix('/vat')->group(function(){
 		Route::delete('batch', 'Api\VATController@deleteBlanketBatch');
 
 		Route::get('list/download/{batch}', 'Api\Export@downloadBlanketVATList');
+	});
+});
+
+Route::prefix('/focal-points')->group(function(){
+	Route::group(['middleware' => 'auth:api'], function(){
+		Route::prefix('vat')->group(function(){
+			Route::post('/', 'FocalPoints\VATController@addVATApplication');
+		});
 	});
 });

@@ -1,15 +1,17 @@
 <?php
 
 namespace App;
-
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+// use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+use App\Enums\UserType;
+
+class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -38,13 +40,21 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+    protected $appends = ['focal_point'];
 
-    public function getJWTCustomClaims()
-    {
-        return [];
+    // public function getJWTIdentifier()
+    // {
+    //     return $this->getKey();
+    // }
+
+    // public function getJWTCustomClaims()
+    // {
+    //     return [];
+    // }
+
+    public function getFocalPointAttribute(){
+        if ($this->user_type == UserType::getInstance(UserType::FocalPoint) && $this->ext_id != null ) {
+            return \App\AgencyFocalPoint::with('agency')->find($this->ext_id);
+        }
     }
 }

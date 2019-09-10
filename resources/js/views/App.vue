@@ -69,7 +69,7 @@
 							<a href="#" class="dropdown-item">Profile</a>
 							<a href="#" class="dropdown-item">Settings</a>
 							<hr class="dropdown-divider">
-							<a href="#" class="dropdown-item">Logout</a>
+							<a href="/logout" class="dropdown-item">Logout</a>
 						</div>
 
 					</div>
@@ -120,6 +120,7 @@
 		},
 		mounted(){
 			// console.log(typeof this.isContainer)
+			this.$store.dispatch('fetchCurrentUser');
 		},
 		computed: {
 			showMainDIV: function(){

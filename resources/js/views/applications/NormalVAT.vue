@@ -2,7 +2,7 @@
 	<div>
 		<fieldset>
 			<legend>Client</legend>
-			<search-client v-model="form.client"></search-client>
+			<search-client v-model="form"></search-client>
 		</fieldset>
 		<fieldset>
 			<legend>Supplier</legend>
@@ -20,7 +20,7 @@
 				</div>
 
 				<div class="col-md">
-					<label class="control-label">Supplier PIN</label>
+					<label class="control-label">Supplier PIN/VAT No.</label>
 					<b-input :value="form.supplier.PIN" disabled></b-input>
 				</div>
 
@@ -44,9 +44,17 @@
 
 		<div class="row">
 			<div class="col-md">
-				<b-button variant="primary">Submit</b-button>
+				<b-button variant="primary" @click="submitApplication">Submit</b-button>
 			</div>
 		</div>
+
+		<b-modal ref="successModal" hide-footer title="Success!">
+			<div class="d-block text-center">
+				<h5>Your case has been created!</h5>
+				<h3>Case No: {{ case_no }}</h3>
+			</div>
+			<b-button class="mt-3" variant="outline-success" block @click="openOutputLink">Download Document Control Form</b-button>
+		</b-modal>
 	</div>
 </template>
 
@@ -67,6 +75,8 @@
 		},
 		data(){
 			return {
+				case_no: "",
+				output_document_link: "",
 				suppliers: [],
 				form: new Form({
 					supplier: "",
@@ -90,6 +100,22 @@
 					loading(false)
 				})
 			}, 350),
+			submitApplication: function(){
+				this.$store.commit('loadingOn');
+				this.form.post('/focal-points/vat').then(res => {
+					console.log(res.data);
+					this.$store.commit('loadingOff');
+					this.$refs['successModal'].show()
+					this.case_no = res.case_no
+					this.output_document_link = res.link
+				}).catch((error) => {
+					console.log(error);
+					this.$store.commit('loadingOff');
+				});
+			},
+			openOutputLink: function(){
+				window.location.href = this.output_document_link
+			}
 			// supplierSearch: (loading, search, vm) => {}
 		}
 	}

@@ -36,7 +36,7 @@ Route::get('/photos/principal/{host_country_id}', function($host_country_id){
 	$response->header("Content-Type", $type);
 
 	return $response;
-})->name('principal-photo');
+})->middleware('isAdmin')->name('principal-photo');
 
 Route::get('/photos/dependent/{host_country_id}', function($host_country_id){
 	$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();
@@ -77,10 +77,11 @@ Route::prefix('focal-point')->group(function(){
 	Route::post('/password/reset/{token}', 'Auth\FocalPointAuthController@changePassword');
 });
 
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
-
-Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
-
-
-
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
+Route::get('/', 'Api\AppController@index')->middleware('auth:web')->name('default');
+
+

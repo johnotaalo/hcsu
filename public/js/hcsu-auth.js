@@ -1725,19 +1725,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
@@ -37014,46 +37001,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div")
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("h1", { staticClass: "display-4 text-center mb-3" }, [
-        _vm._v("Sign in")
-      ]),
-      _vm._v(" "),
-      _c("p", { staticClass: "text-muted text-center mb-5" }, [
-        _vm._v("Login to access your dashboard.")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", [_vm._v("Email Address")]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "email", placeholder: "name@address.com" }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", [_vm._v("Password")]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "password" }
-        })
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-lg btn-block btn-primary mb-3" }, [
-        _vm._v("Sign in")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -49398,7 +49348,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\hcsu\resources\js\hcsu-auth.js */"./resources/js/hcsu-auth.js");
+module.exports = __webpack_require__(/*! C:\Users\Administrator\code\vagrant\hcsu\resources\js\hcsu-auth.js */"./resources/js/hcsu-auth.js");
 
 
 /***/ })

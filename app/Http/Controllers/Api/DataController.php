@@ -16,7 +16,9 @@ class DataController extends Controller
 {
     function importData(){
       $ids = Principal::pluck('OLD_REF_ID')->toArray();
+      // dd($ids);
       $members = StaffMember::whereNotIn('record_id', $ids)->pluck('record_id');
+      // dd($members);
       foreach ($members as $id) {
             $this->importStaffData($id);
       }
@@ -70,7 +72,19 @@ class DataController extends Controller
             ];
       })->toArray();
 
-      \App\Models\PrincipalContract::insert($principalContracts);
+      foreach ($principalContracts as $contract) {
+            $insertedContract = \App\Models\PrincipalContract::create($contract);
+
+            \App\Models\PrincipalContractRenewal::create([
+                  "START_DATE" => $contract['CONTRACT_FROM'], 
+                  "END_DATE" => $contract['CONTRACT_TO'], 
+                  "GRADE_ID" => $contract['GRADE_ID'], 
+                  "GRADE" => $contract['GRADE'], 
+                  "CONTRACT_ID" => $insertedContract->ID
+            ]);
+      }
+
+      // \App\Models\PrincipalContract::insert($principalContracts);
 
       $principalPassports = collect($staffMember->principal_passports)->map(function($passport) use ($principal) {
             return [

@@ -56,7 +56,7 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            ]) : []  
         ],
 
         '2019' => [
@@ -133,6 +133,39 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+            'dump' => [
+               
+               'use_single_transaction',
+               'timeout' => 60 * 5, // 5 minute timeout
+               // 'exclude_tables' => ['table1', 'table2'],
+               // 'add_extra_option' => '--optionname=optionvalue', 
+            ]
+        ],
+
+        'dev_pm' => [
+            'driver' => 'mysql',
+            'host' => env('DEV_PM_DB_HOST', '10.100.95.52'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DEV_PM_DB_DATABASE', 'forge'),
+            'username' => env('DEV_PM_DB_USERNAME', 'forge'),
+            'password' => env('DEV_PM_DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+            'dump' => [
+               
+               'use_single_transaction',
+               'timeout' => 60 * 5, // 5 minute timeout
+               // 'exclude_tables' => ['table1', 'table2'],
+               // 'add_extra_option' => '--optionname=optionvalue', 
+            ]
         ],
 
         'pgsql' => [

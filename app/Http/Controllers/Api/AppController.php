@@ -17,9 +17,14 @@ use App\FormTemplate;
 use Storage;
 use mikehaertl\pdftk\Pdf;
 
+use App\Enums\UserType;
+
 class AppController extends Controller
 {
     function index(Request $request){
+        if (\Auth::user()->user_type == UserType::getInstance(UserType::FocalPoint)) {
+            return redirect()->route('focalpoints-home');
+        }
         $data = [];
         $data['iframe'] = false;
         $data['case_no'] = "";
