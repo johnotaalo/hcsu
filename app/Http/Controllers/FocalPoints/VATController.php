@@ -5,6 +5,8 @@ namespace App\Http\Controllers\FocalPoints;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\VATUserApplication;
+
 class VATController extends Controller
 {
 	function addVATApplication(Request $request){
@@ -117,5 +119,38 @@ class VATController extends Controller
 				'application_id'	=>	$userApplication->id
 			];
 		}
+	}
+
+	function searchApplication(Request $request){
+		$searchQueries = $request->get('query');
+		$limit = $request->get('limit');
+		$page = $request->get('page');
+		$ascending = $request->get('ascending');
+		$byColumn = $request->get('byColumn');
+		$orderBy = $request->get('orderBy');
+
+		$fields = [
+			"CASE NO" 		=>	"case_no"
+		];
+
+		// $queryBuilder = VATUserApplication::select('CASE_NO', 'created_at', 'STATUS');
+		$queryBuilder = VATUserApplication::where('USER_ID', \Auth::id());
+		// $queryBuilder = $queryBuilder->where('USER_ID', \Auth::id());
+		// $queryBuilder = $queryBuilder->setAppends(['supplier']);
+		if ($searchQueries) {
+			$queryBuilder->where('CASE_NO', 'LIKE', "%{$searchQueries}%");
+		}
+
+		$count = $queryBuilder->count();
+
+		$queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+		$data = $queryBuilder->get();
+
+		// dd($data);
+
+		return [
+			'data' 	=> $data,
+			'count'	=>	$count
+		];
 	}
 }

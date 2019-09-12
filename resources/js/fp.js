@@ -14,11 +14,14 @@ import store from './store'
 
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(require('vue-moment'))
 Vue.component('loading', Loading);
+Vue.use(ServerTable, {}, false, 'bootstrap4', 'default');
+Vue.use(ClientTable, {}, false, 'bootstrap4', 'default');
 
 import App from './focalpoints/App'
 import Dashboard from './focalpoints/dashboard/Index'

@@ -42,28 +42,28 @@ Route::get('test', function(){
 	dd($tests);
 });
 
-Route::group(['middleware' => 'auth:api'], function(){
-	Route::prefix('principal')->group(function(){
-		Route::get('/', 'Api\PrincipalController@getPrincipal');
-		Route::post('/add', 'Api\PrincipalController@add');
-		Route::get('/get/{id}', 'Api\PrincipalController@get');
-		Route::post('/update', 'Api\PrincipalController@update');
+// Route::group(['middleware' => 'auth:api'], function(){
+// 	Route::prefix('principal')->group(function(){
+// 		Route::get('/', 'Api\PrincipalController@getPrincipal');
+// 		Route::post('/add', 'Api\PrincipalController@add');
+// 		Route::get('/get/{id}', 'Api\PrincipalController@get');
+// 		Route::post('/update', 'Api\PrincipalController@update');
 
-		Route::post('/passport/add', 'Api\PrincipalController@addPassport');
-		Route::post('/passport/edit', 'Api\PrincipalController@editPassport');
-		Route::delete('/passport', 'Api\PrincipalController@deletePassport');
+// 		Route::post('/passport/add', 'Api\PrincipalController@addPassport');
+// 		Route::post('/passport/edit', 'Api\PrincipalController@editPassport');
+// 		Route::delete('/passport', 'Api\PrincipalController@deletePassport');
 
-		Route::post('/contract/add', 'Api\PrincipalController@addContract');
-		Route::post('/contract/edit', 'Api\PrincipalController@editContract');
-		Route::delete('/contract', 'Api\PrincipalController@deleteContract');
+// 		Route::post('/contract/add', 'Api\PrincipalController@addContract');
+// 		Route::post('/contract/edit', 'Api\PrincipalController@editContract');
+// 		Route::delete('/contract', 'Api\PrincipalController@deleteContract');
 
-		Route::post('/dependent/add', 'Api\PrincipalController@addDependent');
-		Route::post('/dependent/edit', 'Api\PrincipalController@editDependent');
-		Route::delete('/dependent', 'Api\PrincipalController@deleteDependent');
+// 		Route::post('/dependent/add', 'Api\PrincipalController@addDependent');
+// 		Route::post('/dependent/edit', 'Api\PrincipalController@editDependent');
+// 		Route::delete('/dependent', 'Api\PrincipalController@deleteDependent');
 
-		Route::get('/search', 'Api\PrincipalController@searchPrincipal');
-	});
-});
+// 		Route::get('/search', 'Api\PrincipalController@searchPrincipal');
+// 	});
+// });
 
 Route::prefix('principal')->group(function(){
 	Route::get('/', 'Api\PrincipalController@getPrincipal');
@@ -164,6 +164,7 @@ Route::prefix('/focal-points')->group(function(){
 	Route::group(['middleware' => 'auth:api'], function(){
 		Route::prefix('vat')->group(function(){
 			Route::post('/', 'FocalPoints\VATController@addVATApplication');
+			Route::get('/search', 'FocalPoints\VATController@searchApplication');
 		});
 	});
 });

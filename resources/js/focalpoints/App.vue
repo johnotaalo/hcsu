@@ -33,10 +33,10 @@
 
 							<!-- Menu -->
 							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="sidebarIcon">
-								<a href="profile-posts.html" class="dropdown-item">Profile</a>
+								<!-- <a href="profile-posts.html" class="dropdown-item">Profile</a>
 								<a href="settings.html" class="dropdown-item">Settings</a>
-								<hr class="dropdown-divider">
-								<a href="sign-in.html" class="dropdown-item">Logout</a>
+								<hr class="dropdown-divider"> -->
+								<a href="/logout" class="dropdown-item">Logout</a>
 							</div>
 
 						</div>
@@ -61,6 +61,10 @@
 										</li>
 									</ul>
 								</div>
+							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="/logout"><i class="fe fe-lock"></i> Logout</a>
 							</li>
 						</ul>
 
@@ -89,10 +93,10 @@
 
 								<!-- Menu -->
 								<div class="dropdown-menu" aria-labelledby="sidebarIconCopy">
-									<a href="profile-posts.html" class="dropdown-item">Profile</a>
+									<!-- <a href="profile-posts.html" class="dropdown-item">Profile</a>
 									<a href="settings.html" class="dropdown-item">Settings</a>
-									<hr class="dropdown-divider">
-									<a href="sign-in.html" class="dropdown-item">Logout</a>
+									<hr class="dropdown-divider"> -->
+									<a href="/logout" class="dropdown-item">Logout</a>
 								</div>
 
 							</div>

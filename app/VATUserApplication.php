@@ -18,4 +18,16 @@ class VATUserApplication extends Model
 		'CLAIMED_AT',
 		'STATUS'
     ];
+
+    protected $appends = array('supplier', 'data');
+
+    protected function getDataAttribute(){
+    	return \App\Helpers\HCSU\Data\VATData::get($this->CASE_NO);
+    }
+
+    protected function getSupplierAttribute(){
+    	$vat = \App\Models\VAT::where('CASE_NO', $this->CASE_NO)->first();
+
+    	return $vat->supplier;
+    }
 }
