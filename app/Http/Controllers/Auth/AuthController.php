@@ -33,12 +33,14 @@ class AuthController extends Controller
         $user_ip = $request->getClientIp();
         $user_ip = ($user_ip == "10.0.2.2" || $user_ip == "127.0.0.1") ? "10.98.111.148" : $user_ip;
 
-        $log = \App\Models\PM\LoginLog::where(['USR_UID' => $request->user, 'LOG_IP' => $user_ip])->orderBy('LOG_ID', 'DESC')->first();
-        dd($log);
-        return response()->json($response, $this->successStatus); 
+        $log = \App\Models\PM\LoginLog::with('user')->where(['USR_UID' => $request->user, 'LOG_IP' => $user_ip])->orderBy('LOG_ID', 'DESC')->first();
+        if(!is_null($log) && $log->LOG_STATUS == "ACTIVE"){
+          return response()->json($log->user, $this->successStatus);
+        }
+        return response()->json(['error'=>'Unauthorised'], 401);
       }
-        $user = Auth::user();
-        return response()->json($user, $this-> successStatus); 
+      $user = Auth::user();
+      return response()->json($user, $this-> successStatus); 
     }
   //   function login(Request $request){
   //   	$credentials = $request->only('email', 'password');

@@ -5,6 +5,7 @@
         :can-cancel="false"
         :is-full-page="fullPage"></loading>
 		<b-card>
+			<p v-if="$store.state.isUserRetrieved"><i>Logged in as: {{ $store.state.loggedInUser.USR_FIRSTNAME }}, {{ $store.state.loggedInUser.USR_LASTNAME }} ({{ $store.state.loggedInUser.USR_USERNAME }})</i></p>
 			<b-form-group label="Type of Client">
 				<b-form-radio-group
 					id="type-of-client"
