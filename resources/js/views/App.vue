@@ -109,18 +109,35 @@
 <script type="text/javascript">
 	export default {
 		props: {
-			iframe: { type: Boolean, default: false },
-			case: { type: String, default: null, required: false },
+			// iframe: { type: Boolean, default: false },
+			// case: { type: String, default: null, required: false },
+			// user: { type: String, default: null, required: false }
 			// isContainer: { type: Boolean, default: true }
 		},
 		data(){
 			return {
-				isContainer: true
+				isContainer: true,
+				iframe: false,
+				case: null,
+				user: null
 			}
 		},
 		mounted(){
 			// console.log(typeof this.isContainer)
-			this.$store.dispatch('fetchCurrentUser');
+			var query = this.$route.query
+
+			var type = query.type
+			var case_no = query.case_no
+			var user = query.user
+
+			this.iframe = type == "iframe"
+			this.case = case_no
+			this.user = user
+
+			if(!this.user)
+				this.$store.dispatch('fetchCurrentUser');
+			else
+				this.$store.dispatch('checkProcessMakerSession');
 		},
 		computed: {
 			showMainDIV: function(){

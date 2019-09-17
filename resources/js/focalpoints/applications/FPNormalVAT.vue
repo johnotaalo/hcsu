@@ -21,12 +21,12 @@
 							{{ data.row.supplier.SUPPLIER_NAME }}
 						</template>
 
-						<template slot="Application Date" slot-scope = "data">
+						<template slot="Date" slot-scope = "data">
 							{{ data.row.data.date | moment('DD-MM-YYYY') }}
 						</template>
 
 						<template slot="Applied For" slot-scope = "data">
-							<!-- {{ data.row.client.name }} -->
+							{{ data.row.data.client.name }}
 						</template>
 
 						<template slot="Status" slot-scope="data">
@@ -55,7 +55,9 @@
 			return {
 				table: {
 					columns: ['#', 'Case No', 'Date', 'Applied For', 'Supplier', 'Status', 'Action'],
-					options: {}
+					options: {
+						sortable: ['Case No']
+					}
 				}
 			}
 		}

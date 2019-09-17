@@ -2485,7 +2485,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       table: {
         columns: ['#', 'Case No', 'Date', 'Applied For', 'Supplier', 'Status', 'Action'],
-        options: {}
+        options: {
+          sortable: ['Case No']
+        }
       }
     };
   }
@@ -83661,7 +83663,7 @@ var render = function() {
                         }
                       },
                       {
-                        key: "Application Date",
+                        key: "Date",
                         fn: function(data) {
                           return [
                             _vm._v(
@@ -83680,7 +83682,13 @@ var render = function() {
                       {
                         key: "Applied For",
                         fn: function(data) {
-                          return undefined
+                          return [
+                            _vm._v(
+                              "\n\t\t\t\t\t\t" +
+                                _vm._s(data.row.data.client.name) +
+                                "\n\t\t\t\t\t"
+                            )
+                          ]
                         }
                       },
                       {
@@ -112280,6 +112288,26 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
           _this.commit('loadingOff');
         })["catch"](function (error) {
           _this.commit('loadingOff');
+
+          return new Promise(error);
+        });
+      }
+    },
+    checkProcessMakerSession: function checkProcessMakerSession(_ref2) {
+      var _this2 = this;
+
+      var commit = _ref2.commit,
+          state = _ref2.state;
+
+      if (!state.isUserBeingRetrieved) {
+        state.isUserBeingRetrieved = true;
+        this.commit('loadingOn');
+        axios.get('/api/auth/details/pm').then(function (response) {
+          commit('fetchLoggedInUser', response.data);
+
+          _this2.commit('loadingOff');
+        })["catch"](function (error) {
+          _this2.commit('loadingOff');
 
           return new Promise(error);
         });

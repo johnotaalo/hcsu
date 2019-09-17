@@ -82,6 +82,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 // Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
-Route::get('/', 'Api\AppController@index')->middleware('auth:web')->name('default');
+Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
 
 

@@ -130,7 +130,7 @@ class VATController extends Controller
 		$orderBy = $request->get('orderBy');
 
 		$fields = [
-			"CASE NO" 		=>	"case_no"
+			"Case No" 		=>	"CASE_NO"
 		];
 
 		// $queryBuilder = VATUserApplication::select('CASE_NO', 'created_at', 'STATUS');
@@ -144,6 +144,10 @@ class VATController extends Controller
 		$count = $queryBuilder->count();
 
 		$queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+		if($orderBy)
+			$queryBuilder = $queryBuilder->orderBy($fields[$orderBy], ($ascending == 1) ? 'ASC' : 'DESC');
+
+
 		$data = $queryBuilder->get();
 
 		// dd($data);

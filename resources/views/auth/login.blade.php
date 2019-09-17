@@ -1,7 +1,7 @@
 @extends('auth.focalpoints.layouts.main')
 
 @section('content')
-{{ $errors }}
+<!-- {{ $errors }} -->
 <form action="{{ route('login') }}" method="POST">
 
 	{{ csrf_field() }}

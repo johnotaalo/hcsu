@@ -22,12 +22,17 @@ use App\Enums\UserType;
 class AppController extends Controller
 {
     function index(Request $request){
-        if (\Auth::user()->user_type == UserType::getInstance(UserType::FocalPoint)) {
-            return redirect()->route('focalpoints-home');
+        // dd($request->query());
+        if(\Auth::check()){
+            if (\Auth::user()->user_type == UserType::getInstance(UserType::FocalPoint)) {
+                return redirect()->route('focalpoints-home');
+            }
         }
         $data = [];
         $data['iframe'] = false;
         $data['case_no'] = "";
+        $data['user'] = $request->query('user');
+        // dd($request->query());
         // echo "<pre>";print_r($request->url());die;
         if ($request->query('type') == "iframe") {
             $data['iframe'] = true;
@@ -36,6 +41,8 @@ class AppController extends Controller
         if($request->query('case_no') != ""){
             $data['case_no'] = $request->query('case_no');
         }
+
+        // dd($data);
 
     	return view('app.main')->with($data);
     }

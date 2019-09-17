@@ -27,8 +27,20 @@ class AuthController extends Controller
         } 
     }
 
-    public function details() 
-    { 
+    public function details(Request $request) 
+    {
+      if(isset($request->type)){
+        $user_ip = $request->getClientIp();
+        $user_ip = ($user_ip == "10.0.2.2" || $user_ip == "127.0.0.1") ? "10.98.111.148" : $user_ip;
+
+        $log = \App\Models\PM\LoginLog::where(['USR_UID' => '00000000000000000000000000000001', 'LOG_IP' => $user_ip])->orderBy('LOG_ID', 'DESC')->first();
+        dd($log);
+        $case_no = "1242834725d76649b6f6c24051043016";
+        $url = "http://".env('PM_SERVER')."/api/1.0/".env('PM_WORKSPACE')."/extrarest/user?usr_uid=00000000000000000000000000000001";
+        $authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+        $response = \Processmaker::executeREST($url, "GET", null, $authenticationData->access_token);
+        return response()->json($response, $this->successStatus); 
+      }
         $user = Auth::user();
         return response()->json($user, $this-> successStatus); 
     }

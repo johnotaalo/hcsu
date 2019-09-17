@@ -105,7 +105,7 @@
 		data: function(){
 			return {
 				isLoading: false,
-      	fullPage: true,
+      			fullPage: true,
 				clientType: '',
 				clientTypes: [
 					{ text: "Agency", value: 'agency' },
@@ -124,6 +124,11 @@
 			}
 		},
 		mounted(){
+			var query = this.$route.query
+
+			var type = query.type
+			var case_no = query.case_no
+			var user = query.user
 		},
 		methods: {
 			onAgencySearch(search, loading){
