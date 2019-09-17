@@ -112293,7 +112293,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
         });
       }
     },
-    checkProcessMakerSession: function checkProcessMakerSession(_ref2) {
+    checkProcessMakerSession: function checkProcessMakerSession(_ref2, payload) {
       var _this2 = this;
 
       var commit = _ref2.commit,
@@ -112302,7 +112302,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
       if (!state.isUserBeingRetrieved) {
         state.isUserBeingRetrieved = true;
         this.commit('loadingOn');
-        axios.get('/api/auth/details/pm').then(function (response) {
+        axios.get("/api/auth/details/pm/".concat(payload.user)).then(function (response) {
           commit('fetchLoggedInUser', response.data);
 
           _this2.commit('loadingOff');

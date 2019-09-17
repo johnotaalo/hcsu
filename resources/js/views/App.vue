@@ -137,7 +137,7 @@
 			if(!this.user)
 				this.$store.dispatch('fetchCurrentUser');
 			else
-				this.$store.dispatch('checkProcessMakerSession');
+				this.$store.dispatch('checkProcessMakerSession', {user: user});
 		},
 		computed: {
 			showMainDIV: function(){

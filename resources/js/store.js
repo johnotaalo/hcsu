@@ -35,12 +35,12 @@ export default new Vuex.Store({
 				});
 			}
 		},
-		checkProcessMakerSession({ commit, state }){
+		checkProcessMakerSession({ commit, state }, payload){
 			if (!state.isUserBeingRetrieved) {
 				state.isUserBeingRetrieved = true
 
 				this.commit('loadingOn')
-				axios.get('/api/auth/details/pm').then((response) => {
+				axios.get(`/api/auth/details/pm/${payload.user}`).then((response) => {
 					commit('fetchLoggedInUser', response.data)
 					this.commit('loadingOff')
 				}).catch((error) => {
