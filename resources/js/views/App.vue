@@ -1,6 +1,10 @@
 <template>
-	<div>
-
+	<div v-if="$store.state.isUserRetrieved">
+		<!-- <loading
+		:active.sync="$store.state.loading > 0"
+        :can-cancel="false"
+        :is-full-page="true"
+        :opacity="1"></loading> -->
 		<nav v-if="!iframe" class="navbar navbar-expand-lg navbar-light" id="topnav">
 			<div class = "container">
 
@@ -122,6 +126,15 @@
 				user: null
 			}
 		},
+		beforeCreate(){
+			var query = this.$route.query
+			var user = query.user
+			
+			if(!this.user)
+				this.$store.dispatch('fetchCurrentUser');
+			else
+				this.$store.dispatch('checkProcessMakerSession', {user: user});
+		},
 		mounted(){
 			// console.log(typeof this.isContainer)
 			var query = this.$route.query
@@ -133,11 +146,6 @@
 			this.iframe = type == "iframe"
 			this.case = case_no
 			this.user = user
-
-			if(!this.user)
-				this.$store.dispatch('fetchCurrentUser');
-			else
-				this.$store.dispatch('checkProcessMakerSession', {user: user});
 		},
 		computed: {
 			showMainDIV: function(){

@@ -19,7 +19,6 @@
 </head>
 <body>
     <div id="app">
-    {{ $case_no }}    
         <app {!! $iframe ? ':iframe = "true"' : '' !!} case = "{{ $case_no }}"></app>
     </div>
 </body>

@@ -18,6 +18,9 @@ export default new Vuex.Store({
 		},
 		loadingOff (state){
 			state.loading--
+		},
+		gotoLogin() {
+			window.location = "/login"
 		}
 	},
 	actions: {
@@ -30,8 +33,10 @@ export default new Vuex.Store({
 					commit('fetchLoggedInUser', response.data)
 					this.commit('loadingOff')
 				}).catch((error) => {
+					// console.log(error)
 					this.commit('loadingOff');
-					return new Promise(error)
+					this.commit('gotoLogin')
+					// return new Promise((error))
 				});
 			}
 		},
@@ -44,8 +49,10 @@ export default new Vuex.Store({
 					commit('fetchLoggedInUser', response.data)
 					this.commit('loadingOff')
 				}).catch((error) => {
+					// console.log(error)
 					this.commit('loadingOff');
-					return new Promise(error)
+					this.commit('gotoLogin')
+					// return new Promise((error))
 				});
 			}
 		}
