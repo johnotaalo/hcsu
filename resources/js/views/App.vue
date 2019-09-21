@@ -126,15 +126,6 @@
 				user: null
 			}
 		},
-		beforeCreate(){
-			var query = this.$route.query
-			var user = query.user
-			
-			if(!this.user)
-				this.$store.dispatch('fetchCurrentUser');
-			else
-				this.$store.dispatch('checkProcessMakerSession', {user: user});
-		},
 		mounted(){
 			// console.log(typeof this.isContainer)
 			var query = this.$route.query
@@ -146,6 +137,11 @@
 			this.iframe = type == "iframe"
 			this.case = case_no
 			this.user = user
+
+			if(!this.user)
+				this.$store.dispatch('fetchCurrentUser');
+			else
+				this.$store.dispatch('checkProcessMakerSession', {user: user});
 		},
 		computed: {
 			showMainDIV: function(){
