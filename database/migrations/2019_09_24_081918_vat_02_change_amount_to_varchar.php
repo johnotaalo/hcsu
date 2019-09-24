@@ -14,7 +14,7 @@ class Vat02ChangeAmountToVarchar extends Migration
     public function up()
     {
         Schema::connection('pm_data')->table('VAT_02', function (Blueprint $table) {
-            $table->decimal('AMOUNT', 12, 2)->change();
+            $table->decimal("VAT_AMOUNT", 12, 2)->change();
         });
     }
 
@@ -26,7 +26,7 @@ class Vat02ChangeAmountToVarchar extends Migration
     public function down()
     {
         Schema::connection('pm_data')->table('VAT_02', function (Blueprint $table) {
-            $table->float('AMOUNT', 12, 2)->change();
+            $table->float('VAT_AMOUNT', 12, 2)->change();
         });
     }
 }
