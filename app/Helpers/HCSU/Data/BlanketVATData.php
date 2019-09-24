@@ -28,7 +28,7 @@ class BlanketVATData{
             $clientObj->type = "staff";
             $clientObj->organization = $mission;
 		}else if($firstIDChar == "3"){
-			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
+			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $blanketData->HOST_COUNTRY_ID)->first();
             $name = $agency->ACRONYM;
             $mission = $name;
             $client_name = $name;
