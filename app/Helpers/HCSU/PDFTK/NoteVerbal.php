@@ -64,7 +64,7 @@ class NoteVerbal {
 				$body .= str_pad("Organization:", $padding) . "{$this->data->client->organization}\r";
 				$body .= str_pad("Supplier:", $padding) . "{$this->data->vatObj->supplier->NAME}\r";
 				$body .= str_pad("Account No:", $padding) . "{$this->data->vatObj->ACCOUNT_NO}\r";
-				$body .= str_pad("VAT Amount:", $padding) . "KSH. " . number_format($this->data->vatObj->VAT_AMOUNT) . "\r";
+				$body .= str_pad("VAT Amount:", $padding) . "KSH. " . number_format($this->data->vatObj->VAT_AMOUNT, 2) . "\r";
 				$body .= str_pad("Invoice No:", $padding) . "{$this->data->vatObj->INVOICE_NO}\r";
 				$body .= str_pad("Invoice Date:", $padding) . "{$this->data->vatObj->INVOICE_DATE}\r";
 				$body .= str_pad("Duration:", $padding) . "{$this->data->vatObj->DURATION_FROM} to {$this->data->vatObj->DURATION_TO}\r";
