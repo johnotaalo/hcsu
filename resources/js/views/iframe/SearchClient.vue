@@ -108,7 +108,8 @@
 				isLoading: false,
       			fullPage: true,
 				clientType: '',
-				clientTypes: [
+				searchType: '',
+				clientTypeList: [
 					{ text: "Agency", value: 'agency' },
 					{ text: "Staff Member", value: 'staff-member' },
 					{ text: "Dependent", value: 'dependent' }
@@ -130,6 +131,7 @@
 			var type = query.type
 			var case_no = query.case_no
 			var user = query.user
+			this.searchType = query.searchfor
 		},
 		methods: {
 			onAgencySearch(search, loading){
@@ -204,6 +206,38 @@
 				}else{
 					this.host_country_id = 0
 				}
+			}
+		},
+		computed: {
+			clientTypes: function(){
+				var list = this.clientTypeList
+				var arr = [];
+				if (this.searchType == 'staff') {
+					var result = _.find(list, (obj) => {
+						return obj.value == 'staff-member'
+					})
+					this.clientType = 'staff-member'
+					arr.push(result)
+				}
+				else if (this.searchType == 'agency') {
+					var result = _.find(list, (obj) => {
+						return obj.value == 'agency'
+					})
+					this.clientType = 'agency'
+					arr.push(result)
+				}
+				else if (this.searchType == 'dependent') {
+					var result = _.find(list, (obj) => {
+						return obj.value == 'dependent'
+					})
+					this.clientType = 'dependent'
+					arr.push(result)
+				}
+				else{
+					arr = list
+				}
+
+				return arr				
 			}
 		}
 	}
