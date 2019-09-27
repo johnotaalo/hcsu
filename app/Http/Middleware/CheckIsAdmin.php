@@ -15,7 +15,7 @@ class CheckIsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->user_type === UserType::getInstance(UserType::Administrator)) {
+        if(\Auth::user()->user_type === UserType::getInstance(UserType::Administrator)) {
              return $next($request);
         }
         else {
