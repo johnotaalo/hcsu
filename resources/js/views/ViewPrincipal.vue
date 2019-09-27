@@ -487,7 +487,7 @@
 				},
 				contracts: {
 					table: {
-						fields: ["AGENCY", "INDEX_NO", "CONTRACT_TYPE", "GRADE", "FUNC_TITLE", "DURATION", "ACTIONS"]
+						fields: ["AGENCY", "INDEX_NO", "CONTRACT_TYPE", "GRADE", "DESIGNATION", "DURATION", "ACTIONS"]
 					},
 					editIndex: -1
 				},
