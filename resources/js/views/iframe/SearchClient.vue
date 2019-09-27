@@ -131,6 +131,10 @@
 			var type = query.type
 			var case_no = query.case_no
 			var user = query.user
+			var selectedClient = query.host_country_id;
+			if (selectedClient) {
+				getSelectedClient(selectedClient)
+			}
 			this.searchType = query.searchfor
 		},
 		methods: {
@@ -145,6 +149,10 @@
 			onDependentSearch(search, loading){
 				loading(true)
 				this.dependentSearch(loading, search, this)
+			},
+			getSelectedClient(host_country_id){
+				// this.isLoading = true;
+				alert(host_country_id)
 			},
 			search: _.debounce( (loading, search, vm) => {
 				axios(`/api/agencies/search?q=${escape(search)}`)

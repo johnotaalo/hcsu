@@ -117,8 +117,8 @@ class PrincipalController extends Controller
             $imagePath = $request->file('principalPhotoFile')->store('principal_photos');
         }
 
-        $principal->LAST_NAME = $request->input('lastName');
-        $principal->OTHER_NAMES = $request->input('otherNames');
+        $principal->LAST_NAME = strtoupper($request->input('lastName'));
+        $principal->OTHER_NAMES = ucwords(strtolower($request->input('otherNames')));
         $principal->EMAIL = $request->input('email');
         $principal->MOBILE_NO = $request->input('mobileNo');
         $principal->OFFICE_NO = $request->input('officeNo');

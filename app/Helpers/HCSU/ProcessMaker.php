@@ -8,6 +8,7 @@ use Storage;
 
 class ProcessMaker {
 	public static function executeREST($url, $method="GET", $data = [], $accessToken = '', $useCurl = false){
+		// die("Execute rest called");
 		$authenticationData = json_decode(Storage::get("pmauthentication.json"));
 		$tokenExpiry = $authenticationData->expiry;
 		\Log::debug("Checking token expiry...");
@@ -40,7 +41,6 @@ class ProcessMaker {
 		try{
 			if(!$useCurl){
 				$res = $client->request($method, $url, $params);
-				// dd($res->getBody());
 				return json_decode($res->getBody());
 			}else{
 				$ch = curl_init();
@@ -70,6 +70,7 @@ class ProcessMaker {
 
 				$oResponse = json_decode(curl_exec($ch));
 				$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				die("Sample: " . $httpStatus);
 				curl_close($ch);
 
 				return $oResponse;

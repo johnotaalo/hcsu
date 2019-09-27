@@ -119,7 +119,7 @@
 											</div>
 										</div>
 									</div>
-									<b-button @click="updatePrincipalData" size="sm" variant="primary" v-if="!iframe">Update Data</b-button>
+									<b-button @click="updatePrincipalData" size="sm" variant="primary" v-if="!iframe || $store.state.isUserRetrieved">Update Data</b-button>
 								</b-tab>
 								<b-tab title="Passports">
 									<template slot="title">
