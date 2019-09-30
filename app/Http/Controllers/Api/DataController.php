@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\OLDPM\StaffMember;
+use App\Models\OLDPM\StaffSpouse;
 use App\Models\Principal;
 use App\Models\PrincipalContract;
+use App\Models\PrincipalDependent;
 
 class DataController extends Controller
 {
@@ -23,6 +25,64 @@ class DataController extends Controller
             $this->importStaffData($id);
       }
       
+    }
+
+    function importSpouseData(){
+      // \DB::enableQueryLog();
+      $ids = PrincipalDependent::where('RELATIONSHIP_ID', 2)->where('OLD_REF_ID', '!=', NULL)->pluck('OLD_REF_ID')->unique()->toArray();
+      $sql = "SELECT record_id FROM unon_sm_spouse WHERE record_id NOT IN (".implode(', ', $ids).")";
+      // echo $sql;die;
+      $spouses = collect(\DB::connection('old_pm')->select(\DB::raw($sql)))->pluck('record_id');
+      // dd($spouses);
+      foreach ($spouses as $id) {
+            $this->getSpouseData($id);
+      }
+    }
+
+    function getSpouseData($record_id){
+      $spouse = StaffSpouse::find($record_id);
+
+      $no_staff = [];
+      $no_principal = [];
+
+      if($spouse->staff){
+            if($spouse->staff->principal){
+                  $principalDependent = new PrincipalDependent();
+
+                  // if (\Carbon\Carbon::parse($spouse->date_of_birth) === false) {
+                  //       die($spouse->date_of_birth);
+                  // }
+                  // if (strtotime($spouse->date_of_birth) === false) {
+                  //       die($spouse->date_of_birth);
+                  // }
+
+                  $principalDependent->INDEX_NO = NULL;
+                  $principalDependent->LAST_NAME = $spouse->last_name;
+                  $principalDependent->OTHER_NAMES = $spouse->other_names;
+                  $principalDependent->RELATIONSHIP_ID = 2;
+                  $principalDependent->COUNTRY = $spouse->nationality;
+                  $principalDependent->EMPLOYMENT_DETAILS = $spouse->employment_details;
+                  $principalDependent->DATE_OF_BIRTH = ($spouse->date_of_birth != "0000-00-00 00:00:00" && $spouse->date_of_birth != null) ? $spouse->date_of_birth : NULL;
+                  $principalDependent->OLD_REF_ID = $record_id;
+
+                  $principalDependent->PRINCIPAL_ID = $spouse->staff->principal->HOST_COUNTRY_ID;
+                  $principalDependent->PASSPORT_NO = null;
+
+                  $principalDependent->save();
+            }else{
+                  $no_principal[] = $record_id;
+                  echo "{$record_id} has no principal data <br/>";
+            }
+
+            // dd($principalDependent);
+      }else{
+            $no_staff[] = $record_id;
+            // echo "{$record_id} has no staff data <br/>";
+      }
+
+      // echo "no staff <br/>";
+      // echo "<pre>";print_r($no_staff);
+
     }
 
     function importStaffData($record_id){

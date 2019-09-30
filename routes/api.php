@@ -130,6 +130,7 @@ Route::prefix('data')->group(function(){
 
 	Route::prefix('management')->group(function(){
 		Route::get('/import', 'Api\DataController@importData');
+		Route::get('/import/dependents/spouse', 'Api\DataController@importSpouseData');
 	});
 
 	Route::prefix('dependent')->group(function(){

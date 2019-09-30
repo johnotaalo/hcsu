@@ -51,6 +51,31 @@
 								</div>						
 							</div>
 						</div>
+
+						<div class="row">
+							<legend class="col-md-12">Kenyan Identification</legend>
+							<div class="col-md">
+								<div class="form-group">
+									<label for="pin">PIN No.</label>
+									<b-input v-model="form.pin" :size="formSize"></b-input>
+								</div>
+							</div>
+
+							<div class="col-md">
+								<div class="form-group">
+									<label for="pin">Residence No. (RNo)</label>
+									<b-input v-model="form.residenceNo" :size="formSize"></b-input>
+								</div>
+							</div>
+
+							<div class="col-md">
+								<div class="form-group">
+									<label for="pin">Driving License No.</label>
+									<b-input v-model="form.drivingLicense" :size="formSize"></b-input>
+								</div>
+							</div>
+						</div>
+
 						<div class="row">
 							<legend class="col-md-12">Contact Information</legend>
 							<div class="col-md">
@@ -295,6 +320,9 @@
 					Address: "",
 					residence: "",
 					passports: [],
+					pin: "",
+					residenceNo: "",
+					drivingLicense: "",
 					contract: {
 						agency: "",
 						contractType: "",

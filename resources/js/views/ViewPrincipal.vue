@@ -89,6 +89,29 @@
 									<div class="row">
 										<div class="col-md">
 											<div class="form-group">
+												<label for="pin">PIN No.</label>
+												<b-input v-model="form.principal.pin" :size="formSize"></b-input>
+											</div>
+										</div>
+
+										<div class="col-md">
+											<div class="form-group">
+												<label for="pin">Residence No. (RNo)</label>
+												<b-input v-model="form.principal.residenceNo" :size="formSize"></b-input>
+											</div>
+										</div>
+
+										<div class="col-md">
+											<div class="form-group">
+												<label for="pin">Driving License No.</label>
+												<b-input v-model="form.principal.drivingLicense" :size="formSize"></b-input>
+											</div>
+										</div>
+									</div>
+									<hr/>
+									<div class="row">
+										<div class="col-md">
+											<div class="form-group">
 												<label for="mobile_no">Mobile No.</label>
 												<b-input placeholder="+xx xxx xxx xxx" v-model="form.principal.mobileNo" id="mobile_no" :size="formSize" type="tel" required />
 											</div>
@@ -381,6 +404,9 @@
 						officeNo: "",
 						Address: "",
 						residence: "",
+						pin: "",
+						residenceNo: "",
+						drivingLicense: "",
 						image: {
 							url: ""
 						}
@@ -674,6 +700,9 @@
 					this.form.principal.officeNo = this.principal.OFFICE_NO
 					this.form.principal.Address = this.principal.ADDRESS
 					this.form.principal.residence = this.principal.RESIDENCE
+					this.form.principal.pin = this.principal.PIN_NO
+					this.form.principal.drivingLicense = this.principal.DL_NO
+					this.form.principal.residenceNo = this.principal.R_NO
 				})
 			},
 			getFormOptions: function() {

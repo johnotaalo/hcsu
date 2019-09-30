@@ -51,4 +51,8 @@ class StaffMember extends Model
     public function getDlAttribute(){
       return $this->drivingLicenses()->where('owner_code', '01')->first();
     }
+
+    public function principal(){
+      return $this->belongsTo(\App\Models\Principal::class, "record_id", "OLD_REF_ID");
+    }
 }
