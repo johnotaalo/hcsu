@@ -70,7 +70,7 @@ class ProcessMaker {
 
 				$oResponse = json_decode(curl_exec($ch));
 				$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				die("Sample: " . $httpStatus);
+				// die("Sample: " . $httpStatus);
 				curl_close($ch);
 
 				return $oResponse;
