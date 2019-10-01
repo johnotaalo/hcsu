@@ -55,19 +55,23 @@ class VATExemptionForm{
             $client_name = $name;
             $arrival = "N/A";
         } else if ($firstIDChar == "2"){
-					$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
+			$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
 
-					$relationship = $dependent->relationship->RELATIONSHIP;
+			$relationship = $dependent->relationship->RELATIONSHIP;
 
-					$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
+			$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
 
-					$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
-					$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
-					$mission = $dependent->principal->latest_contract->agency->ACRONYM;
-					$arrival = "{$dependent->principal->current_arrival->ARRIVAL} (Dip. Id No: {$dependent->principal->latest_diplomatic_card->DIP_ID_NO})";
+			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
+			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
+			$mission = $dependent->principal->latest_contract->agency->ACRONYM;
 
-					$client_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES));
-				}
+            $diplomaticCardNo = ($dependent->principal->latest_diplomatic_card != null) ? $dependent->principal->latest_diplomatic_card->DIP_ID_NO : "N/A";
+
+            $arrival_date = ($dependent->principal->current_arrival != null) ? $dependent->principal->current_arrival->ARRIVAL : "N/A";
+			$arrival = "{$arrival_date} (Dip. Id No: {$diplomaticCardNo})";
+
+			$client_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES));
+		}
 
         $date = date('F d, Y', strtotime($vat_data->CREATED_AT));
 
