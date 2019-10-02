@@ -26,7 +26,7 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
 
 	public function headings(): array
     {
-        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'ACCOUNT NO', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME"];
+        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME", 'ACCOUNT NO'];
     }
 
     public function headingRow(): int {
@@ -44,8 +44,7 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
     public function columnFormats(): array
     {
         return [
-            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'J' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY
         ];
     }
 
@@ -69,8 +68,8 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
                 $event->sheet->getDelegate()->getStyle("A1:{$highestColumn}1")->getFont()->setBold(true);
                 $event->sheet->getDelegate()->getStyle("A1:A{$totalRows}")->getAlignment()->setHorizontal('center');
                 $event->sheet->getDelegate()->getStyle("B1:B{$totalRows}")->getAlignment()->setHorizontal('left');
-                $event->sheet->getDelegate()->getStyle("C1:G{$totalRows}")->getAlignment()->setHorizontal('center');
-                $event->sheet->getDelegate()->getStyle("I1:I{$totalRows}")->getAlignment()->setHorizontal('center');
+                $event->sheet->getDelegate()->getStyle("C1:H{$totalRows}")->getAlignment()->setHorizontal('center');
+                // $event->sheet->getDelegate()->getStyle("I1:I{$totalRows}")->getAlignment()->setHorizontal('center');
 
                 $event->sheet->getDelegate()->getStyle("A1:{$highestColumn}{$totalRows}")->applyFromArray([
                     'borders' => [
