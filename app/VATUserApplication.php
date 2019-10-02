@@ -28,6 +28,9 @@ class VATUserApplication extends Model
     protected function getSupplierAttribute(){
     	$vat = \App\Models\VAT::where('CASE_NO', $this->CASE_NO)->first();
 
-    	return $vat->supplier;
+        if($vat)
+    	   return $vat->supplier;
+        else
+            return null;
     }
 }

@@ -9,8 +9,16 @@ class VAT extends Model
     protected $connection = "pm_data";
     protected $table = "VAT_01";
 
+    protected $appends = ["total_amount"];
+
     function invoices(){
     	return $this->hasMany('\App\Models\VATInvoice', 'REF_ID', 'UID');
+    }
+
+    function getTotalAmountAttribute(){
+    	$invoices = $this->invoices();
+
+    	dd($invoices);
     }
 
     function supplier(){

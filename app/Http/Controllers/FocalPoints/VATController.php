@@ -27,6 +27,10 @@ class VATController extends Controller
 			return response()->json(['error'=>'Could not retrieve process'], 500);
 		}
 
+		if($request->client['HOST_COUNTRY_ID'][0] == 3){
+
+		}
+
 		$outputDocument = $process->documents->output;
 		$inputDocument = $process->documents->input;
 
@@ -104,7 +108,7 @@ class VATController extends Controller
 		
 
 		if ($outputDocRes) {
-			$base_url = "http://processmakerdev.unon.org/sys" . env("PM_WORKSPACE") . "/en/neoclassic/{$outputDocRes->app_doc_link}";
+			$base_url = "http://".env('PM_SERVER_DOMAIN')."/sysworkflow/en/neoclassic/{$outputDocRes->app_doc_link}";
 
 			$userApplication = new \App\VATUserApplication();
 
@@ -116,9 +120,44 @@ class VATController extends Controller
 			return [
 				'case_no'			=>	$case_no,
 				'link'				=>	$base_url,
+				// 'document_link'		=>	$outputDocRes->app_doc_link,
 				'application_id'	=>	$userApplication->id
 			];
 		}
+	}
+
+	function downloadAcknowledgement(Request $request){
+		\Mail::to('chrispine.otaalo@un.org')->send(new \App\Mail\AcknowledgeVATReceipt());
+		die();
+		$authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+		setcookie("access_token",  $authenticationData->access_token,  $authenticationData->expiry);
+		setcookie("refresh_token", $authenticationData->refresh_token); //refresh token doesn't expire
+		setcookie("client_id",     env("PM_CLIENT_ID"));
+		setcookie("client_secret", env("PM_CLIENT_SECRET"));
+
+		dd($_COOKIE);
+		// dd(strtotime('2019-10-02'));
+		$application = \App\VATUserApplication::where('id', $request->id)->where('USER_ID', \Auth::user()->id)->firstOrFail();
+		$link = $application->ACKNOWLEDGEMENT_LINK;
+
+		$handle = fopen($link, "rb") or die("Error: Unable to open file:\n$link");
+		$contents = stream_get_contents($handle) or die("Error: Unable to get file:\n$link");
+
+		dd($contents);
+
+		fclose($handle);
+
+		//serve up the PDF file for download as attachment in user's browser:
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename="Acknowledgement Receipt Case - '.$application->CASE_NO.'.pdf"');
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Pragma: public');
+		header('Content-Length: ' . strlen($contents));
+		print $contents;
+		die;
 	}
 
 	function searchApplication(Request $request){
@@ -146,11 +185,11 @@ class VATController extends Controller
 		$queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
 		if($orderBy)
 			$queryBuilder = $queryBuilder->orderBy($fields[$orderBy], ($ascending == 1) ? 'ASC' : 'DESC');
+		else
+			$queryBuilder = $queryBuilder->orderBy('CASE_NO', 'DESC');
 
 
 		$data = $queryBuilder->get();
-
-		// dd($data);
 
 		return [
 			'data' 	=> $data,

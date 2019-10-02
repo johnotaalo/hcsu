@@ -29,10 +29,18 @@
 							{{ data.row.data.client.name }}
 						</template>
 
+						<template slot="Amount" slot-scope="data">
+							KES {{ data.row.data.vat.vatAmount }}
+						</template>
+
 						<template slot="Status" slot-scope="data">
 							<span v-if="data.row.STATUS == 'Pending'">
 								<span class="text-warning">●</span>&nbsp;Pending
 							</span>
+						</template>
+
+						<template slot="Action" slot-scope="data">
+							<!-- <a class="btn btn-success btn-sm">View Status</a> -->
 						</template>
 					</v-server-table>
 				</b-tab>
@@ -54,7 +62,7 @@
 		data(){
 			return {
 				table: {
-					columns: ['#', 'Case No', 'Date', 'Applied For', 'Supplier', 'Status', 'Action'],
+					columns: ['#', 'Case No', 'Date', 'Applied For', 'Supplier', 'Amount', 'Status', 'Action'],
 					options: {
 						sortable: ['Case No']
 					}

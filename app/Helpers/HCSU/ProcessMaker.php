@@ -116,6 +116,11 @@ class ProcessMaker {
 			$response->expiry = time() + $response->expires_in;
 			Storage::disk('local')->put('pmauthentication.json', json_encode($response));
 			\Log::debug("Token saved to pmauthentication.json file");
+
+			setcookie("access_token",  $response->access_token,  $response->expiry);
+			setcookie("refresh_token", $response->refresh_token); //refresh token doesn't expire
+			setcookie("client_id",     $client_id);
+			setcookie("client_secret", $client_secret);
 			return $response->access_token;
 		}
 		else {
@@ -124,5 +129,9 @@ class ProcessMaker {
 		}
 	}
 
+
+	public static function login(){
+
+	}
 
 }

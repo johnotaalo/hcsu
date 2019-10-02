@@ -77,6 +77,12 @@ Route::middleware('auth')->prefix('focal-point')->group(function(){
 	Route::get('/login', 'Auth\FocalPointAuthController@login')->name('focalpoints-login');
 	Route::get('/password/reset/{token}', 'Auth\FocalPointAuthController@resetPassword')->name('focalpoint-reset-password');
 	Route::post('/password/reset/{token}', 'Auth\FocalPointAuthController@changePassword');
+
+	Route::prefix('vat')->group(function(){
+		Route::prefix('download')->group(function(){
+			Route::get('acknowledgement/{id}', 'FocalPoints\VATController@downloadAcknowledgement');
+		});
+	});
 });
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
