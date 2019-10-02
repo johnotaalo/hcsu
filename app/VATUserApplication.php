@@ -33,4 +33,8 @@ class VATUserApplication extends Model
         else
             return null;
     }
+
+    protected function user(){
+        return $this->belongsTo(\App\User::class, "USER_ID");
+    }
 }

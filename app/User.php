@@ -42,6 +42,8 @@ class User extends Authenticatable
 
     protected $appends = ['focal_point'];
 
+    protected $connection = 'mysql';
+
     // public function getJWTIdentifier()
     // {
     //     return $this->getKey();

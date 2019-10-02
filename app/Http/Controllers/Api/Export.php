@@ -41,13 +41,12 @@ class Export extends Controller
                 'NO'                    =>  $key + 1,
                 'ORGANIZAITON'          =>  $data->client->organization,
                 'CASE_NO'               =>  $item->CASE_NO,
+                'ACCOUNT NO'            =>  $data->vatObj->ACCOUNT_NO,
                 'DATE_APPLIED_AT_MFA'   =>  \Carbon\Carbon::parse($data->vatObj->ipmis_log->CREATED_AT)->format('d/m/Y'),
                 'DATE_APPLIED_AT_KRA'   =>  '',
                 'DATE_APPROVED'         =>  '',
                 'PIN'                   =>  $data->vatObj->supplier->PIN,
                 'SUPPLIER_NAME'         =>  $data->vatObj->supplier->NAME,
-                'INVOICE_NUMBER'        =>  $data->vatObj->INVOICE_NO,
-                'AMOUNT'                =>  $data->vatObj->VAT_AMOUNT
             ];
         });
 

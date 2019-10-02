@@ -117,6 +117,10 @@ class VATController extends Controller
 			$userApplication->USER_ID = \Auth::user()->id;
 
 			$userApplication->save();
+
+			$application = \App\VATUserApplication::where('id', $request->id)->where('USER_ID', \Auth::user()->id)->firstOrFail();
+			\Mail::to($application->user->focal_point->EMAIL)->send(new \App\Mail\AcknowledgeVATReceipt($application));
+			
 			return [
 				'case_no'			=>	$case_no,
 				'link'				=>	$base_url,
@@ -127,17 +131,17 @@ class VATController extends Controller
 	}
 
 	function downloadAcknowledgement(Request $request){
-		\Mail::to('chrispine.otaalo@un.org')->send(new \App\Mail\AcknowledgeVATReceipt());
-		die();
-		$authenticationData = json_decode(\Storage::get("pmauthentication.json"));
-		setcookie("access_token",  $authenticationData->access_token,  $authenticationData->expiry);
-		setcookie("refresh_token", $authenticationData->refresh_token); //refresh token doesn't expire
-		setcookie("client_id",     env("PM_CLIENT_ID"));
-		setcookie("client_secret", env("PM_CLIENT_SECRET"));
+		// 
+		// die();
+		// $authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+		// setcookie("access_token",  $authenticationData->access_token,  $authenticationData->expiry);
+		// setcookie("refresh_token", $authenticationData->refresh_token); //refresh token doesn't expire
+		// setcookie("client_id",     env("PM_CLIENT_ID"));
+		// setcookie("client_secret", env("PM_CLIENT_SECRET"));
 
-		dd($_COOKIE);
+		// dd($_COOKIE);
 		// dd(strtotime('2019-10-02'));
-		$application = \App\VATUserApplication::where('id', $request->id)->where('USER_ID', \Auth::user()->id)->firstOrFail();
+		
 		$link = $application->ACKNOWLEDGEMENT_LINK;
 
 		$handle = fopen($link, "rb") or die("Error: Unable to open file:\n$link");

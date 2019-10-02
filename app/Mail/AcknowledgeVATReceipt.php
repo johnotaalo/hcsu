@@ -16,9 +16,10 @@ class AcknowledgeVATReceipt extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public $application;
+    public function __construct(\App\VATUserApplication $application)
     {
-        //
+        $this->application = $application;
     }
 
     /**
