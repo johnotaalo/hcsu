@@ -26,7 +26,7 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
 
 	public function headings(): array
     {
-        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME", 'INVOICE NUMBER', 'AMOUNT'];
+        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'ACCOUNT NO', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME"];
     }
 
     public function headingRow(): int {
