@@ -129,6 +129,8 @@ class VATController extends Controller
 	}
 
 	function downloadAcknowledgement(Request $request){
+		$application = \App\VATUserApplication::findOrFail($request->id);
+		dd($application->data);
 		// 
 		// die();
 		// $authenticationData = json_decode(\Storage::get("pmauthentication.json"));
