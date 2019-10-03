@@ -62,7 +62,7 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
     			$event->sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
     			$event->sheet->getPageSetup()->setFitToWidth(1);
                 $event->sheet->getPageSetup()->setFitToHeight(0);
-    			$event->sheet->getHeaderFooter()->setOddHeader('&C&H&BBLANKET VAT EXEMPTIONS TO KRA ON ' . \Carbon\Carbon::parse($this->batch->batch_date)->format('d/m/Y'));
+    			$event->sheet->getHeaderFooter()->setOddHeader('&C&H&BANNUAL VAT EXEMPTIONS TO KRA ON ' . \Carbon\Carbon::parse($this->batch->batch_date)->format('d/m/Y'));
     			$event->sheet->getHeaderFooter()->setOddFooter('&CPage &P of &N');
 
                 $event->sheet->getDelegate()->getStyle("A1:{$highestColumn}1")->getFont()->setBold(true);

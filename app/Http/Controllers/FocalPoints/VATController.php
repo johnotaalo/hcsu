@@ -117,10 +117,8 @@ class VATController extends Controller
 			$userApplication->USER_ID = \Auth::user()->id;
 
 			$userApplication->save();
+			\Mail::to($userApplication->user->focal_point->EMAIL)->send(new \App\Mail\AcknowledgeVATReceipt($userApplication));
 
-			$application = \App\VATUserApplication::where('id', $request->id)->where('USER_ID', \Auth::user()->id)->firstOrFail();
-			\Mail::to($application->user->focal_point->EMAIL)->send(new \App\Mail\AcknowledgeVATReceipt($application));
-			
 			return [
 				'case_no'			=>	$case_no,
 				'link'				=>	$base_url,
