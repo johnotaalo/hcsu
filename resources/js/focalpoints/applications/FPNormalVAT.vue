@@ -75,6 +75,7 @@
 		methods: {
 			resetCard() {
 				this.tabIndex = 0
+				location.reload()
 			}
 		}
 	}

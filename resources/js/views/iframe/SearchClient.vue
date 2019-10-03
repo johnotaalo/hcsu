@@ -101,7 +101,7 @@
 
 	export default {
 		props: {
-			case: { type: String, default: null, required: false }
+			case: { type: String, default: null, required: false },
 		},
 		data: function(){
 			return {
