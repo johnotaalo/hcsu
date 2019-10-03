@@ -46,7 +46,7 @@
 				</b-tab>
 
 				<b-tab title="Add VAT">
-					<normal-vat applier="fp"></normal-vat>
+					<normal-vat applier="fp" @update-tabs="resetCard"></normal-vat>
 				</b-tab>
 			</b-tabs>
 		</b-card>
@@ -71,6 +71,11 @@
 			}
 		},
 		mounted(){
+		},
+		methods: {
+			resetCard() {
+				this.tabIndex = 0
+			}
 		}
 	}
 </script>
