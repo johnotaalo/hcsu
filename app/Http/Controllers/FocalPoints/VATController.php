@@ -145,6 +145,7 @@ class VATController extends Controller
 					'PATH'				=>	$path
 				]);
 			}
+			
 			\Mail::to($userApplication->user->focal_point->EMAIL)->send(new \App\Mail\AcknowledgeVATReceipt($userApplication));
 
 			return [
