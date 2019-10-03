@@ -13,6 +13,8 @@ class VATController extends Controller
 		// $validatedData = $request->validate([
 
 		// ]);
+		// dd($request->files);
+		$documentPaths = [];
 
 		$process = $outputDocument = "";
 
@@ -53,13 +55,18 @@ class VATController extends Controller
 		foreach ($request->documents as $key => $document) {
 			$grid[$k] = [
 				'documentType'			=>	$document['documentType'],
-				'documentType_label'	=> ucwords($document['documentType']),
+				'documentType_label'	=>	ucwords($document['documentType']),
 				'documentNo'			=>	$document['documentNo'],
 				'documentDate'			=>	date('Y-m-d', strtotime($document['documentDate'])),
 				'goodsServices'			=>	$document['goodsDescription'],
 				'vatAmount'				=>	$document['vatAmount'],
 				'etrNo'					=>	""
 			];
+
+			// dd($document);
+
+			$filePath = $document['invoiceFile']->store('uploads/focal-points');
+			$documentPaths[] = storage_path("app/{$filePath}");
 			$k++;
 		}
 
@@ -89,6 +96,7 @@ class VATController extends Controller
 		$variables_url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/variables";
 		$steps_url = "http://".env('PM_SERVER')."/api/1.0/workflow/project/{$process->id}/activity/{$process->task}/steps";
 		$outputDocumentURL = "http://".env('PM_SERVER')."/api/1.0/workflow/extrarest/case/$app_uid/output-document/{$outputDocument}";
+		$inputDocumentURL = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/input-document";
 
 		$stepsResponse = \Processmaker::executeREST($steps_url, "GET", [], $authenticationData->access_token);
 		foreach ($stepsResponse as $step) {
@@ -96,6 +104,19 @@ class VATController extends Controller
 			foreach ($step->triggers as $trigger) {
 				$triggerURL = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/execute-trigger/{$trigger->tri_uid}";
 				$triggerResponse = \Processmaker::executeREST($triggerURL, "PUT", [], $authenticationData->access_token);
+			}
+		}
+
+		if ($inputDocument) {
+			foreach ($documentPaths as $path) {
+				$inputData = [
+					'inp_doc_uid'		=>	$inputDocument,
+					'tas_uid'			=>	$process->task,
+					'app_doc_comment'	=>	"Document uploaded by: " . \Auth::user()->name . " Focal Point " . \Auth::user()->focal_point->agency->ACRONYM . " through the external application",
+					'form'            	=> new \CurlFile($path)
+				];
+
+				$inputDocumentRes = \Processmaker::executeREST($inputDocumentURL, "POST", $inputData, $authenticationData->access_token, true);
 			}
 		}
 
@@ -117,6 +138,13 @@ class VATController extends Controller
 			$userApplication->USER_ID = \Auth::user()->id;
 
 			$userApplication->save();
+
+			foreach ($documentPaths as $path) {
+				\App\VATUserApplicationDocument::create([
+					'APPLICATION_ID'	=>	$userApplication->id,
+					'PATH'				=>	$path
+				]);
+			}
 			\Mail::to($userApplication->user->focal_point->EMAIL)->send(new \App\Mail\AcknowledgeVATReceipt($userApplication));
 
 			return [

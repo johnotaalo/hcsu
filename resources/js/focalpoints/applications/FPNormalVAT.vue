@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<b-card no-body>
-			<b-tabs pills card>
-				<b-tab active>
+			<b-tabs v-model="tabIndex" pills card>
+				<b-tab>
 					<template slot="title">VAT List</template>
 
 					<v-server-table url="/api/focal-points/vat/search/"
@@ -61,6 +61,7 @@
 		components: { 'normal-vat': NormalVAT },
 		data(){
 			return {
+				tabIndex: 0,
 				table: {
 					columns: ['#', 'Case No', 'Date', 'Applied For', 'Supplier', 'Amount', 'Status', 'Action'],
 					options: {
@@ -68,6 +69,8 @@
 					}
 				}
 			}
+		},
+		mounted(){
 		}
 	}
 </script>
