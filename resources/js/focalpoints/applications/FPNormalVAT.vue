@@ -37,6 +37,9 @@
 							<span v-if="data.row.STATUS == 'Pending'">
 								<span class="text-warning">●</span>&nbsp;Pending
 							</span>
+							<span v-if="data.row.STATUS == 'Claimed'">
+								<span class="text-primary">●</span>&nbsp;Claimed
+							</span>
 						</template>
 
 						<template slot="Action" slot-scope="data">
