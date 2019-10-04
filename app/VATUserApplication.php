@@ -43,6 +43,6 @@ class VATUserApplication extends Model
     }
 
     protected function getClaimerDataAttribute(){
-        return $this->claimer();
+        return \App\Models\PM\User::where("USR_UID", $this->USER_CLAIMED)->first();
     }
 }
