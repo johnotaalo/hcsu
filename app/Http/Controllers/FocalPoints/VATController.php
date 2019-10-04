@@ -107,8 +107,9 @@ class VATController extends Controller
 			}
 		}
 
+		$inputDocumentIDs = [];
 		if ($inputDocument) {
-			foreach ($documentPaths as $path) {
+			foreach ($documentPaths as $key => $path) {
 				$inputData = [
 					'inp_doc_uid'		=>	$inputDocument,
 					'tas_uid'			=>	$process->task,
@@ -117,6 +118,7 @@ class VATController extends Controller
 				];
 
 				$inputDocumentRes = \Processmaker::executeREST($inputDocumentURL, "POST", $inputData, $authenticationData->access_token, true);
+				$inputDocumentIDs[$key] = $inputDocumentRes->app_doc_uid;
 			}
 		}
 
@@ -139,13 +141,14 @@ class VATController extends Controller
 
 			$userApplication->save();
 
-			foreach ($documentPaths as $path) {
+			foreach ($documentPaths as $key => $path) {
 				\App\VATUserApplicationDocument::create([
 					'APPLICATION_ID'	=>	$userApplication->id,
-					'PATH'				=>	$path
+					'PATH'				=>	$path,
+					'DOCUMENT_UID'		=>	$inputDocumentIDs[$key]
 				]);
 			}
-			
+
 			\Mail::to($userApplication->user->focal_point->EMAIL)->send(new \App\Mail\AcknowledgeVATReceipt($userApplication));
 
 			return [
