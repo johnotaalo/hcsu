@@ -19,7 +19,7 @@ class VATUserApplication extends Model
 		'STATUS'
     ];
 
-    protected $appends = array('supplier', 'data');
+    protected $appends = array('supplier', 'data', 'claimer_data');
 
     protected function getDataAttribute(){
     	return \App\Helpers\HCSU\Data\VATData::get($this->CASE_NO);
@@ -36,5 +36,13 @@ class VATUserApplication extends Model
 
     protected function user(){
         return $this->belongsTo(\App\User::class, "USER_ID");
+    }
+
+    protected function claimer(){
+        return $this->belongsTo(\App\Models\PM\User::class, "USER_CLAIMED", "USR_UID");
+    }
+
+    protected function getClaimerDataAttribute(){
+        return $this->claimer();
     }
 }
