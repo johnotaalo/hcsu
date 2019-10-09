@@ -51,10 +51,11 @@
 								<hr>
 								<div class="row">
 									<div class="col-md">
-										<b-button block variant="primary" size="sm">
-											<font-awesome-icon icon="pen"/>
-											Edit
-										</b-button>
+										<!-- <b-button block variant="primary" size="sm">
+											
+										</b-button> -->
+
+										<router-link class="btn btn-primary btn-block btn-sm" :to="{ name: 'agencies.edit', params: { id: agency.HOST_COUNTRY_ID }} "><font-awesome-icon icon="pen"/>Edit</router-link>
 									</div>
 									<div class="col-md">
 										<b-button block variant="success" size="sm" @click="viewAgency(agency.HOST_COUNTRY_ID)">

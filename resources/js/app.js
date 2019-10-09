@@ -93,6 +93,7 @@ import ViewDependent from './views/dependent/ViewDependent'
 import Agencies from './views/Agencies'
 import AddAgency from './views/AddAgency'
 import ViewAgency from './views/agency/ViewAgency'
+import EditAgency from './views/agency/EditAgency'
 import Vehicles from './views/Vehicles'
 import SearchClient from './views/iframe/SearchClient'
 import SettingsIndex from './views/settings/SettingsIndex'
@@ -171,6 +172,11 @@ Vue.component(
 	 		path: '/agencies/add',
 	 		name: 'agencies.add',
 	 		component: AddAgency
+	 	},
+	 	{
+	 		path: '/agencies/edit/:id',
+	 		name: 'agencies.edit',
+	 		component: EditAgency
 	 	},
 	 	{
 	 		path: '/agencies/view/:id',

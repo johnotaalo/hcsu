@@ -101,6 +101,7 @@ Route::prefix('agencies')->group(function(){
 	Route::get('/search', 'Api\AgenciesController@searchAgencies');
 	Route::post('/add', 'Api\AgenciesController@addAgencies');
 	Route::get('/get/{agency_id}', 'Api\AgenciesController@getAgency');
+	Route::put('/update/{agency_id}', 'Api\AgenciesController@updateAgency');
 });
 
 Route::get('passport-types', 'Api\AppController@getPassportTypes');
@@ -170,3 +171,5 @@ Route::prefix('/focal-points')->group(function(){
 		});
 	});
 });
+
+Route::get('user/reset/{id}', 'Api\AgenciesController@sendResetPassword');
