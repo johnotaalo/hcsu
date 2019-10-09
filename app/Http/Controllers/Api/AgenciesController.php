@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\Agency;
-use App\models\AgencyFocalPoint;
+use App\AgencyFocalPoint;
 use App\Notifications\FocalPointPassword;
 use Notification;
 use Illuminate\Support\Facades\Password;
