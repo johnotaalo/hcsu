@@ -126,6 +126,8 @@ class Form {
     let formData = this.objectToFormData(data)
     // let data = this.originalData;
 
+    // this.outputToConsole()
+
     if (requestType === 'put' || requestType === 'patch') {
       data['_method'] = requestType
       formData.append('_method', requestType)

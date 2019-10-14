@@ -10,10 +10,21 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import BootstrapVue from 'bootstrap-vue'
 import VueRouter from 'vue-router'
 import appEvent from './core/AppEvent'
+import store from './store'
+
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import { ServerTable, ClientTable, Event } from 'vue-tables-2';
+
+import VueSwal from 'vue-swal'
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(require('vue-moment'))
+Vue.component('loading', Loading);
+Vue.use(ServerTable, {}, false, 'bootstrap4', 'default');
+Vue.use(ClientTable, {}, false, 'bootstrap4', 'default');
+Vue.use(VueSwal)
 
 import App from './focalpoints/App'
 import Dashboard from './focalpoints/dashboard/Index'
@@ -44,5 +55,6 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     components: { App },
-    router
+    router,
+    store
 });

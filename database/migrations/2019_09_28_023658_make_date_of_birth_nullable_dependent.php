@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MakeCommentNullable extends Migration
+class MakeDateOfBirthNullableDependent extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class MakeCommentNullable extends Migration
      */
     public function up()
     {
-        Schema::connection('pm_data')->table('vat_02_batches', function (Blueprint $table) {
-            $table->text('comment')->nullable()->change();
+        Schema::table('PRINCIPAL_DEPENDENT', function (Blueprint $table) {
+            $table->date('DATE_OF_BIRTH')->nullable()->change();
         });
     }
 
@@ -25,8 +25,8 @@ class MakeCommentNullable extends Migration
      */
     public function down()
     {
-        Schema::connection('pm_data')->table('vat_02_batches', function (Blueprint $table) {
-            $table->text('comment')->change();
+        Schema::table('PRINCIPAL_DEPENDENT', function (Blueprint $table) {
+            //
         });
     }
 }

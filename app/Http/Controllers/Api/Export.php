@@ -25,6 +25,8 @@ class Export extends Controller
     		];
     	});
 
+        dd($vatList);
+
     	$exportData = new \App\Exports\VATExport($vatList);
     	return \Excel::download($exportData, 'VAT LIST.xlsx');
     }
@@ -46,8 +48,7 @@ class Export extends Controller
                 'DATE_APPROVED'         =>  '',
                 'PIN'                   =>  $data->vatObj->supplier->PIN,
                 'SUPPLIER_NAME'         =>  $data->vatObj->supplier->NAME,
-                'INVOICE_NUMBER'        =>  $data->vatObj->INVOICE_NO,
-                'AMOUNT'                =>  $data->vatObj->VAT_AMOUNT
+                'ACCOUNT NO'            =>  $data->vatObj->ACCOUNT_NO,
             ];
         });
 

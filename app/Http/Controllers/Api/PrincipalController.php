@@ -117,8 +117,8 @@ class PrincipalController extends Controller
             $imagePath = $request->file('principalPhotoFile')->store('principal_photos');
         }
 
-        $principal->LAST_NAME = $request->input('lastName');
-        $principal->OTHER_NAMES = $request->input('otherNames');
+        $principal->LAST_NAME = strtoupper($request->input('lastName'));
+        $principal->OTHER_NAMES = ucwords(strtolower($request->input('otherNames')));
         $principal->EMAIL = $request->input('email');
         $principal->MOBILE_NO = $request->input('mobileNo');
         $principal->OFFICE_NO = $request->input('officeNo');
@@ -128,6 +128,9 @@ class PrincipalController extends Controller
         $principal->ADDRESS = $request->input('Address');
         $principal->RESIDENCE = $request->input('residence');
         $principal->IMAGE = $imagePath;
+        $principal->PIN_NO = strtoupper($request->pin);
+        $principal->R_NO = $request->residenceNo;
+        $principal->DL_NO = strtoupper($request->drivingLicense);
 
         $principal->save();
 
@@ -223,8 +226,8 @@ class PrincipalController extends Controller
             \Storage::delete($principal->IMAGE);
         }
 
-        $principal->LAST_NAME = $request->input('lastName');
-        $principal->OTHER_NAMES = $request->input('otherNames');
+        $principal->LAST_NAME = strtoupper($request->input('lastName'));
+        $principal->OTHER_NAMES = ucwords(strtolower($request->input('otherNames')));
         $principal->EMAIL = $request->input('email');
         $principal->MOBILE_NO = $request->input('mobileNo');
         $principal->OFFICE_NO = $request->input('officeNo');
@@ -235,6 +238,10 @@ class PrincipalController extends Controller
         $principal->RESIDENCE = $request->input('residence');
 
         $principal->IMAGE = $new_path;
+
+        $principal->PIN_NO = strtoupper($request->pin);
+        $principal->R_NO = $request->residenceNo;
+        $principal->DL_NO = strtoupper($request->drivingLicense);
 
         // echo "<pre>";print_r($principal);die;
 

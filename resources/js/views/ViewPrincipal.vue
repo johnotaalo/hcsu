@@ -89,6 +89,29 @@
 									<div class="row">
 										<div class="col-md">
 											<div class="form-group">
+												<label for="pin">PIN No.</label>
+												<b-input v-model="form.principal.pin" :size="formSize"></b-input>
+											</div>
+										</div>
+
+										<div class="col-md">
+											<div class="form-group">
+												<label for="pin">Residence No. (RNo)</label>
+												<b-input v-model="form.principal.residenceNo" :size="formSize"></b-input>
+											</div>
+										</div>
+
+										<div class="col-md">
+											<div class="form-group">
+												<label for="pin">Driving License No.</label>
+												<b-input v-model="form.principal.drivingLicense" :size="formSize"></b-input>
+											</div>
+										</div>
+									</div>
+									<hr/>
+									<div class="row">
+										<div class="col-md">
+											<div class="form-group">
 												<label for="mobile_no">Mobile No.</label>
 												<b-input placeholder="+xx xxx xxx xxx" v-model="form.principal.mobileNo" id="mobile_no" :size="formSize" type="tel" required />
 											</div>
@@ -119,7 +142,7 @@
 											</div>
 										</div>
 									</div>
-									<b-button @click="updatePrincipalData" size="sm" variant="primary" v-if="!iframe">Update Data</b-button>
+									<b-button @click="updatePrincipalData" size="sm" variant="primary" v-if="!iframe || $store.state.isUserRetrieved">Update Data</b-button>
 								</b-tab>
 								<b-tab title="Passports">
 									<template slot="title">
@@ -381,6 +404,9 @@
 						officeNo: "",
 						Address: "",
 						residence: "",
+						pin: "",
+						residenceNo: "",
+						drivingLicense: "",
 						image: {
 							url: ""
 						}
@@ -487,7 +513,7 @@
 				},
 				contracts: {
 					table: {
-						fields: ["AGENCY", "INDEX_NO", "CONTRACT_TYPE", "GRADE", "FUNC_TITLE", "DURATION", "ACTIONS"]
+						fields: ["AGENCY", "INDEX_NO", "CONTRACT_TYPE", "GRADE", "DESIGNATION", "DURATION", "ACTIONS"]
 					},
 					editIndex: -1
 				},
@@ -674,6 +700,9 @@
 					this.form.principal.officeNo = this.principal.OFFICE_NO
 					this.form.principal.Address = this.principal.ADDRESS
 					this.form.principal.residence = this.principal.RESIDENCE
+					this.form.principal.pin = this.principal.PIN_NO
+					this.form.principal.drivingLicense = this.principal.DL_NO
+					this.form.principal.residenceNo = this.principal.R_NO
 				})
 			},
 			getFormOptions: function() {

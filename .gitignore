@@ -3,6 +3,9 @@
 /public/storage
 /public/css/app.css
 /public/js/app.js
+/public/js/fp.js
+/public/js/fp.css
+/public/js/hcsu-auth.js
 /storage/*.key
 /vendor
 .env

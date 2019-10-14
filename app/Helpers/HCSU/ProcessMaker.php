@@ -8,6 +8,7 @@ use Storage;
 
 class ProcessMaker {
 	public static function executeREST($url, $method="GET", $data = [], $accessToken = '', $useCurl = false){
+		// die("Execute rest called");
 		$authenticationData = json_decode(Storage::get("pmauthentication.json"));
 		$tokenExpiry = $authenticationData->expiry;
 		\Log::debug("Checking token expiry...");
@@ -40,7 +41,6 @@ class ProcessMaker {
 		try{
 			if(!$useCurl){
 				$res = $client->request($method, $url, $params);
-				// dd($res->getBody());
 				return json_decode($res->getBody());
 			}else{
 				$ch = curl_init();
@@ -58,6 +58,7 @@ class ProcessMaker {
 						break;
 					case "PUT":
 						curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 					case "POST":
 						curl_setopt($ch, CURLOPT_POST, 1);
 						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
@@ -69,6 +70,7 @@ class ProcessMaker {
 
 				$oResponse = json_decode(curl_exec($ch));
 				$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				// die("Sample: " . $httpStatus);
 				curl_close($ch);
 
 				return $oResponse;
@@ -78,8 +80,12 @@ class ProcessMaker {
 		}catch(ClientErrorResponseException $exception){
 			return $exception->getResponse()->getBody(true);
 		}
+	}
 
-		
+	public static function routeCase($app_uid){
+		$url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/route-case";
+		$authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+		return Self::executeREST($url, "PUT", [], $authenticationData->access_token);
 	}
 
 	private function refreshToken(){
@@ -110,6 +116,11 @@ class ProcessMaker {
 			$response->expiry = time() + $response->expires_in;
 			Storage::disk('local')->put('pmauthentication.json', json_encode($response));
 			\Log::debug("Token saved to pmauthentication.json file");
+
+			setcookie("access_token",  $response->access_token,  $response->expiry);
+			setcookie("refresh_token", $response->refresh_token); //refresh token doesn't expire
+			setcookie("client_id",     $client_id);
+			setcookie("client_secret", $client_secret);
 			return $response->access_token;
 		}
 		else {
@@ -118,5 +129,9 @@ class ProcessMaker {
 		}
 	}
 
+
+	public static function login(){
+
+	}
 
 }

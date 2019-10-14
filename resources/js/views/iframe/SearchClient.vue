@@ -5,6 +5,7 @@
         :can-cancel="false"
         :is-full-page="fullPage"></loading>
 		<b-card>
+			<p v-if="$store.state.isUserRetrieved"><i>Logged in as: {{ $store.state.loggedInUser.USR_FIRSTNAME }}, {{ $store.state.loggedInUser.USR_LASTNAME }} ({{ $store.state.loggedInUser.USR_USERNAME }})</i></p>
 			<b-form-group label="Type of Client">
 				<b-form-radio-group
 					id="type-of-client"
@@ -100,14 +101,15 @@
 
 	export default {
 		props: {
-			case: { type: String, default: null, required: false }
+			case: { type: String, default: null, required: false },
 		},
 		data: function(){
 			return {
 				isLoading: false,
-      	fullPage: true,
+      			fullPage: true,
 				clientType: '',
-				clientTypes: [
+				searchType: '',
+				clientTypeList: [
 					{ text: "Agency", value: 'agency' },
 					{ text: "Staff Member", value: 'staff-member' },
 					{ text: "Dependent", value: 'dependent' }
@@ -124,6 +126,16 @@
 			}
 		},
 		mounted(){
+			var query = this.$route.query
+
+			var type = query.type
+			var case_no = query.case_no
+			var user = query.user
+			var selectedClient = query.host_country_id;
+			if (selectedClient) {
+				getSelectedClient(selectedClient)
+			}
+			this.searchType = query.searchfor
 		},
 		methods: {
 			onAgencySearch(search, loading){
@@ -137,6 +149,10 @@
 			onDependentSearch(search, loading){
 				loading(true)
 				this.dependentSearch(loading, search, this)
+			},
+			getSelectedClient(host_country_id){
+				// this.isLoading = true;
+				alert(host_country_id)
 			},
 			search: _.debounce( (loading, search, vm) => {
 				axios(`/api/agencies/search?q=${escape(search)}`)
@@ -198,6 +214,38 @@
 				}else{
 					this.host_country_id = 0
 				}
+			}
+		},
+		computed: {
+			clientTypes: function(){
+				var list = this.clientTypeList
+				var arr = [];
+				if (this.searchType == 'staff') {
+					var result = _.find(list, (obj) => {
+						return obj.value == 'staff-member'
+					})
+					this.clientType = 'staff-member'
+					arr.push(result)
+				}
+				else if (this.searchType == 'agency') {
+					var result = _.find(list, (obj) => {
+						return obj.value == 'agency'
+					})
+					this.clientType = 'agency'
+					arr.push(result)
+				}
+				else if (this.searchType == 'dependent') {
+					var result = _.find(list, (obj) => {
+						return obj.value == 'dependent'
+					})
+					this.clientType = 'dependent'
+					arr.push(result)
+				}
+				else{
+					arr = list
+				}
+
+				return arr				
 			}
 		}
 	}

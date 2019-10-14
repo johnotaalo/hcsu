@@ -8,7 +8,7 @@
 
 		<div class="row">
 			<div class="col">
-				<b-table :fields="table.fields" :items="focalPoints">
+				<b-table :fields="table.fields" :items="focalPoints" show-empty>
 					<template slot="focal_point" slot-scope="data">
 						{{ data.item.last_name }}, {{ data.item.other_names }}
 					</template>
@@ -19,6 +19,10 @@
 
 					<template slot="actions" slot-scope="data">
 						<b-button variant="danger" size="sm" @click="removeFocalPoint(data.index)">Remove</b-button>&nbsp;&nbsp;<b-button variant="primary" size="sm" @click="editFocalPoint(data.index)">Edit</b-button>
+					</template>
+
+					<template v-slot:empty="scope">
+						<h4 class="text-center">There are no focal points registered in this organization</h4>
 					</template>
 				</b-table>
 			</div>

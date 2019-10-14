@@ -44,13 +44,9 @@
 						<b-input v-model="value.etr"></b-input>
 					</div>
 
-					<div class="col-sm-3">
+					<div class="col-sm-6">
 						<label for="document_type">Invoice File</label>
-						<b-file placeholder="Choose a file..." drop-placeholder="Drop file here..." v-model="value.invoiceFile"></b-file>
-					</div>
-
-					<div class="col-sm-3">
-						
+						<b-file placeholder="Choose a file..." drop-placeholder="Drop file here..." v-model="value.invoiceFile" accept="application/pdf"></b-file>
 					</div>
 				</b-row>
 

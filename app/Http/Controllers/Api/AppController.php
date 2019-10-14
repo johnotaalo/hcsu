@@ -17,12 +17,22 @@ use App\FormTemplate;
 use Storage;
 use mikehaertl\pdftk\Pdf;
 
+use App\Enums\UserType;
+
 class AppController extends Controller
 {
     function index(Request $request){
+        // dd($request->query());
+        if(\Auth::check()){
+            if (\Auth::user()->user_type == UserType::getInstance(UserType::FocalPoint)) {
+                return redirect()->route('focalpoints-home');
+            }
+        }
         $data = [];
         $data['iframe'] = false;
         $data['case_no'] = "";
+        $data['user'] = $request->query('user');
+        // dd($request->query());
         // echo "<pre>";print_r($request->url());die;
         if ($request->query('type') == "iframe") {
             $data['iframe'] = true;
@@ -31,6 +41,8 @@ class AppController extends Controller
         if($request->query('case_no') != ""){
             $data['case_no'] = $request->query('case_no');
         }
+
+        // dd($data);
 
     	return view('app.main')->with($data);
     }
@@ -92,6 +104,8 @@ class AppController extends Controller
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
 
         $response = \Processmaker::executeREST($url, "PUT", $data, $authenticationData->access_token);
+
+        dd($response);
 
         return $response;
     }

@@ -26,7 +26,7 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
 
 	public function headings(): array
     {
-        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME", 'INVOICE NUMBER', 'AMOUNT'];
+        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME", 'ACCOUNT NO'];
     }
 
     public function headingRow(): int {
@@ -44,8 +44,7 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
     public function columnFormats(): array
     {
         return [
-            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
-            'J' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY
         ];
     }
 
@@ -63,14 +62,14 @@ class BlanketVATExport implements FromCollection, WithHeadings, WithColumnFormat
     			$event->sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
     			$event->sheet->getPageSetup()->setFitToWidth(1);
                 $event->sheet->getPageSetup()->setFitToHeight(0);
-    			$event->sheet->getHeaderFooter()->setOddHeader('&C&H&BBLANKET VAT EXEMPTIONS TO KRA ON ' . \Carbon\Carbon::parse($this->batch->batch_date)->format('d/m/Y'));
+    			$event->sheet->getHeaderFooter()->setOddHeader('&C&H&BANNUAL VAT EXEMPTIONS TO KRA ON ' . \Carbon\Carbon::parse($this->batch->batch_date)->format('d/m/Y'));
     			$event->sheet->getHeaderFooter()->setOddFooter('&CPage &P of &N');
 
                 $event->sheet->getDelegate()->getStyle("A1:{$highestColumn}1")->getFont()->setBold(true);
                 $event->sheet->getDelegate()->getStyle("A1:A{$totalRows}")->getAlignment()->setHorizontal('center');
                 $event->sheet->getDelegate()->getStyle("B1:B{$totalRows}")->getAlignment()->setHorizontal('left');
-                $event->sheet->getDelegate()->getStyle("C1:G{$totalRows}")->getAlignment()->setHorizontal('center');
-                $event->sheet->getDelegate()->getStyle("I1:I{$totalRows}")->getAlignment()->setHorizontal('center');
+                $event->sheet->getDelegate()->getStyle("C1:H{$totalRows}")->getAlignment()->setHorizontal('center');
+                // $event->sheet->getDelegate()->getStyle("I1:I{$totalRows}")->getAlignment()->setHorizontal('center');
 
                 $event->sheet->getDelegate()->getStyle("A1:{$highestColumn}{$totalRows}")->applyFromArray([
                     'borders' => [

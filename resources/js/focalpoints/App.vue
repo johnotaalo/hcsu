@@ -1,7 +1,12 @@
 <template>
 	<div>
+		<loading
+		:active.sync="this.$store.state.loading > 0"
+        :can-cancel="false"
+        :is-full-page="true"
+        :opacity="1"></loading>
 		<div v-if="dashboard">
-			<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light" id="sidebar">
+			<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light" id="sidebar" v-if="this.$store.state.isUserRetrieved">
 				<div class="container-fluid">
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
@@ -11,6 +16,9 @@
 						<img src="/images/UNLOGOBW.jpg" class="navbar-brand-img mx-auto" alt="...">
 					</a>
 
+					<p>{{ user.name }}</p>
+					<P>{{ user.focal_point.agency.ACRONYM }}</P>
+
 					<div class="navbar-user d-md-none">
 
 						<!-- Dropdown -->
@@ -19,16 +27,16 @@
 							<!-- Toggle -->
 							<a href="#" id="sidebarIcon" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<div class="avatar avatar-sm avatar-online">
-									<img src="/images/no_avatar.svg" class="avatar-img rounded-circle" alt="...">
+									<img src="/images/no_avatar.svg" class="avatar-img rounded-circle" :alt="user.name">
 								</div>
 							</a>
 
 							<!-- Menu -->
 							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="sidebarIcon">
-								<a href="profile-posts.html" class="dropdown-item">Profile</a>
+								<!-- <a href="profile-posts.html" class="dropdown-item">Profile</a>
 								<a href="settings.html" class="dropdown-item">Settings</a>
-								<hr class="dropdown-divider">
-								<a href="sign-in.html" class="dropdown-item">Logout</a>
+								<hr class="dropdown-divider"> -->
+								<a href="/logout" class="dropdown-item">Logout</a>
 							</div>
 
 						</div>
@@ -54,6 +62,10 @@
 									</ul>
 								</div>
 							</li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="/logout"><i class="fe fe-lock"></i> Logout</a>
+							</li>
 						</ul>
 
 						<!-- Push content down -->
@@ -75,16 +87,16 @@
 								<!-- Toggle -->
 								<a href="#" id="sidebarIconCopy" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									<div class="avatar avatar-sm avatar-online">
-										<img src="/images/no_avatar.svg" class="avatar-img rounded-circle" alt="...">
+										<img src="/images/no_avatar.svg" class="avatar-img rounded-circle" alt="">
 									</div>
 								</a>
 
 								<!-- Menu -->
 								<div class="dropdown-menu" aria-labelledby="sidebarIconCopy">
-									<a href="profile-posts.html" class="dropdown-item">Profile</a>
+									<!-- <a href="profile-posts.html" class="dropdown-item">Profile</a>
 									<a href="settings.html" class="dropdown-item">Settings</a>
-									<hr class="dropdown-divider">
-									<a href="sign-in.html" class="dropdown-item">Logout</a>
+									<hr class="dropdown-divider"> -->
+									<a href="/logout" class="dropdown-item">Logout</a>
 								</div>
 
 							</div>
@@ -138,6 +150,9 @@
 			dashboard: { type: Boolean, default: true }
 		},
 		created(){
+			this.$store.dispatch('fetchCurrentUser').then(res => {
+				console.log(res)
+			});
 		},
 		computed: {
 			pageTitle: function(){
@@ -151,6 +166,9 @@
 					return this.$route.meta.subtitle
 				else
 					return 'Overview'
+			},
+			user: function(){
+				return this.$store.state.loggedInUser
 			}
 		}
 	}

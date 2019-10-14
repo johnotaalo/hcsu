@@ -18,7 +18,8 @@ let routes = [
  		name: 'home',
  		component: Home,
  		meta: {
- 			title: 'Home'
+ 			title: 'Home',
+ 			auth: true
  		}
  	},
  	{
@@ -26,7 +27,8 @@ let routes = [
  		name: 'principal',
  		component: Principal,
  		meta: {
- 			title: 'Principals'
+ 			title: 'Principals',
+ 			auth: true
  		}
  	},
  	{

@@ -10,6 +10,7 @@ class Principal extends Model
 {
     protected $primaryKey = "ID";
     protected $table = "PRINCIPAL";
+    protected $connection = "mysql";
 
     protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname"];
 

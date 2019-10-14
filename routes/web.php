@@ -16,27 +16,29 @@
 // });
 Route::get('/photos/principal/{host_country_id}', function($host_country_id){
 	$principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $host_country_id)->first();
-	$filename = $principal->IMAGE;
+	if($principal){
+		$filename = $principal->IMAGE;
 
-	if (!\Storage::exists($filename)) {
-		// die("No file name");
-		// abort(404);
-		$file = public_path('images/no_avatar.svg');
-		$type = \File::mimeType($file);
+		if (!\Storage::exists($filename)) {
+			// die("No file name");
+			// abort(404);
+			$file = public_path('images/no_avatar.svg');
+			$type = \File::mimeType($file);
 
-		$headers = array('Content-Type: ' . $type);
+			$headers = array('Content-Type: ' . $type);
 
-		return Response::download($file, 'no_avatar.svg',$headers);
+			return Response::download($file, 'no_avatar.svg',$headers);
+		}
+
+		$file = \Storage::get($filename);
+		$type = \Storage::mimeType($filename);
+
+		$response = Response::make($file, 200);
+		$response->header("Content-Type", $type);
+
+		return $response;
 	}
-
-	$file = \Storage::get($filename);
-	$type = \Storage::mimeType($filename);
-
-	$response = Response::make($file, 200);
-	$response->header("Content-Type", $type);
-
-	return $response;
-})->middleware('isAdmin')->name('principal-photo');
+})->name('principal-photo');
 
 Route::get('/photos/dependent/{host_country_id}', function($host_country_id){
 	$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();
@@ -70,17 +72,24 @@ Route::get('/docusign/afterSignature/{case}/{process}/{task}', 'Api\DocusignAPIC
 Route::get('/docusign/document-sign', 'Api\DocusignAPIController@generateSigningDocument');
 Route::get('/docusign/document-download/{envelope_id}', 'Api\DocusignAPIController@downloadDocument')->name('download-docusigned-doc');
 
-Route::prefix('focal-point')->group(function(){
+Route::middleware('auth')->prefix('focal-point')->group(function(){
 	Route::get('/', 'FocalPoints\DashboardController@index')->name('focalpoints-home');
 	Route::get('/login', 'Auth\FocalPointAuthController@login')->name('focalpoints-login');
 	Route::get('/password/reset/{token}', 'Auth\FocalPointAuthController@resetPassword')->name('focalpoint-reset-password');
 	Route::post('/password/reset/{token}', 'Auth\FocalPointAuthController@changePassword');
+
+	Route::prefix('vat')->group(function(){
+		Route::prefix('download')->group(function(){
+			Route::get('acknowledgement/{id}', 'FocalPoints\VATController@downloadAcknowledgement');
+		});
+	});
 });
 
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
 
+// Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
 Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
 
 
-
-Route::get('/home', 'HomeController@index')->name('home');

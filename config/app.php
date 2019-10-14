@@ -182,6 +182,8 @@ return [
         App\Providers\ProcessmakerServiceProvider::class,
         // App\Providers\FocalPointPasswordResetServiceProvider::class,
 
+        Laravel\Passport\PassportServiceProvider::class,
+
     ],
 
     /*
