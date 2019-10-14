@@ -40,10 +40,19 @@
 							<span v-if="data.row.STATUS == 'Claimed'">
 								<span class="text-primary">●</span>&nbsp;Claimed
 							</span>
+							<span v-if="data.row.STATUS == 'Not Approved'">
+								<span class="text-danger">●</span>&nbsp;Not Approved
+							</span>
+
+							<span v-if="data.row.APPROVED">
+								<span class="text-danger">●</span>&nbsp;{{ data.row.STATUS }}
+							</span>
 						</template>
 
 						<template slot="Action" slot-scope="data">
 							<!-- <a class="btn btn-success btn-sm">View Status</a> -->
+							<a class="btn btn-primary btn-sm" v-if="data.row.APPROVED">Edit</a>
+							<a class="btn btn-default btn-sm">View Application</a>
 						</template>
 					</v-server-table>
 				</b-tab>

@@ -144,7 +144,6 @@ class AgenciesController extends Controller
 						$notification = new FocalPointPassword($createdFP, $token);
 
 						$res = Notification::send($createdFP, $notification);
-						dd($res);
 	    			}
 	    		}
 	    	}
