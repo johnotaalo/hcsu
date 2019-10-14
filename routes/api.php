@@ -25,6 +25,16 @@ Route::prefix('auth')->group(function(){
 	});
 });
 
+Route::get('test', function(){
+	$faker = \Faker\Factory::create();
+	$tests = \App\Test::insert([
+		['name' => $faker->name],
+		['name' => $faker->name]
+	]);
+
+	dd($tests);
+});
+
 
 Route::prefix('principal')->group(function(){
 	Route::get('/', 'Api\PrincipalController@getPrincipal');

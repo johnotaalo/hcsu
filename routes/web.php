@@ -36,7 +36,7 @@ Route::get('/photos/principal/{host_country_id}', function($host_country_id){
 	$response->header("Content-Type", $type);
 
 	return $response;
-})->name('principal-photo');
+})->middleware('isAdmin')->name('principal-photo');
 
 Route::get('/photos/dependent/{host_country_id}', function($host_country_id){
 	$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();

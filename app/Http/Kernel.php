@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'isFocalPoint' => \App\Http\Middleware\CheckIsFocalPoint::class,
+        'isAdmin' => \App\Http\Middleware\CheckIsAdmin::class,
     ];
 
     /**
