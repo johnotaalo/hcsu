@@ -63,7 +63,11 @@
 		components: { 'v-select': vSelect },
 		props: {
 			'value': { type: null, default: null },
-			applier: { type: String, default: 'fp' }
+			applier: { type: String, default: 'fp' },
+			type: { type: String, default: '' }
+		},
+		created() {
+			// this.clientType = this.type
 		},
 		data(){
 			return {

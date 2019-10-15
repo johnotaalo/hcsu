@@ -168,6 +168,7 @@ Route::prefix('/focal-points')->group(function(){
 		Route::prefix('vat')->group(function(){
 			Route::post('/', 'FocalPoints\VATController@addVATApplication');
 			Route::get('/search', 'FocalPoints\VATController@searchApplication');
+			Route::get('/user-application/{id}', 'FocalPoints\VATController@getVATApplication');
 		});
 	});
 });

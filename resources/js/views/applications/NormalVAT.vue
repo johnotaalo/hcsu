@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md">
 				<fieldset>
 					<legend>Client</legend>
 					<search-client v-model="form"></search-client>
@@ -33,7 +33,7 @@
 					</div>
 				</fieldset>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md">
 				<b-alert variant="danger" dismissible show>
 					<h3>Instructions</h3>
 					<ul>
@@ -88,7 +88,9 @@
 		components: { 'v-select': vSelect, 'search-client': SearchClientComponent, Form, DocumentRow },
 		mixins: [rowForm],
 		props: {
-			applier: { type: String, dafault: 'fp' }
+			applier: { type: String, default: 'fp' },
+			id: { type: Number,  default: 0 },
+			viewtype: { type: String, default: 'new' }
 		},
 		data(){
 			return {
@@ -103,9 +105,18 @@
 			}
 		},
 		created() {
-
+			if (this.id != 0) {
+				this.getVATDetails()
+			}
 		},
 		methods: {
+			getVATDetails(){
+				axios(`/api/focal-points/vat/user-application/${this.id}`)
+				.then(res => {
+					this.case_no = res.data.CASE_NO
+					this.form.clientType = (res.data.data.client.type == "staff") ? "staff-member" : res.data.data.client.type
+				})
+			},
 			onSupplierSearch(search, loading){
 				loading(true)
 				this.supplierSearch(loading, search, this)

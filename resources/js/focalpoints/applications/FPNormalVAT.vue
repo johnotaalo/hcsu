@@ -44,15 +44,27 @@
 								<span class="text-danger">●</span>&nbsp;Not Approved
 							</span>
 
-							<span v-if="data.row.APPROVED">
-								<span class="text-danger">●</span>&nbsp;{{ data.row.STATUS }}
+							<span v-if="data.row.APPROVED == 1">
+								<span class="text-success">●</span>&nbsp;{{ data.row.STATUS }}
 							</span>
 						</template>
 
 						<template slot="Action" slot-scope="data">
 							<!-- <a class="btn btn-success btn-sm">View Status</a> -->
-							<a class="btn btn-primary btn-sm" v-if="data.row.APPROVED">Edit</a>
-							<a class="btn btn-default btn-sm">View Application</a>
+
+							<div class="dropdown">
+								<a href="#" class="btn btn-primary btn-sm dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Actions
+								</a>
+								<div class="dropdown-menu dropdown-menu-right">
+									<router-link :to="{name: 'applications.normal-vat.edit', params: { id: data.row.id }}" class="dropdown-item" v-if="data.row.STATUS == 'Not Approved'"><i class="fe fe-edit"></i>&nbsp;&nbsp;Edit</router-link>
+									<router-link :to="{name: 'applications.normal-vat.view', params: { id: data.row.id }}" class="dropdown-item"><i class="fe fe-eye"></i>&nbsp;&nbsp;View Application</router-link>
+									<a></a>
+								</div>
+							</div>
+
+							
+							
 						</template>
 					</v-server-table>
 				</b-tab>

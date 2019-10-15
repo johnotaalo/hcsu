@@ -130,7 +130,7 @@ class VATController extends Controller
 		$response = \Processmaker::routeCase($app_uid);
 		
 
-		if ($outputDocRes) {
+		if (empty($response)) {
 			$base_url = "http://".env('PM_SERVER_DOMAIN')."/sysworkflow/en/neoclassic/{$outputDocRes->app_doc_link}";
 
 			$userApplication = new \App\VATUserApplication();
@@ -157,6 +157,8 @@ class VATController extends Controller
 				// 'document_link'		=>	$outputDocRes->app_doc_link,
 				'application_id'	=>	$userApplication->id
 			];
+		}else{
+			return \Response::json($response, 500);
 		}
 	}
 
@@ -231,5 +233,13 @@ class VATController extends Controller
 			'data' 	=> $data,
 			'count'	=>	$count
 		];
+	}
+
+	function getVATApplication(Request $request){
+		$id = $request->id;
+
+		$application = VATUserApplication::where('id', $id)->where('USER_ID', \Auth::id())->with('documents')->firstOrFail();
+
+		return $application;
 	}
 }

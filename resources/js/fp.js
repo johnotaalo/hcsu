@@ -29,6 +29,8 @@ Vue.use(VueSwal)
 import App from './focalpoints/App'
 import Dashboard from './focalpoints/dashboard/Index'
 import FPNormalVAT from './focalpoints/applications/FPNormalVAT'
+import FPNormalVATEdit from './focalpoints/applications/FPNormalVATEdit'
+import FPNormalVATView from './focalpoints/applications/FPNormalVATView'
 
 const router = new VueRouter({
 	linkExactActiveClass: "active",
@@ -48,7 +50,28 @@ const router = new VueRouter({
 			subtitle: 'Applications',
 			auth: true
 		},
-		component: FPNormalVAT
+		component: FPNormalVAT,
+		children: [
+			
+		]
+	}, {
+		path: '/applications/normal-vat/edit/:id',
+		component: FPNormalVATEdit,
+		name: 'applications.normal-vat.edit',
+		meta: {
+			title: "Normal VAT Application",
+			subtitle: 'Edit Application',
+			auth: true
+		}
+	}, {
+		path: '/applications/normal-vat/view/:id',
+		component: FPNormalVATView,
+		name: 'applications.normal-vat.view',
+		meta: {
+			title: "Normal VAT Application",
+			subtitle: 'View Application',
+			auth: true
+		}
 	}]
 });
 
