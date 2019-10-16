@@ -221,7 +221,8 @@ class AppController extends Controller
             if ($document->input_document != null) {
                 $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
             }
-            return \Storage::download($localFile);
+            // return \Storage::download($localFile);
+            return response()->file(storage_path("app/{$localFile}"));
         }
         else{
             abort(404);
