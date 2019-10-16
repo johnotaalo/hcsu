@@ -14,4 +14,8 @@ class Agency extends Model
     public function focalPoints(){
     	return $this->hasMany('App\Models\AgencyFocalPoint', 'AGENCY_HOST_COUNTRY_ID', 'HOST_COUNTRY_ID');
     }
+
+    public function applications(){
+    	
+    }
 }

@@ -35,17 +35,21 @@
 
 						<template slot="Status" slot-scope="data">
 							<span v-if="data.row.STATUS == 'Pending'">
-								<span class="text-warning">●</span>&nbsp;Pending
+								<span class="text-warning"><i class="fe fe-clock"></i>&nbsp;Pending</span>
 							</span>
 							<span v-if="data.row.STATUS == 'Claimed'">
-								<span class="text-primary">●</span>&nbsp;Claimed
+								<span class="text-primary"><i class="fe fe-user-check"></i>&nbsp;Claimed</span>
 							</span>
 							<span v-if="data.row.STATUS == 'Not Approved'">
-								<span class="text-danger">●</span>&nbsp;Not Approved
+								<span class="text-danger"><i class="fe fe-x"></i>&nbsp;Not Approved</span>
 							</span>
 
 							<span v-if="data.row.APPROVED == 1">
-								<span class="text-success">●</span>&nbsp;{{ data.row.STATUS }}
+								<span v-if="data.row.STATUS != 'Cancelled' && data.row.STATUS != 'Canceled'">
+									<span class="text-success"><pen-tool-icon size="1x"></pen-tool-icon>&nbsp;{{ data.row.STATUS }}</span>
+								</span>
+
+								<span class = "text-danger" v-if="data.row.STATUS == 'Cancelled' || data.row.STATUS == 'Canceled'"><x-octagon-icon size="1x"></x-octagon-icon>&nbsp;Canceled</span>
 							</span>
 						</template>
 
@@ -79,10 +83,11 @@
 
 <script type="text/javascript">
 	import NormalVAT from '../../views/applications/NormalVAT'
+	import { PenToolIcon, XOctagonIcon } from 'vue-feather-icons'
 
 	export default {
 		name: "FPNormalVAT",
-		components: { 'normal-vat': NormalVAT },
+		components: { 'normal-vat': NormalVAT, PenToolIcon, XOctagonIcon },
 		data(){
 			return {
 				tabIndex: 0,
@@ -95,6 +100,7 @@
 			}
 		},
 		mounted(){
+			// this.$parent.dashboard = false
 		},
 		methods: {
 			resetCard() {

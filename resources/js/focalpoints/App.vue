@@ -5,7 +5,7 @@
         :can-cancel="false"
         :is-full-page="true"
         :opacity="1"></loading>
-		<div v-if="dashboard">
+		<div>
 			<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light" id="sidebar" v-if="this.$store.state.isUserRetrieved">
 				<div class="container-fluid">
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidebarCollapse" aria-controls="sidebarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,7 +116,7 @@
 			</nav>
 
 			<div class="main-content">
-				<div class="header">
+				<div class="header" v-if="!dashboard">
 					<div class="container-fluid">
 						<div class="header-body">
 							<div class="row align-items-end">
@@ -136,7 +136,7 @@
 					</div>
 				</div>
 
-				<div class="container-fluid">
+				<div v-bind:class="{ 'container-fluid' : !dashboard } ">
 					<router-view></router-view>
 				</div>
 			</div>
@@ -147,9 +147,15 @@
 <script type="text/javascript">
 	export default {
 		props: {
-			dashboard: { type: Boolean, default: true }
+			// dashboard: { type: Boolean, default: false }
+		},
+		data(){
+			return {
+				dashboard: false
+			}
 		},
 		created(){
+			// this.$route
 			this.$store.dispatch('fetchCurrentUser').then(res => {
 				console.log(res)
 			});
@@ -169,6 +175,11 @@
 			},
 			user: function(){
 				return this.$store.state.loggedInUser
+			}
+		},
+		watch: {
+			$route (to, from){
+				this.dashboard = false;
 			}
 		}
 	}
