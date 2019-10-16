@@ -25,7 +25,7 @@ class Export extends Controller
     		];
     	});
 
-        dd($vatList);
+        // dd($vatList);
 
     	$exportData = new \App\Exports\VATExport($vatList);
     	return \Excel::download($exportData, 'VAT LIST.xlsx');
