@@ -183,4 +183,13 @@ class DataController extends Controller
     function createHostCountryID($new_id){
       return "10000000" + $new_id;
     }
+
+    function getClient(Request $request){
+      $clientType = $request->query('type');
+      $number = $request->query('query');
+
+      if ($clientType == "clients") {
+      }else if ($clientType == "focalpoint") {
+      }
+    }
 }
