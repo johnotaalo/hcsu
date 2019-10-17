@@ -299,7 +299,7 @@ class AppController extends Controller
     }
 
     function uploadGeneratedForm($case_no, $task_id, $document, $localFile){
-        // $inputDocuments = $this->getGeneratedDocuments($case_no);
+        $inputDocuments = $this->getGeneratedDocuments($case_no);
         // // dd($inputDocuments);
         // if (count($inputDocuments)) {
         //     foreach ($inputDocuments as $inputDocument) {
@@ -357,6 +357,7 @@ class AppController extends Controller
         $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
+        dd($response);
 
         return $response;
     }
