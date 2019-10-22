@@ -104,6 +104,10 @@ Route::prefix('agencies')->group(function(){
 	Route::put('/update/{agency_id}', 'Api\AgenciesController@updateAgency');
 });
 
+
+Route::prefix('agency')->group(function(){
+	Route::get('focal-point/{host_country_id}', 'Api\AgenciesController@getFocalPoints');
+});
 Route::get('passport-types', 'Api\AppController@getPassportTypes');
 Route::get('countries', 'Api\AppController@getCountries');
 Route::prefix('data')->group(function(){

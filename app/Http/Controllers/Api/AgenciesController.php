@@ -102,6 +102,8 @@ class AgenciesController extends Controller
 			'POSTCODE'			=>	$request->input('agencyDetails.agency_postal_code')
 		];
 
+		// dd($request->input('focalPoints'));
+
 		$agency = Agency::where('HOST_COUNTRY_ID', $request->agency_id)->firstOrFail();
 		foreach ($data as $key => $value) {
 			$agency->$key = $value;
@@ -111,8 +113,9 @@ class AgenciesController extends Controller
     	// return $request->input;
     	if($request->input('focalPoints')){
 	    	if ($request->input('focalPoints')) {
+	    		dd($request->input('focalPoints'));
 	    		foreach($request->input('focalPoints') as $fp){
-	    			if (!isset($fp['ID'])) {
+	    			if (!isset($fp['id'])) {
 	    				$username = $this->generateUsername($fp['other_names'], $fp['last_name'], $fp['index_no']);
 	    				$fpdata = [
 							"AGENCY_HOST_COUNTRY_ID"	=>	$request->agency_id,
@@ -144,6 +147,29 @@ class AgenciesController extends Controller
 						$notification = new FocalPointPassword($createdFP, $token);
 
 						$res = Notification::send($createdFP, $notification);
+	    			}else{
+	    				$fpdata = [
+							"AGENCY_HOST_COUNTRY_ID"	=>	$request->agency_id,
+							"INDEX_NO"					=>	$fp['index_no'],
+							"LAST_NAME"					=>	$fp['last_name'],
+							"OTHER_NAMES"				=>	$fp['other_names'],
+							"EXTENSION"					=>	$fp['extension'],
+							"MOBILE_NO"					=>	$fp['mobile_no'],
+							"EMAIL"						=>	$fp['email_address']
+						];
+
+						$fp = AgencyFocalPoint::find($fp['id']);
+						$fp->update($fpdata);
+						// dd($fp);
+
+						$user = \App\User::where('ext_id', $fp->ID)->first();
+						$userArray = [
+							'name'		=>	$fp->full_name,
+							'email'		=>	$fp->EMAIL,
+							'ext_id'	=>	$fp->ID
+						];
+
+						$user->update($userArray);
 	    			}
 	    		}
 	    	}
@@ -206,5 +232,11 @@ class AgenciesController extends Controller
 		$usernameExists = AgencyFocalPoint::where('USERNAME', $username)->exists();
 
 		return $usernameExists;
+	}
+
+	function getFocalPoints(Request $request){
+		$agency = Agency::where('HOST_COUNTRY_ID', $request->host_country_id)->firstOrFail();
+
+		return $agency->focalPoints;
 	}
 }

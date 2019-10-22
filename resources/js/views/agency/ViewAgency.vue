@@ -28,13 +28,64 @@
 						</div>
 					</div>
 				</div>
-				<div class="row align-items-center mt-2">
+				<div class="row mt-2">
 					<div class="col-md-9">
 						<b-card no-body>
 							<b-tabs card>
-								<b-tab title="Principal Details" active>
+								<b-tab title="Agency Details" active>
+									<table class="table table-bordered">
+										<tr>
+											<td>
+												<b>Host Country ID</b>
+											</td>
+											<td>
+												{{ agency.HOST_COUNTRY_ID }}
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Agency Name</b>
+											</td>
+											<td>
+												{{ agency.AGENCYNAME }}
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Acronym</b>
+											</td>
+											<td>
+												{{ agency.ACRONYM }}
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Location</b>
+											</td>
+											<td>
+												{{ agency.LOCATION }}
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Physical Address</b>
+											</td>
+											<td>
+												{{ agency.PHY_ADDRESS }}
+											</td>
+										</tr>
+									</table>
 								</b-tab>
 								<b-tab title="Focal Points">
+									<div class="row">
+										<div class="col-md">
+											<b-table :fields="table.focalPoints.fields" :items="focalPoints" show-empty>
+												<template slot="NAME" slot-scope="data">
+													{{ data.item.LAST_NAME }}, {{ data.item.OTHER_NAMES }}
+												</template>
+											</b-table>
+										</div>
+									</div>
 								</b-tab>
 							</b-tabs>
 						</b-card>
@@ -51,7 +102,7 @@
 								</div>
 								<div class="col-auto">
 									<small class="text-muted">
-									129
+									0
 									</small>
 								</div>
 							</div>
@@ -97,7 +148,13 @@
 		data(){
 			return {
 				agencyId: this.$route.params.id,
-				agency: {}
+				agency: {},
+				focalPoints: [],
+				table: {
+					focalPoints: {
+						fields: ["INDEX_NO", "NAME", "EXTENSION", "MOBILE_NO", "EMAIL"]
+					}
+				}
 			}
 		},
 		created(){
@@ -109,8 +166,11 @@
 				axios.get(`/api/agencies/get/${this.agencyId}`)
 				.then(res => {
 					this.agency = res.data
+
+					this.focalPoints = res.data.focal_points
 				})
-			}
+			},
+			
 		}
 	}
 </script>

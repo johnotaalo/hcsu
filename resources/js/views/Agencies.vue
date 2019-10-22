@@ -15,7 +15,7 @@
 				
 				<div v-if="totalRows && !loading" class="row" id="agencyList" :per-page="pagination.perPage">
 					<!-- <paginate name="agencies" :list="agencies" :per="pagination.perPage"> -->
-						<div class="col-md-4 mb-3" v-for="agency in agencies">
+						<div class="col-md-4 mb-3" v-for="agency in filteredAgencies">
 							<b-card style="height: 280px;">
 								<div class="row" style="height: 40%;">
 									<div class="col-sm-2" style="padding: 6px;" >
@@ -117,7 +117,7 @@
 		computed: {
 			filteredAgencies() {
 				return this.agencies.filter(agency => {
-					return agency.ACRONYM.toLowerCase().includes(this.search.toLowerCase());
+					return agency.ACRONYM.toLowerCase().includes(this.search.toLowerCase()) || agency.AGENCYNAME.toLowerCase().includes(this.search.toLowerCase());
 				});
 			},
 			totalRows() {

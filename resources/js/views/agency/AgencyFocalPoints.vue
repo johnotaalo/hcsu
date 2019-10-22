@@ -40,7 +40,13 @@
 		name: "AgencyFocalPoints",
 		components: { FocalPointDetails },
 		props: {
-			value: { type: null, default: null }
+			value: { type: null, default: null },
+			agency: { type: null, default: null }
+		},
+		created(){
+			if (this.agency != null) {
+				this.getFocalPoints(this.agency)
+			}
 		},
 		data(){
 			return {
@@ -56,6 +62,22 @@
 			}
 		},
 		methods: {
+			getFocalPoints: function(host_country_id){
+				axios.get(`api/agency/focal-point/${host_country_id}`)
+				.then(res => {
+					this.focalPoints = _.map(res.data, function(fp) {
+						return {
+							id 				: fp.ID,
+							last_name		: fp.LAST_NAME,
+							other_names		: fp.OTHER_NAMES,
+							email_address	: fp.EMAIL,
+							extension		: fp.EXTENSION,
+							index_no		: fp.INDEX_NO,
+							mobile_no		: fp.MOBILE_NO
+						}
+					})
+				})
+			},
 			mergeFocalPointData(){
 				var dataObj = {};
 				var em = this;

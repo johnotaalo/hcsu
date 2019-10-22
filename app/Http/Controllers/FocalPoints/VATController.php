@@ -6,14 +6,24 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\VATUserApplication;
+use App\Rules\Documentno;
 
 class VATController extends Controller
 {
 	function addVATApplication(Request $request){
-		// $validatedData = $request->validate([
+		// $request->
+		$validatedData = $request->validate([
+			'supplier'						=>	'required',
+			'client'						=>	'required',
+			'documents'						=>	'required|array|min:1',
+			'documents.*.documentNo'		=>	['required', new Documentno($request->supplier)],
+			'documents.*.documentDate'		=>	'required',
+			'documents.*.goodsDescription'	=>	'required',
+			'documents.*.vatAmount'			=>	'required',
+			'documents.*.documentType'		=>	'required',
+			'documents.*.invoiceFile'		=>	'required|mimes:pdf'
+		]);
 
-		// ]);
-		// dd($request->files);
 		$documentPaths = [];
 
 		$process = $outputDocument = "";
@@ -53,6 +63,9 @@ class VATController extends Controller
 
 		$k = 1;
 		foreach ($request->documents as $key => $document) {
+			$document['vatAmount'] = str_replace(',', '', $document['vatAmount']);
+			$document['vatAmount'] = str_replace(' ', '', $document['vatAmount']);
+
 			$grid[$k] = [
 				'documentType'			=>	$document['documentType'],
 				'documentType_label'	=>	ucwords($document['documentType']),

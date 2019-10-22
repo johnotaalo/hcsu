@@ -6,7 +6,7 @@
 					<agency-details v-model="form.agencyDetails"></agency-details>
 				</tab-content>
 				<tab-content title = "Focal Point(s)" icon="fe fe-users">
-					<agency-focal-points v-model="form.focalPoints" @focalPointsListener="focalPointsChange"></agency-focal-points>
+					<agency-focal-points :agency = "$route.params.id" v-model="form.focalPoints" @focalPointsListener="focalPointsChange"></agency-focal-points>
 				</tab-content>
 			</form-wizard>
 		</b-card>
@@ -60,7 +60,7 @@
 				})
 			},
 			onComplete: function(){
-				console.log(this.form.data())
+				// console.log(this.form.data())
 				this.form.put(`agencies/update/${this.form.agencyDetails.host_country_id}`)
 				.then(data => {
 					console.log(data)
