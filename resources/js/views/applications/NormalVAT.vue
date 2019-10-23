@@ -150,13 +150,13 @@
 					this.$swal("All Good!", `Successfully submitted VAT Application. Your Case No is: ${res.case_no}. We have also sent an email to your address with the details`, "success")
 					.then((value) => {
 						if (value) {
-							// this.$emit('update-tabs')
+							this.$emit('update-tabs')
 						}
 					})
 
-					// this.form.supplier = ""
-					// this.form.client = {}
-					// this.form.documents = []
+					this.form.supplier = ""
+					this.form.client = {}
+					this.form.documents = []
 				}).catch((error) => {
 					console.log(error);
 					this.$store.commit('loadingOff');
