@@ -72,6 +72,18 @@
 			</div>
 			<!-- <b-button class="mt-3" variant="outline-success" block @click="openOutputLink">Download Document Control Form</b-button> -->
 		</b-modal>
+
+		<b-modal ref="errorModal" title="Error!">
+			<div class="d-block">
+				<h5>Rectify the errors before proceeding</h5>
+				<p v-for = "(error, key) in errors">
+					{{ key | capitalize }} Field
+					<ul>
+						<li v-for = "e in error">{{ e }}</li>
+					</ul>
+				</p>
+			</div>
+		</b-modal>
 	</div>
 </template>
 
@@ -101,7 +113,8 @@
 					supplier: "",
 					client: {},
 					documents: []
-				})
+				}),
+				errors: []
 			}
 		},
 		created() {
@@ -129,6 +142,7 @@
 				})
 			}, 350),
 			submitApplication: function(){
+				this.errors = [];
 				this.$store.commit('loadingOn');
 				this.form.post('/focal-points/vat').then(res => {
 					this.$store.commit('loadingOff');
@@ -144,9 +158,13 @@
 					// this.form.client = {}
 					// this.form.documents = []
 				}).catch((error) => {
-					// console.log(error);
+					console.log(error);
 					this.$store.commit('loadingOff');
-					this.$swal("Error", "There was an error while applying for your application. Please try again later", "error")
+					this.$swal("Error", `There was an error while applying for your application. ${error.message}`, "error")
+					if (error.errors) {
+						this.errors = error.errors
+						this.$refs['errorModal'].show()
+					}
 				});
 			},
 			openOutputLink: function(){
