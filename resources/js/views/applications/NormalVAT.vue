@@ -2,19 +2,35 @@
 	<div>
 		<div class="row">
 			<div class="col-md">
+				<button class="btn btn-rounded btn-primary" v-b-modal.instructionsModal><i class="fe fe-info"></i>&nbsp;Click here to view instructions</button>
+				<!-- &nbsp;|&nbsp;
+				<a class="btn btn-rounded btn-danger" target = "_blank" href="/documents/Guidelines for the submission of VAT claims.pdf"><i class="fe fe-download"></i>&nbsp;Download VAT Guidelines</a> -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md">
 				<fieldset>
 					<legend>Client</legend>
-					<search-client v-model="form"></search-client>
+					<div v-if="showClientForm">
+						<search-client v-model="form"></search-client>
+						<button v-if="id != 0" class="btn btn-sm btn-warning" @click="showClientForm = false">Revert</button>
+					</div>
+					<div v-else>
+						<p>Picked Details: <button class="btn btn-link" @click="showClientForm = true">Change</button></p>
+						<b>Type: </b>{{ data.data.client.type | capitalize }}<br/>
+						<b>Name: </b>{{ data.data.client.name }}
+					</div>
 				</fieldset>
+				<hr>
 				<fieldset>
 					<legend>Supplier</legend>
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col-md">
 							<div class="form-group">
 								
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="row">
 						<div class="col-md">
 							<label class="control-label">Pick a Supplier</label>
@@ -32,18 +48,6 @@
 						</div>
 					</div>
 				</fieldset>
-			</div>
-			<div class="col-md">
-				<b-alert variant="danger" dismissible show>
-					<h3>Instructions</h3>
-					<ul>
-						<li>Please scan all documents as one pdf document</li>
-						<li>If you are claiming for anything pertaining to a car, please include the <b>log book of the car</b></li>
-						<li>If you are claiming for a meeting, please include the <b>list of participants</b></li>
-						<li>All official VAT claims <b>must</b> include an <b>LPO</b></li>
-					</ul>
-					<!-- <b-button></b-button> -->
-				</b-alert>
 			</div>
 		</div>
 		
@@ -84,6 +88,17 @@
 				</p>
 			</div>
 		</b-modal>
+
+		<b-modal ref="instructionsModal" title = "Instructions" hide-footer hide-header id="instructionsModal">
+			<!-- <div class="col-md"> -->
+				<!-- <b-alert variant="danger" dismissible show> -->
+					<instructions-row></instructions-row>
+					<b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0 mt-3" v-model = "hideinstructions">Do not show this pop up again</b-form-checkbox>
+					<b-button class="mt-3" variant="outline-success" block @click="closeInstructionForm">Got It</b-button>
+					<!-- <b-button></b-button> -->
+				<!-- </b-alert> -->
+			<!-- </div> -->
+		</b-modal>
 	</div>
 </template>
 
@@ -93,11 +108,12 @@
 	import DocumentRow from './components/DocumentRow'
 	import rowForm from '../../mixins/rowForm'
 	import SearchClientComponent from '../../components/SearchClientComponent'
+	import InstructionsRow from './components/InstructionsRow'
 	import _ from 'lodash'
 
 	export default {
 		name: "NormalVAT",
-		components: { 'v-select': vSelect, 'search-client': SearchClientComponent, Form, DocumentRow },
+		components: { 'v-select': vSelect, 'search-client': SearchClientComponent, Form, DocumentRow, InstructionsRow },
 		mixins: [rowForm],
 		props: {
 			applier: { type: String, default: 'fp' },
@@ -106,6 +122,9 @@
 		},
 		data(){
 			return {
+				hide_instruction_label: "hide-instruction",
+				hideinstructions: false,
+				showClientForm: true,
 				case_no: "",
 				output_document_link: "",
 				suppliers: [],
@@ -114,7 +133,8 @@
 					client: {},
 					documents: []
 				}),
-				errors: []
+				errors: [],
+				data: {}
 			}
 		},
 		created() {
@@ -122,12 +142,49 @@
 				this.getVATDetails()
 			}
 		},
+
+		mounted(){
+			if(localStorage.getItem(this.hide_instruction_label) == "false"){
+				this.hideinstructions = false
+				this.$refs['instructionsModal'].show()
+			}else{
+				this.hideinstructions = true
+			}
+
+			this.$root.$on('bv::modal::hide', (bvEvent, modalId) => {
+				if (modalId == "instructionsModal") {
+					this.closeInstructionForm()
+				}
+			})
+		},
 		methods: {
+			downloadGuidelines(){
+
+			},
 			getVATDetails(){
 				axios(`/api/focal-points/vat/user-application/${this.id}`)
 				.then(res => {
 					this.case_no = res.data.CASE_NO
-					this.form.clientType = (res.data.data.client.type == "staff") ? "staff-member" : res.data.data.client.type
+					this.showClientForm = false
+					// this.form.clientType = (res.data.data.client.type == "staff") ? "staff-member" : res.data.data.client.type
+					var invoices = res.data.invoices
+
+					this.data = res.data
+
+					this.form.supplier = res.data.supplier
+					this.form.client = res.data.client
+					this.form.documents = _.map(res.data.documents, (doc, key) => {
+						return {
+							id: doc.id,
+							documentType: invoices[0].DOCUMENT_TYPE,
+							documentNo: invoices[0].DOCUMENT_NO,
+							documentDate: invoices[0].DOCUMENT_DATE,
+							goodsDescription: invoices[0].GOODS_DESCRIPTION,
+							vatAmount: invoices[0].VAT_AMOUNT,
+							link: doc.document_link,
+							edit: true
+						}
+					})
 				})
 			},
 			onSupplierSearch(search, loading){
@@ -158,7 +215,6 @@
 					this.form.client = {}
 					this.form.documents = []
 				}).catch((error) => {
-					console.log(error);
 					this.$store.commit('loadingOff');
 					this.$swal("Error", `There was an error while applying for your application. ${error.message}`, "error")
 					if (error.errors) {
@@ -167,10 +223,26 @@
 					}
 				});
 			},
+			closeInstructionForm: function(){
+				localStorage.setItem(this.hide_instruction_label, this.hideinstructions)
+				this.$refs['instructionsModal'].hide()
+			},
 			openOutputLink: function(){
 				window.location.href = this.output_document_link
 			}
 			// supplierSearch: (loading, search, vm) => {}
+		},
+		computed: {
+			// hideinstructionsx: function(){
+			// 	return (localStorage.getItem(this.hide_instruction_label) === "true") ? true : false
+			// }
+		},
+		watch: {
+			showClientForm: function(newVal, oldVal){
+				if (newVal == false) {
+					this.form.client = this.data.client
+				}
+			}
 		}
 	}
 </script>

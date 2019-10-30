@@ -19,10 +19,23 @@ class VATUserApplication extends Model
 		'STATUS'
     ];
 
-    protected $appends = array('supplier', 'data', 'claimer_data', 'invoices');
+    protected $appends = array('supplier', 'data', 'claimer_data', 'invoices', 'client');
 
     protected function getDataAttribute(){
     	return \App\Helpers\HCSU\Data\VATData::get($this->CASE_NO);
+    }
+
+    protected function getClientAttribute(){
+        $vat = \App\Models\VAT::where('CASE_NO', $this->CASE_NO)->first();
+        $host_country_id = (string)$vat->HOST_COUNTRY_ID;
+
+        if ($host_country_id[0] == 1) {
+            return \App\Models\Principal::where('HOST_COUNTRY_ID', $vat->HOST_COUNTRY_ID)->first();
+        }else if ($host_country_id[0] == 3) {
+            return \App\Models\Agency::where('HOST_COUNTRY_ID', $vat->HOST_COUNTRY_ID)->first();
+        }
+
+        return ;
     }
 
     protected function getSupplierAttribute(){

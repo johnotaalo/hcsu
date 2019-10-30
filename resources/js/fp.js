@@ -32,6 +32,16 @@ import FPNormalVAT from './focalpoints/applications/FPNormalVAT'
 import FPNormalVATEdit from './focalpoints/applications/FPNormalVATEdit'
 import FPNormalVATView from './focalpoints/applications/FPNormalVATView'
 
+axios.interceptors.request.use(config => {
+	NProgress.start()
+	return config;
+});
+
+axios.interceptors.response.use(response => {
+	NProgress.done()
+	return response;
+});
+
 const router = new VueRouter({
 	linkExactActiveClass: "active",
 	routes: [{

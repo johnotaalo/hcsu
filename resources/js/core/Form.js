@@ -151,6 +151,7 @@ class Form {
         // console.log(error.response);
         this.onFail(error)
         reject(error.response.data)
+        NProgress.done()
         // app.$store.commit('loadingOff')
       })
     })

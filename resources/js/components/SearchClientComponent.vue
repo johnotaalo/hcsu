@@ -8,7 +8,6 @@
 				name="client-types-option"
 			></b-form-radio-group>
 		</b-form-group>
-
 		<div v-if="value.clientType == ''" >
 			Please select a client type above
 		</div>
@@ -66,12 +65,13 @@
 			applier: { type: String, default: 'fp' },
 			type: { type: String, default: '' }
 		},
-		created() {
+		mounted() {
 			// this.clientType = this.type
+			// console.log("Client", this.client)
 		},
 		data(){
 			return {
-				clientType: "",
+				// clientType: "",
 				clientTypes: [
 					{ text: "Agency", value: 'agency' },
 					{ text: "Staff Member", value: 'staff-member' }
