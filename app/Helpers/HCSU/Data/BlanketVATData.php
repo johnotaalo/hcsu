@@ -38,6 +38,27 @@ class BlanketVATData{
             $clientObj->organization = $mission;
             $clientObj->type = "agency";
             $clientObj->arrival = $arrival;
+		}else if ($firstIDChar == "2"){
+			$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $blanketData->HOST_COUNTRY_ID)->first();
+
+			$relationship = $dependent->relationship->RELATIONSHIP;
+
+			$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
+
+			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
+			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
+			$mission = $dependent->principal->latest_contract->agency->ACRONYM;
+            $arrivalDate = ($dependent->principal->current_arrival) ? $dependent->principal->current_arrival->ARRIVAL : "N/A";
+            $diplomaticCardNo = ($dependent->principal->latest_diplomatic_card) ? $dependent->principal->latest_diplomatic_card->DIP_ID_NO : "N/A";
+            $arrival = "{$arrivalDate} (Dip. Id No: {$diplomaticCardNo})";
+			// $arrival = ($dependent->principal->current_arrival) ? "{$dependent->principal->current_arrival->ARRIVAL} (Dip. Id No: {$dependent->principal->latest_diplomatic_card->DIP_ID_NO})" : "N/A";
+
+			$clientObj->name = $c_name;
+			$clientObj->designation = $dependent->principal->latest_contract->DESIGNATION;
+			$clientObj->organization = $mission;
+			$clientObj->index_no = $dependent->principal->latest_contract->INDEX_NO;
+			$clientObj->type = "dependent";
+			$clientObj->arrival = $arrival;
 		}
 
 		$durationFrom = new \Carbon\Carbon($blanketData->DURATION_FROM);
