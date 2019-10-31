@@ -129,7 +129,9 @@
 				output_document_link: "",
 				suppliers: [],
 				form: new Form({
+					id: this.id,
 					supplier: "",
+					case_no: "",
 					client: {},
 					documents: []
 				}),
@@ -170,7 +172,7 @@
 					var invoices = res.data.invoices
 
 					this.data = res.data
-
+					this.form.case_no = this.case_no
 					this.form.supplier = res.data.supplier
 					this.form.client = res.data.client
 					this.form.documents = _.map(res.data.documents, (doc, key) => {
@@ -201,27 +203,46 @@
 			submitApplication: function(){
 				this.errors = [];
 				this.$store.commit('loadingOn');
-				this.form.post('/focal-points/vat').then(res => {
-					this.$store.commit('loadingOff');
-					// this.$refs['successModal'].show()
-					this.$swal("All Good!", `Successfully submitted VAT Application. Your Case No is: ${res.case_no}. We have also sent an email to your address with the details`, "success")
-					.then((value) => {
-						if (value) {
-							this.$emit('update-tabs')
+				if(this.id != 0){
+					this.form.put('/focal-points/vat').then(res => {
+						this.$store.commit('loadingOff')
+						this.$swal("All Good!", `Successfully submitted VAT Application. Your Case No is: ${res.case_no}. We have also sent an email to your address with the details`, "success")
+						.then((value) => {
+							if (value) {
+								this.$emit('update-tabs')
+							}
+						})
+					}).catch((error) => {
+						this.$store.commit('loadingOff');
+						this.$swal("Error", `There was an error while applying for your application. ${error.message}`, "error")
+						if (error.errors) {
+							this.errors = error.errors
+							this.$refs['errorModal'].show()
 						}
-					})
+					});
+				}else{
+					this.form.post('/focal-points/vat').then(res => {
+						this.$store.commit('loadingOff');
+						// this.$refs['successModal'].show()
+						this.$swal("All Good!", `Successfully submitted VAT Application. Your Case No is: ${res.case_no}. We have also sent an email to your address with the details`, "success")
+						.then((value) => {
+							if (value) {
+								this.$emit('update-tabs')
+							}
+						})
 
-					this.form.supplier = ""
-					this.form.client = {}
-					this.form.documents = []
-				}).catch((error) => {
-					this.$store.commit('loadingOff');
-					this.$swal("Error", `There was an error while applying for your application. ${error.message}`, "error")
-					if (error.errors) {
-						this.errors = error.errors
-						this.$refs['errorModal'].show()
-					}
-				});
+						this.form.supplier = ""
+						this.form.client = {}
+						this.form.documents = []
+					}).catch((error) => {
+						this.$store.commit('loadingOff');
+						this.$swal("Error", `There was an error while applying for your application. ${error.message}`, "error")
+						if (error.errors) {
+							this.errors = error.errors
+							this.$refs['errorModal'].show()
+						}
+					});
+				}
 			},
 			closeInstructionForm: function(){
 				localStorage.setItem(this.hide_instruction_label, this.hideinstructions)

@@ -58,12 +58,32 @@ class Principal extends Model
     }
 
     public function getLatestContractAttribute(){
-      $contract = \App\Models\PrincipalContract::where('PRINCIPAL_ID', $this->HOST_COUNTRY_ID)
-                  ->whereHas('renewals', function($query){
-                    $query->orderBy('END_DATE', 'DESC');
-                  })
-                  ->with('agency')
-                  ->first();
+        \DB::enableQueryLog();
+      // $contract = \App\Models\PrincipalContract::where('PRINCIPAL_ID', $this->HOST_COUNTRY_ID)
+      //             ->whereHas('renewals', function($query){
+      //               $query->orderBy('END_DATE', 'DESC');
+      //             })
+      //             ->with('agency')
+      //             ->first();
+        $sql = "SELECT
+                    * 
+                FROM
+                    PRINCIPAL_CONTRACT PC
+                    JOIN PRINCIPAL_CONTRACT_RENEWALS PCR ON PCR.CONTRACT_ID = PC.ID
+                    WHERE PC.PRINCIPAL_ID = {$this->HOST_COUNTRY_ID}
+                    ORDER BY PCR.END_DATE DESC
+                    LIMIT 1;";
+
+        $data = \DB::select(\DB::raw($sql));
+        $contract = [];
+        if($data)
+            $contract = $data[0];
+                  // dd($contract);
+                  // \DB::enableQueryLog();
+                  // $query = \DB::getQueryLog();
+                  // dd($query);
+        // $maxContract = $contract->max('CONTRACT_TO');
+        // dd($maxContract);
       return $contract;
     }
 

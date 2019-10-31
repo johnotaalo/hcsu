@@ -105,8 +105,9 @@
 				this.$emit('remove', this.value.id)
 			},
 			viewdocument(){
-				console.log(this.value.link)
-				// window.open(this.value.link, '_blank');
+				// console.log(this.value.link)
+
+				window.open(`/uploads/vat/${this.value.id}`, '_blank');
 			}
 		},
 		computed: {

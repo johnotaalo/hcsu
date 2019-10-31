@@ -15,11 +15,15 @@ class Documentno implements Rule
     protected $supplier_name;
     protected $vat;
     protected $document_no;
+    protected $edit;
+    protected $caseNo;
 
-    public function __construct($supplier)
+    public function __construct($supplier, $edit = false, $caseNo = null)
     {
         $this->supplier_id = $supplier['ID'];
         $this->supplier_name = $supplier['SUPPLIER_NAME'];
+        $this->edit = $edit;
+        $this->caseNo = $caseNo;
     }
 
     /**
@@ -35,10 +39,18 @@ class Documentno implements Rule
             $query->where('DOCUMENT_NO', $value);
         })->first();
 
-        if($vat){
+        if($vat && !$this->edit){
             $this->vat = $vat;
             $this->document_no = $value;
             return false;
+        }else if ($vat && $this->edit){
+            if($vat->CASE_NO == $this->caseNo){
+                return true;
+            }else{
+                $this->vat = $vat;
+                $this->document_no = $value;
+                return false;
+            }
         }
 
         return true;

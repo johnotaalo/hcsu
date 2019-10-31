@@ -63,6 +63,21 @@ Route::get('/photos/dependent/{host_country_id}', function($host_country_id){
 
 	return $response;
 })->name('dependent-photo');
+
+Route::get('/uploads/vat/{upload_id}', function($upload_id){
+	$file = \App\VATUserApplicationDocument::find($upload_id);
+	// dd($file->document_link);
+	if (\Storage::exists($file->document_link)) {
+		$filex = \Storage::get($file->document_link);
+		$type = \Storage::mimeType($file->document_link);
+
+		$response = Response::make($filex, 200);
+		$response->header("Content-Type", $type);
+
+		return $response;
+	}
+	abort(404);
+});
 Route::get('/sample', 'Test\SampleController@index');
 Route::get('/pmauthentication', 'Test\SampleController@pmauth');
 Route::get('/docusign', 'Api\DocusignAPIController@index')->name('docusign-client');

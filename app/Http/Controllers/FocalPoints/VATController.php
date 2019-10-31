@@ -166,7 +166,164 @@ class VATController extends Controller
 
 			return [
 				'case_no'			=>	$case_no,
-				'link'				=>	$base_url,
+				// 'link'				=>	$base_url,
+				// 'document_link'		=>	$outputDocRes->app_doc_link,
+				'application_id'	=>	$userApplication->id
+			];
+		}else{
+			return \Response::json($response, 500);
+		}
+	}
+
+	function updateVATApplication(Request $request){
+		$case = \App\Models\PM\Application::select('APP_UID', 'APP_NUMBER')->where('APP_NUMBER', $request->case_no)->first();
+		$authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+
+		// dd($case);
+		// dd($request->input());
+		$validatedData = $request->validate([
+			'supplier'						=>	'required',
+			'client'						=>	'required',
+			'documents'						=>	'required|array|min:1',
+			'documents.*.documentNo'		=>	['required', new Documentno($request->supplier, true, $request->case_no)],
+			'documents.*.documentDate'		=>	'required',
+			'documents.*.goodsDescription'	=>	'required',
+			'documents.*.vatAmount'			=>	'required',
+			'documents.*.documentType'		=>	'required',
+			'documents.*.invoiceFile'		=>	'sometimes|required|mimes:pdf'
+		]);
+
+		$documentPaths = [];
+
+		$process = $outputDocument = "";
+
+		try{
+			$processes = json_decode(\Storage::get("processes.json"));
+			$process = $processes->VAT;
+
+			if(!$process){
+				return response()->json(['error'=>'Could not retrieve process'], 500);
+			}
+		}catch(Exception $ex){
+			return response()->json(['error'=>'Could not retrieve process'], 500);
+		}
+
+		$outputDocument = $process->documents->output;
+		$inputDocument = $process->documents->input;
+
+		// URLs
+		$setVariablesURL = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$case->APP_UID}/variable";
+		$steps_url = "http://".env('PM_SERVER')."/api/1.0/workflow/project/{$process->id}/activity/{$process->task}/steps";
+		$inputDocumentURL = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$case->APP_UID}/input-document";
+
+		$vatData = [
+			'host_country_id'			=>	$request->client['HOST_COUNTRY_ID'],
+			'host_country_id_label'		=>	$request->client['HOST_COUNTRY_ID'],
+			'supplier'					=>	$request->supplier['ID'],
+			'supplier_label'			=>	$request->supplier['SUPPLIER_NAME'],
+			'acknowledgementDate'		=>	date('Y-m-d'),
+			'clientInitiated'			=>	1,
+			'clientInitiated_label'		=>	'True',
+			'comments'					=>	"Submitted by " . \Auth::user()->name . " Focal Point " . \Auth::user()->focal_point->agency->ACRONYM . " through the external application"
+		];
+
+		$grid = [];
+
+		$k = 1;
+		foreach ($request->documents as $key => $document) {
+			$document['vatAmount'] = str_replace(',', '', $document['vatAmount']);
+			$document['vatAmount'] = str_replace(' ', '', $document['vatAmount']);
+
+			$grid[$k] = [
+				'documentType'			=>	$document['documentType'],
+				'documentType_label'	=>	ucwords($document['documentType']),
+				'documentNo'			=>	$document['documentNo'],
+				'documentDate'			=>	date('Y-m-d', strtotime($document['documentDate'])),
+				'goodsServices'			=>	$document['goodsDescription'],
+				'vatAmount'				=>	$document['vatAmount'],
+				'etrNo'					=>	""
+			];
+
+			// dd($document);
+			if(isset($document['invoiceFile'])){
+				$filePath = $document['invoiceFile']->store('uploads/focal-points');
+				$documentPaths[] = storage_path("app/{$filePath}");
+			}
+
+			if(!isset($document['invoiceFile']) && $document['edit']){
+				$doc = \App\VATUserApplicationDocument::find($document['id']);
+				if($doc)
+					$documentPaths[] = $doc->PATH;
+			}
+			$k++;
+		}
+
+		$vatData['documentDetails'] = $grid;
+		
+		$response = \Processmaker::executeREST($setVariablesURL, "PUT", $vatData, $authenticationData->access_token);
+
+		$stepsResponse = \Processmaker::executeREST($steps_url, "GET", [], $authenticationData->access_token);
+		foreach ($stepsResponse as $step) {
+			// Run triggers
+			foreach ($step->triggers as $trigger) {
+				$triggerURL = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$case->APP_UID}/execute-trigger/{$trigger->tri_uid}";
+				$triggerResponse = \Processmaker::executeREST($triggerURL, "PUT", [], $authenticationData->access_token);
+			}
+		}
+
+		// Remove documents
+		$documents = \App\VATUserApplicationDocument::where('APPLICATION_ID', $request->id)->get();
+
+		foreach ($documents as $document) {
+			$documentDeleteURL = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$case->APP_UID}/1/input-document/{$document->DOCUMENT_UID}";
+			$res = \Processmaker::executeREST($documentDeleteURL, "DELETE", [], $authenticationData->access_token, true);
+			if($res){
+				if ($res->error->code >= 400) {
+
+				}
+			}
+			$document->delete();
+		}
+
+		$inputDocumentIDs = [];
+		if ($inputDocument) {
+			foreach ($documentPaths as $key => $path) {
+				$inputData = [
+					'inp_doc_uid'		=>	$inputDocument,
+					'tas_uid'			=>	$process->task,
+					'app_doc_comment'	=>	"Document uploaded by: " . \Auth::user()->name . " Focal Point " . \Auth::user()->focal_point->agency->ACRONYM . " through the external application",
+					'form'            	=> new \CurlFile($path)
+				];
+
+				$inputDocumentRes = \Processmaker::executeREST($inputDocumentURL, "POST", $inputData, $authenticationData->access_token, true);
+				$inputDocumentIDs[$key] = $inputDocumentRes->app_doc_uid;
+			}
+		}
+
+		if (empty($response)) {
+			// $base_url = "http://".env('PM_SERVER_DOMAIN')."/sysworkflow/en/neoclassic/{$outputDocRes->app_doc_link}";
+
+			$userApplication = \App\VATUserApplication::find($request->id);
+
+			// $userApplication->CASE_NO = $case->APP_NUMBER;
+			$userApplication->ACKNOWLEDGEMENT_LINK = '';
+			$userApplication->USER_ID = \Auth::user()->id;
+
+			$userApplication->save();
+
+			foreach ($documentPaths as $key => $path) {
+				\App\VATUserApplicationDocument::create([
+					'APPLICATION_ID'	=>	$userApplication->id,
+					'PATH'				=>	$path,
+					'DOCUMENT_UID'		=>	$inputDocumentIDs[$key]
+				]);
+			}
+
+			\Mail::to($userApplication->user->focal_point->EMAIL)->send(new \App\Mail\AcknowledgeVATReceipt($userApplication));
+
+			return [
+				'case_no'			=>	$case->APP_NUMBER,
+				// 'link'				=>	$base_url,
 				// 'document_link'		=>	$outputDocRes->app_doc_link,
 				'application_id'	=>	$userApplication->id
 			];

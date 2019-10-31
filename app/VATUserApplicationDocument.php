@@ -13,6 +13,7 @@ class VATUserApplicationDocument extends Model
     protected $appends = array('document_link');
 
     function getDocumentLinkAttribute(){
-    	return Storage::url(str_replace( '/var/www/html/hcsu/storage/', '', $this->PATH ));
+    	return str_replace( 'C:\xampp\htdocs\hcsu\storage\app/', '', str_replace( '/var/www/html/hcsu/storage/app/', '', $this->PATH ));
+    	return Storage::url(str_replace( '/var/www/html/hcsu/storage/app/', '', $this->PATH ));
     }
 }
