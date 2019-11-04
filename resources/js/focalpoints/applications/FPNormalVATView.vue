@@ -1,6 +1,6 @@
 <template>
 	<div>
-		View Application
+		
 	</div>
 </template>
 

@@ -300,6 +300,8 @@ class VATController extends Controller
 			}
 		}
 
+		$response = \Processmaker::routeCase($case->APP_UID);
+
 		if (empty($response)) {
 			// $base_url = "http://".env('PM_SERVER_DOMAIN')."/sysworkflow/en/neoclassic/{$outputDocRes->app_doc_link}";
 
@@ -308,6 +310,7 @@ class VATController extends Controller
 			// $userApplication->CASE_NO = $case->APP_NUMBER;
 			$userApplication->ACKNOWLEDGEMENT_LINK = '';
 			$userApplication->USER_ID = \Auth::user()->id;
+			$userApplication->STATUS = 'Pending';
 
 			$userApplication->save();
 
