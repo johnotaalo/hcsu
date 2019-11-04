@@ -63,7 +63,7 @@ class VATExemptionForm{
 
 			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
 			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
-			$mission = $dependent->principal->latest_contract->agency->ACRONYM;
+			$mission = $dependent->principal->latest_contract->ACRONYM;
 
             $diplomaticCardNo = ($dependent->principal->latest_diplomatic_card != null) ? $dependent->principal->latest_diplomatic_card->DIP_ID_NO : "N/A";
 
