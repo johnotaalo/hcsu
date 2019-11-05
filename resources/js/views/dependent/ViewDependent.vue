@@ -122,7 +122,7 @@
                 </div>
                 <div class="col-auto">
                   <small class="text-muted">
-                    {{ dependent.principal.latest_contract.agency.ACRONYM }}
+                    {{ dependent.principal.latest_contract.ACRONYM }}
                   </small>
                 </div>
               </div>
