@@ -110,6 +110,19 @@ class AppController extends Controller
         return $response;
     }
 
+    function getCaseVariable(Request $request){
+        $case = $request->case_no;
+        $del_index = 1;
+        $variable_name = $request->variable;
+
+        $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+
+        $response = \Processmaker::executeREST($url, "GET", [], (new \Processmaker())->authData()->access_token);
+        // dd($response);
+        $caseVariable = get_object_vars($response);
+        return $caseVariable;
+    }
+
     function addTemplate(Request $request){
         $process = $request->input('process');
         $task = $request->input('task');

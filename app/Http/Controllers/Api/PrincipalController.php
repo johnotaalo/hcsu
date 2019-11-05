@@ -111,6 +111,8 @@ class PrincipalController extends Controller
     }
 
     function add(Request $request){
+        $case_no = ($request->query('case_no')) ? $request->query('case_no') : "";
+        // echo $case_no;die;
         $principal = new Principal();
         $imagePath = null;
         if(null !== $request->file('principalPhotoFile')){
@@ -211,7 +213,17 @@ class PrincipalController extends Controller
             $contractRenewal->save();
         }
 
-        return ['status' => 'success'];
+        if($case_no){
+            $pmData = [
+                'host_country_id'           =>  $principal->HOST_COUNTRY_ID,
+                'host_country_id_label'     =>  $principal->HOST_COUNTRY_ID
+            ];
+
+            $response = \Processmaker::updateCaseVariables($case_no, $pmData);
+            // dd($response);
+        }
+
+        return ['status' => 'success', 'principal'  =>  $principal];
     }
 
     function update(Request $request){

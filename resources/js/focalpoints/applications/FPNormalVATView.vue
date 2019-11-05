@@ -1,6 +1,8 @@
 <template>
 	<div>
-		
+		<b-card title = "VAT Application Case #">
+			
+		</b-card>
 	</div>
 </template>
 

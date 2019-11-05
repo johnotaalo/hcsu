@@ -178,4 +178,8 @@ Route::prefix('/focal-points')->group(function(){
 	});
 });
 
+Route::prefix('processmaker')->group(function(){
+	Route::get('/case/{case_no}/variable/{variable}', 'Api\AppController@getCaseVariable');
+});
+
 Route::get('user/reset/{id}', 'Api\AgenciesController@sendResetPassword');

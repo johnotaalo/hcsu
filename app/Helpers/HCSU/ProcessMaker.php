@@ -129,6 +129,24 @@ class ProcessMaker {
 		}
 	}
 
+	public static function updateCaseVariables($case, $data, $del_index = 1){
+        $url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$case}/variable";
+
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+
+        $response = Self::executeREST($url, "PUT", $data, (new self)->authData()->access_token);
+
+        // dd($response);
+
+        return $response;
+	}
+
+	public function authData(){
+		$authenticationData = json_decode(Storage::get("pmauthentication.json"));
+
+		return $authenticationData;
+	}
+
 
 	public static function login(){
 

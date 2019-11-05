@@ -253,6 +253,8 @@
 		mixins: [rowForm],
 		data() {
 			return {
+				case_no: (this.$route.query.case_no) ? this.$route.query.case_no : null,
+				rqType: this.$route.query.type,
 				uploadFieldName: 'file',
 				principalFileName: 'principal_photo',
 				fields: [
@@ -443,6 +445,10 @@
 			}
 		},
 		mounted() {
+			// var query = this.$route.query
+			// var case_no = (query.case_no) ? query.case_no : null
+
+			// this.case_no = case_no
 			this.getPrincipalOptions();
  		},
  		watch: {
@@ -676,9 +682,18 @@
 
 			onComplete: function(){
 				var em = this
-				this.form.post('/principal/add')
+				var urlParams = (this.rqType == "iframe") ? `case_no=${this.case_no}` : ""
+
+				this.form.post(`/principal/add?${urlParams}`)
 				.then((res) => {
-					em.$router.push({ name: 'principal' })
+					this.$swal(`Success! Host Country ID: ${res.principal.HOST_COUNTRY_ID}`, "The client has successfully been registered", "success")
+					if(this.rqType != "iframe"){
+						em.$router.push({ name: 'principal.view', params: { id: res.data.host_country_id } })
+					}
+				})
+				.catch((error) => {
+					console.log(error)
+					this.$swal("Error!", "There was an error while performing your request!", "error")
 				});
 			}
 		}
