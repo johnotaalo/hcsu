@@ -2,6 +2,14 @@
 	<div>
 		<div class="row">
 			<div class="col-md">
+				<div v-if="data.APPROVED == 0 && data.STATUS == 'Not Approved'" style="color: red">
+					<b>This application was rejected because of the following reason:</b>
+					<p>{{ data.APPROVAL_COMMENT }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md">
 				<button class="btn btn-rounded btn-primary" v-b-modal.instructionsModal><i class="fe fe-info"></i>&nbsp;Click here to view instructions</button>
 				<!-- &nbsp;|&nbsp;
 				<a class="btn btn-rounded btn-danger" target = "_blank" href="/documents/Guidelines for the submission of VAT claims.pdf"><i class="fe fe-download"></i>&nbsp;Download VAT Guidelines</a> -->
