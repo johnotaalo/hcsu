@@ -71,7 +71,7 @@ class Principal extends Model
                     PRINCIPAL_CONTRACT PC
                     JOIN PRINCIPAL_CONTRACT_RENEWALS PCR ON PCR.CONTRACT_ID = PC.ID
                     JOIN pm_ref_data.agencies a ON a.AGENCY_ID = PC.AGENCY_ID
-                    WHERE PC.PRINCIPAL_ID = 10000001
+                    WHERE PC.PRINCIPAL_ID = {$this->HOST_COUNTRY_ID}
                     ORDER BY PCR.END_DATE DESC
                     LIMIT 1;";
 
