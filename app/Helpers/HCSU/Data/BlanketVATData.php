@@ -47,7 +47,7 @@ class BlanketVATData{
 
 			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
 			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
-			$mission = $dependent->principal->latest_contract->agency->ACRONYM;
+			$mission = $dependent->principal->latest_contract->ACRONYM;
             $arrivalDate = ($dependent->principal->current_arrival) ? $dependent->principal->current_arrival->ARRIVAL : "N/A";
             $diplomaticCardNo = ($dependent->principal->latest_diplomatic_card) ? $dependent->principal->latest_diplomatic_card->DIP_ID_NO : "N/A";
             $arrival = "{$arrivalDate} (Dip. Id No: {$diplomaticCardNo})";
