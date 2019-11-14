@@ -84,7 +84,7 @@ class PrincipalController extends Controller
                 ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
                 ->orWhere('PIN', 'LIKE', "%{$query}%")
                 ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
-                ->limit(10)
+                ->limit(20)
                 ->get();
     }
 
@@ -99,7 +99,7 @@ class PrincipalController extends Controller
                 $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
                 ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
               })
-              ->limit(10)
+              ->limit(20)
               ->with('relationshipX', 'principal')
               ->get();
     }

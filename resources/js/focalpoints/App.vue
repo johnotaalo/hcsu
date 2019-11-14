@@ -116,7 +116,7 @@
 			</nav>
 
 			<div class="main-content">
-				<div class="header" v-if="!dashboard">
+				<div class="header" v-if="showTitle">
 					<div class="container-fluid">
 						<div class="header-body">
 							<div class="row align-items-end">
@@ -130,6 +130,7 @@
 									</h1>
 								</div>
 								<div class="col-auto">
+									<div ></div>
 								</div>
 							</div>
 						</div>
@@ -175,6 +176,12 @@
 			},
 			user: function(){
 				return this.$store.state.loggedInUser
+			},
+			showTitle: function(){
+				if (this.$route.name == "dashboard" || this.$route.name == "applications.normal-vat") {
+					return false
+				}
+				return true
 			}
 		},
 		watch: {

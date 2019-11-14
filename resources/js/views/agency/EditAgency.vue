@@ -63,7 +63,7 @@
 				// console.log(this.form.data())
 				this.form.put(`agencies/update/${this.form.agencyDetails.host_country_id}`)
 				.then(data => {
-					console.log(data)
+					// console.log(data)
 				})
 			},
 			focalPointsChange(value){

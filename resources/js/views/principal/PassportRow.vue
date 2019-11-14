@@ -95,7 +95,7 @@
 
 				if(this.value.passportType == 3){
 					this.selectCountries = _.map(this.countries, function(o){
-						if( o.id == "UNNY" || o.id == "UNOG" ) { return o }
+						if( o.id == "UNNY" || o.id == "UNOG" || o.id == "UNOV" ) { return o }
 					})
 
 					this.selectCountries = _.without(this.selectCountries, undefined)

@@ -8,15 +8,29 @@
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md">
-				<button class="btn btn-rounded btn-primary" v-b-modal.instructionsModal><i class="fe fe-info"></i>&nbsp;Click here to view instructions</button>
-				<!-- &nbsp;|&nbsp;
-				<a class="btn btn-rounded btn-danger" target = "_blank" href="/documents/Guidelines for the submission of VAT claims.pdf"><i class="fe fe-download"></i>&nbsp;Download VAT Guidelines</a> -->
+		<div class="row align-items-center">
+			<div class="col">
+
+				<h4>VAT Application Details</h4>
+
+			</div>
+			<div class="col-auto">
+				<button class="btn btn-sm btn-primary" v-b-modal.instructionsModal><i class="fe fe-info"></i>&nbsp;Click here to view instructions</button>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md">
+				
+				<!-- &nbsp;|&nbsp;
+				<a class="btn btn-rounded btn-danger" target = "_blank" href="/documents/Guidelines for the submission of VAT claims.pdf"><i class="fe fe-download"></i>&nbsp;Download VAT Guidelines</a> -->
+			</div>
+			<div class="col-md">
+				<h1 v-if="data.CASE_NO" class="float-right"><b>CASE#: </b>{{ data.CASE_NO }}</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md">
+				
 				<fieldset>
 					<legend>Client</legend>
 					<div v-if="showClientForm">
