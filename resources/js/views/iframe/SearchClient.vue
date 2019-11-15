@@ -43,12 +43,12 @@
 						</template>
 
 						<template slot="option" slot-scope="option">
-							<img style="width: 50px;height: 50px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 50px;height: 50px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
+							<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
 						</template>
 
 						<template slot="selected-option" slot-scope="option">
 							<span v-if="option.LAST_NAME">
-								<img style="width: 50px;height: 50px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 50px;height: 50px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
+								<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
 							</span>
 						</template>
 					</v-select>

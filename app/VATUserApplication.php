@@ -47,6 +47,10 @@ class VATUserApplication extends Model
             return null;
     }
 
+    public function vat(){
+        return $this->belongsTo(\App\Models\VAT::class, 'CASE_NO', 'CASE_NO');
+    }
+
     protected function user(){
         return $this->belongsTo(\App\User::class, "USER_ID");
     }

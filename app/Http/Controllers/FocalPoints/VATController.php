@@ -372,7 +372,7 @@ class VATController extends Controller
 	}
 
 	function searchApplication(Request $request){
-		$searchQueries = $request->get('query');
+		$searchQueries = ($request->get('query')) ? $request->get('query') : $request->get('normalSearch');
 		$limit = $request->get('limit');
 		$page = $request->get('page');
 		$ascending = $request->get('ascending');
@@ -389,6 +389,11 @@ class VATController extends Controller
 		// $queryBuilder = $queryBuilder->setAppends(['supplier']);
 		if ($searchQueries) {
 			$queryBuilder->where('CASE_NO', 'LIKE', "%{$searchQueries}%");
+			// $queryBuilder->orWhereHas('vat', function($modelQuery) use ($searchQueries){
+			// 	$modelQuery->whereHas('supplier', function($q) use ($searchQueries) {
+			// 		$q->where('SUPPLIER_NAME', 'LIKE', "%{$searchQueries}%");
+			// 	});
+			// });
 		}
 
 		$count = $queryBuilder->count();
@@ -411,7 +416,7 @@ class VATController extends Controller
 	function getVATApplication(Request $request){
 		$id = $request->id;
 
-		$application = VATUserApplication::where('id', $id)->where('USER_ID', \Auth::id())->with('documents')->firstOrFail();
+		$application = VATUserApplication::where('id', $id)->where('USER_ID', \Auth::id())->with(['vat', 'documents'])->firstOrFail();
 
 		return $application;
 	}

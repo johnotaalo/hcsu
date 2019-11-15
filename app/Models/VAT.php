@@ -18,10 +18,10 @@ class VAT extends Model
     function getTotalAmountAttribute(){
     	$invoices = $this->invoices();
 
-    	dd($invoices);
+    	// dd($invoices);
     }
 
     function supplier(){
-    	return $this->hasOne('\App\Models\Supplier', 'ID', 'SUPPLIER_ID');
+    	return $this->hasOne(\App\Models\Supplier::class, 'ID', 'SUPPLIER_ID');
     }
 }

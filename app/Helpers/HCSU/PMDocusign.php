@@ -58,6 +58,9 @@ class PMDocusign{
 
 	public static function checkExpiry(){
 		$authData = self::getAuthData();
+		if (!$authData) {
+			die( "There was an error" );
+		}
 		$accessToken = $authData->ds_access_token;
 		$expiration = $authData->ds_expiration;
 

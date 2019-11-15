@@ -16,6 +16,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 
+
 import VueSwal from 'vue-swal'
 
 Vue.use(VueRouter)

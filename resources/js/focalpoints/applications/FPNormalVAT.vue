@@ -31,7 +31,7 @@
 								<span class="fe fe-search text-muted"></span>
 							</div>
 							<div class="col">
-								<b-input type="search" class="form-control form-control-flush search" placeholder="Search"/>
+								<b-input type="search" class="form-control form-control-flush search" v-model = "searchTerm" placeholder="Search" v-on:keyup="applySearchFilter(searchTerm)"/>
 							</div>
 						</form>
 
@@ -56,6 +56,7 @@
 			</div>
 			<div class="table-responsive">
 				<v-server-table url="/api/focal-points/vat/search/"
+				ref="uploadedVATTable"
 				:columns="table.columns"
 				:options="table.options"
 				size="sm"
@@ -127,6 +128,10 @@
 
 <script type="text/javascript">
 	import { PenToolIcon, XOctagonIcon } from 'vue-feather-icons'
+	import VueTables from 'vue-tables-2'
+	// const ClientTable = VueTables.ClientTable
+	const Event = VueTables.Event
+	// console.log(Event)
 
 	export default {
 		name: "FPNormalVAT",
@@ -134,13 +139,14 @@
 		data(){
 			return {
 				tabIndex: 0,
+				searchTerm: "",
 				table: {
-					columns: ['#', 'Case No', 'Date', 'Applied For', 'Supplier', 'Amount', 'Status', 'Action'],
+					columns: ['Case No', 'Date', 'Applied For', 'Supplier', 'Amount', 'Status', 'Action'],
 					options: {
 						sortable: ['Case No', 'Date'],
-						customFilters: [{
-							name: 'normalSearch'
-						}]
+						filterable: false,
+						perPageValues: [],
+						customFilters: ['normalSearch']
 					}
 				}
 			}
@@ -152,6 +158,9 @@
 			resetCard() {
 				this.tabIndex = 0
 				location.reload()
+			},
+			applySearchFilter: function(term){
+				Event.$emit('vue-tables.filter::normalSearch', term);
 			}
 		}
 	}

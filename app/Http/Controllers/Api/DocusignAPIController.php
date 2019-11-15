@@ -26,9 +26,11 @@ class DocusignAPIController extends Controller
 		$current_session = \App\Helpers\HCSU\PMDocusign::getAuthData();
 		$state_session = $current_session->state;
 
+		// dd($current_session);
+
 		if(empty($state) || (isset($state_session) && $state !== $state_session)){
 			if (isset($state_session)){
-				$current_session['state'] = "";
+				$current_session->state = "";
 			}
 			exit('Invalid OAuth state');
 		}else{
