@@ -17,10 +17,10 @@ class CreateStaffRegistrationsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('CASE_NO');
             $table->integer('HOST_COUNTRY_ID');
-            $table->integer('IPMIS_NO');
-            $table->integer('IPMIS_STATUS');
+            $table->integer('IPMIS_NO')->nullable();
+            $table->integer('IPMIS_STATUS')->nullable();
             $table->text('IPMIS_COMMENT')->nullable();
-            $table->text('STAFF_REGISTRATION_LINK');
+            $table->text('STAFF_REGISTRATION_LINK')->nullable();
             $table->timestamps();
         });
     }
