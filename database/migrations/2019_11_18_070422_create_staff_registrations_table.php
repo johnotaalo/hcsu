@@ -32,6 +32,6 @@ class CreateStaffRegistrationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('AC_00');
+        Schema::connection('pm_data')->dropIfExists('AC_00');
     }
 }
