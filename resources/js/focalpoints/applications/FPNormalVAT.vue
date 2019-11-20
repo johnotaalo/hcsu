@@ -89,14 +89,14 @@
 						<span v-if="data.row.STATUS == 'Pending'">
 							<span class="text-warning"><i class="fe fe-clock"></i>&nbsp;Pending</span>
 						</span>
-						<span v-if="data.row.STATUS == 'Claimed'">
+						<span v-else-if="data.row.STATUS == 'Claimed'">
 							<span class="text-primary"><i class="fe fe-user-check"></i>&nbsp;Claimed</span>
 						</span>
-						<span v-if="data.row.STATUS == 'Not Approved'">
+						<span v-else-if="data.row.STATUS == 'Not Approved'">
 							<span class="text-danger"><i class="fe fe-x"></i>&nbsp;Not Approved</span>
 						</span>
 
-						<span v-if="data.row.APPROVED == 1">
+						<span v-else-if="data.row.APPROVED == 1">
 							<span v-if="data.row.STATUS != 'Cancelled' && data.row.STATUS != 'Canceled'">
 								<span class="text-success"><pen-tool-icon size="1x"></pen-tool-icon>&nbsp;{{ data.row.STATUS }}</span>
 							</span>
