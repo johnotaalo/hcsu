@@ -19,7 +19,7 @@
 </head>
 <body>
     <div id="app">
-        <app {!! $iframe ? ':iframe = "true"' : '' !!} case = "{{ $case_no }}"></app>
+        <app {!! (isset($iframe)) ? ':iframe = "true"' : '' !!} case = "{{ $case_no }}"></app>
     </div>
 </body>
 </html>
