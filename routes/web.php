@@ -103,6 +103,7 @@ Route::middleware('auth')->prefix('focal-point')->group(function(){
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'Api\AppController@index');
 
 // Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
 Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
