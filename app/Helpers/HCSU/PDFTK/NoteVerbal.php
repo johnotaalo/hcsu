@@ -27,6 +27,11 @@ class NoteVerbal {
 				$end_header = " UNON's annual Value Added Tax (VAT) and Excise Duty exemption application for {$this->data->vatObj->supplier->SERVICE_TYPE} services provided by {$this->data->vatObj->supplier->NAME} for the year {$this->data->year}.";
 				$connector = " refer to";
 				break;
+
+			case 'pin':
+				$end_header = " assistance in obtaining a Personal Identity Number (PIN) from Kenya Revenue Authority for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}.";
+				$connector = " request for";
+				break;
 		}
 
 		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
@@ -70,6 +75,15 @@ class NoteVerbal {
 				$body .= str_pad("Duration:", $padding) . "{$this->data->vatObj->DURATION_FROM} to {$this->data->vatObj->DURATION_TO}\r";
 				$body .= "\r";
 				$body .= "UNON is therefore seeking the esteemed Ministry's approval of the annual VAT exemption.";
+			break;
+
+			case "pin":
+				$body = "Details are as follows:\r";
+				$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+				$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+				$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
+				$body .= "\r";
+				$body .= "Mohamed Mubarak, UN ID Card No. 711305, Patrick Mwololo, UN ID Card No. 945740, Evans MWANZI, UN ID Card No. 292241 and Lilliya LIECH, UN ID Card No. 549559 are authorized to handle the PIN application of the above-mentioned {$this->data->client->contract_type} of {$this->data->client->organization}.";
 			break;
 			
 		}

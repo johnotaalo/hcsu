@@ -53,6 +53,22 @@
 						</div>
 
 						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="pin">Place of Birth</label>
+									<b-input v-model="form.place_of_birth" :size="formSize"></b-input>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="pin">Nationality</label>
+									<v-select :options="options.countries" v-model="form.nationality"></v-select>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
 							<legend class="col-md-12">Kenyan Identification</legend>
 							<div class="col-md">
 								<div class="form-group">
@@ -316,6 +332,8 @@
 					maxDate: new this.$moment().format(),
 					gender: "",
 					dob: "",
+					place_of_birth: "",
+					nationality: "",
 					mobileNo: "",
 					email: "",
 					officeNo: "",

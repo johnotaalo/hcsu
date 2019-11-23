@@ -12,9 +12,9 @@ class Principal extends Model
     protected $table = "PRINCIPAL";
     protected $connection = "mysql";
 
-    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname"];
+    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname", "latest_passport"];
 
-    protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "GENDER", "ADDRESS", "RESIDENCE", "OLD_REF_ID"];
+    protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "PLACE_OF_BIRTH", "NATIONALITY", "GENDER", "ADDRESS", "RESIDENCE", "OLD_REF_ID"];
 
     public function contracts(){
     	return $this->hasMany('\App\Models\PrincipalContract', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
@@ -25,10 +25,20 @@ class Principal extends Model
     }
 
     public function passports(){
-    	return $this->hasMany('\App\Models\PrincipalPassport', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
+    	return $this->hasMany('\App\Models\PrincipalPassport', 'PRINCIPAL_ID', 'ID');
+    }
+
+    public function getLatestPassportAttribute(){
+        $passports = \App\Models\PrincipalPassport::where('PRINCIPAL_ID', $this->ID)->orderBy('EXPIRY_DATE', 'DESC')->first();
+
+        return $passports;
     }
     public function vehicles(){
         return $this->hasMany('\App\Models\VehicleOwner', 'HOST_COUNTRY_ID', 'HOST_COUNTRY_ID');
+    }
+
+    public function nationality(){
+      return $this->hasOne(\App\Models\Country::class, 'id', 'NATIONALITY');
     }
 
     public function arrivalDepartures(){

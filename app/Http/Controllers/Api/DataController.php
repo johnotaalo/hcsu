@@ -39,6 +39,13 @@ class DataController extends Controller
       }
     }
 
+    function importPrincipalNationalities(){
+      $principals = Principal::where('NATIONALITY', NULL)->get();
+      foreach ($principals as $principal) {
+            $this->updateStaffNationality($principal);
+      }
+    }
+
     function getSpouseData($record_id){
       $spouse = StaffSpouse::find($record_id);
 
@@ -85,6 +92,21 @@ class DataController extends Controller
 
     }
 
+    function updateStaffNationality($principal){
+      $staffMember = StaffMember::find($principal->OLD_REF_ID);
+
+      if($staffMember){
+            $nationality = \App\Models\Country::where('name', 'LIKE', "%{$staffMember->nationality}%")->orWhere('official_name', 'LIKE', "%{$staffMember->nationality}%")->orWhere('pm_abbrev', 'LIKE', "%{$staffMember->nationality}%")->first();
+            $nationality_id = ($nationality) ? $nationality->id : null;
+            echo $staffMember->last_name . " => {$staffMember->nationality} => " . $nationality_id . "<br/>";
+            $principal->PLACE_OF_BIRTH = $staffMember->place_of_birth;
+            $principal->NATIONALITY = $nationality_id;
+
+            $principal->save();
+      }
+      
+    }
+
     function importStaffData($record_id){
       $staffMember = StaffMember::find($record_id);
       // dd($staffMember->principal_diplomatic_cards);
@@ -106,6 +128,7 @@ class DataController extends Controller
       $principal->ADDRESS = $staffMember->address;
       $principal->RESIDENCE = $staffMember->residence;
       $principal->OLD_REF_ID = $staffMember->record_id;
+      $principal->PLACE_OF_BIRTH = $staffMember->place_of_birth;
 
       // dd($principal);
 

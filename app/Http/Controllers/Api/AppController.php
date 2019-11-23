@@ -117,7 +117,7 @@ class AppController extends Controller
                     break;
             }
         }
-        
+
         $del_index = 1;
         $variable_name = "host_country_id";
         
@@ -295,6 +295,8 @@ class AppController extends Controller
                 $data = \App\Helpers\HCSU\Data\VATData::get($case->app_number);
             case 'blanket':
                 $data = \App\Helpers\HCSU\Data\BlanketVATData::get($case->app_number);
+            case 'pin':
+                $data = \App\Helpers\HCSU\Data\PINData::get($case->app_number);
             break;
         }
 
