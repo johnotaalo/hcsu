@@ -181,7 +181,8 @@
 				this.isLoading = true;
 				axios.post('/api/client/update', {
 					case_no: this.$parent.case,
-					host_country_id: this.host_country_id
+					host_country_id: this.host_country_id,
+					application: this.application
 				})
 				.then( (res) => {
 					this.isLoading = false

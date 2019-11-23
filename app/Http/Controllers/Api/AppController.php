@@ -91,9 +91,36 @@ class AppController extends Controller
 
     function updateHostCountryID(Request $request){
         $case = $request->case_no;
+        $application = $request->application;
+        $host_country_id = $request->host_country_id;
+
+        if ($application == 'pin') {
+            $clientType = identify_hcsu_client($host_country_id);
+            switch ($clientType) {
+                case 'agency':
+                    $agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $host_country_id)->first();
+                    $agency->PIN_NO = null;
+                    $agency->save();
+                    break;
+                case 'staff':
+                    $staff = \App\Models\Principal::where('HOST_COUNTRY_ID', $host_country_id)->first();
+                    $staff->PIN_NO = null;
+                    $staff->save();
+                    break;
+                case 'dependent':
+                    $dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();
+                    $dependent->PIN = null;
+                    $dependent->save();
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+        
         $del_index = 1;
         $variable_name = "host_country_id";
-        $host_country_id = $request->host_country_id;
+        
 
         $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
 

@@ -8,3 +8,17 @@ if (! function_exists('get_highest_excel_column')) {
 		}
 	}
 }
+
+if (! function_exists('identify_hcsu_client') ) {
+	function identify_hcsu_client($host_country_id){
+		$firstIDChar = substr($host_country_id, 0, 1);
+
+		if ( $firstIDChar == 1 ) {
+			return 'staff';
+		} else if ( $firstIDChar == 2 ) {
+			return 'dependent';
+		} else if ( $firstIDChar == 3 ) {
+			return 'agency';
+		}
+	}
+}
