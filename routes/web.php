@@ -107,5 +107,3 @@ Route::get('/', 'Api\AppController@index');
 
 // Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
 Route::get('/{any}', 'Api\AppController@index')->where('any', '.*')->name('default');
-
-

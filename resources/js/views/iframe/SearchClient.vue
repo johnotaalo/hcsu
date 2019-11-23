@@ -109,6 +109,7 @@
       			fullPage: true,
 				clientType: '',
 				searchType: '',
+				application: '',
 				clientTypeList: [
 					{ text: "Agency", value: 'agency' },
 					{ text: "Staff Member", value: 'staff-member' },
@@ -136,6 +137,7 @@
 				getSelectedClient(selectedClient)
 			}
 			this.searchType = query.searchfor
+			this.application = query.application
 		},
 		methods: {
 			onAgencySearch(search, loading){
@@ -193,24 +195,98 @@
 		},
 		watch: {
 			selectedAgency: function(newVal, oldVal){
-				if(newVal){
-					this.host_country_id = newVal.HOST_COUNTRY_ID
+				var em = this
+				if(newVal.HOST_COUNTRY_ID){
+					if(this.application == 'pin'){
+						if (newVal.PIN_NO != null && newVal.PIN_NO != "null") {
+							this.$swal({
+								title: "PIN Exists", 
+								text: `This Organization already has a PIN (${newVal.PIN_NO}). If you proceed, the organization's PIN shall be cleared from the system. Proceed?`, 
+								icon: "warning",
+								buttons: true,
+								dangerMode: true
+							})
+							.then((proceed) => {
+								if (proceed) {
+									// console.log(newVal)
+									em.host_country_id = newVal.HOST_COUNTRY_ID
+								}else{
+									// alert("Clicked on cancel");
+									em.host_country_id = 0
+									em.selectedAgency = {}
+								}
+							})
+						}else{
+							this.host_country_id = newVal.HOST_COUNTRY_ID
+						}
+					}else{
+						this.host_country_id = newVal.HOST_COUNTRY_ID
+					}
 				}else{
 					this.host_country_id = 0
 				}
 				// this.selectedStaff = {}
 			},
 			selectedStaff: function(newVal, oldVal){
-				if(newVal){
-					this.host_country_id = newVal.HOST_COUNTRY_ID
+				var em = this
+				if(newVal.HOST_COUNTRY_ID){
+					if(this.application == 'pin'){
+						if (newVal.PIN_NO != null && newVal.PIN_NO != "null") {
+							this.$swal({
+								title: "PIN Exists", 
+								text: `The staff member already has a PIN (${newVal.PIN_NO}). If you proceed, the staff member's PIN shall be cleared from the system. Proceed?`, 
+								icon: "warning",
+								buttons: true,
+								dangerMode: true
+							})
+							.then((proceed) => {
+								if (proceed) {
+									// console.log(newVal)
+									em.host_country_id = newVal.HOST_COUNTRY_ID
+								}else{
+									// alert("Clicked on cancel");
+									em.host_country_id = 0
+									em.selectedStaff = {}
+								}
+							})
+						}else{
+							this.host_country_id = newVal.HOST_COUNTRY_ID
+						}
+					}else{
+						this.host_country_id = newVal.HOST_COUNTRY_ID
+					}
 				}else{
 					this.host_country_id = 0
 				}
-				// this.selectedAgency= {}
 			},
 			selectedDependent: function(newVal, oldVal){
-				if(newVal){
-					this.host_country_id = newVal.HOST_COUNTRY_ID
+				var em = this
+				if(newVal.HOST_COUNTRY_ID){
+					if(this.application == 'pin'){
+						if (newVal.PIN != null && newVal.PIN != "null") {
+							this.$swal({
+								title: "PIN Exists", 
+								text: `The client already has a PIN (${newVal.PIN}). If you proceed, the client's PIN shall be cleared from the system. Proceed?`, 
+								icon: "warning",
+								buttons: true,
+								dangerMode: true
+							})
+							.then((proceed) => {
+								if (proceed) {
+									// console.log(newVal)
+									em.host_country_id = newVal.HOST_COUNTRY_ID
+								}else{
+									// alert("Clicked on cancel");
+									em.host_country_id = 0
+									em.selectedDependent = {}
+								}
+							})
+						}else{
+							this.host_country_id = newVal.HOST_COUNTRY_ID
+						}
+					}else{
+						this.host_country_id = newVal.HOST_COUNTRY_ID
+					}
 				}else{
 					this.host_country_id = 0
 				}
