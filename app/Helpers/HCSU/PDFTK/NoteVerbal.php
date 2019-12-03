@@ -34,7 +34,7 @@ class NoteVerbal {
 				break;
 		}
 
-		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
+		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs & International Trade of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
 
 		return $this;
 	}

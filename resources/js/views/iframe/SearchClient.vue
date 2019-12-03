@@ -319,7 +319,17 @@
 					arr.push(result)
 				}
 				else{
-					arr = list
+
+					if (this.application == 'diplomatic_id') {
+						var result = _.filter(list, (obj) => {
+							return obj.value == 'staff-member' || obj.value == 'dependent'
+						})
+
+						arr = result
+					}
+					else{
+						arr = list
+					}
 				}
 
 				return arr				
