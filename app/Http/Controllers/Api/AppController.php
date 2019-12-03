@@ -293,11 +293,13 @@ class AppController extends Controller
         switch($request->process){
             case 'vat':
                 $data = \App\Helpers\HCSU\Data\VATData::get($case->app_number);
+                break;
             case 'blanket':
                 $data = \App\Helpers\HCSU\Data\BlanketVATData::get($case->app_number);
+                break;
             case 'pin':
                 $data = \App\Helpers\HCSU\Data\PINData::get($case->app_number);
-            break;
+                break;
         }
 
         // dd($data);
