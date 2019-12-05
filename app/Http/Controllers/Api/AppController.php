@@ -300,6 +300,9 @@ class AppController extends Controller
             case 'pin':
                 $data = \App\Helpers\HCSU\Data\PINData::get($case->app_number);
                 break;
+            case 'diplomatic-id':
+                dd("Diplomatic ID Card New");
+                break;
         }
 
         // dd($data);
