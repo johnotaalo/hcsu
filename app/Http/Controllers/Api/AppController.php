@@ -301,7 +301,7 @@ class AppController extends Controller
                 $data = \App\Helpers\HCSU\Data\PINData::get($case->app_number);
                 break;
             case 'diplomatic-id':
-                dd("Diplomatic ID Card New");
+                $data = \App\Helpers\HCSU\Data\DiplomaticIDData::get($case->app_number);
                 break;
         }
 

@@ -20,17 +20,22 @@ class NoteVerbal {
 
 		switch($this->process){
 			case 'vat':
-				$end_header=" a Value Added Tax (VAT) Exemption claim.";
-				$connector = " submit an application for";
+				$end_header="a Value Added Tax (VAT) Exemption claim.";
+				$connector = "submit an application for";
 				break;
 			case 'blanket':
-				$end_header = " UNON's annual Value Added Tax (VAT) and Excise Duty exemption application for {$this->data->vatObj->supplier->SERVICE_TYPE} services provided by {$this->data->vatObj->supplier->NAME} for the year {$this->data->year}.";
-				$connector = " refer to";
+				$end_header = "UNON's annual Value Added Tax (VAT) and Excise Duty exemption application for {$this->data->vatObj->supplier->SERVICE_TYPE} services provided by {$this->data->vatObj->supplier->NAME} for the year {$this->data->year}.";
+				$connector = "refer to";
 				break;
 
 			case 'pin':
-				$end_header = " assistance in obtaining a Personal Identity Number (PIN) from Kenya Revenue Authority for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}.";
-				$connector = " request for";
+				$end_header = "assistance in obtaining a Personal Identity Number (PIN) from Kenya Revenue Authority for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}.";
+				$connector = "request for";
+				break;
+			case 'diplomatic-id':
+				$end_header = (isset($this->data->client->relationship)) ? "the under mentioned {$this->data->client->relationship} of {$this->data->client->principal}" : "{$this->data->client->name}";
+				$end_header .= ", an internationally recruited staff member of {$this->data->client->organization}";
+				$connector = "apply for a diplomatic identity card for";
 				break;
 		}
 
@@ -84,6 +89,21 @@ class NoteVerbal {
 				$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
 				$body .= "\r";
 				$body .= "Mohamed Mubarak, UN ID Card No. 711305, Patrick Mwololo, UN ID Card No. 945740, Evans MWANZI, UN ID Card No. 292241 and Lilliya LIECH, UN ID Card No. 549559 are authorized to handle the PIN application of the above-mentioned {$this->data->client->contract_type} of {$this->data->client->organization}.";
+			break;
+
+			case "diplomatic-id":
+				$body = "Details are as follows:\r";
+				if ($this->data->client->type == "staff") {
+					$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+					$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+					$body .= str_pad("Title: ", $padding) . "{$this->data->client->designation}/{$this->data->client->grade}\r";
+				}else{
+					$body .= ucwords($this->data->client->relationship) . "\r";
+					$body .= str_pad("Name", 40) . str_pad("Nationality", 25) . "Title\r";
+					$body .= str_pad($this->data->client->name, 40) . str_pad($this->data->client->nationality, 25) . ucwords($this->data->client->relationship) . "\r";
+				}
+				$body .= "\r";
+				$body .= "The Ministry's assistance in issuance of a Diplomatic Identity Card will be highly appreciated.";
 			break;
 			
 		}
