@@ -584,6 +584,7 @@
 			},
 			filteredDesignations: function(){
 				var designations = this.options.designations;
+				console.log(this.modal.contract.grade)
 				if(this.modal.contract.grade){
 					var filtered = _.map(designations[this.modal.contract.grade.label], designation => ({
 						id: designation.ID,
@@ -890,7 +891,7 @@
 						_this.clearContractModal()
 					})
 				}else{
-					this.modal.contract.post('/principal/contract/edit/')
+					this.modal.contract.post('/principal/contract/edit')
 					.then((res) => {
 						_this.principal.contracts.splice(_this.contracts.editIndex, 1, res)
 

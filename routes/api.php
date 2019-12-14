@@ -137,6 +137,7 @@ Route::prefix('data')->group(function(){
 		Route::get('/import', 'Api\DataController@importData');
 		Route::get('/import/dependents/spouse', 'Api\DataController@importSpouseData');
 		Route::get('import/principal/nationalities', 'Api\DataController@importPrincipalNationalities');
+		Route::get('import/dependents/passports', 'Api\DataController@importDependentPassports');
 	});
 
 	Route::prefix('dependent')->group(function(){

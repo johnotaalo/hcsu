@@ -215,4 +215,13 @@ class DataController extends Controller
       }else if ($clientType == "focalpoint") {
       }
     }
+
+    function importDependentPassports(){
+      $passports = \App\Models\OLDPM\StaffPassport::where('owner_code', '<>', '01')
+      ->whereNotNull('owner_code')
+      
+      ->get();
+
+      dd($passports);
+    }
 }

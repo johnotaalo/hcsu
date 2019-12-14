@@ -4,8 +4,8 @@
 			<div class="col-md">
 				<div class="form-group">
 					<label for="agency">Agency</label>
-					<v-select class="is-invalid" :options="agencies" v-model="data.agency" :state="$v.data.agency.$error"></v-select>
-					<div v-if="$v.data.agency.$error" class="my-invalid-feedback">Please provide an agency.</div>
+					<v-select class="is-invalid" :options="agencies" v-model="value.agency" :state="$v.value.agency.$error"></v-select>
+					<div v-if="$v.value.agency.$error" class="my-invalid-feedback">Please provide an agency.</div>
 				</div>
 			</div>
 		</div>
@@ -13,31 +13,31 @@
 			<div class="col-md">
 				<div class="form-group">
 					<label for="contract_type">Contract Type</label>
-					<v-select id="contract_type" :options="contractTypes" v-model="data.contractType"></v-select>
+					<v-select id="contract_type" :options="contractTypes" v-model="value.contractType"></v-select>
 					<div v-if="$v.data.contractType.$error" class="my-invalid-feedback">Please provide a contract type.</div>
 				</div>
 				<div class="form-group">
 					<label for="grade">Grade</label>
-					<v-select id="grade" :options="grades" v-model="data.grade"></v-select>
+					<v-select id="grade" :options="grades" v-model="value.grade"></v-select>
 					<div v-if="$v.data.grade.$error" class="my-invalid-feedback">Please provide a grade.</div>
 				</div>
 				<div class="form-group">
 					<label for="designation">Designation</label>
 					<!-- <b-input v-model="data.designation" id="designation" /> -->
-					<v-select id="designation" :options="filteredDesignations" v-model="data.designation"></v-select>
+					<v-select id="designation" :options="designations" v-model="value.designation"></v-select>
 					<div v-if="$v.data.designation.$error" class="my-invalid-feedback">Please provide a designation.</div>
 				</div>
 			</div>
 			<div class="col-md">
 				<div class="form-group">
 					<label for="index_no">Index No.</label>
-					<b-input v-model="data.indexNo" id="index_no" />
+					<b-input v-model="value.indexNo" id="index_no" />
 					<div v-if="$v.data.indexNo.$error" class="my-invalid-feedback">Please provide an Index No.</div>
 				</div>
 
 				<div class="form-group">
 					<label for="functional_title">Functional Title</label>
-					<b-input v-model="data.functionalTitle" id="functional_title" />
+					<b-input v-model="value.functionalTitle" id="functional_title" />
 					<div v-if="$v.data.functionalTitle.$error" class="my-invalid-feedback">Please provide a functional title.</div>
 				</div>
 			</div>
@@ -48,14 +48,14 @@
 			<div class="col-md">
 				<div class="form-group">
 					<label for="from">From</label>
-					<datetime v-model="data.contractFrom" input-id="from" input-class="form-control" :max-datetime="maxDateTime"></datetime>
+					<datetime v-model="value.contractFrom" input-id="from" input-class="form-control" :max-datetime="maxDateTime"></datetime>
 					<div v-if="$v.data.contractFrom.$error" class="my-invalid-feedback">Please provide a contract start date.</div>
 				</div>
 			</div>
 			<div class="col-md">
 				<div class="form-group">
 					<label for="to">To</label>
-					<datetime v-model="data.contractTo" input-id="to" input-class="form-control" :min-datetime="minDateTime"></datetime>
+					<datetime v-model="value.contractTo" input-id="to" input-class="form-control" :min-datetime="minDateTime"></datetime>
 					<div v-if="$v.data.contractTo.$error" class="my-invalid-feedback">Please provide a contract end date.</div>
 				</div>
 			</div>
@@ -125,21 +125,47 @@
 				grade: {
 					required
 				}
+			},
+			value: {
+				agency: {
+					required
+				},
+				contractType: {
+					required
+				},
+				indexNo: {
+					required
+				},
+				designation: {
+					required
+				}, 
+				functionalTitle: {
+					required
+				},
+				contractFrom: {
+					required
+				},
+				contractTo: {
+					required
+				},
+				grade: {
+					required
+				}
 			}
 		},
 		methods: {
 			validate(){
-				this.$v.data.$touch();
-				var isValid = !this.$v.data.$invalid
-				this.$emit('on-validate', this.$data, isValid)
+				this.$v.value.$touch();
+				var isValid = !this.$v.value.$invalid
+				this.$emit('on-validate', this.$value, isValid)
 				return isValid
 			}
 		},
 		computed: {
 			filteredDesignations: function(){
 				var designations = this.designations;
-				if(this.data.grade){
-					var filtered = _.map(designations[this.data.grade.label], designation => ({
+				if(this.value.grade){
+					var filtered = _.map(designations[this.value.grade.label], designation => ({
 						id: designation.ID,
 						label: designation.DESIGNATION
 					}))

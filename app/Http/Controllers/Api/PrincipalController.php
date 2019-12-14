@@ -339,6 +339,7 @@ class PrincipalController extends Controller
     }
 
     function editContract(Request $request){
+        // dd($request->input());
         $principalContract = PrincipalContract::find($request->contract_id);
 
         $principalContract->INDEX_NO = $request->indexNo;
@@ -346,6 +347,9 @@ class PrincipalController extends Controller
         $principalContract->DESIGNATION = $request->designation['label'];
         $principalContract->FUNC_TITLE = $request->functionalTitle;
         $principalContract->CONTRACT_TYPE_ID = $request->contractType['id'];
+        $principalContract->GRADE_ID = $request->grade['id'];
+        $principalContract->CONTRACT_FROM = \Carbon\Carbon::parse($request->contractFrom);
+        $principalContract->CONTRACT_TO = \Carbon\Carbon::parse($request->contractTo);
 
         $principalContract->save();
 
