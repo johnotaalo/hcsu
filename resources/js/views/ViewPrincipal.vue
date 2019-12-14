@@ -179,19 +179,20 @@
 									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-contract v-if="updatable"><i class="fe fe-plus mr-1"></i>Add Contract</b-button>
 									<b-table :fields="contracts.table.fields" :items="principal.contracts">
 										<template slot="AGENCY" slot-scope="data">
-											{{ data.item.contract_agency.ACRONYM }}
+											<span v-if="data.item.contract_agency">{{ data.item.contract_agency.ACRONYM }}</span>
+											<span v-else></span>
 										</template>
 
 										<template slot = "CONTRACT_TYPE" slot-scope ="data">
-											{{ data.item.type.C_TYPE }}
+											<span v-if="data.item.type">{{ data.item.type.C_TYPE }}</span>
 										</template>
 
 										<template slot = "GRADE" slot-scope ="data">
-											{{ data.item.renewals.grade.GRADE }}
+											<span v-if="data.item.renewals.grade">{{ data.item.renewals.grade.GRADE }}</span>
 										</template>
 
 										<template slot="DURATION" slot-scope="data">
-											{{ data.item.renewals.START_DATE | moment("DD/MM/YYYY") }} to {{ data.item.renewals.END_DATE | moment("DD/MM/YYYY") }}
+											<span v-if="data.item.renewals">{{ data.item.renewals.START_DATE | moment("DD/MM/YYYY") }} to {{ data.item.renewals.END_DATE | moment("DD/MM/YYYY") }}</span>
 										</template>
 
 										<template slot="ACTIONS" slot-scope="row">
@@ -584,7 +585,6 @@
 			},
 			filteredDesignations: function(){
 				var designations = this.options.designations;
-				console.log(this.modal.contract.grade)
 				if(this.modal.contract.grade){
 					var filtered = _.map(designations[this.modal.contract.grade.label], designation => ({
 						id: designation.ID,
@@ -908,18 +908,28 @@
 				_this.modal.contract.editIndex = index
 				_this.contracts.editIndex = index
 
+
+
 				var agencyObj = _.find(_this.options.agencies, [ 'id', contractData.AGENCY_ID ]);
 				var contractTypeObj = _.find(_this.options.contractTypes, [ 'id', contractData.CONTRACT_TYPE_ID ]);
 				var gradeObj = _.find(_this.options.grades, [ 'id', contractData.renewals.GRADE_ID ]);
+				var cleanedDesignations = _.map(_this.options.designations[gradeObj.label], (o) => {
+					return {
+						id: o.ID,
+						label: o.DESIGNATION
+					}
+				})
+				var designationObj = _.find(cleanedDesignations, ['label', contractData.DESIGNATION])
 
 				agencyObj = (typeof agencyObj == "undefined") ? {} : agencyObj
 				contractTypeObj = (typeof contractTypeObj == "undefined") ? {} : contractTypeObj
 				gradeObj = (typeof gradeObj == "undefined") ? {} : gradeObj
+				designationObj = (typeof designationObj == "undefined") ? {} : designationObj
 
 				_this.modal.contract.agency = agencyObj
 				_this.modal.contract.contractType = contractTypeObj
 				_this.modal.contract.indexNo = contractData.INDEX_NO
-				_this.modal.contract.designation = contractData.DESIGNATION
+				_this.modal.contract.designation = designationObj
 				_this.modal.contract.functionalTitle = contractData.FUNC_TITLE
 				_this.modal.contract.contractFrom = contractData.renewals.START_DATE
 				_this.modal.contract.contractTo = contractData.renewals.END_DATE
