@@ -17,6 +17,7 @@ class CreateVisaExtensionApplicationsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('CASE_NO');
             $table->string('HOST_COUNTRY_ID');
+            $table->string('SERIAL_NO');
             $table->text('KENYA_ADDRESS');
             $table->date('DATE_OF_ENTRY');
             $table->string('PORT_OF_ENTRY');
