@@ -86,6 +86,23 @@
 										</div>
 									</div>
 									<hr>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="pin">Place of Birth</label>
+												<b-input v-model="form.principal.place_of_birth" :size="formSize"></b-input>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="pin">Nationality</label>
+												<v-select :options="options.countries" v-model="form.principal.nationality"></v-select>
+											</div>
+										</div>
+									</div>
+									<hr>
 									<div class="row">
 										<div class="col-md">
 											<div class="form-group">
@@ -392,6 +409,7 @@
 				uploadFieldName: 'file',
 				selectCountries: [],
 				selectedDependent: -1,
+				countries: [],
 				form: {
 					principal: new Form({
 						id: "",
@@ -410,7 +428,9 @@
 						drivingLicense: "",
 						image: {
 							url: ""
-						}
+						},
+						place_of_birth: "",
+						nationality: {}
 					})
 				},
 				activeTitle: {
@@ -530,8 +550,9 @@
 		},
 		mounted() {
 			this.$parent.isContainer = false
-			this.getPrincipalData();
 			this.getFormOptions();
+			this.getPrincipalData();
+			
 
 			this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
 				if(modalId == "modal-passport"){
@@ -592,6 +613,7 @@
 					}))
 					return filtered
 				}
+
 				return []
 			},
 			dependentMaxDatetime: function(){
@@ -707,11 +729,17 @@
 					this.form.principal.pin = this.principal.PIN_NO
 					this.form.principal.drivingLicense = this.principal.DL_NO
 					this.form.principal.residenceNo = this.principal.R_NO
+					this.form.principal.place_of_birth = this.principal.PLACE_OF_BIRTH
+					let principalNationality = _.find(this.countries, ["id", this.principal.NATIONALITY])
+					this.form.principal.nationality['label'] = principalNationality.official_name
+					this.form.principal.nationality['id'] = principalNationality.iso_3
+					
 				})
 			},
 			getFormOptions: function() {
 				axios('/api/data/principal-options')
 				.then((res) => {
+					this.countries = res.data.countries
 					this.options.countries = _.map(res.data.countries, country => ({
 						id: country.iso_3,
 						label: country.official_name

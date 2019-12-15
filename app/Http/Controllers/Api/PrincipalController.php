@@ -133,6 +133,8 @@ class PrincipalController extends Controller
         $principal->PIN_NO = strtoupper($request->pin);
         $principal->R_NO = $request->residenceNo;
         $principal->DL_NO = strtoupper($request->drivingLicense);
+        $principal->PLACE_OF_BIRTH = $request->place_of_birth;
+        $principal->NATIONALITY = (\App\Models\Country::where('iso_3', $request->nationality['id'])->first())->id;
 
         $principal->save();
 
@@ -248,6 +250,8 @@ class PrincipalController extends Controller
         $principal->GENDER = $request->input('gender');
         $principal->ADDRESS = $request->input('Address');
         $principal->RESIDENCE = $request->input('residence');
+        $principal->PLACE_OF_BIRTH = $request->place_of_birth;
+        $principal->NATIONALITY = (\App\Models\Country::where('iso_3', $request->nationality['id'])->first())->id;
 
         $principal->IMAGE = $new_path;
 
