@@ -320,7 +320,7 @@
 				}
 				else{
 
-					if (this.application == 'diplomatic_id') {
+					if (this.application == 'diplomatic_id' || this.application == 'visa_extension') {
 						var result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'dependent'
 						})
