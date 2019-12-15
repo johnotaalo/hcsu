@@ -33,9 +33,13 @@ class NoteVerbal {
 				$connector = "request for";
 				break;
 			case 'diplomatic-id':
+			case 'diplomatic-id-renewal':
 				$end_header = (isset($this->data->client->relationship)) ? "the under mentioned {$this->data->client->relationship} of {$this->data->client->principal}" : "{$this->data->client->name}";
 				$end_header .= ", an internationally recruited staff member of {$this->data->client->organization}";
-				$connector = "apply for a diplomatic identity card for";
+				if($this->data->type == "new")
+					$connector = "apply for a diplomatic identity card for";
+				else
+					$connector = "apply for renewal of Diplomatic ID card for";
 				break;
 		}
 
@@ -92,6 +96,7 @@ class NoteVerbal {
 			break;
 
 			case "diplomatic-id":
+			case "diplomatic-id-renewal":
 				$body = "Details are as follows:\r";
 				if ($this->data->client->type == "staff") {
 					$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
@@ -103,7 +108,10 @@ class NoteVerbal {
 					$body .= str_pad($this->data->client->name, 40) . str_pad($this->data->client->nationality, 25) . ucwords($this->data->client->relationship) . "\r";
 				}
 				$body .= "\r";
-				$body .= "The Ministry's assistance in issuance of a Diplomatic Identity Card will be highly appreciated.";
+				if($this->data->type == "new")
+					$body .= "The Ministry's assistance in issuance of a Diplomatic Identity Card will be highly appreciated.";
+				else
+					$body .= "The Ministry's assistance in renewal of the Diplomatic Identity Card would be highly appreciated.";
 			break;
 			
 		}

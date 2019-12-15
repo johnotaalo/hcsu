@@ -3,13 +3,14 @@
 namespace App\Helpers\HCSU\Data;
 
 use \App\DIPIDApplication;
+use \App\DIPIDRenewalApplication as DIPIDRenewal;
 
 class DiplomaticIDData{
-	public static function get($case_no){
+	public static function get($case_no, $type = "new"){
 		$data = new \StdClass;
 		$clientObj = new \StdClass;
 
-		$dipidData = DIPIDApplication::where('CASE_NO', $case_no)->first();
+		$dipidData = ($type == "new") ? DIPIDApplication::where('CASE_NO', $case_no)->first() : DIPIDRenewal::where('CASE_NO', $case_no)->first();
 		$clientType = identify_hcsu_client($dipidData->HOST_COUNTRY_ID);
 		$clientObj->type = $clientType;
 
@@ -56,6 +57,7 @@ class DiplomaticIDData{
         $data->case_no = $case_no;
         $data->ref = $dipidData->NV_SERIAL_NO;
         $data->date = date('F d, Y');
+        $data->type = $type;
 
 		return $data;
 	}
