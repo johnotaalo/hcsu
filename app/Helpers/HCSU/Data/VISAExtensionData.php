@@ -2,14 +2,14 @@
 
 namespace App\Helpers\HCSU\Data;
 
-use \App\VISAExtensionApplication;
+use \App\VisaExtensionApplication;
 
 class VISAExtensionData{
 	public static function get($case_no){
 		$data = new \StdClass;
 		$clientObj = new \StdClass;
 
-		$case_data = VISAExtensionApplication::where('CASE_NO', $case_no)->first();
+		$case_data = VisaExtensionApplication::where('CASE_NO', $case_no)->first();
 		$clientType = identify_hcsu_client($case_data->HOST_COUNTRY_ID); 
 		$clientObj->type = $clientType;
 		$clientObj->passport = new \StdClass;
