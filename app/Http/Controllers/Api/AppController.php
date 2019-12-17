@@ -161,6 +161,7 @@ class AppController extends Controller
             "input_document"    => $request->input('input_document'),
             "process"           => $process['prj_uid'],
             "task"              => $task['act_uid'],
+            "step"              =>  $step['step_uid'],
             "path"              => $template
         ]);
 
@@ -172,6 +173,7 @@ class AppController extends Controller
                 'useExec'   =>  true
             ];
         }
+        
         $pdf = new Pdf($path, $config);
         $data = $pdf->getDataFields();
         $fileName = str_replace(" ", "", $request->input('name')) ;
@@ -212,6 +214,14 @@ class AppController extends Controller
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
         return $response->diagrams[0]->activities;
+    }
+
+    function getTaskSteps(Request $request){
+        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+        $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
+        
+        return $response;
     }
 
     function generateDocument(Request $request){

@@ -20,11 +20,18 @@
 					<v-select v-model = "form.task" :options="processTasks" label="act_name"></v-select>
 				</div>
 			</div>
+
 			<div class="form-group">
-				<b-input placeholder="Enter Input Document UID" label="Input Document UID" v-model = "form.input_document"></b-input>
+				<label>Step</label>
+				<v-select v-model = "form.step" :options="taskSteps" label="obj_title"></v-select>
 			</div>
-			<div class="form-group">
-				<b-input placeholder="Enter Template name" label="Template Name" v-model = "form.name"></b-input>
+			<div class="form-group row">
+				<div class="col-md">
+					<b-input placeholder="Enter Input Document UID" label="Input Document UID" v-model = "form.input_document"></b-input>
+				</div>
+				<div class="col-md">
+					<b-input placeholder="Enter Template name" label="Template Name" v-model = "form.name"></b-input>
+				</div>
 			</div>
 			<div class="form-group">
 				<label>Template</label>
@@ -44,10 +51,12 @@
 			return {
 				processes: [],
 				processTasks: [],
+				taskSteps: [],
 				form: new Form({
 					name: "",
 					process: "",
 					task: "",
+					step: "",
 					input_document: "",
 					file: ""
 				})
@@ -70,6 +79,13 @@
 					this.processTasks = res.data
 				});
 			},
+
+			getSteps(process_uid, task_uid){
+				axios.get(`/api/data/processes/${process_uid}/task/${task_uid}/steps`)
+				.then((res) => {
+					this.taskSteps = res.data
+				})
+			},
 			uploadTemplateFile: function(){
 				var em = this
 				this.form.post('/template/add')
@@ -83,7 +99,12 @@
 				var uid = val.prj_uid
 				this.getTasks(uid)
 				this.form.task = ""
-			}
+			},
+			'form.task': function(val){
+				var task_uid = val.act_uid
+				var project_uid = this.form.process.prj_uid
+				this.getSteps(project_uid, task_uid)
+			},
 		}
 	}
 </script>

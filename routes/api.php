@@ -147,6 +147,7 @@ Route::prefix('data')->group(function(){
 	Route::prefix('processes')->group(function(){
 		Route::get('/', 'Api\AppController@getProcessList');
 		Route::get('/{process}/tasks', 'Api\AppController@getProcessTasks');
+		Route::get('/{process}/task/{task}/steps', 'Api\AppController@getTaskSteps');
 	});
 });
 
