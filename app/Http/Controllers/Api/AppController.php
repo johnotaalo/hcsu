@@ -153,6 +153,7 @@ class AppController extends Controller
     function addTemplate(Request $request){
         $process = $request->input('process');
         $task = $request->input('task');
+        $step = $request->input('step');
         $template = $request->file('file')->store("templates/{$process['prj_uid']}/{$task['act_uid']}");
         $path = storage_path('app/'. $template);
 
@@ -173,7 +174,7 @@ class AppController extends Controller
                 'useExec'   =>  true
             ];
         }
-        
+
         $pdf = new Pdf($path, $config);
         $data = $pdf->getDataFields();
         $fileName = str_replace(" ", "", $request->input('name')) ;
