@@ -20,6 +20,7 @@ class MakeMostIM05FieldsNullable extends Migration
             $table->text('EXTENDING_REASON')->nullable()->change();
             $table->integer('PERIOD')->nullable()->change();
             $table->string('PERIOD_UNITS')->nullable()->change();
+            $table->string('IS_PHYSICAL_ADDRESS')->nullable();
         });
     }
 
@@ -31,7 +32,7 @@ class MakeMostIM05FieldsNullable extends Migration
     public function down()
     {
         Schema::connection('pm_data')->table('IM_05', function (Blueprint $table) {
-            
+            $table->dropColumn(['IS_PHYSICAL_ADDRESS']);
         });
     }
 }
