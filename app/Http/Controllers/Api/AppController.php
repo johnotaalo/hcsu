@@ -227,16 +227,21 @@ class AppController extends Controller
 
     function generateDocument(Request $request){
         $case = $this->getCaseInformation($request->case_no);
+        $applicationType = ($request->query('type')) ? $request->query('type') : "";
         // $variables = $this->getCaseVariables($request->case_no);
 
         // dd($case);
         $process = $case->pro_uid;
         $currentTask = $case->current_task[0]->tas_uid;
 
-        $document = FormTemplate::where([
-            'process'   =>  $process,
-            'task'      =>  $currentTask
-        ])->first();
+        if(!$applicationType){
+            $document = FormTemplate::where([
+                'process'   =>  $process,
+                'task'      =>  $currentTask
+            ])->first();
+        }else{
+
+        }
 
         if($document){
             $path = storage_path('app/'. $document->path);
