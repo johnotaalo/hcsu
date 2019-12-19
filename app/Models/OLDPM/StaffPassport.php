@@ -13,4 +13,12 @@ class StaffPassport extends Model
 	public function passportType(){
 		return $this->belongsTo('\App\Models\PassportType', 'passport_type', 'PPT_TYPE');
 	}
+
+	public function staff(){
+		return $this->belongsTo(\App\Models\OLDPM\StaffMember::class, 'index_no', 'index_no');
+	}
+
+	public function getStaffAttributeAttribute(){
+		
+	}
 }

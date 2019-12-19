@@ -163,7 +163,8 @@ class AppController extends Controller
             "process"           => $process['prj_uid'],
             "task"              => $task['act_uid'],
             "step"              =>  $step['step_uid'],
-            "path"              => $template
+            "path"              => $template,
+            "type"              =>  $request->input('type')
         ]);
 
         $config = [];
@@ -240,7 +241,11 @@ class AppController extends Controller
                 'task'      =>  $currentTask
             ])->first();
         }else{
-
+            $document = FormTemplate::where([
+                'process'   =>  $process,
+                'task'      =>  $currentTask,
+                'type'      =>  $applicationType
+            ])->first();
         }
 
         if($document){

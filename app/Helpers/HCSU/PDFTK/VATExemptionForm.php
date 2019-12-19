@@ -62,7 +62,8 @@ class VATExemptionForm{
 			$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
 
 			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
-			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
+            $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$vat_data->HOST_COUNTRY_ID})"))->first();
+			$name = "{$c_name}; {$contract->DESIGNATION}";
 			$mission = $dependent->principal->latest_contract->ACRONYM;
 
             $diplomaticCardNo = ($dependent->principal->latest_diplomatic_card != null) ? $dependent->principal->latest_diplomatic_card->DIP_ID_NO : "N/A";

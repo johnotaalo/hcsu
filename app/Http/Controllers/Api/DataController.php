@@ -218,10 +218,74 @@ class DataController extends Controller
 
     function importDependentPassports(){
       $passports = \App\Models\OLDPM\StaffPassport::where('owner_code', '<>', '01')
-      ->whereNotNull('owner_code')
-      
-      ->get();
+                    ->where('owner_code', '<>', '')
+                    ->whereNotNull('owner_code')
+                    // ->limit(10)
+                    ->with(['staff'])      
+                    ->get();
 
-      dd($passports);
+      $cleanedPassportData = $passports->map(function($passport){
+        $dep = $newDep = new \StdClass;
+        $host_country_id = "";
+        if ($passport->owner_code == "02") {
+          $dep = \App\Models\OLDPM\StaffSpouse::where('owner_code', $passport->owner_code)->where('index_no', $passport->index_no)->first();
+        }else{
+          $dep = \App\Models\OLDPM\StaffDependent::where('owner_code', $passport->owner_code)->where('index_no', $passport->index_no)->first();
+        }
+        if($dep){
+          $newDep = \App\Models\PrincipalDependent::where('OLD_REF_ID', $dep->record_id)->first();
+          $host_country_id = (isset($newDep->HOST_COUNTRY_ID)) ? $newDep->HOST_COUNTRY_ID : "";
+        }
+
+        return (object)[
+          'details'         =>  $passport,
+          "owner_code"      =>  $passport->owner_code,
+          'host_country_id' =>  $host_country_id
+        ];
+      });
+
+      $availablePassports = $cleanedPassportData->filter(function($data){
+        return $data->host_country_id != "";
+      })->all();
+
+      $insertData = collect($availablePassports)->map(function($passport){
+        $passport_type = \App\Models\PassportType::where('PPT_TYPE', $passport->details->passport_type)->first();
+        return [
+          'DEPENDENT_ID'      =>  $passport->host_country_id,
+          'PASSPORT_NO'       =>  $passport->details->passport_no,
+          'PASSPORT_TYPE'     =>  ($passport_type) ? $passport_type->ID : 0,
+          'ISSUE_DATE'        =>  $passport->details->issue_date,
+          'EXPIRY_DATE'       =>  $passport->details->expiry_date,
+          'PLACE_OF_ISSUE'    =>  $passport->details->place_of_issue,
+          'COUNTRY_OF_ISSUE'  =>  $passport->details->country_of_issue,
+          'OLD_REF_ID'        =>  $passport->details->record_id
+        ];
+      })->toArray();
+
+      \App\Models\PrincipalDependentPassport::query()->truncate();
+      \App\Models\PrincipalDependentPassport::insert($insertData);
+
+      // dd($insertData);
+
+      // dd($cleanedPassportData->toArray());
+      // $cleanedPassportDataArray = $cleanedPassportData->toArray();
+      // dd($availablePassports);
+      // $available = array_diff(
+      //   $cleanedPassportDataArray, 
+      //   $unknown
+      // );
+
+      // dd("Known: " . count($available) . " Unkown: " . count($unknown));
+
+      // $staffMemberIndices = $passports->map(function($passport){
+      //   if($passport->staff->index_no != "" || $passport->staff->index_no != null)
+      //     return $passport->staff->index_no;
+      // })->toArray();
+
+      // $dependents = \App\Models\PrincipalDependent::where
+
+      // dd($staffMemberIndices);
+
+      return $insertData;
     }
 }

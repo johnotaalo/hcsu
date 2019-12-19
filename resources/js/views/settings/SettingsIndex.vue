@@ -22,8 +22,18 @@
 			</div>
 
 			<div class="form-group">
-				<label>Step</label>
-				<v-select v-model = "form.step" :options="taskSteps" label="obj_title"></v-select>
+				<div class="row">
+					<div class="col-md">
+						<label>Step</label>
+						<v-select v-model = "form.step" :options="taskSteps" label="obj_title"></v-select>
+					</div>
+
+					<div class="col-md">
+						<label>Type</label>
+						<b-input placeholder="Enter Type" label="Type" v-model="form.type"/>
+					</div>
+				</div>
+				
 			</div>
 			<div class="form-group row">
 				<div class="col-md">
@@ -57,6 +67,7 @@
 					process: "",
 					task: "",
 					step: "",
+					type: "",
 					input_document: "",
 					file: ""
 				})
