@@ -17,6 +17,7 @@ class CreateWorkPermitApplicationsTable extends Migration
             $table->bigIncrements('id');
             $table->string('CASE_NO');
             $table->string('HOST_COUNTRY_ID');
+            $table->string('TYPE');
             $table->text('NV_SERIAL_NO');
             $table->timestamps();
         });
