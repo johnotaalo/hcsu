@@ -12,7 +12,7 @@ class Principal extends Model
     protected $table = "PRINCIPAL";
     protected $connection = "mysql";
 
-    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname", "latest_passport"];
+    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname", "latest_passport", "spouse"];
 
     protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "PLACE_OF_BIRTH", "NATIONALITY", "GENDER", "ADDRESS", "RESIDENCE", "OLD_REF_ID"];
 
@@ -22,6 +22,10 @@ class Principal extends Model
 
     public function dependents(){
     	return $this->hasMany('\App\Models\PrincipalDependent', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
+    }
+
+    public function getSpouseAttribute(){
+        return $this->dependents->where('RELATIONSHIP_ID', 2)->first();
     }
 
     public function passports(){

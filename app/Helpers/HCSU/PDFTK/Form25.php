@@ -19,21 +19,44 @@ class Form25{
 
 		$date = date('F d, Y');
 
+		$dependent_data = [];
+
+		foreach ($form_data->client->dependents as $dependent) {
+			$no = 1;
+			if ($dependent->RELATIONSHIP_ID != 2) {
+				$dependent_data["owner{$no}"] = ucwords(strtolower($dependent->OTHER_NAMES)) . " " . strtoupper($dependent->LAST_NAME);
+				$dependent_data["sex{$no}"] = $dependent->GENDER;
+				$dependent_data["date_of_birth{$no}"] = date('Y-m-d', strtotime($dependent->DATE_OF_BIRTH));
+				$dependent_data["nationality{$no}"] = $dependent->COUNTRY;
+				$no++;
+			}
+		}
+
 		$tabData = [
-			"other_names"		=>	$form_data->client->clientdata->OTHER_NAMES,
+			"fullname"			=>	$form_data->client->name,
+			"pobox"				=>	$form_data->client->clientdata->ADDRESS,
+			"dob"				=>	$form_data->client->clientdata->DATE_OF_BIRTH,
+			"pob"				=>	$form_data->client->clientdata->PLACE_OF_BIRTH,
 			"nationality"		=>	$form_data->client->nationality,
-			"date_of_issue"		=>	$form_data->client->passport->issue_date,
-			"place_of_issue"	=>	$form_data->client->passport->place_of_issue,
-			"address_in_kenya"	=>	$form_data->case_data->KENYA_ADDRESS,
-			"passport_no"		=>	$form_data->client->passport->passport_no,
-			"surname"			=>	strtoupper($form_data->client->clientdata->LAST_NAME),
-			"port_of_entry"		=>	$form_data->case_data->PORT_OF_ENTRY,
-			"extending_reason"	=>	$form_data->case_data->EXTENDING_REASON,
-			"date_of_entry"		=>	$form_data->case_data->DATE_OF_ENTRY,
-			"extending_period"	=>	"{$form_data->case_data->PERIOD} {$form_data->case_data->PERIOD_UNITS}"
+			"pptno"				=>	$form_data->client->passport->passport_no,
+			"ppttype"			=>	$form_data->client->passport->passport_type,
+			"doi"				=>	$form_data->client->passport->issue_date,
+			"poi"				=>	$form_data->client->passport->place_of_issue,
+			"spousename"		=>	ucwords(strtolower($form_data->client->clientdata->spouse->OTHER_NAMES)) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME),
+			"rNo"				=>	$form_data->client->clientdata->R_NO,
+			"agencyfullname"	=>	$form_data->client->contract->AGENCYNAME,
+			"designation"		=>	$form_data->client->contract->DESIGNATION,
+			"location"			=>	$form_data->client->contract->LOCATION,
+			"descript"			=>	$form_data->client->contract->FUNC_TITLE,
+			"cstart"			=>	$form_data->client->contract->START_DATE,
+			"cend"				=>	$form_data->client->contract->END_DATE,
+			"today"				=>	$form_data->date
 		];
 
+		$tabData = $tabData + $dependent_data;
+
 		// $template = new \App\Helpers\HCSU\PDFTK\Templates\VISAExtensionForm($tabData);
+		// dd($tabData);
         $this->filename = "{$document->form_name} for {$form_data->client->name} - {$date}";
         return $tabData;
 	}
