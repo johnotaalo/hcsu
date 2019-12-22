@@ -151,6 +151,7 @@ class AppController extends Controller
     }
 
     function addTemplate(Request $request){
+        // dd($request);
         $process = $request->input('process');
         $task = $request->input('task');
         $step = $request->input('step');

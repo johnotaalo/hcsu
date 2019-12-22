@@ -59,13 +59,6 @@ Vue.filter('combineArray', (value, key) => {
 	if (typeof(key) == "undefined") {
 		return _.join(value, ', ')
 	}
-
-	// var items = _.map(value, (item) => {
-	// 	return item[key]
-	// })
-	// console.log(items)
-	// return value.map(item => item[key]['AGENCY_NAME']).join(',')
-
 	return _.map(value, key).join(', ')
 });
 
