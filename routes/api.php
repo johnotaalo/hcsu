@@ -33,6 +33,10 @@ Route::prefix('auth')->group(function(){
 	});
 });
 
+Route::prefix('kiosk')->group(function(){
+	Route::get('clients/search', 'API\AppController@searchClient');
+});
+
 Route::get('test', function(){
 	$faker = \Faker\Factory::create();
 	$tests = \App\Test::insert([
