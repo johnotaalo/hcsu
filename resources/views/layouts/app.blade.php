@@ -11,6 +11,13 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('themes/nprogress/nprogress.css') }}">
     <script type="text/javascript" src="{{ asset('themes/nprogress/nprogress.js') }}"></script>
+    <script type="text/javascript">
+        window.Laravel = {
+            baseUrl: "<?php echo URL::to('/');; ?>"
+        };
+
+        console.log(window.Laravel)
+    </script>
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
 

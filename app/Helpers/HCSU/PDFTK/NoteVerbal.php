@@ -41,6 +41,42 @@ class NoteVerbal {
 				else
 					$connector = "apply for renewal of Diplomatic ID card for";
 				break;
+			case 'work-permit-new-case':
+				$connector = "submit an application for";
+				$end_header = "";
+				if ($this->data->type == "new-case") {
+					$end_header .= "issuance";
+				}
+
+				$end_header .= " of Exemption from Kenya Work Permit";
+
+				if($this->data->client->dependents){
+					$end_header .= " and Dependants Pass";
+				}
+
+				$end_header .= " for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
+
+				if($this->data->client->relationships){
+					$relationships = [];
+					foreach ($this->data->client->relationships as $relationship) {
+						if ($relationship != "Spouse") {
+							$relationship = "dependants";
+						}else{
+							$relationship = strtolower($relationship);
+						}
+
+						array_push($relationships, $relationship);
+					}
+
+					$uniqueRelationships = collect($relationships)->unique()->toArray();
+					$relationshipString = implode(" and ", $uniqueRelationships);
+
+					$end_header .= " and his {$relationshipString}";
+				}
+
+				$end_header .= ".";
+				
+				break;
 		}
 
 		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs & International Trade of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
@@ -112,6 +148,27 @@ class NoteVerbal {
 					$body .= "The Ministry's assistance in issuance of a Diplomatic Identity Card will be highly appreciated.";
 				else
 					$body .= "The Ministry's assistance in renewal of the Diplomatic Identity Card would be highly appreciated.";
+			break;
+
+			case 'work-permit-new-case':
+				$body = "Details are as follows:\r";
+
+				$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+				$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
+				$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+				if($this->data->type == "new-case"){
+					$body .= str_pad("R. No: ", $padding) . "New Case\r";
+				}
+				$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
+
+				if($this->data->client->dependents){
+					$body .= "\rSpouse and Dependants\r";
+					$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
+					foreach ($this->data->client->dependents as $dependant) {
+						dd($dependant->latest_passport);
+						$body .= str_pad(ucwords(strtolower($dependant->OTHER_NAMES)) . " " . strtoupper($dependant->LAST_NAME), 30) . str_pad("", 15) . str_pad($dependant->COUNTRY, 20);
+					}
+				}
 			break;
 			
 		}
