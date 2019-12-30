@@ -24,7 +24,7 @@ class PrincipalDependent extends Model
         return $relationship;
     }
 
-    public function getLatestPassportAttriubte(){
+    public function getLatestPassportAttribute(){
         $passports = \App\Models\PrincipalDependentPassport::where('DEPENDENT_ID', $this->HOST_COUNTRY_ID)->orderBy('EXPIRY_DATE', 'DESC')->first();
 
         return $passports;
