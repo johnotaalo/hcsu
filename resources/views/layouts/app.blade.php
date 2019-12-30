@@ -15,8 +15,6 @@
         window.Laravel = {
             baseUrl: "<?php echo URL::to('/');; ?>"
         };
-
-        console.log(window.Laravel)
     </script>
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>

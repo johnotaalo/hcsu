@@ -24,7 +24,7 @@
 			<div class="card-body">
 				<!-- <div class="col-md-12"> -->
 					<v-server-table
-					url="/api/principal/"
+					:url="`${baseUrl}/api/principal/`"
 					:columns="principal.columns"
 					:options="principal.options"
 					size="sm">
@@ -47,6 +47,7 @@
 	export default {
 		data(){
 			return {
+				baseUrl: window.Laravel.baseUrl,
 				options: {
 					principalImageProps: { blank: false, blankColor: '#777', width: 40, height: 40, class: 'm1' }
 				},
