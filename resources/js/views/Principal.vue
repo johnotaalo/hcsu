@@ -75,6 +75,14 @@
 							dropdown: false,
 							edge: true,
 
+						},
+						requestFunction: (data) => {
+							return axios.get(`${this.baseUrl}/api/principal/`, {
+								params: data
+							})
+							.catch(function (e) {
+								console.log('error', e);
+							});
 						}
 					}
 				},
