@@ -165,7 +165,7 @@ class NoteVerbal {
 					$body .= "\rSpouse and Dependants\r";
 					$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
 					foreach ($this->data->client->dependents as $dependant) {
-						dd($dependant->latest_passport);
+						// dd($dependant->latest_passport);
 						$body .= str_pad(ucwords(strtolower($dependant->OTHER_NAMES)) . " " . strtoupper($dependant->LAST_NAME), 30) . str_pad("", 15) . str_pad($dependant->COUNTRY, 20);
 					}
 				}
