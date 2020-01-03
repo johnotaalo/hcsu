@@ -280,6 +280,7 @@ ORDER BY
         $case = $this->getCaseInformation($request->case_no);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";
         // $variables = $this->getCaseVariables($request->case_no);
+        $extraParams = $request->query();
 
         // dd($case);
         $process = $case->pro_uid;
@@ -315,7 +316,7 @@ ORDER BY
             $pdf = new Pdf($path, $config);
 
             $class = new $className();
-            $data = $class->getData($case->app_number, $document);
+            $data = $class->getData($case->app_number, $document, $extraParams);
             $filename = $class->getFileName();
             // $pdf->fillForm($data)
             //     ->needAppearances()
