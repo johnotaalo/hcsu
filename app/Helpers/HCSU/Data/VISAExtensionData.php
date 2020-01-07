@@ -50,8 +50,8 @@ class VISAExtensionData{
           $clientObj->contract_type = $contract->C_TYPE;
           $clientObj->nationality = $dependent->COUNTRY;
           $clientObj->passport->passport_no = ($dependent->latest_passport) ? $dependent->latest_passport->PASSPORT_NO : "N/A";
-          $clientObj->passport->issue_date = ($dependent->latest_passport) ? $principal->latest_passport->ISSUE_DATE : "N/A";
-	      $clientObj->passport->place_of_issue = ($dependent->latest_passport) ? $principal->latest_passport->PLACE_OF_ISSUE : "N/A";
+          $clientObj->passport->issue_date = ($dependent->latest_passport) ? $dependent->latest_passport->ISSUE_DATE : "N/A";
+	      $clientObj->passport->place_of_issue = ($dependent->latest_passport) ? $dependent->latest_passport->PLACE_OF_ISSUE : "N/A";
         }
 
         $data->client = $clientObj;
