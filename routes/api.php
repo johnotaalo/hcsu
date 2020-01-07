@@ -146,12 +146,18 @@ Route::prefix('data')->group(function(){
 
 	Route::prefix('dependent')->group(function(){
 		Route::get('/get/{host_country_id}', 'Api\PrincipalController@getDependent');
+		Route::post('/update/{host_country_id}', 'Api\PrincipalController@updateDependent');
+		Route::post('/passport/add/{host_country_id}', 'Api\PrincipalController@addDependentPassport');
 	});
 
 	Route::prefix('processes')->group(function(){
 		Route::get('/', 'Api\AppController@getProcessList');
 		Route::get('/{process}/tasks', 'Api\AppController@getProcessTasks');
 		Route::get('/{process}/task/{task}/steps', 'Api\AppController@getTaskSteps');
+	});
+
+	Route::prefix('options')->group(function(){
+		Route::get('/dependent', 'Api\DataController@getDependentOptions');
 	});
 });
 

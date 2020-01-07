@@ -10,4 +10,6 @@ class PrincipalDependentPassport extends Model
     protected $table = "DEPENDENT_PASSPORTS";
 
     protected $fillable = ['DEPENDENT_ID', 'PASSPORT_NO', 'PASSPORT_TYPE', 'ISSUE_DATE', 'EXPIRY_DATE', 'PLACE_OF_ISSUE', 'COUNTRY_OF_ISSUE', 'OLD_REF_ID'];
+
+    // protected $dates = ['ISSUE_DATE', 'EXPIRY_DATE'];
 }

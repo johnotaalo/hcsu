@@ -13,7 +13,7 @@ class PrincipalDependent extends Model
 
     protected $fillable = ["HOST_COUNTRY_ID", "PRINCIPAL_ID", "INDEX_NO", "LAST_NAME", "OTHER_NAMES", "RELATIONSHIP_ID", "COUNTRY", "EMPLOYMENT_DETAILS", "PASSPORT_NO", "DATE_OF_BIRTH", "IMAGE", "OLD_REF_ID"];
 
-    protected $dates = ['DATE_OF_BIRTH'];
+    // protected $dates = ['DATE_OF_BIRTH'];
 
     public function getImageLinkAttribute(){
     	return Storage::url($this->IMAGE);

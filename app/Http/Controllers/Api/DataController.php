@@ -288,4 +288,11 @@ class DataController extends Controller
 
       return $insertData;
     }
+
+    function getDependentOptions(){
+      return [
+        'relationships'   =>  \App\Models\Relationship::whereNotIn('RELATIONSHIP', ['Principal'])->get(),
+        'nationalities'   =>  \App\Models\Country::all()
+      ];
+    }
 }

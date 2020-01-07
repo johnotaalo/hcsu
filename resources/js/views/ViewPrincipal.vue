@@ -618,7 +618,6 @@
 			},
 			dependentMaxDatetime: function(){
 				var relationshipType = this.modal.dependent.relationshipType.id;
-				console.log(relationshipType)
 				if(relationshipType == 2 || relationshipType == 7){
 					return this.$moment().subtract(16, "Years").format()
 				}else if(relationshipType == 5 || relationshipType == 6){

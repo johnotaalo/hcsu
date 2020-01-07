@@ -110,6 +110,29 @@ class PrincipalController extends Controller
       return PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->with('principal', 'relationshipX')->first();
     }
 
+    function updateDependent(Request $request){
+        $host_country_id = $request->host_country_id;
+
+        $dependent = PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();
+
+        foreach ($request->dependent as $key => $value) {
+            $dependent->$key = $value;
+        }
+
+        return ['status' => $dependent->update()];
+    }
+
+    function addDependentPassport(Request $request){
+        $host_country_id = $request->host_country_id;
+        $inputData = array_merge($request->all(), ['DEPENDENT_ID' => $host_country_id]);
+
+        $inputData['ISSUE_DATE'] = date('Y-m-d', strtotime($inputData['ISSUE_DATE']));
+        $inputData['EXPIRY_DATE'] = date('Y-m-d', strtotime($inputData['EXPIRY_DATE']));
+        $data = \App\Models\PrincipalDependentPassport::firstOrNew($inputData);
+
+        return $data->save();
+    }
+
     function add(Request $request){
         $case_no = ($request->query('case_no')) ? $request->query('case_no') : "";
         // echo $case_no;die;
