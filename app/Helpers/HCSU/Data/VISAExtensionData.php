@@ -45,10 +45,13 @@ class VISAExtensionData{
           $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dependent->principal->HOST_COUNTRY_ID})"))->first();
 
           $clientObj->name = $c_name;
+          $clientObj->clientdata = $dependent;
           $clientObj->organization = $mission;
           $clientObj->contract_type = $contract->C_TYPE;
           $clientObj->nationality = $dependent->COUNTRY;
-          $clientObj->passport_no = $dependent->PASSPORT_NO;
+          $clientObj->passport->passport_no = ($dependent->latest_passport) ? $dependent->latest_passport->PASSPORT_NO : "N/A";
+          $clientObj->passport->issue_date = ($dependent->latest_passport) ? $principal->latest_passport->ISSUE_DATE : "N/A";
+	      $clientObj->passport->place_of_issue = ($dependent->latest_passport) ? $principal->latest_passport->PLACE_OF_ISSUE : "N/A";
         }
 
         $data->client = $clientObj;
