@@ -128,9 +128,13 @@ class PrincipalController extends Controller
 
         $inputData['ISSUE_DATE'] = date('Y-m-d', strtotime($inputData['ISSUE_DATE']));
         $inputData['EXPIRY_DATE'] = date('Y-m-d', strtotime($inputData['EXPIRY_DATE']));
-        $data = \App\Models\PrincipalDependentPassport::firstOrNew($inputData);
 
-        return $data->save();
+        $data = \App\Models\PrincipalDependentPassport::firstOrNew($inputData);
+        $res = $data->save();
+
+        if($res == 1){
+            return $inputData;
+        }
     }
 
     function add(Request $request){

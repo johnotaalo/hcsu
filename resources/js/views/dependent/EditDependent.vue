@@ -206,7 +206,7 @@
 			addPassport(){
 				this.modal.passport.post(`/data/dependent/passport/add/${this.dependent_id}`)
 				.then(res => {
-					
+					this.getData()
 				})
 			},
 
