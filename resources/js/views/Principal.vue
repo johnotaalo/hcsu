@@ -83,7 +83,7 @@
 							})
 							.catch(function (e) {
 								console.log('error', e);
-							});
+							}.bind(this));
 						}
 					}
 				},
