@@ -23,8 +23,9 @@
 			</div>
 			<div class="card-body">
 				<!-- <div class="col-md-12"> -->
+					<!-- :url="`${baseUrl}/api/principal/`" -->
 					<v-server-table
-					:url="`${baseUrl}/api/principal/`"
+					
 					:columns="principal.columns"
 					:options="principal.options"
 					size="sm">
@@ -83,6 +84,9 @@
 							.catch(function (e) {
 								console.log('error', e);
 							});
+						},
+						responseAdapter: (response) => {
+							console.log(response)
 						}
 					}
 				},
