@@ -168,19 +168,19 @@
 
 									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-passport><i class="fe fe-plus mr-1"></i>Add Passport</b-button>
 									<b-table :fields="passports.table.fields" :items="principal.passports">
-										<template slot="PASSPORT_TYPE" slot-scope="data">
+										<template v-slot:cell(PASSPORT_TYPE)="data">
 											{{ data.item.type.PPT_TYPE }}
 										</template>
 
-										<template slot="ISSUE_DATE" slot-scope="data">
+										<template v-slot:cell(ISSUE_DATE)="data">
 											{{ data.item.ISSUE_DATE | moment("MMMM Do, YYYY") }}
 										</template>
 
-										<template slot="EXPIRY_DATE" slot-scope="data">
+										<template v-slot:cell(EXPIRY_DATE)="data">
 											{{ data.item.EXPIRY_DATE | moment("MMMM Do, YYYY") }}
 										</template>
 
-										<template slot="ACTIONS" slot-scope="row">
+										<template v-slot:cell(ACTIONS)="row">
 											<span>
 											<b-button variant = "info" size="sm" @click="editPassport(row.index)" v-b-modal.modal-passport><i class="fe fe-edit mr-1"></i>Edit</b-button>
 											<b-button variant = "danger" size="sm" @click="removePassport(row.index)"><i class="fe fe-trash mr-1"></i>Remove</b-button>
@@ -195,24 +195,24 @@
 									</template>
 									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-contract><i class="fe fe-plus mr-1"></i>Add Contract</b-button>
 									<b-table :fields="contracts.table.fields" :items="principal.contracts">
-										<template slot="AGENCY" slot-scope="data">
+										<template v-slot:cell(AGENCY)="data">
 											<span v-if="data.item.contract_agency">{{ data.item.contract_agency.ACRONYM }}</span>
 											<span v-else></span>
 										</template>
 
-										<template slot = "CONTRACT_TYPE" slot-scope ="data">
+										<template v-slot:cell(CONTRACT_TYPE)="data">
 											<span v-if="data.item.type">{{ data.item.type.C_TYPE }}</span>
 										</template>
 
-										<template slot = "GRADE" slot-scope ="data">
+										<template v-slot:cell(GRADE)="data">
 											<span v-if="data.item.renewals.grade">{{ data.item.renewals.grade.GRADE }}</span>
 										</template>
 
-										<template slot="DURATION" slot-scope="data">
+										<template v-slot:cell(DURATION)="data">
 											<span v-if="data.item.renewals">{{ data.item.renewals.START_DATE | moment("DD/MM/YYYY") }} to {{ data.item.renewals.END_DATE | moment("DD/MM/YYYY") }}</span>
 										</template>
 
-										<template slot="ACTIONS" slot-scope="row">
+										<template v-slot:cell(ACTIONS)="row">
 											<span>
 												<b-button variant="primary" size="sm" @click="editContract(row.index)" v-b-modal.modal-contract><i class = "fe fe-edit mr-1"></i>Edit</b-button>
 												<b-button variant="danger" size="sm" @click="removeContract(row.index)"><i class = "fe fe-trash mr-1"></i>Delete</b-button>
@@ -227,23 +227,23 @@
 										<i class="fe fe-users mr-2"></i>Dependents <b-badge variant="warning">{{ principal.dependents.length }}</b-badge>
 									</template>
 									<b-table :fields="dependents.table.fields" :items="principal.dependents">
-										<template slot="IMAGE" slot-scope="data">
+										<template v-slot:cell(IMAGE)="data">
 											<b-img width="50" height="50" rounded="circle" alt="Circle image" :src="data.item.image_link" />
 										</template>
 
-										<template slot = "NAME" slot-scope="data">
+										<template v-slot:cell(NAME)="data">
 											{{ data.item.LAST_NAME }}, {{ data.item.OTHER_NAMES }}
 										</template>
 
-										<template slot="DATE_OF_BIRTH" slot-scope="data">
+										<template v-slot:cell(DATE_OF_BIRTH)="data">
 											{{ data.item.DATE_OF_BIRTH | moment("MMMM Do, YYYY") }}
 										</template>
 
-										<template slot = "RELATIONSHIP" slot-scope="data">
+										<template v-slot:cell(RELATIONSHIP)="data">
 											{{ data.item.relationship.RELATIONSHIP }}
 										</template>
 
-										<template slot = "ACTIONS" slot-scope="row">
+										<template v-slot:cell(ACTIONS)="row">
 											<div class="dropdown mr-3">
 												<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButtonTwo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												Actions

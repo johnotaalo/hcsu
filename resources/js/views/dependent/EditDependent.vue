@@ -78,7 +78,7 @@
 						<b-tab title="Passports">
 							<b-button variant="primary" class="mb-2" size="sm" v-b-modal.add-passport-modal>Add Passport</b-button>
 							<b-table :fields="table.fields" :items="dependent.passports" show-empty>
-								<template slot="actions" slot-scope="data">
+								<template v-slot:cell(actions)="data">
 									<b-button size="sm" variant="primary" @click="openEditPassportModal(data.index)" v-b-modal.add-passport-modal>Edit</b-button>
 									<b-button size="sm" variant="danger" @click="removePassport(data.index)">Remove</b-button>
 								</template>

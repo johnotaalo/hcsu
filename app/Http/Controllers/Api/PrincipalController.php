@@ -149,6 +149,12 @@ class PrincipalController extends Controller
         return ['status' => $res];
     }
 
+    function deleteDependentPassport(Request $request){
+        $passport_id = $request->passport_id;
+
+        return ['status' => \App\Models\PrincipalDependentPassport::destroy($passport_id)];
+    }
+
     function add(Request $request){
         $case_no = ($request->query('case_no')) ? $request->query('case_no') : "";
         // echo $case_no;die;
