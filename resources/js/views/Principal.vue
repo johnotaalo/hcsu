@@ -84,9 +84,6 @@
 							.catch(function (e) {
 								console.log('error', e);
 							});
-						},
-						responseAdapter: (response) => {
-							console.log(response)
 						}
 					}
 				},
