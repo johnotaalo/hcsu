@@ -263,7 +263,7 @@ Vue.component(
 	 			{
 	 				path: 'normal',
 	 				component: NormalVAT,
-	 				name: 'normal-vat'
+	 				name: 'normal-vat-data'
 	 			}
 	 		]
 	 	},

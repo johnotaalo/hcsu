@@ -77,14 +77,19 @@
 
 						<b-tab title="Passports">
 							<b-button variant="primary" class="mb-2" size="sm" v-b-modal.add-passport-modal>Add Passport</b-button>
-							<b-table :fields="table.fields" :items="dependent.passports" show-empty></b-table>
+							<b-table :fields="table.fields" :items="dependent.passports" show-empty>
+								<template slot="actions" slot-scope="data">
+									<b-button size="sm" variant="primary" @click="openEditPassportModal(data.index)" v-b-modal.add-passport-modal>Edit</b-button>
+									<b-button size="sm" variant="danger" @click="removePassport(data.index)">Remove</b-button>
+								</template>
+							</b-table>
 						</b-tab>
 					</b-tabs>
 				</b-card>
 			</div>
 		</div>
 
-		<b-modal id="add-passport-modal" ref="add-passport-modal" title="Add Passport" @ok="addPassport" @cancel="cancelPassportModal">
+		<b-modal id="add-passport-modal" ref="add-passport-modal" title="Add Passport" @ok="addPassport" @cancel="cancelPassportModal" @hidden="clearModal">
 			<b-form-group label= "Passport No">
 				<b-form-input v-model="modal.passport.PASSPORT_NO" />
 			</b-form-group>
@@ -94,7 +99,7 @@
 			</b-form-group>
 
 			<b-form-group label= "Expiry Date">
-				<datetime v-model="modal.passport.EXPIRY_DATE" type="date" input-id="modal-passport-issue-date" input-class="form-control" :auto="dateAutoProp"/>
+				<datetime v-model="modal.passport.EXPIRY_DATE" type="date" input-id="modal-passport-expiry-date" input-class="form-control" :auto="dateAutoProp"/>
 			</b-form-group>
 
 			<b-form-group label= "Place of Issue">
@@ -122,6 +127,8 @@
 
 					}
 				}),
+
+				editPassportIndex: -1,
 
 				modal: {
 					passport: new Form({
@@ -153,7 +160,7 @@
 						'EXPIRY_DATE',
 						'PLACE_OF_ISSUE',
 						'COUNTRY_OF_ISSUE',
-						'ACTIONS'
+						{ key: 'actions', label: 'ACTIONS' }
 					]
 				}
 			}
@@ -204,14 +211,65 @@
 			},
 
 			addPassport(){
-				this.modal.passport.post(`/data/dependent/passport/add/${this.dependent_id}`)
+				if(this.editPassportIndex == -1){
+					this.modal.passport.post(`/data/dependent/passport/add/${this.dependent_id}`)
+					.then(res => {
+						this.getData()
+					})
+				}else{
+					var passport = this.dependent.passports[this.editPassportIndex]
+
+					this.modal.passport.post(`/data/dependent/passport/edit/${passport.ID}`)
+					.then(res => {
+						this.getData()
+					})
+				}
+			},
+
+			openEditPassportModal(idx){
+				var passport = this.dependent.passports[idx]
+				this.modal.passport.PASSPORT_NO = passport.PASSPORT_NO
+				this.modal.passport.ISSUE_DATE = passport.ISSUE_DATE
+				this.modal.passport.EXPIRY_DATE = passport.EXPIRY_DATE
+				this.modal.passport.PLACE_OF_ISSUE = passport.PLACE_OF_ISSUE
+				this.modal.passport.COUNTRY_OF_ISSUE = passport.COUNTRY_OF_ISSUE
+				this.editPassportIndex = idx
+			},
+
+			removePassport(idx){
+				this.$swal({
+					title: "Delete Passport?",
+					text: "This action cannot be undone",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willDelete) => {
+					if (willDelete) {
+						this.proceedDelete(idx)
+					}
+				});
+			},
+
+			proceedDelete(idx){
+				var passport = this.dependent.passports[idx]
+				axios.delete(`/api/data/dependent/passport/delete/${passport.ID}`)
 				.then(res => {
 					this.getData()
 				})
 			},
 
-			cancelPassportModal(){
+			clearModal(){
+				this.modal.passport.PASSPORT_NO = ""
+				this.modal.passport.ISSUE_DATE = ""
+				this.modal.passport.EXPIRY_DATE = ""
+				this.modal.passport.PLACE_OF_ISSUE = ""
+				this.modal.passport.COUNTRY_OF_ISSUE = ""
+				this.editPassportIndex = -1
+			},
 
+			cancelPassportModal(){
+				this.clearModal()
 			}
 		}
 	}

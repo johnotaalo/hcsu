@@ -148,6 +148,7 @@ Route::prefix('data')->group(function(){
 		Route::get('/get/{host_country_id}', 'Api\PrincipalController@getDependent');
 		Route::post('/update/{host_country_id}', 'Api\PrincipalController@updateDependent');
 		Route::post('/passport/add/{host_country_id}', 'Api\PrincipalController@addDependentPassport');
+		Route::post('/passport/edit/{passport_id}', 'Api\PrincipalController@editDependentPassport');
 	});
 
 	Route::prefix('processes')->group(function(){

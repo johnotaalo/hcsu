@@ -137,6 +137,18 @@ class PrincipalController extends Controller
         }
     }
 
+    function editDependentPassport(Request $request){
+        $passport_id = $request->passport_id;
+        $inputData = $request->all();
+
+        $inputData['ISSUE_DATE'] = date('Y-m-d', strtotime($inputData['ISSUE_DATE']));
+        $inputData['EXPIRY_DATE'] = date('Y-m-d', strtotime($inputData['EXPIRY_DATE']));
+
+        $res = \App\Models\PrincipalDependentPassport::find($passport_id)->update($inputData);
+
+        return ['status' => $res];
+    }
+
     function add(Request $request){
         $case_no = ($request->query('case_no')) ? $request->query('case_no') : "";
         // echo $case_no;die;
