@@ -39,12 +39,12 @@ class PrincipalController extends Controller
             $queryBuilder->where('LAST_NAME', 'LIKE', "%{$searchQueries}%");
             $queryBuilder->orWhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
             $queryBuilder->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$searchQueries}%");
-            $queryBuilder->orWhereHas('passports', function(Builder $query) use ($searchQueries){
-                $query->where('PASSPORT_NO', 'LIKE', "%{$searchQueries}%");
-            });
-            $queryBuilder->orWhereHas('diplomaticCards', function(Builder $query) use ($searchQueries){
-                $query->where('DIP_ID_NO', 'LIKE', "%{$searchQueries}%");
-            });
+            // $queryBuilder->orWhereHas('passports', function(Builder $query) use ($searchQueries){
+            //     $query->where('PASSPORT_NO', 'LIKE', "%{$searchQueries}%");
+            // });
+            // $queryBuilder->orWhereHas('diplomaticCards', function(Builder $query) use ($searchQueries){
+            //     $query->where('DIP_ID_NO', 'LIKE', "%{$searchQueries}%");
+            // });
         }
 
         $count = $queryBuilder->count();
