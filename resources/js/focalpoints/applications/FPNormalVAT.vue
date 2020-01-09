@@ -55,7 +55,7 @@
 				</div>
 			</div>
 			<div class="table-responsive">
-				<v-server-table url="/api/focal-points/vat/search/"
+				<v-server-table url="/api/focal-points/vat/search"
 				ref="uploadedVATTable"
 				:columns="table.columns"
 				:options="table.options"
