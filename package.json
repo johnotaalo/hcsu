@@ -38,6 +38,7 @@
         "bulma": "^0.7.5",
         "css-element-queries": "^1.2.3",
         "es6-promise": "^4.2.8",
+        "laravel-vue-datatable": "^0.5.1",
         "luxon": "^1.21.3",
         "moment": "^2.24.0",
         "v-calendar": "^0.9.7",

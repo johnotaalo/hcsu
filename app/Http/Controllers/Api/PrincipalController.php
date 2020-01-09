@@ -12,10 +12,28 @@ use App\Models\PrincipalPassport;
 use App\Models\PrincipalContract;
 use App\Models\PrincipalContractRenewal;
 
+use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
+
 use Illuminate\Support\Facades\Storage;
 
 class PrincipalController extends Controller
 {
+    function getPrincipalOld(Request $request){
+        $length = $request->input('length');
+        $orderBy = $request->input('column'); //Index
+        $orderByDir = $request->input('dir', 'asc');
+        $searchValue = $request->input('search');
+
+        $data = Principal::select('IMAGE', 'HOST_COUNTRY_ID', 'LAST_NAME', 'OTHER_NAMES', 'EMAIL', 'MOBILE_NO', 'OFFICE_NO')
+                                    ->where('LAST_NAME', 'LIKE', "%{$searchValue}%")
+                                    ->orWhere('OTHER_NAMES', 'LIKE', "%{$searchValue}%")
+                                    ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$searchValue}%")
+                                    ->orderBy($orderBy, $orderByDir)
+                                    ->paginate($length);
+
+        return new DataTableCollectionResource($data);;
+    }
+
     function getPrincipal(Request $request){
     	$searchQueries = $request->get('query');
         $limit = $request->get('limit');

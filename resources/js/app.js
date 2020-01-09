@@ -31,6 +31,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'vue-datetime/dist/vue-datetime.css'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+
+import DataTable from 'laravel-vue-datatable';
+
 require('vue-toastr/src/vue-toastr.scss')
 
 
@@ -47,6 +50,7 @@ Vue.use(Notifications)
 Vue.use(Vuelidate)
 Vue.use(VuePluralize)
 Vue.use(VuePaginate)
+Vue.use(DataTable)
 
 library.add({faCoffee, faCogs, faMoneyBill, faUserFriends, faPen, faEye })
 

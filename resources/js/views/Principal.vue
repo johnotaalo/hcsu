@@ -26,7 +26,7 @@
 					<!-- :url="`${baseUrl}/api/principal/`" -->
 					<v-server-table
 					
-					:columns="principal.columns"
+					:columns="serverColumns"
 					:options="principal.options"
 					size="sm">
 						<template slot="IMAGE" slot-scope="data">
@@ -39,13 +39,18 @@
 							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }">View</router-link> 
 						</template>
 					</v-server-table>
+
+					<!-- <data-table :url="`${baseUrl}/api/principal/`" :per-page="principal.options.perPageValues" :columns="principal.columns" /> -->
 				<!-- </div> -->
 			</div>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
+	import PrincipalImageComponent from '../components/principal/PrincipalImageComponent'
+	import PrincipalActionsComponent from '../components/principal/PrincipalActionsComponent'
 	export default {
+		components: { PrincipalImageComponent, PrincipalActionsComponent },
 		data(){
 			return {
 				baseUrl: window.Laravel.baseUrl,
@@ -53,7 +58,47 @@
 					principalImageProps: { blank: false, blankColor: '#777', width: 40, height: 40, class: 'm1' }
 				},
 				principal: {
-					columns: ["IMAGE", "host_country_id", "last_name", "other_names", "email_address", "actions"],
+					columns: [
+						{
+							label: "",
+							name: "IMAGE",
+							filterable: false,
+							component: PrincipalImageComponent
+						}, 
+						{
+							label: "HOST COUNTRY ID",
+							name: "HOST_COUNTRY_ID",
+							filterable: true,
+							orderable: true
+						}, 
+						{
+							label: "LAST NAME",
+							name: "LAST_NAME",
+							filterable: true,
+							orderable: true
+						}, 
+						{
+							label: "OTHER NAMES",
+							name: "OTHER_NAMES",
+							filterable: true,
+							orderable: true
+						}, 
+						{
+							label: "EMAIL",
+							name: "EMAIL",
+							filterable: true,
+							orderable: true
+						}, 
+						{
+							label: "",
+							name: "View",
+							filterable: false,
+							orderable: false,
+							event: "click",
+							component: PrincipalActionsComponent,
+							handler: this.viewPrincipal
+						}
+					],
 					options: {
 						perPage: 20,
 						perPageValues: [10, 20, 50, 100],
@@ -64,7 +109,7 @@
 							agency: 'not_mobile',
 							actions: 'not_mobile'
 						},
-						columnsDropdown: true,
+						columnsDropdown: false,
 						sortIcon: {
 							base: 'icon',
 							up: 'icon-sort-up',
@@ -78,7 +123,7 @@
 
 						},
 						requestFunction: (data) => {
-							return axios.get(`${this.baseUrl}/api/principal/`, {
+							return axios.get(`${this.baseUrl}/api/principal`, {
 								params: data
 							})
 							.catch(function (e) {
@@ -126,6 +171,23 @@
 		computed: {
 			rows() {
 				return this.items.length;
+			},
+			serverColumns(){
+				return _.map(this.principal.columns, (o) => {
+					if (o.name == "IMAGE") {
+						return o.name
+					}else if(o.name == "EMAIL"){
+						return "email_address"
+					}else if(o.name == "View"){
+						return "actions"
+					}
+					return o.name.toLowerCase()
+				})
+			}
+		},
+		methods: {
+			viewPrincipal(data){
+				console.log(data)
 			}
 		}
 	}

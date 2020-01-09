@@ -177,7 +177,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
-
+        JamesDordoy\LaravelVueDatatable\Providers\LaravelVueDatatableServiceProvider::class,
         // Custom Helpers
         App\Providers\ProcessmakerServiceProvider::class,
         // App\Providers\FocalPointPasswordResetServiceProvider::class,
