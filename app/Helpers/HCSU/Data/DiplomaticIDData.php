@@ -54,6 +54,7 @@ class DiplomaticIDData{
 
 
 		$data->client = $clientObj;
+		$data->dipData = $dipidData;
         $data->case_no = $case_no;
         $data->ref = $dipidData->NV_SERIAL_NO;
         $data->date = date('F d, Y');

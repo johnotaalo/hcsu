@@ -144,6 +144,12 @@ class NoteVerbal {
 					$body .= str_pad($this->data->client->name, 40) . str_pad($this->data->client->nationality, 25) . ucwords($this->data->client->relationship) . "\r";
 				}
 				$body .= "\r";
+
+				if($this->data->dipData->NV_COMMENTS){
+					$period = (substr($this->data->dipData->NV_COMMENTS, -1) == ".") ? "" : ".";
+					$body .= "{$this->data->dipData->NV_COMMENTS}{$period}\r\r";
+				}
+
 				if($this->data->type == "new")
 					$body .= "The Ministry's assistance in issuance of a Diplomatic Identity Card will be highly appreciated.";
 				else
