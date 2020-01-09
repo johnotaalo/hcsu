@@ -10,10 +10,15 @@
 			<div class="card-header">
 				<div class="row align-items-center">
 					<div class="col">
-						<!-- Title -->
-						<h4 class="card-header-title">
-						Principal
-						</h4>
+						<form class="row align-items-center">
+							<div class="col-auto pr-0">
+								<span class="fe fe-search text-muted"></span>
+							</div>
+
+							<div class="col">
+								<b-input type="search" class="form-control form-control-flush search" v-model = "searchTerm" placeholder="Search" v-on:keyup="applySearchFilter(searchTerm)"/>
+							</div>
+						</form>
 
 					</div>
 					<div class="col-auto">
@@ -21,18 +26,18 @@
 					</div>
 				</div>
 			</div>
-			<div class="card-body">
+			<!-- <div class="card-body"> -->
 				<!-- <div class="col-md-12"> -->
 					<!-- :url="`${baseUrl}/api/principal/`" -->
 					<v-server-table
-					
+					class="table-sm table-nowrap card-table"
 					:columns="serverColumns"
 					:options="principal.options"
 					size="sm">
 						<template slot="IMAGE" slot-scope="data">
 							<center>
 								<b-img v-if="data.row.image !='' && data.row.image != '/storage/'" v-bind="options.principalImageProps" rounded="circle" :src="data.row.image"></b-img>
-								<b-img v-else width="50" height="50" rounded="circle" alt="Circle image" src="/images/no_avatar.svg"></b-img>
+								<b-img v-else width="40" height="40" rounded="circle" alt="Circle image" src="/images/no_avatar.svg"></b-img>
 							</center>
 						</template>
 						<template slot="actions" slot-scope="data">
@@ -42,18 +47,23 @@
 
 					<!-- <data-table :url="`${baseUrl}/api/principal/`" :per-page="principal.options.perPageValues" :columns="principal.columns" /> -->
 				<!-- </div> -->
-			</div>
+			<!-- </div> -->
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
 	import PrincipalImageComponent from '../components/principal/PrincipalImageComponent'
 	import PrincipalActionsComponent from '../components/principal/PrincipalActionsComponent'
+
+	import VueTables from 'vue-tables-2'
+	const Event = VueTables.Event
+
 	export default {
 		components: { PrincipalImageComponent, PrincipalActionsComponent },
 		data(){
 			return {
 				baseUrl: window.Laravel.baseUrl,
+				searchTerm: "",
 				options: {
 					principalImageProps: { blank: false, blankColor: '#777', width: 40, height: 40, class: 'm1' }
 				},
@@ -100,8 +110,10 @@
 						}
 					],
 					options: {
-						perPage: 20,
-						perPageValues: [10, 20, 50, 100],
+						perPage: 50,
+						perPageValues: [],
+						filterable: false,
+						customFilters: ['normalSearch'],
 						columnsDisplay: {
 							last_name: 'not_mobile',
 							other_names: 'not_mobile',
@@ -188,6 +200,9 @@
 		methods: {
 			viewPrincipal(data){
 				console.log(data)
+			},
+			applySearchFilter: function(term){
+				Event.$emit('vue-tables.filter::normalSearch', term);
 			}
 		}
 	}

@@ -43,12 +43,31 @@
 						</template>
 
 						<template slot="option" slot-scope="option">
-							<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
+							<div class = "row align-items-center">
+								<div class="col-auto">
+									<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>
+								</div>
+								<div class="col ml-n2">
+									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+								</div>
+							</div>
 						</template>
 
 						<template slot="selected-option" slot-scope="option">
 							<span v-if="option.LAST_NAME">
-								<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
+								<div class = "row align-items-center">
+								<div class="col-auto">
+									<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>
+								</div>
+								<div class="col ml-n2">
+									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+									<span class="card-text">
+										<span>Organization (<span v-if="option.latest_contract">{{ option.latest_contract.ACRONYM }}</span><span v-else>N/A</span>)</span>, 
+										<span>Latest Passport (<span v-if="option.latest_passport">{{ option.latest_passport.PASSPORT_NO }}</span><span v-else>N/A</span>)</span>, 
+										<span>Latest DIP ID (<span v-if="option.latest_diplomatic_card">{{ option.latest_diplomatic_card.DIP_ID_NO }}</span><span v-else>N/A</span>)</span>
+									</span>
+								</div>
+							</div>
 							</span>
 						</template>
 					</v-select>
@@ -92,6 +111,10 @@
 
 			<div v-if="host_country_id != 0" class="mt-5">
 				<center><button class="btn btn-primary" v-on:click="proceedClient" id = "proceed-button">Proceed with selected client</button></center>
+
+				<div v-if="clientType == 'dependent' || clientType == 'staff-member'">
+					
+				</div>
 			</div>
 		</b-card>
 	</div>

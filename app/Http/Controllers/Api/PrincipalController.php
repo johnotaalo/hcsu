@@ -15,11 +15,12 @@ use App\Models\PrincipalContractRenewal;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class PrincipalController extends Controller
 {
     function getPrincipal(Request $request){
-    	$searchQueries = $request->get('query');
+    	$searchQueries = $request->get('normalSearch');
         $limit = $request->get('limit');
         $page = $request->get('page');
         $ascending = $request->get('ascending');
@@ -38,6 +39,12 @@ class PrincipalController extends Controller
             $queryBuilder->where('LAST_NAME', 'LIKE', "%{$searchQueries}%");
             $queryBuilder->orWhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
             $queryBuilder->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$searchQueries}%");
+            $queryBuilder->orWhereHas('passports', function(Builder $query) use ($searchQueries){
+                $query->where('PASSPORT_NO', 'LIKE', "%{$searchQueries}%");
+            });
+            $queryBuilder->orWhereHas('diplomaticCards', function(Builder $query) use ($searchQueries){
+                $query->where('DIP_ID_NO', 'LIKE', "%{$searchQueries}%");
+            });
         }
 
         $count = $queryBuilder->count();
@@ -86,6 +93,12 @@ class PrincipalController extends Controller
                 ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
                 ->orWhere('PIN', 'LIKE', "%{$query}%")
                 ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
+                ->orWhereHas('passports', function(Builder $q) use ($query){
+                    $q->where('PASSPORT_NO', 'LIKE', "%{$query}%");
+                })
+                ->orWhereHas('diplomaticCards', function(Builder $q) use ($query){
+                    $q->where('DIP_ID_NO', 'LIKE', "%{$query}%");
+                })
                 ->limit(20)
                 ->get();
     }
