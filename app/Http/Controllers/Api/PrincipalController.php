@@ -93,12 +93,12 @@ class PrincipalController extends Controller
                 ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
                 ->orWhere('PIN', 'LIKE', "%{$query}%")
                 ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
-                ->orWhereHas('passports', function(Builder $q) use ($query){
-                    $q->where('PASSPORT_NO', 'LIKE', "%{$query}%");
-                })
-                ->orWhereHas('diplomaticCards', function(Builder $q) use ($query){
-                    $q->where('DIP_ID_NO', 'LIKE', "%{$query}%");
-                })
+                // ->orWhereHas('passports', function(Builder $q) use ($query){
+                //     $q->where('PASSPORT_NO', 'LIKE', "%{$query}%");
+                // })
+                // ->orWhereHas('diplomaticCards', function(Builder $q) use ($query){
+                //     $q->where('DIP_ID_NO', 'LIKE', "%{$query}%");
+                // })
                 ->limit(20)
                 ->get();
     }
