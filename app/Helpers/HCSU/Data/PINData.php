@@ -54,7 +54,7 @@ class PINData{
                   $clientObj->organization = $mission;
                   $clientObj->contract_type = $contract->C_TYPE;
                   $clientObj->nationality = $dependent->COUNTRY;
-                  $clientObj->passport = $dependent->PASSPORT_NO;
+                  $clientObj->passport = ($dependent->latest_passport) ? $dependent->latest_passport->PASSPORT_NO : "N/A";;
             }
 
             $data->client = $clientObj;
