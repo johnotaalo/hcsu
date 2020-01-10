@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 class Export extends Controller
 {
     function exportVAT(Request $request){
-    	$vat = \App\Models\VAT::all();
+    	$vat = \App\Models\VAT::limit(500)->get();
 
     	$vatList = $vat->map(function($item){
     		$vatData = \App\Helpers\HCSU\Data\VATData::get($item->CASE_NO);
