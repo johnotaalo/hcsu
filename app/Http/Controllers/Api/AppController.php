@@ -500,4 +500,22 @@ ORDER BY
 
         return $vat_data;
     }
+
+    function ipmisSubprocesses(){
+        $applications = \App\Models\PM\SubApplication::all();
+        $data = $applications->map(function($sub_application){
+            return [
+                'parent_case'       =>  $sub_application->parent->APP_NUMBER,
+                'subprocess_case'   =>  $sub_application->application->APP_NUMBER,
+                'case_title'        =>  $sub_application->parent->APP_TITLE,
+                'process'           =>  $sub_application->parent->process->CON_VALUE,
+                'creator'           =>  "{$sub_application->parent->creator->USR_FIRSTNAME} {$sub_application->parent->creator->USR_LASTNAME}"
+            ];
+        });
+        
+        return [
+            'count' =>  count($data),
+            'data'  =>  $data
+        ];
+    }
 }

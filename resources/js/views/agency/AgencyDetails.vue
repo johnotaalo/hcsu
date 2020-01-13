@@ -3,6 +3,12 @@
 		<div class="row">
 			<div class="col-md">
 				<legend>Agency Details</legend>
+
+				<div class="form-group">
+					<b-img class ="avatar-img border border-4 border-body" style="width: 100px;height: 100px;background: #FCE4EC;" v-bind="options.imageProps" :src="agencyLogoURL"/>
+					<input type="file" ref="agencyFile" name="agencyFile" @change="onAgencyFileChange($event.target.name, $event.target.files)" style="display:none">
+					<b-button variant="primary" size="sm" @click="$refs.agencyFile.click()">Upload Logo</b-button>
+				</div>
 				<div class="form-group">
 					<label for="agency_name">Agency Name</label>
 					<b-form-input placeholder="Enter Agency Name" v-model="value.agency_name"></b-form-input>
@@ -86,11 +92,52 @@
 		name: "AgencyDetails",
 		data(){
 			return {
+				options: {
+					imageProps: { blank: true, blankColor: '#777', width: 100, height: 100, class: 'm1' }
+				}
+			}
+		},
+		created(){
+			this.value.image = {}
+			if (!this.value.image) {
+				this.value.image.url = ""
+			}
+		},
+		methods: {
+			onAgencyFileChange(fieldName, file){
+				const { maxSize } = this
+				let imageFile = file[0]
 
+				//check if user actually selected a file
+				if (file.length>0) {
+					let size = imageFile.size / maxSize / maxSize
+					if (!imageFile.type.match('image.*')) {
+						alert("Please choose an image file");
+					} else if (size>1) {
+						// check whether the size is greater than the size limit
+						alert('Your file is too big! Please select an image under 1MB')
+					} else {
+						// Append file into FormData & turn file into image URL
+						let formData = new FormData()
+						let imageURL = URL.createObjectURL(imageFile)
+						this.value.image = {}
+						this.value.image.url = imageURL
+						this.value.image.file = imageFile
+						this.value.image_link = imageURL
+						this.options.imageProps.blank = false
+					}
+				}
+			}
+		},
+		computed: {
+			agencyLogoURL(){
+				if(this.value.image.url){
+					return this.value.image.url
+				}
 			}
 		},
 		props: {
-			'value': { type: null, default: null },
+			'value': { type: Object, default: () => { return {} } },
 		}
 	}
 </script>

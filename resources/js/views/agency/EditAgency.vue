@@ -32,7 +32,8 @@
 						agency_postal_code: "",
 						agency_location: "",
 						agency_physical_address: "",
-						agency_hca: ""
+						agency_hca: "",
+						image: {}
 					},
 					focalPoints: []
 				})

@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<b-card no-body>
-			<b-tabs small card pills>
-				<b-tab  active>
+			<b-tabs small card>
+				<b-tab active>
 					<template v-slot:title>
-						Principal&nbsp;&nbsp;<span class="badge badge-success">0</span>
+						Principal&nbsp;&nbsp;<span class="badge badge-success">{{ $refs.pendingStaff.data.length }}</span>
 					</template>
 
 					<b-button variant="primary" size="sm" @click="importAllStaff()"><i class="fe fe-user-plus"></i>&nbsp;Import All</b-button>

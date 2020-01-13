@@ -160,6 +160,8 @@ Route::prefix('data')->group(function(){
 		Route::get('/', 'Api\AppController@getProcessList');
 		Route::get('/{process}/tasks', 'Api\AppController@getProcessTasks');
 		Route::get('/{process}/task/{task}/steps', 'Api\AppController@getTaskSteps');
+
+		Route::get('/ipmis', 'Api\AppController@ipmisSubprocesses');
 	});
 
 	Route::prefix('options')->group(function(){

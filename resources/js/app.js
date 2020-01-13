@@ -120,6 +120,8 @@ import PlatesOrder from './views/vehicle/plates/PlatesOrder'
 // Data
 import DataManagement from './views/data/DataManagement'
 
+import Subprocesses from './views/processes/Subprocesses'
+
 // Auth
 // import Login from './views/Login'
 
@@ -289,6 +291,11 @@ Vue.component(
 	 		path: '/data-management',
 	 		name: 'data-management',
 	 		component: DataManagement
+	 	},
+	 	{
+	 		path: '/subprocesses/ipmis',
+	 		name: "subprocesses-ipmis",
+	 		component: Subprocesses
 	 	}
  	]
  });
