@@ -138,7 +138,11 @@ Route::prefix('data')->group(function(){
 	});
 
 	Route::prefix('management')->group(function(){
+		Route::prefix('pending')->group(function(){
+			Route::get('principals', 'Api\DataController@pendingPrincipals');
+		});
 		Route::get('/import', 'Api\DataController@importData');
+		Route::get('/import/pending/staff/{record_id}', 'Api\DataController@importPendingStaff');
 		Route::get('/import/dependents/spouse', 'Api\DataController@importSpouseData');
 		Route::get('import/principal/nationalities', 'Api\DataController@importPrincipalNationalities');
 		Route::get('import/dependents/passports', 'Api\DataController@importDependentPassports');

@@ -15,7 +15,7 @@
 
 				<!-- Brand -->
 				<a class="navbar-brand mr-auto" href="index.html">
-					<img src="/img/unep.png" alt="..." class="navbar-brand-img">
+					<img src="/images/UNLOGOBW.jpg" alt="..." class="navbar-brand-img">
 				</a>
 
 				<!-- Form -->
@@ -95,6 +95,7 @@
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'agencies' }">Agencies</router-link></li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'vehicles' }">Vehicles</router-link></li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'data-management' }">Data</router-link></li>
+				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'settings' }">Settings</router-link></li>
 			</ul>
 
           </div>

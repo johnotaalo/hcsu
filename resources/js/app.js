@@ -102,6 +102,8 @@ import EditAgency from './views/agency/EditAgency'
 import Vehicles from './views/Vehicles'
 import SearchClient from './views/iframe/SearchClient'
 import SettingsIndex from './views/settings/SettingsIndex'
+import DocumentTemplates from './views/settings/DocumentTemplates'
+import DataMigration from './views/settings/DataMigration'
 import VAT from './views/vat/VAT'
 import BlanketVAT from './views/vat/BlanketVAT'
 // BlanketVATBatch
@@ -235,7 +237,19 @@ Vue.component(
 	 	{
 	 		path: '/settings',
 	 		name: 'settings',
-	 		component: SettingsIndex
+	 		component: SettingsIndex,
+	 		children: [
+	 			{
+	 				path: 'document/templates',
+	 				component: DocumentTemplates,
+	 				name: "settings-templates"
+	 			},
+	 			{
+	 				path: 'data/migration',
+	 				component: DataMigration,
+	 				name: "settings-migration"
+	 			}
+	 		]
 	 	},
 	 	{
 	 		path: '/vat',

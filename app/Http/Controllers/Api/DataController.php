@@ -98,7 +98,7 @@ class DataController extends Controller
       if($staffMember){
             $nationality = \App\Models\Country::where('name', 'LIKE', "%{$staffMember->nationality}%")->orWhere('official_name', 'LIKE', "%{$staffMember->nationality}%")->orWhere('pm_abbrev', 'LIKE', "%{$staffMember->nationality}%")->first();
             $nationality_id = ($nationality) ? $nationality->id : null;
-            echo $staffMember->last_name . " => {$staffMember->nationality} => " . $nationality_id . "<br/>";
+            // echo $staffMember->last_name . " => {$staffMember->nationality} => " . $nationality_id . "<br/>";
             $principal->PLACE_OF_BIRTH = $staffMember->place_of_birth;
             $principal->NATIONALITY = $nationality_id;
 
@@ -113,6 +113,7 @@ class DataController extends Controller
       // return $staffMember;
       // Principal Details
       $principal = new Principal();
+      $principal->HOST_COUNTRY_ID = strtotime(time());
       $principal->LAST_NAME = $staffMember->last_name;
       $principal->OTHER_NAMES = $staffMember->other_names;
       $principal->EMAIL = $staffMember->email_address;
@@ -137,6 +138,9 @@ class DataController extends Controller
       $host_country_id = $this->createHostCountryID($principal->ID);
       $principal->HOST_COUNTRY_ID = $host_country_id;
       $principal->save();
+
+      $pdata = Principal::where('HOST_COUNTRY_ID', $host_country_id)->first();
+      $this->updateStaffNationality($pdata);
 
       // Principal Contract Details
       $principalContracts = $staffMember->contracts->map(function($contract) use ($host_country_id){
@@ -203,7 +207,7 @@ class DataController extends Controller
       $principalArrivalDeparture->save();
     }
 
-    function createHostCountryID($new_id){
+    function createHostCountryID($new_id = null){
       return "10000000" + $new_id;
     }
 
@@ -294,5 +298,45 @@ class DataController extends Controller
         'relationships'   =>  \App\Models\Relationship::whereNotIn('RELATIONSHIP', ['Principal'])->get(),
         'nationalities'   =>  \App\Models\Country::all()
       ];
+    }
+
+    function pendingPrincipals(Request $request){
+      $searchQueries = $request->get('query');
+      $limit = $request->get('limit');
+      $page = $request->get('page');
+      $ascending = $request->get('ascending');
+      $byColumn = $request->get('byColumn');
+      $orderBy = $request->get('orderBy');
+
+      $ids = Principal::pluck('OLD_REF_ID')->toArray();
+      $queryBuilder =StaffMember::select('record_id', 'index_no', 'last_name', 'other_names', 'mission')->whereNotIn('record_id', $ids);
+
+      if($searchQueries){
+        $queryBuilder->where('last_name', 'LIKE', "%{$searchQueries}%");
+        $queryBuilder->orWhere('other_names', 'LIKE', "%{$searchQueries}%");
+        $queryBuilder->orWhere('index_no', 'LIKE', "%{$searchQueries}%");
+      }
+
+      $count = $queryBuilder->count();
+      $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+      $staff_members = $queryBuilder->get();
+      $cleanedData = [];
+
+      return [
+        'data'  => $staff_members,
+        'count' =>  $count
+      ];
+    }
+
+    function importPendingStaff(Request $request){
+      $principal = Principal::where('OLD_REF_ID', $request->record_id)->first();
+      if(!$principal){
+        $this->importStaffData($request->record_id);
+        $principal = Principal::where('OLD_REF_ID', $request->record_id)->first();
+        $this->updateStaffNationality($principal);
+        return ['status' => true, "message" => "{$principal->LAST_NAME}, {$principal->OTHER_NAMES} has successfully been imported with Host Country ID: {$principal->HOST_COUNTRY_ID}"];
+      }else{
+        return ['status' => false, 'message' => "{$principal->LAST_NAME}, {$principal->OTHER_NAMES} has already been imported with Host Country ID: {$principal->HOST_COUNTRY_ID}"];
+      }
     }
 }
