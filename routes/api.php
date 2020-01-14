@@ -167,6 +167,10 @@ Route::prefix('data')->group(function(){
 	Route::prefix('options')->group(function(){
 		Route::get('/dependent', 'Api\DataController@getDependentOptions');
 	});
+
+	Route::prefix('users')->group(function(){
+		Route::get('/', 'Api\AppController@getUsers');
+	});
 });
 
 Route::prefix('documents')->group(function(){

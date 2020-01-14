@@ -501,21 +501,54 @@ ORDER BY
         return $vat_data;
     }
 
-    function ipmisSubprocesses(){
-        $applications = \App\Models\PM\SubApplication::all();
-        $data = $applications->map(function($sub_application){
-            return [
-                'parent_case'       =>  $sub_application->parent->APP_NUMBER,
-                'subprocess_case'   =>  ($sub_application->application) ? $sub_application->application->APP_NUMBER : "N/A",
-                'case_title'        =>  $sub_application->parent->APP_TITLE,
-                'process'           =>  $sub_application->parent->process->CON_VALUE,
-                'creator'           =>  "{$sub_application->parent->creator->USR_FIRSTNAME} {$sub_application->parent->creator->USR_LASTNAME}"
-            ];
-        });
+    function getUsers(){
+        $users = \App\Models\PM\User::where('USR_STATUS', 'ACTIVE')->get();
+
+        return $users;
+    }
+
+    function ipmisSubprocesses(Request $request){
+        $filterSearch = json_decode($request->filterSearch);
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        
+        // $applications = \App\Models\PM\SubApplication::all();
+        $queryBuilder = \DB::connection('pm')->table('SUB_APPLICATION')->select(\DB::raw('parent.APP_NUMBER as parent_case, app.APP_NUMBER as subprocess_case, parent.APP_TITLE as case_title, content.CON_VALUE as process, concat(user.USR_LASTNAME, ", ", user.USR_FIRSTNAME) as creator'));
+        $queryBuilder = $queryBuilder->join('APPLICATION AS parent', 'SUB_APPLICATION.APP_PARENT', '=', 'parent.APP_UID')
+                        ->join('APPLICATION AS app', 'SUB_APPLICATION.APP_UID', '=', 'app.APP_UID')
+                        ->join('USERS AS user', 'user.USR_UID', '=', 'parent.APP_INIT_USER')
+                        ->join('CONTENT AS content', 'parent.PRO_UID', '=', 'content.CON_ID')
+                        ->where('content.CON_CATEGORY', "PRO_TITLE");
+
+        if($filterSearch){
+            $process = $filterSearch->process;
+            $creator = $filterSearch->creator;
+
+            if($process != ""){
+                $queryBuilder = $queryBuilder->where('parent.PRO_UID', $process->uid);
+            }
+            if(isset($creator->value)){
+                $queryBuilder = $queryBuilder->where('parent.APP_INIT_USER', $creator->value);
+            }
+        }
+
+        $count = $queryBuilder->count();
+        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+        $applications = $queryBuilder->get();
+        
+        // $data = $applications->map(function($sub_application){
+        //     return [
+        //         'parent_case'       =>  $sub_application->parent->APP_NUMBER,
+        //         'subprocess_case'   =>  ($sub_application->application) ? $sub_application->application->APP_NUMBER : "N/A",
+        //         'case_title'        =>  $sub_application->parent->APP_TITLE,
+        //         'process'           =>  $sub_application->parent->process->CON_VALUE,
+        //         'creator'           =>  "{$sub_application->parent->creator->USR_FIRSTNAME} {$sub_application->parent->creator->USR_LASTNAME}"
+        //     ];
+        // });
         
         return [
-            'count' =>  count($data),
-            'data'  =>  $data
+            'count' =>  $count,
+            'data'  =>  $applications
         ];
     }
 }
