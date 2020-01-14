@@ -16,8 +16,9 @@
 			return {
 				options: {
 					filterable: false,
+					perPageValues: []
 				},
-				columns: ['parent_case', 'subprocess_case', 'case_title', 'creator']
+				columns: ['parent_case', 'subprocess_case', 'case_title', 'process', 'creator']
 			}
 		}
 	}
