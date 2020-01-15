@@ -180,7 +180,7 @@ class PrincipalController extends Controller
         }
 
         $principal->LAST_NAME = strtoupper($request->input('lastName'));
-        $principal->OTHER_NAMES = ucwords(strtolower($request->input('otherNames')));
+        $principal->OTHER_NAMES = format_other_names($request->input('otherNames'));
         $principal->EMAIL = $request->input('email');
         $principal->MOBILE_NO = $request->input('mobileNo');
         $principal->OFFICE_NO = $request->input('officeNo');
@@ -301,7 +301,7 @@ class PrincipalController extends Controller
         }
 
         $principal->LAST_NAME = strtoupper($request->input('lastName'));
-        $principal->OTHER_NAMES = ucwords(strtolower($request->input('otherNames')));
+        $principal->OTHER_NAMES = format_other_names($request->input('otherNames'));
         $principal->EMAIL = $request->input('email');
         $principal->MOBILE_NO = $request->input('mobileNo');
         $principal->OFFICE_NO = $request->input('officeNo');

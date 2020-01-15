@@ -16,7 +16,7 @@ class WorkPermitExemptionData{
 		$principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
 		$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$caseData->HOST_COUNTRY_ID})"))->first();
 		$mission = $contract->ACRONYM;
-		$name = ucwords(strtolower($principal->OTHER_NAMES)) . " " . strtoupper($principal->LAST_NAME);
+		$name = format_other_names($principal->OTHER_NAMES) . " " . strtoupper($principal->LAST_NAME);
 		$client_name = $name;
 
 		$includedDependents = explode(',', $caseData->DEPENDENTS);

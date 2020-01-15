@@ -1,9 +1,9 @@
 <template>
 	<div>
 
-		<v-client-table :columns="columns" :data="suppliers" :options="options">
+		<v-client-table :columns="columns" :data="suppliers" :options="options" class="table-sm">
 			<div slot="afterFilter">
-				<b-button v-b-modal.manage-supplier>Add Supplier</b-button>
+				<b-button v-b-modal.manage-supplier variant="primary" size="sm">Add Supplier</b-button>
 			</div>
 			<template slot="#" slot-scope="props">
 				{{ props.index }}
@@ -20,7 +20,7 @@
 			</template>
 
 			<template slot="Actions" slot-scope="props">
-				
+				<b-button size="sm"></b-button>
 			</template>
 		</v-client-table>
 
@@ -76,8 +76,8 @@
 				suppliers: [],
 				columns: ['#', 'SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN', 'Actions'],
 				options: {
-					filterable: ['SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN'],
-					filterByColumn: true,
+					filterable: false,
+					perPageValues: []
 				},
 				modal: new Form({
 					'SUPPLIER_NAME': '',

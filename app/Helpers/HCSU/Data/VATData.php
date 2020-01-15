@@ -47,7 +47,7 @@ class VATData{
             $principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $vat_data->HOST_COUNTRY_ID)->first();
 
             // die($principal->current_arrival);
-            $name = strtoupper($principal->LAST_NAME). ", " . ucwords(strtolower($principal->OTHER_NAMES)) ;
+            $name = strtoupper($principal->LAST_NAME). ", " . format_other_names($principal->OTHER_NAMES) ;
             $client_name = $name;
             $name = $name . "; " . $contract->DESIGNATION;
             $mission = $contract->ACRONYM;
@@ -80,7 +80,7 @@ class VATData{
 
 			$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
 
-			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
+			$c_name = strtoupper($dependent->LAST_NAME). ", " . format_other_names($dependent->OTHER_NAMES) . " {$relationship} {$dependent->principal->fullname}";
 			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
             $mission= "";
             if ($dependent->principal->latest_contract) {

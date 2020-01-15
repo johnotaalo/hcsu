@@ -20,7 +20,7 @@ class DiplomaticIDData{
 
 			$mission = $contract->ACRONYM;
 
-			$name = ucwords(strtolower($principal->OTHER_NAMES)) . " " . strtoupper($principal->LAST_NAME);
+			$name = format_other_names($principal->OTHER_NAMES) . " " . strtoupper($principal->LAST_NAME);
 			$client_name = $name;
 
 			$clientObj->name = $client_name;

@@ -21,7 +21,7 @@ class BlanketVATData{
 
             $mission = $contract->ACRONYM;
 
-            $name = strtoupper($principal->LAST_NAME). ", " . ucwords(strtolower($principal->OTHER_NAMES)) ;
+            $name = strtoupper($principal->LAST_NAME). ", " . format_other_names($principal->OTHER_NAMES) ;
             $client_name = $name;
 
             $clientObj->name = $client_name;
@@ -45,7 +45,7 @@ class BlanketVATData{
 
 			$relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
 
-			$c_name = strtoupper($dependent->LAST_NAME). ", " . ucwords(strtolower($dependent->OTHER_NAMES)) . " {$relationship} {$dependent->principal->fullname}";
+			$c_name = strtoupper($dependent->LAST_NAME). ", " . format_other_names($dependent->OTHER_NAMES) . " {$relationship} {$dependent->principal->fullname}";
 			$name = "{$c_name}; {$dependent->principal->latest_contract->DESIGNATION}";
 			$mission = $dependent->principal->latest_contract->ACRONYM;
             $arrivalDate = ($dependent->principal->current_arrival) ? $dependent->principal->current_arrival->ARRIVAL : "N/A";

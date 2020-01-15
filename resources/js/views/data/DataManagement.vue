@@ -18,7 +18,7 @@
 		</div>
 
 		<b-card no-body>
-			<b-tabs pills card>
+			<b-tabs small card>
 				<b-tab title="V.A.T Suppliers" active>
 					<vat-suppliers></vat-suppliers>
 				</b-tab>
