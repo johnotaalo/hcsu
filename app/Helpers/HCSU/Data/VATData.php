@@ -99,13 +99,14 @@ class VATData{
 			$clientObj->arrival = $arrival;
 		}
 
-        $vatObj->supplierName = $vat_data->supplier->SUPPLIER_NAME;
+        $vatObj->supplierName      =  $vat_data->supplier->SUPPLIER_NAME;
         $vatObj->supplierAddress   =  $vat_data->supplier->SUPPLIER_ADDRESS;
         $vatObj->supplierVAT       =  $vat_data->supplier->PIN;
         $vatObj->goodsDescription  =  $goods;
         $vatObj->pfNo              =  $invoice_numbers;
         $vatObj->vatAmount         =  number_format($totalVAT, 2);
         $vatObj->pfDate            =  $pfDate;
+        $vatObj->status            =  $vat_data->application->APP_STATUS
 
         $data->case_no = $case_no;
         $data->ref = $vat_data->EXEMPTION_FORM_REF_NO;

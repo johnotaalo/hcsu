@@ -24,4 +24,8 @@ class VAT extends Model
     function supplier(){
     	return $this->hasOne(\App\Models\Supplier::class, 'ID', 'SUPPLIER_ID');
     }
+
+    function application(){
+        return $this->belongsTo(\App\Models\PM\Application::class, 'CASE_NO', 'APP_NUMBER');
+    }
 }
