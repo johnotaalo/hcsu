@@ -162,6 +162,7 @@ Route::prefix('data')->group(function(){
 		Route::get('/{process}/task/{task}/steps', 'Api\AppController@getTaskSteps');
 
 		Route::get('/ipmis', 'Api\AppController@ipmisSubprocesses');
+		Route::get('/ipmis-functionality', 'Api\AppController@ipmisSubprocesses');
 	});
 
 	Route::prefix('options')->group(function(){

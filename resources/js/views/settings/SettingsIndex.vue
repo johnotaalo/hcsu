@@ -27,6 +27,12 @@
 										</router-link>
 									</li>
 
+									<li class="nav-item">
+										<router-link class="nav-link" :to="{ name: 'settings-ipmis-functionality' }">
+											<i class="fe fe-globe"></i> IPMIS Functionality
+										</router-link>
+									</li>
+
 								</ul>
 
 							</div> <!-- / .navbar-collapse -->

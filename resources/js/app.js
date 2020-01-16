@@ -104,6 +104,7 @@ import SearchClient from './views/iframe/SearchClient'
 import SettingsIndex from './views/settings/SettingsIndex'
 import DocumentTemplates from './views/settings/DocumentTemplates'
 import DataMigration from './views/settings/DataMigration'
+import IPMISFunctionality from './views/settings/IPMISFunctionality'
 import VAT from './views/vat/VAT'
 import BlanketVAT from './views/vat/BlanketVAT'
 // BlanketVATBatch
@@ -121,6 +122,9 @@ import PlatesOrder from './views/vehicle/plates/PlatesOrder'
 import DataManagement from './views/data/DataManagement'
 
 import Subprocesses from './views/processes/Subprocesses'
+
+// Exports
+import VATListExport from './views/exports/VATListExport'
 
 // Auth
 // import Login from './views/Login'
@@ -237,6 +241,11 @@ Vue.component(
 	 		component: SearchClient
 	 	},
 	 	{
+	 		path: '/exports/vat-list',
+	 		name: 'export-vat-list',
+	 		component: VATListExport
+	 	},
+	 	{
 	 		path: '/settings',
 	 		name: 'settings',
 	 		component: SettingsIndex,
@@ -250,6 +259,11 @@ Vue.component(
 	 				path: 'data/migration',
 	 				component: DataMigration,
 	 				name: "settings-migration"
+	 			},
+	 			{
+	 				path: 'processmaker/ipmis/functionality',
+	 				component: IPMISFunctionality,
+	 				name: 'settings-ipmis-functionality'
 	 			}
 	 		]
 	 	},
