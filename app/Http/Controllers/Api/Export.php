@@ -1,18 +1,16 @@
 <?php
-
 namespace App\Http\Controllers\API;
-
+ini_set('max_execution_time', 500);
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class Export extends Controller
 {
     function exportVAT(Request $request){
-    	$vat = \App\Models\VAT::orderBy('CASE_NO','DESC')
-                ->whereHas('application', function($query){
-                    $query->where('APP_STATUS', 'TO_DO');
-                })
-                ->get();
+        $app_numbers = (\App\Models\PM\Application::where('APP_STATUS', 'TO_DO')->pluck('APP_NUMBER'))->toArray();
+    	$vatQuery = \App\Models\VAT::orderBy('CASE_NO','DESC')
+                ->whereIn('CASE_NO', $app_numbers);
+        $vat = $vatQuery->->get();
 
     	$vatList = $vat->map(function($item){
     		$vatData = \App\Helpers\HCSU\Data\VATData::get($item->CASE_NO);
@@ -28,8 +26,6 @@ class Export extends Controller
     			'AMOUNT'		=>	$vatData->vat->vatAmount
     		];
     	});
-
-        // dd($vatList);
 
     	$exportData = new \App\Exports\VATExport($vatList);
     	return \Excel::download($exportData, 'VAT LIST.xlsx');

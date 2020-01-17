@@ -106,7 +106,7 @@ class VATData{
         $vatObj->pfNo              =  $invoice_numbers;
         $vatObj->vatAmount         =  number_format($totalVAT, 2);
         $vatObj->pfDate            =  $pfDate;
-        $vatObj->status            =  $vat_data->application->APP_STATUS
+        $vatObj->status            =  $vat_data->application->APP_STATUS;
 
         $data->case_no = $case_no;
         $data->ref = $vat_data->EXEMPTION_FORM_REF_NO;

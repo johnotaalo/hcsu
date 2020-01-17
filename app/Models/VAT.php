@@ -9,7 +9,7 @@ class VAT extends Model
     protected $connection = "pm_data";
     protected $table = "VAT_01";
 
-    protected $appends = ["total_amount"];
+    protected $appends = ["total_amount", "application"];
 
     function invoices(){
     	return $this->hasMany('\App\Models\VATInvoice', 'REF_ID', 'UID');
@@ -25,7 +25,12 @@ class VAT extends Model
     	return $this->hasOne(\App\Models\Supplier::class, 'ID', 'SUPPLIER_ID');
     }
 
-    function application(){
-        return $this->belongsTo(\App\Models\PM\Application::class, 'CASE_NO', 'APP_NUMBER');
+    function getApplicationAttribute(){
+        $data = \DB::connection('pm')->table('APPLICATION')->where("APP_NUMBER", $this->attributes['CASE_NO'])->first();
+        if(!$data){
+            return null;
+        }
+        return $data;
+        // return $this->belongsTo(\App\Models\PM\Application::class, 'CASE_NO', 'APP_NUMBER');
     }
 }
