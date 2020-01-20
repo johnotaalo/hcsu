@@ -39,9 +39,22 @@
 					id: row.id
 				})
 
-				form.post(`/api/data/processes/ipmis/functionality/${row.id}`)
+				form.put(`/data/processes/ipmis/functionality/${row.id}`)
 				.then(res => {
-					console.log(res)
+					this.$notify({
+						group: 'foo',
+						title: 'Success',
+						text: res.message,
+						type: "success"
+					});
+				})
+				.catch(error => {
+					this.$notify({
+						group: 'foo',
+						title: 'Error',
+						text: error.message,
+						type: "error"
+					});
 				});
 			}
 		}

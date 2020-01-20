@@ -519,7 +519,16 @@ ORDER BY
     }
 
     function toggleIPMISFunctionality(Request $request){
-        dd($request->functional);
+        $functionality = \App\Models\IPMISFunctionality::find($request->id);
+
+        $functionality->IPMIS_FUNCTIONAL = ($request->functionality == "true") ? 1 : 0;
+
+        $updated = $functionality->save();
+
+        if($updated){
+            $connector = ($request->functionality == "true") ? "activated" : "deactivated";
+            return ['message' => "Successfully {$connector} IPMIS Functionality for {$functionality->PROCESS_NAME}"];
+        }
     }
 
     function ipmisSubprocesses(Request $request){

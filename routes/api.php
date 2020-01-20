@@ -163,7 +163,7 @@ Route::prefix('data')->group(function(){
 
 		Route::get('/ipmis', 'Api\AppController@ipmisSubprocesses');
 		Route::get('/ipmis/functionality', 'Api\AppController@ipmisFunctionality');
-		Route::post('/ipmis/functionality/{id}', 'Api\AppController@toggleIPMISFunctionality');
+		Route::put('/ipmis/functionality/{id}', 'Api\AppController@toggleIPMISFunctionality');
 	});
 
 	Route::prefix('options')->group(function(){

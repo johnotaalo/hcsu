@@ -116,62 +116,37 @@ class AgenciesController extends Controller
 	    		// dd($request->input('focalPoints'));
 	    		foreach($request->input('focalPoints') as $fp){
 	    			// if (!isset($fp['id'])) {
-	    				$username = $this->generateUsername($fp['other_names'], $fp['last_name'], $fp['index_no']);
-	    				$fpdata = [
-							"AGENCY_HOST_COUNTRY_ID"	=>	$request->agency_id,
-							"INDEX_NO"					=>	$fp['index_no'],
-							"LAST_NAME"					=>	$fp['last_name'],
-							"OTHER_NAMES"				=>	$fp['other_names'],
-							"EXTENSION"					=>	$fp['extension'],
-							"MOBILE_NO"					=>	$fp['mobile_no'],
-							"EMAIL"						=>	$fp['email_address'],
-							"USERNAME"					=>	$username,
-							"PASSWORD"					=>	str_random(20)
-						];
+    				$username = $this->generateUsername($fp['other_names'], $fp['last_name'], $fp['index_no']);
+    				$fpdata = [
+						"AGENCY_HOST_COUNTRY_ID"	=>	$request->agency_id,
+						"INDEX_NO"					=>	$fp['index_no'],
+						"LAST_NAME"					=>	$fp['last_name'],
+						"OTHER_NAMES"				=>	$fp['other_names'],
+						"EXTENSION"					=>	$fp['extension'],
+						"MOBILE_NO"					=>	$fp['mobile_no'],
+						"EMAIL"						=>	$fp['email_address'],
+						"USERNAME"					=>	$username,
+						"PASSWORD"					=>	str_random(20)
+					];
 
 
-						$createdFP = AgencyFocalPoint::create($fpdata);
-						$user = \App\User::create([
-							'name'		=>	$createdFP->full_name,
-							'email'		=>	$createdFP->EMAIL,
-							'password'	=>	$createdFP->PASSWORD,
-							'username'	=>	$createdFP->USERNAME,
-							'user_type'	=>	\App\Enums\UserType::FocalPoint,
-							'ext_id'	=>	$createdFP->ID
-						]);
+					$createdFP = AgencyFocalPoint::create($fpdata);
+					$user = \App\User::create([
+						'name'		=>	$createdFP->full_name,
+						'email'		=>	$createdFP->EMAIL,
+						'password'	=>	$createdFP->PASSWORD,
+						'username'	=>	$createdFP->USERNAME,
+						'user_type'	=>	\App\Enums\UserType::FocalPoint,
+						'ext_id'	=>	$createdFP->ID
+					]);
 
-						$user->save();
+					$user->save();
 
-						$token = app(\Illuminate\Auth\Passwords\PasswordBroker::class)->createToken($user);
+					$token = app(\Illuminate\Auth\Passwords\PasswordBroker::class)->createToken($user);
 
-						$notification = new FocalPointPassword($createdFP, $token);
+					$notification = new FocalPointPassword($createdFP, $token);
 
-						$res = Notification::send($createdFP, $notification);
-	    			// }
-	    	// 		else{
-	    	// 			$fpdata = [
-						// 	"AGENCY_HOST_COUNTRY_ID"	=>	$request->agency_id,
-						// 	"INDEX_NO"					=>	$fp['index_no'],
-						// 	"LAST_NAME"					=>	$fp['last_name'],
-						// 	"OTHER_NAMES"				=>	$fp['other_names'],
-						// 	"EXTENSION"					=>	$fp['extension'],
-						// 	"MOBILE_NO"					=>	$fp['mobile_no'],
-						// 	"EMAIL"						=>	$fp['email_address']
-						// ];
-
-						// $fp = AgencyFocalPoint::find($fp['id']);
-						// $fp->update($fpdata);
-						// // dd($fp);
-
-						// $user = \App\User::where('ext_id', $fp->ID)->first();
-						// $userArray = [
-						// 	'name'		=>	$fp->full_name,
-						// 	'email'		=>	$fp->EMAIL,
-						// 	'ext_id'	=>	$fp->ID
-						// ];
-
-						// $user->update($userArray);
-	    	// 		}
+					$res = Notification::send($createdFP, $notification);
 	    		}
 	    	}
 	    }
