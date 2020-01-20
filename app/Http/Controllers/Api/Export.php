@@ -10,7 +10,7 @@ class Export extends Controller
         $app_numbers = (\App\Models\PM\Application::where('APP_STATUS', 'TO_DO')->pluck('APP_NUMBER'))->toArray();
     	$vatQuery = \App\Models\VAT::orderBy('CASE_NO','DESC')
                 ->whereIn('CASE_NO', $app_numbers);
-        $vat = $vatQuery->->get();
+        $vat = $vatQuery->get();
 
     	$vatList = $vat->map(function($item){
     		$vatData = \App\Helpers\HCSU\Data\VATData::get($item->CASE_NO);
