@@ -507,6 +507,21 @@ ORDER BY
         return $users;
     }
 
+    function ipmisFunctionality(){
+        $processes = \DB::connection('pm')->table('PROCESS')->where('PRO_STATUS', 'ACTIVE')->select('PRO_UID', 'PRO_TITLE')->get();
+        // dd($processes);
+        foreach ($processes as $process) {
+            $data = \App\Models\IPMISFunctionality::firstOrCreate(['PROCESS_UID' => $process->PRO_UID, 'PROCESS_NAME' => $process->PRO_TITLE]);
+        }
+
+        $ipmis_functional = \App\Models\IPMISFunctionality::all();
+        return $ipmis_functional;
+    }
+
+    function toggleIPMISFunctionality(Request $request){
+        dd($request->functional);
+    }
+
     function ipmisSubprocesses(Request $request){
         $filterSearch = json_decode($request->filterSearch);
         $limit = $request->get('limit');

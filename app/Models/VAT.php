@@ -31,6 +31,10 @@ class VAT extends Model
             return null;
         }
         return $data;
-        // return $this->belongsTo(\App\Models\PM\Application::class, 'CASE_NO', 'APP_NUMBER');
+        // 
+    }
+
+    function app(){
+        return $this->belongsTo(\App\Models\PM\Application::class, 'CASE_NO', 'APP_NUMBER');
     }
 }
