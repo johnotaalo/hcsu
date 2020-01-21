@@ -139,7 +139,7 @@ class NoteVerbal {
 					$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
 					$body .= str_pad("Title: ", $padding) . "{$this->data->client->designation}/{$this->data->client->grade}\r";
 				}else{
-					$body .= ucwords($this->data->client->relationship) . "\r";
+					// $body .= ucwords($this->data->client->relationship) . "\r";
 					$body .= str_pad("Name", 40) . str_pad("Nationality", 25) . "Title\r";
 					$body .= str_pad($this->data->client->name, 40) . str_pad($this->data->client->nationality, 25) . ucwords($this->data->client->relationship) . "\r";
 				}
