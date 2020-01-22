@@ -594,6 +594,35 @@ class PrincipalController extends Controller
         }
     }
 
+    function searchDomesticWorker(Request $request){
+        $term = $request->query('q');
+        // return PrincipalDependent::
+        //       where('LAST_NAME', 'LIKE', "%{$query}%")
+        //       ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
+        //       ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
+        //       ->orWhereHas('principal', function ($modelQuery) use ($query) {
+        //         $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
+        //         ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
+        //       })
+        //       ->limit(20)
+        //       ->with('relationshipX', 'principal')
+        //       ->get();
+        $workers = \App\Models\PrincipalDomesticWorker::
+                    where('LAST_NAME', 'LIKE', "%{$term}%")
+                    ->orWhere('OTHER_NAMES', 'LIKE', "%{$term}%")
+                    ->orWhereHas('passports', function($query) use ($term){
+                        $query->where('PASSPORT_NO', 'LIKE', "%{$term}%");
+                    })
+                    ->orWhereHas('principal', function($query) use ($term){
+                        $query->where('LAST_NAME', 'LIKE', "%{$term}%")
+                                ->orWhere('OTHER_NAMES', 'LIKE', "%{$term}%");
+                    })
+                    ->with('principal')
+                    ->get();
+
+        return $workers;
+    }
+
     function createDomesticWorkerHostCountryID(){
         $max_hcid = \App\Models\PrincipalDomesticWorker::max('HOST_COUNTRY_ID');
         if (is_null($max_hcid)) {

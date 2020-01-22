@@ -107,6 +107,41 @@
 						</template>
 					</v-select>
 				</div>
+
+				<div v-if="clientType == 'domestic-worker'">
+					<label class="control-label">Please type to search for a Domestic Worker</label>
+					<v-select label = "LAST_NAME" :filterable="false" :options="domesticWorkers" @search="onDomesticWorkerSearch" v-model="selectedDomesticWorker">
+						<template slot="no-options">
+							Type to search for a Domestic Worker
+						</template>
+
+						<template slot="option" slot-scope="option">
+							<div class = "row align-items-center">
+								<div class = "col-auto">
+									<img style="width: 50px;height: 50px;" :src="no_avatar_img"/>
+								</div>
+								<div class="col ml-n2">
+									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+									<p class="card-text text-muted">Domestic Worker of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.ACRONYM }})</p>
+								</div>
+							</div>
+						</template>
+
+						<template slot="selected-option" slot-scope="option">
+							<span v-if="option.LAST_NAME">
+								<div class = "row align-items-center">
+									<div class = "col-auto">
+										<img style="width: 50px;height: 50px;" :src="no_avatar_img"/>
+									</div>
+									<div class="col ml-n2">
+										<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+										<p class="card-text text-muted">Domestic Worker of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.ACRONYM }})</p>
+									</div>
+								</div>
+							</span>
+						</template>
+					</v-select>
+				</div>
 			</div>
 
 			<div v-if="host_country_id != 0" class="mt-5">
@@ -136,14 +171,17 @@
 				clientTypeList: [
 					{ text: "Agency", value: 'agency' },
 					{ text: "Staff Member", value: 'staff-member' },
-					{ text: "Dependent", value: 'dependent' }
+					{ text: "Dependent", value: 'dependent' },
+					{ text: "Domestic Worker", value: 'domestic-worker' }
 				],
 				agencies: [],
 				staffMembers: [],
 				dependents: [],
+				domesticWorkers: [],
 				selectedAgency: {},
 				selectedStaff: {},
 				selectedDependent: {},
+				selectedDomesticWorker: {},
 				host_country_id: 0,
 				finalisedHCSUID: 0,
 				no_avatar_img: "/images/no_avatar.svg"
@@ -175,6 +213,10 @@
 				loading(true)
 				this.dependentSearch(loading, search, this)
 			},
+			onDomesticWorkerSearch(search, loading){
+				loading(true)
+				this.domesticWorkerSearch(loading, search, this)
+			},
 			getSelectedClient(host_country_id){
 				// this.isLoading = true;
 				alert(host_country_id)
@@ -200,6 +242,13 @@
 					loading(false)
 				} )
 			}, 350 ),
+			domesticWorkerSearch: _.debounce((loading, search, vm) => {
+				axios(`api/principal/domesticworker/search?q=${escape(search)}`)
+				.then(res=>{
+					vm.domesticWorkers = res.data
+					loading(false)
+				})
+			}, 200),
 			proceedClient: function(){
 				this.isLoading = true;
 				axios.post('/api/client/update', {
@@ -314,6 +363,14 @@
 				}else{
 					this.host_country_id = 0
 				}
+			},
+			selectedDomesticWorker: function(newVal, oldVal){
+				var em = this
+				if(newVal.HOST_COUNTRY_ID){
+					this.host_country_id = newVal.HOST_COUNTRY_ID
+				}else{
+					this.host_country_id = 0
+				}
 			}
 		},
 		computed: {
@@ -344,9 +401,15 @@
 				else{
 
 					if (this.application == 'diplomatic_id' || this.application == 'visa_extension') {
-						var result = _.filter(list, (obj) => {
-							return obj.value == 'staff-member' || obj.value == 'dependent'
-						})
+						if(this.application == 'diplomatic_id'){
+							var result = _.filter(list, (obj) => {
+								return obj.value == 'staff-member' || obj.value == 'dependent'
+							})
+						}else{
+							var result = _.filter(list, (obj) => {
+								return obj.value == 'staff-member' || obj.value == 'dependent' || obj.value == 'domestic-worker'
+							})
+						}
 
 						arr = result
 					}

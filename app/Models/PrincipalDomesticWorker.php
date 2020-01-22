@@ -16,6 +16,10 @@ class PrincipalDomesticWorker extends Model
     	return $this->hasMany(\App\Models\PrincipalDomesticWorkerPassport::class, 'HOST_COUNTRY_ID', 'HOST_COUNTRY_ID');
     }
 
+    public function principal(){
+        return $this->belongsTo(\App\Models\Principal::class, 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
+    }
+
     public function getAllPassportsAttribute(){
     	return \App\Models\PrincipalDomesticWorkerPassport::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->get();
     }
