@@ -399,24 +399,24 @@
 					arr.push(result)
 				}
 				else{
+					var result = [];
 					if(this.application == 'visa_extension' || this.application == 'work-permit-new-case'){
-						var result = _.filter(list, (obj) => {
+						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'dependent' || obj.value == 'domestic-worker'
 						})
 					}
 					else if (this.application == 'diplomatic_id') {
-							var result = _.filter(list, (obj) => {
-								return obj.value == 'staff-member' || obj.value == 'dependent'
-							})
-
-						arr = result
+						result = _.filter(list, (obj) => {
+							return obj.value == 'staff-member' || obj.value == 'dependent'
+						})
 					}
 					else{
-						var result = _.filter(list, (obj) => {
+						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'dependent' || obj.value == 'agency'
 						})
-						arr = result
 					}
+
+					arr = result
 				}
 
 				return arr				
