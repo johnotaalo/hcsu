@@ -94,6 +94,7 @@ Route::prefix('principal')->group(function(){
 	Route::put('domesticworker/edit', 'Api\PrincipalController@updateDomesticWorker');
 	Route::delete('domesticworker', 'Api\PrincipalController@deleteDomesticWorker');
 	Route::get('domesticworker/search', 'Api\PrincipalController@searchDomesticWorker');
+	Route::get('domesticworker/get/{host_country_id}', 'Api\PrincipalController@getDomesticWorker');
 });
 
 Route::prefix('template')->group(function(){

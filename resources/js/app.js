@@ -126,6 +126,8 @@ import Subprocesses from './views/processes/Subprocesses'
 // Exports
 import VATListExport from './views/exports/VATListExport'
 
+import EditDomesticWorker from './views/domestic-worker/EditDomesticWorker'
+
 // Auth
 // import Login from './views/Login'
 
@@ -200,6 +202,11 @@ Vue.component(
 	 		path: '/agencies/view/:id',
 	 		name: 'agencies.view',
 	 		component: ViewAgency
+	 	},
+	 	{
+	 		path: '/domestic-worker/edit/:id',
+	 		name: 'domestic-worker.edit',
+	 		component: EditDomesticWorker
 	 	},
 	 	{
 	 		path: '/vehicles',

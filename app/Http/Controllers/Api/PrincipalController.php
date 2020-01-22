@@ -596,17 +596,6 @@ class PrincipalController extends Controller
 
     function searchDomesticWorker(Request $request){
         $term = $request->query('q');
-        // return PrincipalDependent::
-        //       where('LAST_NAME', 'LIKE', "%{$query}%")
-        //       ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
-        //       ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
-        //       ->orWhereHas('principal', function ($modelQuery) use ($query) {
-        //         $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
-        //         ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
-        //       })
-        //       ->limit(20)
-        //       ->with('relationshipX', 'principal')
-        //       ->get();
         $workers = \App\Models\PrincipalDomesticWorker::
                     where('LAST_NAME', 'LIKE', "%{$term}%")
                     ->orWhere('OTHER_NAMES', 'LIKE', "%{$term}%")
@@ -621,6 +610,14 @@ class PrincipalController extends Controller
                     ->get();
 
         return $workers;
+    }
+
+    function getDomesticWorker(Request $request){
+        $host_country_id = $request->host_country_id;
+
+        $worker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $host_country_id)->with('principal')->first();
+
+        return $worker;
     }
 
     function createDomesticWorkerHostCountryID(){

@@ -1270,7 +1270,7 @@
 							this.$notify({
 								group: 'foo',
 								title: 'Success',
-								text: "Successfully added domestic worker",
+								text: "Successfully updated domestic worker",
 								type: "success"
 							});
 
