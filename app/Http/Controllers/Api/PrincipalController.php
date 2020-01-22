@@ -327,7 +327,7 @@ class PrincipalController extends Controller
     }
 
     function get(Request $request){
-        $principal = Principal::where('HOST_COUNTRY_ID', $request->id)->with(['contracts', 'dependents', 'passports', 'vehicles'])->first();
+        $principal = Principal::where('HOST_COUNTRY_ID', $request->id)->with(['contracts', 'dependents', 'passports', 'vehicles', 'domesticWorkers'])->first();
 
         // \DB::enableQueryLog();
       // $query = \DB::getQueryLog();
@@ -504,5 +504,102 @@ class PrincipalController extends Controller
         PrincipalDependent::destroy($dependent_id);
 
         return ['status' => 'success'];
+    }
+
+    function addDomesticWorker(Request $request){
+        $host_country_id = $this->createDomesticWorkerHostCountryID();
+
+        $domesticWorker = new \App\Models\PrincipalDomesticWorker();
+        $principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $request->principalId)->firstOrFail();
+
+        $domesticWorker->HOST_COUNTRY_ID = $host_country_id;
+        $domesticWorker->PRINCIPAL_ID = $request->principalId;
+        $domesticWorker->LAST_NAME = ucwords($request->lastName);
+        $domesticWorker->OTHER_NAMES = format_other_names($request->otherNames);
+        $domesticWorker->ADDRESS = $request->address;
+        $domesticWorker->EMAIL = $request->email;
+        $domesticWorker->PHONE_NUMBER = $request->phone;
+        $domesticWorker->PLACE_OF_BIRTH = $request->placeOfBirth;
+        $domesticWorker->DATE_OF_BIRTH = $request->dateOfBirth;
+        $domesticWorker->NATIONALITY = ($request->nationality) ? $request->nationality : 1;
+        $domesticWorker->R_NO = $request->rno;
+        $domesticWorker->PLACE_OF_EMPLOYMENT = $principal->RESIDENCE;
+        $domesticWorker->CONTRACT_START_DATE = $request->employmentDate;
+
+        $domesticWorker->save();
+        $passportData = [];
+
+        foreach ($request->passports as $passport) {
+           $passportData[] = [
+                'HOST_COUNTRY_ID'   =>  $host_country_id,
+                'PASSPORT_NO'       =>  $passport['passportNo'],
+                'PLACE_OF_ISSUE'    =>  $passport['place_issue'],
+                'PASSPORT_TYPE'     =>  $passport['passportType'],
+                'COUNTRY_OF_ISSUE'  =>  $passport['country_issue']['id'],
+                'ISSUE_DATE'        =>  date('Y-m-d', strtotime($passport['date_issue'])),
+                'EXPIRY_DATE'       =>  date('Y-m-d', strtotime($passport['expiry_date']))
+            ];
+        }
+
+        \App\Models\PrincipalDomesticWorkerPassport::insert($passportData);
+
+        return \App\Models\PrincipalDomesticWorker::with('passports')->find($domesticWorker->id);
+    }
+
+    function updateDomesticWorker(Request $request){
+        $domesticWorker = \App\Models\PrincipalDomesticWorker::findOrFail($request->id);
+        $principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $request->principalId)->firstOrFail();
+
+        $domesticWorker->LAST_NAME = ucwords($request->lastName);
+        $domesticWorker->OTHER_NAMES = format_other_names($request->otherNames);
+        $domesticWorker->ADDRESS = $request->address;
+        $domesticWorker->EMAIL = $request->email;
+        $domesticWorker->PHONE_NUMBER = $request->phone;
+        $domesticWorker->PLACE_OF_BIRTH = $request->placeOfBirth;
+        $domesticWorker->DATE_OF_BIRTH = $request->dateOfBirth;
+        $domesticWorker->NATIONALITY = ($request->nationality) ? $request->nationality : 1;
+        $domesticWorker->R_NO = $request->rno;
+        $domesticWorker->PLACE_OF_EMPLOYMENT = $principal->RESIDENCE;
+        $domesticWorker->CONTRACT_START_DATE = $request->employmentDate;
+
+        $domesticWorker->save();
+
+        $passportData = [];
+
+        foreach ($request->passports as $passport) {
+           $passportData[] = [
+                'HOST_COUNTRY_ID'   =>  $domesticWorker->HOST_COUNTRY_ID,
+                'PASSPORT_NO'       =>  $passport['passportNo'],
+                'PLACE_OF_ISSUE'    =>  $passport['place_issue'],
+                'PASSPORT_TYPE'     =>  $passport['passportType'],
+                'COUNTRY_OF_ISSUE'  =>  $passport['country_issue']['id'],
+                'ISSUE_DATE'        =>  date('Y-m-d', strtotime($passport['date_issue'])),
+                'EXPIRY_DATE'       =>  date('Y-m-d', strtotime($passport['expiry_date']))
+            ];
+        }
+
+        \App\Models\PrincipalDomesticWorkerPassport::where('HOST_COUNTRY_ID', $domesticWorker->HOST_COUNTRY_ID)->delete();
+        \App\Models\PrincipalDomesticWorkerPassport::insert($passportData);
+
+        return \App\Models\PrincipalDomesticWorker::with('passports')->find($domesticWorker->id);
+    }
+
+    function deleteDomesticWorker(Request $request){
+        $domesticWorker = \App\Models\PrincipalDomesticWorker::findOrFail($request->id);
+
+        $deleted = $domesticWorker->delete();
+
+        if($deleted){
+            return ['status' => 'success'];
+        }
+    }
+
+    function createDomesticWorkerHostCountryID(){
+        $max_hcid = \App\Models\PrincipalDomesticWorker::max('HOST_COUNTRY_ID');
+        if (is_null($max_hcid)) {
+            return 40000001;
+        }
+
+        return (int)$max_hcid + 1;
     }
 }

@@ -89,6 +89,10 @@ Route::prefix('principal')->group(function(){
 	Route::delete('/dependent', 'Api\PrincipalController@deleteDependent');
 
 	Route::get('/search', 'Api\PrincipalController@searchPrincipal');
+
+	Route::post('domesticworker/add', 'Api\PrincipalController@addDomesticWorker');
+	Route::put('domesticworker/edit', 'Api\PrincipalController@updateDomesticWorker');
+	Route::delete('domesticworker', 'Api\PrincipalController@deleteDomesticWorker');
 });
 
 Route::prefix('template')->group(function(){
@@ -168,6 +172,7 @@ Route::prefix('data')->group(function(){
 
 	Route::prefix('options')->group(function(){
 		Route::get('/dependent', 'Api\DataController@getDependentOptions');
+		Route::get('/domestic-worker', 'Api\DataController@getDomesticWorkerOptions');
 	});
 
 	Route::prefix('users')->group(function(){

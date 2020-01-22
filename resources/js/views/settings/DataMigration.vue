@@ -7,13 +7,14 @@
 						Principal&nbsp;&nbsp;<span class="badge badge-success">{{ $refs.pendingStaff.data.length }}</span>
 					</template>
 
-					<b-button variant="primary" size="sm" @click="importAllStaff()"><i class="fe fe-user-plus"></i>&nbsp;Import All</b-button>
+					<b-button :disabled="activatebutton" variant="primary" size="sm" @click="importAllStaff()"><i class="fe fe-user-plus"></i>&nbsp;Import All</b-button>
 
 					<v-server-table class="table-sm table-nowrap card-table"
 					ref="pendingStaff"
 					url="/api/data/management/pending/principals"
 					:columns="principal.options.columns"
 					:options="principal.options"
+					name="vue-tables"
 					size="sm">
 						<template slot="index_no" slot-scope="data">
 							{{ data.row.index_no }}
@@ -37,12 +38,17 @@
 	export default{
 		data(){
 			return {
+				mounted: false,
+				tableLoaded: true,
 				principal: {
 					options: {
 						columns: ["index_no", "staff_name", "actions"]
 					}
 				}
 			}
+		},
+		mounted() {
+			this.mounted = true
 		},
 		methods: {
 			importIndividualStaff(record_id){
@@ -96,6 +102,13 @@
 						type: "error"
 					});
 				});
+			}
+		},
+		computed: {
+			activatebutton(){
+				if (this.mounted && this.$refs.pendingStaff.count > 0)
+					return false
+				return true
 			}
 		}
 	}

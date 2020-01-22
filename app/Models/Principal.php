@@ -24,6 +24,10 @@ class Principal extends Model
     	return $this->hasMany('\App\Models\PrincipalDependent', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
     }
 
+    public function domesticWorkers(){
+        return $this->hasMany('\App\Models\PrincipalDomesticWorker', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
+    }
+
     public function getSpouseAttribute(){
         return $this->dependents->where('RELATIONSHIP_ID', 2)->first();
     }

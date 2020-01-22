@@ -4,7 +4,7 @@
 			<div class="row">
 				<div class="col-sm">
 					<label for="passport_type" >Passport Type</label>
-					<b-form-select v-model="value.passportType" :options="passportTypes">
+					<b-form-select v-model="value.passportType" :options="passportTypes" size="sm">
 						<template slot="first">
 							<option :value="null" disabled>-- Please select an option --</option>
 						</template>
@@ -12,16 +12,16 @@
 				</div>
 				<div class="col-sm">
 					<label for="passport_no">Passport No.</label>
-					<b-input v-model="value.passportNo" id="passport_no" />
+					<b-input v-model="value.passportNo" id="passport_no" size="sm"/>
 				</div>
 				<div class="col-sm" v-if="value.passportType != 3">
 					<label for="place_issue">Place of Issue</label>
-					<b-input v-model="value.place_issue" id="place_issue" />
+					<b-input v-model="value.place_issue" id="place_issue" size="sm"/>
 				</div>
 				<div class="col-sm">
 					<label v-if="value.passportType != 3" for="country_issue">Country of Issue</label>
 					<label v-else for="country_issue">Issuing Organization</label>
-					<v-select v-model="value.country_issue" :options="selectCountries">
+					<v-select v-model="value.country_issue" :options="selectCountriesx">
 						<!-- <template slot="first">
 							<option :value="null" disabled>-- Please select an option --</option>
 						</template> -->
@@ -30,12 +30,12 @@
 				<div class="col-sm">
 					<label for="date_issue">Date of Issue</label>
 					<!-- <b-input v-model="value.date_issue" id="date_issue" type="date" /> -->
-					<datetime v-model="value.date_issue" input-id="date_issue" input-class="form-control" :max-datetime="maxFromDate"></datetime>
+					<datetime value-zone="UTC+3" v-model="value.date_issue" input-id="date_issue" input-class="form-control form-control-sm" :max-datetime="maxFromDate" size="sm"></datetime>
 				</div>
 				<div class="col-sm">
 					<label for="expiry_date">Expiry Date</label>
 					<!-- <b-input v-model="value.expiry_date" id="expiry_date" type="date" /> -->
-					<datetime v-model="value.expiry_date" input-id="expiry_date" input-class="form-control"></datetime>
+					<datetime value-zone="UTC+3" v-model="value.expiry_date" input-id="expiry_date" input-class="form-control form-control-sm" size="sm"></datetime>
 				</div>
 			</div>
 			<div class="row mt-3">
@@ -66,12 +66,28 @@
 		},
 		data() {
 			return {
-				selectCountries: []
+				selectCountries: this.countries
 			}
+		},
+		mounted(){
+			this.filterPassport()
 		},
 		computed: {
 			maxFromDate: function() {
 				return this.$moment().format()
+			},
+			selectCountriesx: function(){
+				if(this.value.passportType == 3){
+					this.selectCountries = _.map(this.countries, function(o){
+						if( o.id == "UNNY" || o.id == "UNOG" || o.id == "UNOV" ) { return o }
+					})
+
+					this.selectCountries = _.without(this.selectCountries, undefined)
+				}else{
+					this.selectCountries = this.countries
+				}
+
+				return this.selectCountries
 			}
 		},
 		methods: {
@@ -80,15 +96,8 @@
 			},
 			removeRow () {
 				this.$emit('remove', this.value.id)
-			}
-		},
-		watch: {
-			'value.date_issue': function(newVal, oldVal){
-				if (this.value.passportType == 3) {
-					this.value.expiry_date = this.$moment(newVal).add(5, "Years").format()
-				}
 			},
-			'value.passportType': function(newVal, oldVal){
+			filterPassport(){
 				if (this.value.passportType == 3 && this.value.date_issue != "") {
 					this.value.expiry_date = this.$moment(this.value.date_issue).add(5, "Years").format()
 				}
@@ -102,6 +111,16 @@
 				}else{
 					this.selectCountries = this.countries
 				}
+			}
+		},
+		watch: {
+			'value.date_issue': function(newVal, oldVal){
+				if (this.value.passportType == 3) {
+					this.value.expiry_date = this.$moment(newVal).add(5, "Years").format()
+				}
+			},
+			'value.passportType': function(newVal, oldVal){
+				this.filterPassport()
 			}
 		}
 	}

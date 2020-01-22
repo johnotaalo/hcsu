@@ -258,6 +258,28 @@
 									</b-table>
 								</b-tab>
 
+								<b-tab title="Domestic Workers">
+									<template slot="title">
+										<i class="fe fe-home mr-2"></i>Domestic Workers <b-badge variant="warning">{{ principal.domestic_workers.length }}</b-badge>
+									</template>
+
+									<b-button class="mb-3" variant="success" size="sm" v-b-modal.domestic-worker-modal><i class="fe fe-plus mr-1"></i>Add Domestic Worker</b-button>
+
+									<b-table :fields="domesticWorkers.table.fields" :items="principal.domestic_workers" show-empty>
+										<template v-slot:empty="scope">
+											<center><h4>No data available</h4> <b-button variant = "primary" size="sm" v-b-modal.domestic-worker-modal>Add One</b-button></center>
+										</template>
+
+										<template v-slot:cell(NAME)="data">
+											{{ data.item.LAST_NAME }}, {{ data.item.OTHER_NAMES }}
+										</template>
+
+										<template v-slot:cell(ACTIONS)="data">
+											<b-button variant="info" size="sm" @click="editDomesticWorker(data.index)"><i class = "fe fe-edit mr-1"></i>&nbsp;Edit</b-button>
+											<b-button variant="danger" size="sm" @click="removeDomesticWorker(data.index)"><i class = "fe fe-trash mr-1"></i>&nbsp;Remove</b-button>
+										</template>
+									</b-table>
+								</b-tab>
 								<b-tab title="Vehicles">
 									<template slot="title">
 										<i class="fe fe-truck mr-2"></i>Vehicles <b-badge variant="warning">{{ principal.vehicles.length }}</b-badge>
@@ -370,10 +392,13 @@
 
 		</b-modal>
 
-		<b-modal id="dependent-passport-modal" ref="dependent-modal" title="Dependent Passport" size="xl">
+		<b-modal id="dependent-passport-modal" ref="dependent-passport-modal" title="Dependent Passport" size="xl">
 			<passports v-if="selectedDependent != -1" :passportTypes="options.passportTypes" :countries="options.countries" :passports="dependentPassportDetails"></passports>
 		</b-modal>
-		<!-- <vue-toastr ref="toastr"></vue-toastr> -->
+
+		<b-modal id="domestic-worker-modal" ref="domestic-worker-modal" title="Domestic Worker" size="xl" @ok="addDomesticWorker" @hidden="cancelDomesticWorkerModal">
+			<domestic-worker v-model="modal.domesticWorker" :searchPrincipal="false" :principaldata="domesticworkerPrincipalData"></domestic-worker>
+		</b-modal>
 		</div>
 </template>
 
@@ -383,6 +408,7 @@
 	import ContractDetails from './principal/ContractDetails'
 	import VehicleList from './vehicle/VehicleList'
 	import Passports from './dependent/Passports'
+	import DomesticWorker from '../components/domestic-worker/DomesticWorker'
 	import vUploader from 'v-uploader'
 
 	const uploaderConfig = {
@@ -400,7 +426,7 @@
 	// this.$root.app.use(vUploader, uploaderConfig);
 
 	export default {
-		components: { datetime: Datetime, ContractDetails, VehicleList, Passports, vUploader },
+		components: { datetime: Datetime, ContractDetails, VehicleList, Passports, vUploader, DomesticWorker },
 		data() {
 			return {
 				userId: this.$route.params.id,
@@ -485,6 +511,22 @@
 						imageFile: "",
 						editIndex: "",
 						principal_id: ""
+					}),
+					domesticWorker: new Form({
+						id: "",
+						principalId: this.$route.params.id,
+						lastName: "",
+						otherNames: "",
+						email: "",
+						phone: "",
+						placeOfBirth: "",
+						dateOfBirth: "",
+						employmentDate: "",
+						nationality: "",
+						rno: "",
+						address: "",
+						editIndex: "",
+						passports: []
 					})
 				},
 				options: {
@@ -544,6 +586,11 @@
 					},
 					editIndex: -1
 				},
+				domesticWorkers: {
+					table: {
+						fields: ["HOST_COUNTRY_ID", "NAME", "DATE_OF_BIRTH", "PLACE_OF_BIRTH", "ACTIONS"]
+					}
+				},
 				principalImageProps: { blank: false, blankColor: '#777', width: 100, height: 100, class: 'm1' },
 				iframe: false
 			}
@@ -559,8 +606,10 @@
 					this.cancelPassportModal()
 				}else if(modalId == "modal-contract"){
 					this.cancelContractModal()
-				}else if(modalId = "dependent-modal"){
+				}else if(modalId == "dependent-modal"){
 					this.cancelDependentModal()
+				}else if(modalId == "domestic-worker-modal"){
+					this.cancelDomesticWorkerModal()
 				}
 			})
 
@@ -593,6 +642,9 @@
 			}
 		},
 		computed: {
+			domesticworkerPrincipalData: function(){
+				return this.form.principal
+			},
 			principalImage: function(){
 				if(this.form.principal.image.url){
 					return this.form.principal.image.url
@@ -1134,7 +1186,7 @@
 						group: 'foo',
 						title: 'Error',
 						text: errorMessage,
-						type: "danger"
+						type: "error"
 					});
 				});
 			},
@@ -1156,8 +1208,188 @@
 				_this.options.imageProps.blank = true
 			},
 
+			clearDomesticWorkerModal: function(){
+				var _this = this
+
+				_this.modal.domesticWorker.id = ""
+				_this.modal.domesticWorker.lastName = ""
+				_this.modal.domesticWorker.otherNames = "";
+				_this.modal.domesticWorker.email = "";
+				_this.modal.domesticWorker.phone = "";
+				_this.modal.domesticWorker.placeOfBirth = "";
+				_this.modal.domesticWorker.dateOfBirth = "";
+				_this.modal.domesticWorker.employmentDate = "";
+				_this.modal.domesticWorker.nationality = "";
+				_this.modal.domesticWorker.rno = "";
+				_this.modal.domesticWorker.address = "";
+				_this.modal.domesticWorker.passports = [];
+				_this.modal.domesticWorker.editIndex = ""
+			},
+
 			cancelDependentModal: function(){
 				this.clearDependentModal();
+			},
+			addDomesticWorker: function(event){
+				event.preventDefault()
+				var domesticWorkerData = this.modal.domesticWorker
+				if (domesticWorkerData.id == "") {
+					if (domesticWorkerData.passports.length > 0) {
+						domesticWorkerData.post('/principal/domesticworker/add')
+						.then(res => {
+							this.$notify({
+								group: 'foo',
+								title: 'Success',
+								text: "Successfully added domestic worker",
+								type: "success"
+							});
+
+							this.principal.domestic_workers.push(res)
+
+							this.$nextTick(() => {
+								this.$bvModal.hide('domestic-worker-modal')
+							})
+						});
+					}
+					else{
+						var errorMessage = ""; 
+						if(domesticWorkerData.passports.length == 0) {
+							errorMessage = "You must add at least one passport";
+						}
+
+						this.$notify({
+							group: 'foo',
+							title: 'Error',
+							text: errorMessage,
+							type: "error"
+						});
+					}
+				}else {
+					if (domesticWorkerData.passports.length > 0) {
+						domesticWorkerData.put('/principal/domesticworker/edit')
+						.then(res => {
+							this.$notify({
+								group: 'foo',
+								title: 'Success',
+								text: "Successfully added domestic worker",
+								type: "success"
+							});
+
+							this.principal.domestic_workers.splice(domesticWorkerData.editIndex, 1, res)
+
+							this.$nextTick(() => {
+								this.$bvModal.hide('domestic-worker-modal')
+							})
+						});
+					}else{
+						var errorMessage = ""; 
+						if(domesticWorkerData.passports.length == 0) {
+							errorMessage = "You must add at least one passport";
+						}
+
+						this.$notify({
+							group: 'foo',
+							title: 'Error',
+							text: errorMessage,
+							type: "error"
+						});
+					}
+				}
+			},
+			cancelDomesticWorkerModal: function(){
+				this.clearDomesticWorkerModal()
+			},
+			editDomesticWorker: function(index){
+				var domesticWorker = this.principal.domestic_workers[index]
+
+				this.modal.domesticWorker.editIndex = index
+				this.modal.domesticWorker.id = domesticWorker.id
+				this.modal.domesticWorker.lastName = domesticWorker.LAST_NAME
+				this.modal.domesticWorker.otherNames = domesticWorker.OTHER_NAMES
+				this.modal.domesticWorker.email = domesticWorker.EMAIL
+				this.modal.domesticWorker.phone = domesticWorker.PHONE_NUMBER
+				this.modal.domesticWorker.placeOfBirth = domesticWorker.PLACE_OF_BIRTH
+				this.modal.domesticWorker.dateOfBirth = domesticWorker.DATE_OF_BIRTH
+				this.modal.domesticWorker.employmentDate = domesticWorker.CONTRACT_START_DATE
+				this.modal.domesticWorker.nationality = domesticWorker.NATIONALITY
+				this.modal.domesticWorker.rno = domesticWorker.R_NO
+				this.modal.domesticWorker.address = domesticWorker.ADDRESS
+				this.modal.domesticWorker.passports = _.map(domesticWorker.all_passports, (passport) => {
+					const issuedate = this.subtractDateFix(passport.ISSUE_DATE)
+					const expirydate = this.subtractDateFix(passport.EXPIRY_DATE)
+
+					return {
+						passportType: passport.PASSPORT_TYPE,
+						passportNo: passport.PASSPORT_NO,
+						place_issue: passport.PLACE_OF_ISSUE,
+						date_issue: passport.ISSUE_DATE,
+						expiry_date: passport.EXPIRY_DATE,
+						country_issue: {
+							id: passport.COUNTRY_OF_ISSUE,
+							label: passport.actual_country_of_issue.official_name
+						}
+					}
+				})
+
+				this.$bvModal.show('domestic-worker-modal')
+			},
+			subtractDateFix(dateString){
+				let _date = new Date()
+					_date.setYear(dateString.slice(0, 4))
+					_date.setMonth(parseInt(dateString.slice(5, 7)) - 1)
+					_date.setDate(dateString.slice(8, 10))
+
+				return _date
+			},
+			removeDomesticWorker(index){
+				var _this = this;
+				this.$swal({
+					title: "Delete Domestic Worker?",
+					text: "This action cannot be undone",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willDelete) => {
+					if (willDelete) {
+						this.proceedDeleteDomesticWorker(index)
+					}
+				});
+			},
+			proceedDeleteDomesticWorker(index){
+				var _this = this;
+				var id = this.principal.domestic_workers[index].id
+				var name = this.principal.domestic_workers[index].LAST_NAME + ", " + this.principal.domestic_workers[index].OTHER_NAMES
+
+				instance.default.delete('/principal/domesticworker', { data: {id: id } }).then(res => {
+					if(res.data.status == "success"){
+						this.$notify({
+							group: 'foo',
+							title: 'Success',
+							text: "Successfully deleted domestic worker: " + name + " from " + _this.fullname + " profile",
+							type: "success"
+						});
+
+						this.principal.domestic_workers.splice(index, 1)
+					}
+				})
+				.catch(error => {
+					var errorMessage = ""
+					if(error.reponse){
+						errorMessage = error.response.data.message
+					}else if(error.request){
+						var errorObj = JSON.parse(error.request.response)
+						errorMessage = error.request.statusText + "<br/>" + errorObj.message
+					}else{
+						errorMessage = error.request
+					}
+
+					this.$notify({
+						group: 'foo',
+						title: 'Error',
+						text: errorMessage,
+						type: "error"
+					});
+				});
 			}
 		}
 	}

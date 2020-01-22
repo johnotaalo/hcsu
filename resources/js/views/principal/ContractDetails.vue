@@ -48,14 +48,14 @@
 			<div class="col-md">
 				<div class="form-group">
 					<label for="from">From</label>
-					<datetime v-model="value.contractFrom" input-id="from" input-class="form-control" :max-datetime="maxDateTime"></datetime>
+					<datetime value-zone="UTC+3" v-model="value.contractFrom" input-id="from" input-class="form-control" :max-datetime="maxDateTime"></datetime>
 					<div v-if="$v.data.contractFrom.$error" class="my-invalid-feedback">Please provide a contract start date.</div>
 				</div>
 			</div>
 			<div class="col-md">
 				<div class="form-group">
 					<label for="to">To</label>
-					<datetime v-model="value.contractTo" input-id="to" input-class="form-control" :min-datetime="minDateTime"></datetime>
+					<datetime value-zone="UTC+3" v-model="value.contractTo" input-id="to" input-class="form-control" :min-datetime="minDateTime"></datetime>
 					<div v-if="$v.data.contractTo.$error" class="my-invalid-feedback">Please provide a contract end date.</div>
 				</div>
 			</div>

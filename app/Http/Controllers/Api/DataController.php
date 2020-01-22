@@ -300,6 +300,13 @@ class DataController extends Controller
       ];
     }
 
+    function getDomesticWorkerOptions(){
+      return [
+        'countries'       => \App\Models\Country::all(),
+        'passportTypes'   =>  \App\Models\PassportType::where('ID', 2)->get()
+      ];
+    }
+
     function pendingPrincipals(Request $request){
       $searchQueries = $request->get('query');
       $limit = $request->get('limit');
