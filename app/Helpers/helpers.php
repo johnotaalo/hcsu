@@ -34,7 +34,17 @@ if (! function_exists('format_other_names') ) {
 			}
 
 			$formatted_name = implode("-", $frags);
-		}else{
+		}
+		elseif (strpos($other_names, ".") !== false) {
+			$frags = explode(".", $other_names);
+
+			foreach ($frags as $key => $frag) {
+				$frags[$key] = ucwords(strtolower($frag));
+			}
+
+			$formatted_name = implode(".", $frags);
+		}
+		else{
 			$formatted_name = ucwords(strtolower($other_names));
 		}
 
