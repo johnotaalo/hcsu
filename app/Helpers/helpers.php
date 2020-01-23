@@ -19,6 +19,8 @@ if (! function_exists('identify_hcsu_client') ) {
 			return 'dependent';
 		} else if ( $firstIDChar == 3 ) {
 			return 'agency';
+		} else if ( $firstIDChar == 4 ) {
+			return 'domestic-worker';
 		}
 	}
 }

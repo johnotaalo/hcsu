@@ -54,6 +54,11 @@ class VISAExtensionData{
 	      $clientObj->passport->place_of_issue = ($dependent->latest_passport) ? $dependent->latest_passport->PLACE_OF_ISSUE : "N/A";
         }
 
+        else if ($clientType == "domestic-worker"){
+        	$domesticWorker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $case_data->HOST_COUNTRY_ID)->first();
+        	dd($domesticWorker);
+        }
+
         $data->client = $clientObj;
         $data->case_no = $case_no;
         $data->ref = $case_data->SERIAL_NO;
