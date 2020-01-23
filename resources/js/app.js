@@ -90,6 +90,7 @@ Vue.filter('nullable', function (value) {
 // import router from './router'
 import App from './views/App'
 import Home from './views/Home'
+import PageNotFound from './views/PageNotFound'
 import Principal from './views/Principal'
 import AddPrincipal from './views/AddPrincipal'
 import ViewPrincipal from './views/ViewPrincipal'
@@ -317,6 +318,11 @@ Vue.component(
 	 		path: '/subprocesses/ipmis',
 	 		name: "subprocesses-ipmis",
 	 		component: Subprocesses
+	 	},
+	 	{
+	 		path: '*',
+	 		component: PageNotFound,
+	 		name: '404'
 	 	}
  	]
  });

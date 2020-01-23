@@ -96,6 +96,14 @@
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'vehicles' }">Vehicles</router-link></li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'data-management' }">Data</router-link></li>
 				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">Processes</a>
+					<ul class="dropdown-menu">
+						<li>
+							<router-link class="dropdown-item" :to="{ name: 'blanket-vat' }">Blanket VAT</router-link>
+						</li>
+					</ul>
+				</li>
+				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">Exports</a>
 					<ul class="dropdown-menu">
 						<li>
