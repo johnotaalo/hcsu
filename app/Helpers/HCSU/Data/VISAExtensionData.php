@@ -56,7 +56,19 @@ class VISAExtensionData{
 
         else if ($clientType == "domestic-worker"){
         	$domesticWorker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $case_data->HOST_COUNTRY_ID)->first();
-        	dd($domesticWorker);
+
+        	$c_name = strtoupper($domesticWorker->LAST_NAME). ", " . format_other_names($domesticWorker->OTHER_NAMES) . " domestic worker of {$domesticWorker->principal->fullname}";
+        	$mission = $domesticWorker->principal->latest_contract->ACRONYM;
+        	$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$domesticWorker->principal->HOST_COUNTRY_ID})"))->first();
+
+			$clientObj->name = $c_name;
+			$clientObj->clientdata = $domesticWorker;
+			$clientObj->organization = $mission;
+			$clientObj->contract_type = $contract->C_TYPE;
+			$clientObj->nationality = $domesticWorker->nationality->name;
+			$clientObj->passport->passport_no = ($domesticWorker->latest_passport) ? $domesticWorker->latest_passport->PASSPORT_NO : "N/A";
+			$clientObj->passport->issue_date = ($domesticWorker->latest_passport) ? $domesticWorker->latest_passport->ISSUE_DATE : "N/A";
+			$clientObj->passport->place_of_issue = ($domesticWorker->latest_passport) ? $domesticWorker->latest_passport->PLACE_OF_ISSUE : "N/A";
         }
 
         $data->client = $clientObj;

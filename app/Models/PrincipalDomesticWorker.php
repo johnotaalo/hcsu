@@ -20,7 +20,17 @@ class PrincipalDomesticWorker extends Model
         return $this->belongsTo(\App\Models\Principal::class, 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
     }
 
+    public function nationality(){
+        return $this->belongsTo(\App\Models\Country::class, 'NATIONALITY', 'id');
+    }
+
     public function getAllPassportsAttribute(){
     	return \App\Models\PrincipalDomesticWorkerPassport::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->get();
+    }
+
+    public function getLatestPassportAttribute(){
+        $passport = \App\Models\PrincipalDomesticWorkerPassport::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->orderBy('EXPIRY_DATE', 'DESC')->first();
+
+        return $passport;
     }
 }
