@@ -126,6 +126,7 @@ import Subprocesses from './views/processes/Subprocesses'
 
 // Exports
 import VATListExport from './views/exports/VATListExport'
+import OrganizationDataExport from './views/exports/OrganizationDataExport'
 
 import EditDomesticWorker from './views/domestic-worker/EditDomesticWorker'
 
@@ -252,6 +253,11 @@ Vue.component(
 	 		path: '/exports/vat-list',
 	 		name: 'export-vat-list',
 	 		component: VATListExport
+	 	},
+	 	{
+	 		path: '/exports/organization-data',
+	 		name: 'export-organization-data',
+	 		component: OrganizationDataExport
 	 	},
 	 	{
 	 		path: '/settings',

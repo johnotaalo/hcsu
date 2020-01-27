@@ -20,7 +20,7 @@
 			</template>
 
 			<template slot="Actions" slot-scope="props">
-				<b-button size="sm"></b-button>
+				<b-button size="sm" @click="editSupplier(props.row)">Edit</b-button>
 			</template>
 		</v-client-table>
 
@@ -80,6 +80,7 @@
 					perPageValues: []
 				},
 				modal: new Form({
+					ID: "",
 					'SUPPLIER_NAME': '',
 					'SUPPLIER_SHORT_NAME': '',
 					'SUPPLIER_ADDRESS': '',
@@ -107,31 +108,63 @@
 					// this.$toastr.error('There was an error fetching suppliers');
 				});
 			},
+			editSupplier(data){
+				console.log(data)
+				this.modal.ID = data.ID
+				this.modal.SUPPLIER_NAME = data.SUPPLIER_NAME
+				this.modal.SUPPLIER_SHORT_NAME = data.SUPPLIER_SHORT_NAME
+				this.modal.SUPPLIER_ADDRESS = data.SUPPLIER_ADDRESS
+				this.modal.PIN = data.PIN
+
+				this.$bvModal.show('manage-supplier')
+			},
 			submitModal(event){
 				event.preventDefault()
 				this.modalLoader.isLoading = true
-				this.modal.post('data/suppliers')
-				.then(res => {
-					this.modalLoader.isLoading = false
-					this.$swal('Success!', "Successfully added supplier", "success")
-					this.$bvModal.hide('manage-supplier')
-				})
-				.catch(error => {
-					this.modalLoader.isLoading = false
-					this.modalLoader.error = true
-					this.modalLoader.errorMessage = error.message
-					if(error.errors){
-						this.modalLoader.validationErrors = error.errors
-					}
-					this.$swal({
-						title: 'ERROR', 
-						text: `Sorry there was an error while performing this request<br/>${error.message}`, 
-						icon: "error"
+				if(this.modal.ID == ""){
+					this.modal.post('data/suppliers')
+					.then(res => {
+						this.modalLoader.isLoading = false
+						this.$swal('Success!', "Successfully added supplier", "success")
+						this.$bvModal.hide('manage-supplier')
 					})
-				});
-
+					.catch(error => {
+						this.modalLoader.isLoading = false
+						this.modalLoader.error = true
+						this.modalLoader.errorMessage = error.message
+						if(error.errors){
+							this.modalLoader.validationErrors = error.errors
+						}
+						this.$swal({
+							title: 'ERROR', 
+							text: `Sorry there was an error while performing this request<br/>${error.message}`, 
+							icon: "error"
+						})
+					});
+				}else{
+					this.modal.put('data/suppliers')
+					.then(res => {
+						this.modalLoader.isLoading = false
+						this.$swal('Success!', "Successfully updated supplier", "success")
+						this.$bvModal.hide('manage-supplier')
+					})
+					.catch(error => {
+						this.modalLoader.isLoading = false
+						this.modalLoader.error = true
+						this.modalLoader.errorMessage = error.message
+						if(error.errors){
+							this.modalLoader.validationErrors = error.errors
+						}
+						this.$swal({
+							title: 'ERROR', 
+							text: `Sorry there was an error while performing this request<br/>${error.message}`, 
+							icon: "error"
+						})
+					});
+				}
 			},
 			resetModal(){
+				this.modal.ID = ''
 				this.modal.SUPPLIER_NAME = ''
 				this.modal.SUPPLIER_ADDRESS = ''
 				this.modal.SUPPLIER_SHORT_NAME = ''

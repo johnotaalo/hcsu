@@ -109,6 +109,9 @@
 						<li>
 							<router-link class="dropdown-item" :to="{ name: 'export-vat-list' }">VAT List</router-link>
 						</li>
+						<li>
+							<router-link class="dropdown-item" :to="{ name: 'export-organization-data' }">Organization Data</router-link>
+						</li>
 					</ul>
 				</li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'settings' }">Settings</router-link></li>

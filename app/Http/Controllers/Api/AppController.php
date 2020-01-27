@@ -575,4 +575,10 @@ ORDER BY
             'data'  =>  $applications
         ];
     }
+
+    function getOldestDate(){
+        $date = \App\Models\PM\Application::min('APP_CREATE_DATE');
+
+        return $date;
+    }
 }

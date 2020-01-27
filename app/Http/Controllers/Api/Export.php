@@ -31,6 +31,43 @@ class Export extends Controller
     	return \Excel::download($exportData, 'VAT LIST.xlsx');
     }
 
+    function exportNewProcessData(Request $request){
+        $processes = collect($request->input('processes'))->map(function($process){
+            return $process['id'];
+        })->toArray();
+        $agencies = collect($request->input('agencies'))->map(function($agency){
+            return $agency['id'];
+        })->toArray();
+        $agencies_list = (count($agencies) > 0) ? implode(",", $agencies) : "All";
+
+        $statuses = collect($request->input('status'))->map(function($status){
+            return $status['id'];
+        })->toArray();
+
+        $years = $request->years;
+
+        $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO');
+        if (count($processes) > 0) {
+            $queryBuilder = $queryBuilder->whereIn('PRO_UID', $processes);
+        }
+
+        if (count($agencies) > 0) {
+            $queryBuilder = $queryBuilder->whereIn('agency', $agencies);
+        }
+
+        if(count($statuses)){
+            $queryBuilder = $queryBuilder->whereIn('CASE_STATUS', $statuses);
+        }
+
+        if(count($years)){
+            $queryBuilder = $queryBuilder->whereIn(\DB::raw('YEAR(CASE_START_DATE)'), $years);
+        }
+
+        $data = $queryBuilder->get();
+        $exportData = new \App\Exports\OrganizationDataExport($data);
+        return \Excel::download($exportData, "Organization Data ({$agencies_list}).xlsx");
+    }
+
     function downloadBlanketVATList(Request $request){
         $batch = \App\Models\BlanketVATBatch::find($request->batch);
         $vat = \App\Models\BlanketVAT::where('BATCH_ID', $request->batch)->get();

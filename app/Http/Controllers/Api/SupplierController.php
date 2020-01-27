@@ -22,6 +22,23 @@ class SupplierController extends Controller
 		return \App\Models\Supplier::create($request->input());
 	}
 
+	function update(Request $request){
+		$validateData = $request->validate([
+			'SUPPLIER_NAME'			=>	'required',
+			'SUPPLIER_ADDRESS'		=>	'required',
+			'SUPPLIER_SHORT_NAME'	=>	'required',
+			'PIN'					=>	'required'
+		]);
+
+		$supplier = \App\Models\Supplier::find($request->ID);
+
+		$supplier->fill($request->input());
+
+		$supplier->save();
+
+		return $supplier;
+	}
+
 	function searchSupplier(Request $request){
 		$searchTerm = $request->query('q');
 		return \App\Models\Supplier::where("SUPPLIER_NAME", "LIKE", "%{$searchTerm}%")->get();

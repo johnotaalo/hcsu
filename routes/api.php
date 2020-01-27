@@ -139,6 +139,7 @@ Route::prefix('vehicle')->group(function(){
 Route::prefix('data')->group(function(){
 	Route::prefix('suppliers')->group(function(){
 		Route::post('/', 'Api\SupplierController@create');
+		Route::put('/', 'Api\SupplierController@update');
 		Route::get('/all', 'Api\SupplierController@all');
 		Route::get('/search', 'Api\SupplierController@searchSupplier');
 	});
@@ -172,6 +173,10 @@ Route::prefix('data')->group(function(){
 		Route::put('/ipmis/functionality/{id}', 'Api\AppController@toggleIPMISFunctionality');
 	});
 
+	Route::prefix('applications')->group(function(){
+		Route::get('oldestdate', 'Api\AppController@getOldestDate');
+	});
+
 	Route::prefix('options')->group(function(){
 		Route::get('/dependent', 'Api\DataController@getDependentOptions');
 		Route::get('/domestic-worker', 'Api\DataController@getDomesticWorkerOptions');
@@ -187,6 +192,7 @@ Route::prefix('documents')->group(function(){
 	Route::get('/get/note_verbal/{process}/{case_no}', 'Api\AppController@generateNoteVerbal');
 
 	Route::get('/export/vat/normal/list', 'Api\Export@exportVAT');
+	Route::post('/export/processes/organization', 'Api\Export@exportNewProcessData');
 });
 
 Route::get('/dependent/search', 'Api\PrincipalController@searchDependent');
