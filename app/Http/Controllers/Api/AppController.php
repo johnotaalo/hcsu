@@ -276,6 +276,37 @@ ORDER BY
         return $response;
     }
 
+    function generateNOA(Request $request){
+        $document = FormTemplate::where([
+            'form_name' =>  'NOA'
+        ])->first();
+
+        if($document){
+            $path = storage_path('app/'. $document->path);
+            $form = new \App\Helpers\HCSU\PDFTK\NOA();
+            $config = [];
+            if (env('PDFTK_COMMAND')) {
+                $config = [
+                    'command'   =>  env('PDFTK_COMMAND'),
+                    'useExec'   =>  true
+                ];
+            }
+
+            $pdf = new Pdf($path, $config);
+            $pdf->fillForm($form->formData($request->host_country_id))
+                ->flatten()
+                ->execute();
+
+            $content = file_get_contents($pdf->getTmpFile());
+            $filename = $form->getFileName();
+            $localFile = "forms/NOA/{$filename}.pdf";
+            \Storage::put($localFile, $content);
+            // Upload to processmaker
+            // return \Storage::download($localFile);
+            return response()->file(storage_path("app/{$localFile}"));
+        }
+    }
+
     function generateDocument(Request $request){
         $case = $this->getCaseInformation($request->case_no);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";

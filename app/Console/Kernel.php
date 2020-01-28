@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Jobs\ExportOrganizationData;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -24,8 +26,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $organization_groups = [
+            'UNSOS' => [
+                'UNSOS',
+                'UNSOS (SO)',
+                'UNSOA',
+                'UNSOM'
+            ],
+            'UNICEF'    =>  [
+                'UNICEF (ESARO) (RO)',
+                'UNICEF (KCO)',
+                'UNICEF USSC SO'
+            ]
+        ];
+
+        foreach ($organization_groups as $group => $organizations) {
+            $schedule->job(new ExportOrganizationData($organizations, $group), 'organization_data')->dailyAt('19:20');
+        }
+        
     }
 
     /**

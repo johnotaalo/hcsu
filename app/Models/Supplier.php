@@ -10,6 +10,7 @@ class Supplier extends Model
     protected $table = "ref_suppliers";
 
     protected $fillable = ['SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'SUPPLIER_SHORT_NAME', 'PIN'];
+    protected $primaryKey = "ID";
 
     public $timestamps = false;
 }

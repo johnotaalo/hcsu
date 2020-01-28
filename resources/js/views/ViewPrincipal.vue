@@ -42,6 +42,11 @@
 							<h1 class="header-title">{{ fullname }}</h1>
 
 						</div>
+						<div class="col mb-3 ml-n3 ml-md-n2">
+
+							<b-button @click="downloadNOA" variant="primary">Generate NOA</b-button>
+
+						</div>
 						<div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3">
 							<!-- Pretitle -->
 							<h6 class="header-pretitle">HOST COUNTRY ID</h6>
@@ -703,6 +708,9 @@
 			}
 		},
 		methods: {
+			downloadNOA: function(){
+				window.open(`/api/documents/generate/NOA/${this.userId}`);
+			},
 			handleFileUpload: function(){
 				this.$refs.principalFile.click();
 			},

@@ -186,20 +186,6 @@
 				this.form.status = []
 				this.form.years = []
 			}
-		},
-		computed:{
-			yearsToSelect(){
-				var years = []
-				if (this.oldestdate) {
-					var oldestYear = this.$moment(this.oldestdate).year()
-					var currentYear = this.$moment().year()
-					for (var i = oldestYear; i <= currentYear; i++) {
-						years.push(i)
-					}
-				}
-				
-				return years;
-			}
 		}
 	}
 </script>

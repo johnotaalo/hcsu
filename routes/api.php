@@ -47,6 +47,26 @@ Route::get('test', function(){
 	dd($tests);
 });
 
+Route::get('/test/queue', function(){
+	$organization_groups = [
+        'UNSOS' => [
+            'UNSOS',
+            'UNSOS (SO)',
+            'UNSOA',
+            'UNSOM'
+        ],
+        'UNICEF'    =>  [
+            'UNICEF (ESARO) (RO)',
+            'UNICEF (KCO)',
+            'UNICEF USSC SO'
+        ]
+    ];
+
+    foreach ($organization_groups as $group => $organizations) {
+        \App\Jobs\ExportOrganizationData::dispatch($organizations, $group)->onQueue('processing');
+    }
+});
+
 // Route::group(['middleware' => 'auth:api'], function(){
 // 	Route::prefix('principal')->group(function(){
 // 		Route::get('/', 'Api\PrincipalController@getPrincipal');
@@ -189,6 +209,7 @@ Route::prefix('data')->group(function(){
 
 Route::prefix('documents')->group(function(){
 	Route::get('/generate/{case_no}', 'Api\AppController@generateDocument');
+	Route::get('/generate/NOA/{host_country_id}', 'Api\AppController@generateNOA');
 	Route::get('/get/note_verbal/{process}/{case_no}', 'Api\AppController@generateNoteVerbal');
 
 	Route::get('/export/vat/normal/list', 'Api\Export@exportVAT');

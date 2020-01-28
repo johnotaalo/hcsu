@@ -9,7 +9,7 @@
 					<div class="card-body">
 						<ul class="nav nav-tabs mb-4">
 							<li class="nav-item"><router-link class="nav-link" :to="{ name: 'blanket-vat-batches' }">Batches</router-link></li>
-							<li class="nav-item"<router-link class="nav-link" :to="{ name: 'normal-vat' }">Normal VAT</router-link></li>
+							<li class="nav-item"><router-link class="nav-link" :to="{ name: 'normal-vat' }">Normal VAT</router-link></li>
 						</ul>
 						<router-view></router-view>
 					</div>

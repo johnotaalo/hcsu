@@ -52,7 +52,7 @@ class Export extends Controller
         }
 
         if (count($agencies) > 0) {
-            $queryBuilder = $queryBuilder->whereIn('agency', $agencies);
+            $queryBuilder = $queryBuilder->whereIn('AGENCY', $agencies);
         }
 
         if(count($statuses)){

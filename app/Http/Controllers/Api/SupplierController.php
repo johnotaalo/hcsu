@@ -30,13 +30,9 @@ class SupplierController extends Controller
 			'PIN'					=>	'required'
 		]);
 
-		$supplier = \App\Models\Supplier::find($request->ID);
+		$updated = \App\Models\Supplier::find($request->ID)->update($request->except('_method', 'ID'));
 
-		$supplier->fill($request->input());
-
-		$supplier->save();
-
-		return $supplier;
+		return ['updated' => $updated];
 	}
 
 	function searchSupplier(Request $request){
