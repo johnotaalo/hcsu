@@ -73,8 +73,8 @@ class NOA{
 			"v1"				=>	"N/A",
 			"m0"				=>	"N/A",
 			"m1"				=>	"N/A",
-			"spousename"		=>	format_other_names($spouse->OTHER_NAMES) . " " . strtoupper($spouse->LAST_NAME),
-			"sp_emp"			=>	($spouse->EMPLOYMENT_DETAILS) ? $spouse->EMPLOYMENT_DETAILS : "N/A",
+			"spousename"		=>	($spouse) ? format_other_names($spouse->OTHER_NAMES) . " " . strtoupper($spouse->LAST_NAME) : "N/A",
+			"sp_emp"			=>	($spouse) ? $spouse->EMPLOYMENT_DETAILS : "N/A",
 			"today"				=>	(\Carbon\Carbon::now())->format("F d, Y")
 
 		];
