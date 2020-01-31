@@ -197,8 +197,12 @@ class NoteVerbal {
 					}
 				}
 
-				if($this->data->caseData->COMMENTS){
+				if($this->data->caseData->COMMENTS && $this->data->client->type == "staff"){
 					$body .= "\r{$this->data->caseData->COMMENTS}\r";
+				}
+
+				if($this->data->caseData->JUSTIFICATION && $this->data->client->type == "domestic-worker"){
+					$body .= "\r{$this->data->caseData->JUSTIFICATION}\r";
 				}
 
 				if($this->data->client->type == "domestic-worker"){
@@ -215,7 +219,7 @@ class NoteVerbal {
 			$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 
 			$body .= "\rThe Host Country Agreement signed between UNEP and Government of Kenya provides in article XI, section 22 (a)i, that privileges granted to officials of the United Nations include among other things residence Permits for \"Members\" of permanent missions and other representatives of Member States, their families and other members of their households.\r";
-			$body .= "\rThe office of the Director General, UNON wishes to inform the esteemed Ministry that {$this->data->caseData->COMMENTS} and therefore issuance of Exemption from Kenya Work Permit to her domestic worker is highly recommended.\r";
+			$body .= "\rThe office of the Director General, UNON wishes to inform the esteemed Ministry that {$this->data->caseData->JUSTIFICATION} and therefore issuance of Exemption from Kenya Work Permit to her domestic worker is highly recommended.\r";
 			break;
 			
 		}

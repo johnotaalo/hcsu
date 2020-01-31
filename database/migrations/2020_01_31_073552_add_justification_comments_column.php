@@ -15,6 +15,7 @@ class AddJustificationCommentsColumn extends Migration
     {
         Schema::connection('pm_data')->table('IM_01', function (Blueprint $table) {
             $table->text('COMMENTS')->after('DEPENDENTS')->nullable();
+             $table->text('JUSTIFICATION')->after('COMMENTS')->nullable();
         });
     }
 
@@ -26,7 +27,7 @@ class AddJustificationCommentsColumn extends Migration
     public function down()
     {
         Schema::connection('pm_data')->table('IM_01', function (Blueprint $table) {
-            $table->dropColumn(['COMMENTS']);
+            $table->dropColumn(['COMMENTS', 'JUSTIFICATION']);
         });
     }
 }
