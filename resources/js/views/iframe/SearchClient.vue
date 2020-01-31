@@ -402,7 +402,7 @@
 					var result = [];
 					if(this.application == 'visa_extension' || this.application == 'work-permit-new-case'){
 						result = _.filter(list, (obj) => {
-							return obj.value == 'staff-member' || obj.value == 'dependent' || obj.value == 'domestic-worker'
+							return obj.value == 'staff-member' || obj.value == 'domestic-worker'
 						})
 					}
 					else if (this.application == 'diplomatic_id') {
