@@ -42,40 +42,59 @@ class NoteVerbal {
 					$connector = "apply for renewal of Diplomatic ID card for";
 				break;
 			case 'work-permit-new-case':
-				$connector = "submit an application for";
+				if ($this->data->client->type == "staff") {
+					$connector = "submit an application for";
+					$end_header = "";
+					if ($this->data->type == "new-case") {
+						$end_header .= "issuance";
+					}
+
+					$end_header .= " of Exemption from Kenya Work Permit";
+
+					if($this->data->client->dependents){
+						$end_header .= " and Dependants Pass";
+					}
+
+					$end_header .= " for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
+
+					if($this->data->client->relationships){
+						$relationships = [];
+						foreach ($this->data->client->relationships as $relationship) {
+							if ($relationship != "Spouse") {
+								$relationship = "dependants";
+							}else{
+								$relationship = strtolower($relationship);
+							}
+
+							array_push($relationships, $relationship);
+						}
+
+						$uniqueRelationships = collect($relationships)->unique()->toArray();
+						$relationshipString = implode(" and ", $uniqueRelationships);
+
+						$end_header .= " and his {$relationshipString}";
+					}
+
+					$end_header .= ".";
+				}else{
+					$connector = "apply for";
+					$end_header = "";
+					if ($this->data->type == "new-case") {
+						$end_header .= "issuance";
+					}
+
+					$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
+				}
+				break;
+			case 'domestic-worker-justification':
+				$connector = "apply for";
 				$end_header = "";
 				if ($this->data->type == "new-case") {
 					$end_header .= "issuance";
 				}
 
-				$end_header .= " of Exemption from Kenya Work Permit";
+				$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, {$this->data->client->contract->DESIGNATION} with {$this->data->client->organization} in Kenya.";
 
-				if($this->data->client->dependents){
-					$end_header .= " and Dependants Pass";
-				}
-
-				$end_header .= " for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
-
-				if($this->data->client->relationships){
-					$relationships = [];
-					foreach ($this->data->client->relationships as $relationship) {
-						if ($relationship != "Spouse") {
-							$relationship = "dependants";
-						}else{
-							$relationship = strtolower($relationship);
-						}
-
-						array_push($relationships, $relationship);
-					}
-
-					$uniqueRelationships = collect($relationships)->unique()->toArray();
-					$relationshipString = implode(" and ", $uniqueRelationships);
-
-					$end_header .= " and his {$relationshipString}";
-				}
-
-				$end_header .= ".";
-				
 				break;
 		}
 
@@ -167,14 +186,36 @@ class NoteVerbal {
 				}
 				$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 
-				if($this->data->client->dependents){
-					$body .= "\rSpouse and Dependants\r";
-					$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
-					foreach ($this->data->client->dependents as $dependant) {
-						// dd($dependant->latest_passport);
-						$body .= str_pad(ucwords(strtolower($dependant->OTHER_NAMES)) . " " . strtoupper($dependant->LAST_NAME), 30) . str_pad("", 15) . str_pad($dependant->COUNTRY, 20);
+				if($this->data->client->type == "staff"){
+					if($this->data->client->dependents){
+						$body .= "\rSpouse and Dependants\r";
+						$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
+						foreach ($this->data->client->dependents as $dependant) {
+							// dd($dependant->latest_passport);
+							$body .= str_pad(ucwords(strtolower($dependant->OTHER_NAMES)) . " " . strtoupper($dependant->LAST_NAME), 30) . str_pad("", 15) . str_pad($dependant->COUNTRY, 20);
+						}
 					}
 				}
+
+				if($this->data->caseData->COMMENTS){
+					$body .= "\r{$this->data->caseData->COMMENTS}\r";
+				}
+
+				if($this->data->client->type == "domestic-worker"){
+					$body .= "\rDuly completed Form 25, copies of above-mentioned passport, other relevant supporting documents and a copy of the staff member's Passport No. {$this->data->client->principal->latest_passport->PASSPORT_NO} with valid Exemption from Kenya Work Permit No. R-{$this->data->client->principal->R_NO}.\r";
+				}
+				
+			break;
+
+		case 'domestic-worker-justification':
+			$body = "The details of the house help are as follows:\r";
+			$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+			$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
+			$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+			$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
+
+			$body .= "\rThe Host Country Agreement signed between UNEP and Government of Kenya provides in article XI, section 22 (a)i, that privileges granted to officials of the United Nations include among other things residence Permits for \"Members\" of permanent missions and other representatives of Member States, their families and other members of their households.\r";
+			$body .= "\rThe office of the Director General, UNON wishes to inform the esteemed Ministry that {$this->data->caseData->COMMENTS} and therefore issuance of Exemption from Kenya Work Permit to her domestic worker is highly recommended.\r";
 			break;
 			
 		}

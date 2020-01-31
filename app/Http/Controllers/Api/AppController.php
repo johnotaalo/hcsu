@@ -410,6 +410,7 @@ ORDER BY
                 $data = \App\Helpers\HCSU\Data\DiplomaticIDData::get($case->app_number, 'renewal');
                 break;
             case 'work-permit-new-case':
+            case 'domestic-worker-justification':
                 $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'new-case');
                 break;
         }
