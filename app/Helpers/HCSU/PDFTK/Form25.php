@@ -36,7 +36,7 @@ class Form25{
 
 		$tabData = [
 			"fullname"			=>	$form_data->client->name,
-			"pobox"				=>	$form_data->client->clientdata->ADDRESS,
+			"pobox"				=>	"{$form_data->client->clientdata->ADDRESS} c/o {$form_data->client->clientdata->principal->principal_name}",
 			"dob"				=>	$form_data->client->clientdata->DATE_OF_BIRTH,
 			"pob"				=>	$form_data->client->clientdata->PLACE_OF_BIRTH,
 			"nationality"		=>	$form_data->client->nationality,
@@ -46,11 +46,11 @@ class Form25{
 			"poi"				=>	$form_data->client->passport->place_of_issue,
 			"spousename"		=>	($form_data->client->type == "staff") ? ucwords(strtolower($form_data->client->clientdata->spouse->OTHER_NAMES)) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME) : "N/A",
 			"rNo"				=>	$form_data->client->clientdata->R_NO,
-			"agencyfullname"	=>	$form_data->client->contract->AGENCYNAME,
-			"designation"		=>	$form_data->client->contract->DESIGNATION,
-			"location"			=>	$form_data->client->contract->LOCATION,
-			"descript"			=>	$form_data->client->contract->FUNC_TITLE,
-			"cstart"			=>	$form_data->client->contract->START_DATE,
+			"agencyfullname"	=>	($form_data->client->type == "staff") ? $form_data->client->contract->AGENCYNAME : $form_data->client->clientdata->principal->principal_name,
+			"designation"		=>	($form_data->client->type == "staff") ? $form_data->client->contract->DESIGNATION : "House Help",
+			"location"			=>	($form_data->client->type == "staff") ? $form_data->client->contract->LOCATION : $form_data->client->clientdata->principal->RESIDENCE,
+			"descript"			=>	($form_data->client->type == "staff") ? $form_data->client->contract->FUNC_TITLE : "Domestic Worker",
+			"cstart"			=>	($form_data->client->type == "staff") ? $form_data->client->contract->START_DATE : $form_data->client->clientdata->CONTRACT_START_DATE,
 			"cend"				=>	$form_data->client->contract->END_DATE,
 			"today"				=>	$form_data->date
 		];
@@ -58,7 +58,7 @@ class Form25{
 		$tabData = $tabData + $dependent_data;
 
 		// $template = new \App\Helpers\HCSU\PDFTK\Templates\VISAExtensionForm($tabData);
-		// dd($tabData);
+		dd($tabData);
         $this->filename = "{$document->form_name} for {$form_data->client->name} - {$date}";
         return $tabData;
 	}
