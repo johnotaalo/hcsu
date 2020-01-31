@@ -14,4 +14,8 @@ class PrincipalDomesticWorkerPassport extends Model
     	// dd($this->attr['PLACE_OF_ISSUE']);
     	return \App\Models\Country::where('iso_3', $this->COUNTRY_OF_ISSUE)->first();
     }
+
+    public function type(){
+    	return $this->belongsTo(\App\Models\PassportType::class, 'PASSPORT_TYPE', 'ID');
+    }
 }

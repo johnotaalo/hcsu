@@ -21,14 +21,16 @@ class Form25{
 
 		$dependent_data = [];
 
-		foreach ($form_data->client->dependents as $dependent) {
-			$no = 1;
-			if ($dependent->RELATIONSHIP_ID != 2) {
-				$dependent_data["owner{$no}"] = ucwords(strtolower($dependent->OTHER_NAMES)) . " " . strtoupper($dependent->LAST_NAME);
-				$dependent_data["sex{$no}"] = $dependent->GENDER;
-				$dependent_data["date_of_birth{$no}"] = date('Y-m-d', strtotime($dependent->DATE_OF_BIRTH));
-				$dependent_data["nationality{$no}"] = $dependent->COUNTRY;
-				$no++;
+		if($form_data->client->type == "staff"){
+			foreach ($form_data->client->dependents as $dependent) {
+				$no = 1;
+				if ($dependent->RELATIONSHIP_ID != 2) {
+					$dependent_data["owner{$no}"] = ucwords(strtolower($dependent->OTHER_NAMES)) . " " . strtoupper($dependent->LAST_NAME);
+					$dependent_data["sex{$no}"] = $dependent->GENDER;
+					$dependent_data["date_of_birth{$no}"] = date('Y-m-d', strtotime($dependent->DATE_OF_BIRTH));
+					$dependent_data["nationality{$no}"] = $dependent->COUNTRY;
+					$no++;
+				}
 			}
 		}
 
@@ -42,7 +44,7 @@ class Form25{
 			"ppttype"			=>	$form_data->client->passport->passport_type,
 			"doi"				=>	$form_data->client->passport->issue_date,
 			"poi"				=>	$form_data->client->passport->place_of_issue,
-			"spousename"		=>	ucwords(strtolower($form_data->client->clientdata->spouse->OTHER_NAMES)) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME),
+			"spousename"		=>	($form_data->client->type == "staff") ? ucwords(strtolower($form_data->client->clientdata->spouse->OTHER_NAMES)) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME) : "N/A",
 			"rNo"				=>	$form_data->client->clientdata->R_NO,
 			"agencyfullname"	=>	$form_data->client->contract->AGENCYNAME,
 			"designation"		=>	$form_data->client->contract->DESIGNATION,

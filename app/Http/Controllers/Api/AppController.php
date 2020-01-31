@@ -353,19 +353,23 @@ ORDER BY
             //     ->needAppearances()
             //     ->saveAs("{$filename}.pdf");
             // $pdf->send("{$filename}", true);
-            $pdf->fillForm($data)
-                ->flatten()
-                ->execute();
-
-            $content = file_get_contents($pdf->getTmpFile());
-            $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
-            \Storage::put($localFile, $content);
-            // Upload to processmaker
-            if ($document->input_document != null) {
-                $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+            try{
+                $pdf->fillForm($data)
+                    ->flatten()
+                    ->execute();
+                dd($pdf->getError());
+                $content = file_get_contents($pdf->getTmpFile());
+                $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
+                \Storage::put($localFile, $content);
+                // Upload to processmaker
+                if ($document->input_document != null) {
+                    $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+                }
+                // return \Storage::download($localFile);
+                return response()->file(storage_path("app/{$localFile}"));
+            }catch(\Exception $ex){
+                dd($ex);
             }
-            // return \Storage::download($localFile);
-            return response()->file(storage_path("app/{$localFile}"));
         }
         else{
             abort(404);
