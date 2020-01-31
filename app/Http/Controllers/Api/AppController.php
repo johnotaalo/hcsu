@@ -357,7 +357,9 @@ ORDER BY
                 $pdf->fillForm($data)
                     ->flatten()
                     ->execute();
-                dd($pdf->getError());
+               if($pdf->getError()){
+                abort(500, $pdf->getError());
+               }
                 $content = file_get_contents($pdf->getTmpFile());
                 $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
                 \Storage::put($localFile, $content);
