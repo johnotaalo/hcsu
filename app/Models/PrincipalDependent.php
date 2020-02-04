@@ -9,7 +9,7 @@ class PrincipalDependent extends Model
 {
     protected $primaryKey = "ID";
 	protected $table = "PRINCIPAL_DEPENDENT";
-  	protected $appends = ["image_link", "relationship", "passports", "latest_passport"];
+  	protected $appends = ["image_link", "relationship", "passports", "latest_passport", "fullname"];
 
     protected $fillable = ["HOST_COUNTRY_ID", "PRINCIPAL_ID", "INDEX_NO", "LAST_NAME", "OTHER_NAMES", "RELATIONSHIP_ID", "COUNTRY", "EMPLOYMENT_DETAILS", "PASSPORT_NO", "DATE_OF_BIRTH", "IMAGE", "OLD_REF_ID"];
 
@@ -41,5 +41,9 @@ class PrincipalDependent extends Model
 
     public function relationshipX(){
       return $this->belongsTo('\App\Models\Relationship', 'RELATIONSHIP_ID', 'REL_ID');
+    }
+
+    public function getFullnameAttribute(){
+        return format_other_names($this->OTHER_NAMES) . " " . strtoupper($this->LAST_NAME);
     }
 }
