@@ -36,7 +36,7 @@ class Form25{
 
 		$tabData = [
 			"fullname"			=>	$form_data->client->name,
-			"pobox"				=>	"{$form_data->client->clientdata->ADDRESS} c/o {$form_data->client->clientdata->principal->principal_name}",
+			"pobox"				=>	($form_data->client->type == "staff") ? $form_data->client->clientdata->ADDRESS : "{$form_data->client->clientdata->ADDRESS} c/o {$form_data->client->clientdata->principal->principal_name}",
 			"dob"				=>	$form_data->client->clientdata->DATE_OF_BIRTH,
 			"pob"				=>	$form_data->client->clientdata->PLACE_OF_BIRTH,
 			"nationality"		=>	$form_data->client->nationality,

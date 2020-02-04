@@ -187,7 +187,7 @@ class NoteVerbal {
 				$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 
 				if($this->data->client->type == "staff"){
-					if($this->data->client->dependents){
+					if(!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != ""){
 						$body .= "\rSpouse and Dependants\r";
 						$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
 						foreach ($this->data->client->dependents as $dependant) {
