@@ -368,6 +368,9 @@ ORDER BY
                     $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
                 }
                 // return \Storage::download($localFile);
+                if(isset($request->download) && $request->download == 1){
+                    return \Storage::download($localFile);
+                }
                 return response()->file(storage_path("app/{$localFile}"));
             }catch(\Exception $ex){
                 dd($ex);

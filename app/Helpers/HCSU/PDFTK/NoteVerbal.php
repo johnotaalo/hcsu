@@ -98,13 +98,14 @@ class NoteVerbal {
 				break;
 		}
 
-		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs & International Trade of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
+		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
 
 		return $this;
 	}
 
 	public function getFooter(){
-		$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs and International Trade of the Republic of Kenya the assurances of its highest consideration.\r\r\r\r\r\r\r\r                            {$this->data->date}";
+		$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs 
+		of the Republic of Kenya the assurances of its highest consideration.\r\r\r\r\r\r\r\r                            {$this->data->date}";
 
 		return $this;
 	}
@@ -187,6 +188,7 @@ class NoteVerbal {
 				$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 
 				if($this->data->client->type == "staff"){
+					
 					if(!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != ""){
 						$body .= "\rSpouse and Dependants\r";
 						$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
@@ -198,6 +200,9 @@ class NoteVerbal {
 							$body .= str_pad(ucwords(strtolower($dependant->OTHER_NAMES)) . " " . strtoupper($dependant->LAST_NAME), 30) . str_pad($passport_no, 15) . str_pad($dependant->COUNTRY, 20) . str_pad($passport_validity, 20);
 						}
 					}
+
+					$include_28 = (!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != "") ? "& 28" : "";
+					$body .= "Duly commpleted Forms 25 {$include_28} together with a copy of the above mentioned passport is attached herewith.\r";
 				}
 
 				if($this->data->caseData->COMMENTS && $this->data->client->type == "staff"){

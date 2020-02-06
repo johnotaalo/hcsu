@@ -860,7 +860,7 @@
 						_this.clearPassportModal()
 					})
 				}else{
-					this.modal.passport.post('/principal/passport/edit/')
+					this.modal.passport.post('/principal/passport/edit')
 					.then((res) => {
 						_this.principal.passports.splice(_this.passports.editIndex, 1, res)
 
