@@ -17,6 +17,7 @@ class NoteVerbal {
 		$connector = "";
 		$end_header = "";
 		$body = "";
+		$your_ref = "";
 
 		switch($this->process){
 			case 'vat':
@@ -42,11 +43,18 @@ class NoteVerbal {
 					$connector = "apply for renewal of Diplomatic ID card for";
 				break;
 			case 'work-permit-new-case':
+			case 'work-permit-endorsement':
 				if ($this->data->client->type == "staff") {
 					$connector = "submit an application for";
 					$end_header = "";
 					if ($this->data->type == "new-case") {
 						$end_header .= "issuance";
+					}else{
+						$end_header .= "endorsement";
+					}
+
+					if($this->process == "work-permit-endorsement"){
+						$your_ref = "Your Ref: {$this->data->client->RNO}\n";
 					}
 
 					$end_header .= " of Exemption from Kenya Work Permit";
@@ -94,18 +102,16 @@ class NoteVerbal {
 				}
 
 				$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, {$this->data->client->contract->DESIGNATION} with {$this->data->client->organization} in Kenya.";
-
 				break;
 		}
 
-		$this->header = "Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
+		$this->header = "{$your_ref}Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
 
 		return $this;
 	}
 
 	public function getFooter(){
-		$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs 
-		of the Republic of Kenya the assurances of its highest consideration.\r\r\r\r\r\r\r\r                            {$this->data->date}";
+		$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs of the Republic of Kenya the assurances of its highest consideration.\r\r\r\r\r\r\r\r                            {$this->data->date}";
 
 		return $this;
 	}
@@ -177,6 +183,7 @@ class NoteVerbal {
 			break;
 
 			case 'work-permit-new-case':
+			case 'work-permit-endorsement':
 				$body = "Details are as follows:\r";
 
 				$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
@@ -201,8 +208,12 @@ class NoteVerbal {
 						}
 					}
 
-					$include_28 = (!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != "") ? "& 28" : "";
-					$body .= "Duly commpleted Forms 25 {$include_28} together with a copy of the above mentioned passport is attached herewith.\r";
+					if($this->process == "work-permit-new-case"){
+						$include_28 = (!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != "") ? "& 28" : "";
+						$body .= "Duly commpleted Forms 25 {$include_28} together with a copy of the above mentioned passport is attached herewith.\r";
+					}else{
+						$body .= "\rThe above mentioned passport is attached herewith.";
+					}
 				}
 
 				if($this->data->caseData->COMMENTS && $this->data->client->type == "staff"){

@@ -144,7 +144,7 @@
               @remove="removeRow($event, form.passports)" />
 				</tab-content>
 				<tab-content title= "Contract Details" icon = "fe fe-file" :before-change="()=>validateStep('contract')">
-					<contract-details ref="contract" :agencies="options.agencies" :contractTypes="options.contractTypes" :grades="options.grades" v-model="form.contract" :designations="options.designations" @on-validate="mergeContractData"></contract-details>
+					<contract-details ref="contract" :agencies="options.agencies" :contractTypes="options.contractTypes" :grades="options.grades" v-model="form.contract" :designations="filteredDesignations" @on-validate="mergeContractData"></contract-details>
 				</tab-content>
 				<tab-content title= "Dependents" icon = "fe fe-users">
 					<div class="row">
@@ -193,8 +193,7 @@
 						<input type="file"
 						ref="file"
 						:name="uploadFieldName"
-						@change="onFileChange(
-						$event.target.name, $event.target.files)"
+						@change="onFileChange($event.target.name, $event.target.files)"
 						style="display:none">
 					</center>
 				</div>
@@ -458,6 +457,18 @@
 
 				return new this.$moment().format();
 			},
+			filteredDesignations: function(){
+				var designations = this.options.designations;
+				if(this.form.contract.grade){
+					var filtered = _.map(designations[this.form.contract.grade.label], designation => ({
+						id: designation.ID,
+						label: designation.DESIGNATION
+					}))
+					return filtered
+				}
+
+				return []
+			},
 			maxDobPrincipal: function(){
 				return this.$moment().subtract(18, "Years").format()
 			}
@@ -706,7 +717,7 @@
 				.then((res) => {
 					this.$swal(`Success! Host Country ID: ${res.principal.HOST_COUNTRY_ID}`, "The client has successfully been registered", "success")
 					if(this.rqType != "iframe"){
-						em.$router.push({ name: 'principal.view', params: { id: res.data.host_country_id } })
+						em.$router.push({ name: 'principal.view', params: { id: res.principal.HOST_COUNTRY_ID } })
 					}
 				})
 				.catch((error) => {

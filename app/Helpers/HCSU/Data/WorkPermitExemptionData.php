@@ -3,10 +3,18 @@
 namespace App\Helpers\HCSU\Data;
 
 use \App\WorkPermitApplication;
+use \App\WorkPermitEndorsement;
 
 class WorkPermitExemptionData{
 	public static function get($case_no, $type = "new"){
-		$caseData = WorkPermitApplication::where('CASE_NO', $case_no)->first();
+		$endorsementCase = new \StdClass;
+		if ($type == "new-case") {
+			$caseData = WorkPermitApplication::where('CASE_NO', $case_no)->first();
+		}elseif ($type == "endorsement") {
+			$caseData = WorkPermitEndorsement::where('CASE_NO', $case_no)->first();
+			$endorsementCase = WorkPermitApplication::where('ENDORSEMENT_CASE_NO', $case_no)->first();
+		}
+		
 		$data = new \StdClass;
 		$clientObj = new \StdClass;
 
@@ -26,6 +34,10 @@ class WorkPermitExemptionData{
 			if (count($includedDependents)) {
 				$dependents = \App\Models\PrincipalDependent::whereIn('HOST_COUNTRY_ID', $includedDependents)->get();
 				$relationships = ($dependents->pluck('relationship.RELATIONSHIP'))->unique()->toArray();
+			}
+
+			if($endorsementCase){
+				$clientObj->RNO = $endorsementCase->RNUMBER;
 			}
 
 			$clientObj->name = $client_name;

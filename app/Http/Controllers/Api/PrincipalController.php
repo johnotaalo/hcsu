@@ -179,6 +179,7 @@ class PrincipalController extends Controller
             $imagePath = $request->file('principalPhotoFile')->store('principal_photos');
         }
 
+        $principal->HOST_COUNTRY_ID = strtotime(date(DATE_RFC2822));
         $principal->LAST_NAME = strtoupper($request->input('lastName'));
         $principal->OTHER_NAMES = format_other_names($request->input('otherNames'));
         $principal->EMAIL = $request->input('email');
@@ -240,7 +241,7 @@ class PrincipalController extends Controller
             foreach ($request->input('passports') as $key => $passport) {
                 $principalPassport = new PrincipalPassport();
 
-                $principalPassport->PRINCIPAL_ID = $principal->HOST_COUNTRY_ID;
+                $principalPassport->PRINCIPAL_ID = $principal->ID;
                 $principalPassport->PASSPORT_TYPE_ID = $passport["passportType"];
                 $principalPassport->PASSPORT_NO = $passport["passportNo"];
                 $principalPassport->PLACE_OF_ISSUE = $passport["place_issue"];
