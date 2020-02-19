@@ -8,6 +8,7 @@ use \App\Models\Agency;
 
 class VATData{
 	public static function get($case_no){
+		try{
 		$data = [];
 
 		$vat_data = VAT::where('CASE_NO', $case_no)->first();
@@ -115,6 +116,10 @@ class VATData{
         $data->vat = $vatObj;
 
         return $data;
+}catch(\Exception $ex){
+echo "Case: {$case_no}";die;
+	dd($ex);
+}
 	}
 
 	static function generateCombinedString($array){
