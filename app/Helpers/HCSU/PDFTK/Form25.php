@@ -35,7 +35,7 @@ class Form25{
 		}
 
 		$spouseDetails = $form_data->client->clientdata->spouse;
-		$spouse_name = ($spouseDetails) ? format_other_names($spouseDetails->OTHER_NAMES) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME) : "N/A"
+		$spouse_name = ($spouseDetails) ? format_other_names($spouseDetails->OTHER_NAMES) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME) : "N/A";
 
 		$tabData = [
 			"fullname"			=>	$form_data->client->name,
