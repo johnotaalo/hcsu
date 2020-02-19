@@ -40,7 +40,7 @@ class Form25{
 			$spouse_name = ($form_data->client->clientdata->parent) ? format_other_names($form_data->client->clientdata->parent->OTHER_NAMES) . " " . strtoupper($form_data->client->clientdata->parent->LAST_NAME) : "N/A";
 		}else{
 			if($spouseDetails){
-				$spouse_name = format_other_names($spouseDetails->OTHER_NAMES) . " " . strtoupper($spouseDetails->LAST_NAME) : "N/A";
+				$spouse_name = format_other_names($spouseDetails->OTHER_NAMES) . " " . strtoupper($spouseDetails->LAST_NAME);
 			}
 		}
 
