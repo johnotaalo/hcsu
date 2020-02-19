@@ -33,7 +33,8 @@ class Principal extends Model
     }
 
     public function getParentAttribute(){
-        return $this->dependents->where('RELATIONSHIP_ID', 5)->orWhere('RELATIONSHIP_ID', 6)->first();
+        // return $this->dependents->where('RELATIONSHIP_ID', 5)->orWhere('RELATIONSHIP_ID', 6)->first();
+        return \App\Models\PrincipalDependent::where('PRINCIPAL_ID', $this->PRINCIPAL_ID)->where('RELATIONSHIP_ID', 5)->orWhere('RELATIONSHIP_ID', 6)->first();
     }
 
     public function passports(){
