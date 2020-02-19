@@ -35,7 +35,14 @@ class Form25{
 		}
 
 		$spouseDetails = $form_data->client->clientdata->spouse;
-		$spouse_name = ($spouseDetails) ? format_other_names($spouseDetails->OTHER_NAMES) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME) : "N/A";
+		$spouse_name = "";
+		if($form_data->client->clientdata->MARITAL_STATUS == "Single"){
+			$spouse_name = ($form_data->client->clientdata->parent) ? format_other_names($form_data->client->clientdata->parent->OTHER_NAMES) . " " . strtoupper($form_data->client->clientdata->parent->LAST_NAME) : "N/A";
+		}else{
+			if($spouseDetails){
+				$spouse_name = format_other_names($spouseDetails->OTHER_NAMES) . " " . strtoupper($spouseDetails->LAST_NAME) : "N/A";
+			}
+		}
 
 		$tabData = [
 			"fullname"			=>	$form_data->client->name,

@@ -32,6 +32,10 @@ class Principal extends Model
         return $this->dependents->where('RELATIONSHIP_ID', 2)->first();
     }
 
+    public function getParentAttribute(){
+        return $this->dependents->where('RELATIONSHIP_ID', 5)->orWhere('RELATIONSHIP_ID', 6)->first();
+    }
+
     public function passports(){
     	return $this->hasMany('\App\Models\PrincipalPassport', 'PRINCIPAL_ID', 'ID');
     }
