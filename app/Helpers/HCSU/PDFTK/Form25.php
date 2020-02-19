@@ -34,6 +34,9 @@ class Form25{
 			}
 		}
 
+		$spouseDetails = $form_data->client->clientdata->spouse;
+		$spouse_name = ($spouseDetails) ? format_other_names($spouseDetails->OTHER_NAMES) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME) : "N/A"
+
 		$tabData = [
 			"fullname"			=>	$form_data->client->name,
 			"pobox"				=>	($form_data->client->type == "staff") ? $form_data->client->clientdata->ADDRESS : "{$form_data->client->clientdata->ADDRESS} c/o {$form_data->client->clientdata->principal->principal_name}",
@@ -44,7 +47,7 @@ class Form25{
 			"ppttype"			=>	$form_data->client->passport->passport_type,
 			"doi"				=>	$form_data->client->passport->issue_date,
 			"poi"				=>	$form_data->client->passport->place_of_issue,
-			"spousename"		=>	($form_data->client->type == "staff") ? ucwords(strtolower($form_data->client->clientdata->spouse->OTHER_NAMES)) . " " . strtoupper($form_data->client->clientdata->spouse->LAST_NAME) : "N/A",
+			"spousename"		=>	($form_data->client->type == "staff") ? $spouse_name : "N/A",
 			"rNo"				=>	$form_data->client->clientdata->R_NO,
 			"agencyfullname"	=>	($form_data->client->type == "staff") ? $form_data->client->contract->AGENCYNAME : $form_data->client->clientdata->principal->principal_name,
 			"designation"		=>	($form_data->client->type == "staff") ? $form_data->client->contract->DESIGNATION : "House Help",
