@@ -14,7 +14,7 @@ class BlanketVATData{
 		$blanketData = BlanketVAT::where('CASE_NO', $case_no)->first();
 		$firstIDChar = substr($blanketData->HOST_COUNTRY_ID, 0, 1);
 		$year = date('Y', strtotime($blanketData->DURATION_FROM));
-
+try{
 		if($firstIDChar == "1"){
 			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$blanketData->HOST_COUNTRY_ID})"))->first();
             $principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $blanketData->HOST_COUNTRY_ID)->first();
@@ -60,6 +60,9 @@ class BlanketVATData{
 			$clientObj->type = "dependent";
 			$clientObj->arrival = $arrival;
 		}
+	}catch(\Exception $ex){
+		dd($case_no);
+	}
 
 		$durationFrom = new \Carbon\Carbon($blanketData->DURATION_FROM);
 		$durationTo = new \Carbon\Carbon($blanketData->DURATION_TO);
