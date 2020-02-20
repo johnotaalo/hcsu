@@ -325,7 +325,7 @@ ORDER BY
         }else{
             $document = FormTemplate::where([
                 'process'   =>  $process,
-                'task'      =>  $currentTask,
+                // 'task'      =>  $currentTask,
                 'type'      =>  $applicationType
             ])->first();
         }
