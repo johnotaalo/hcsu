@@ -12,7 +12,7 @@ class Principal extends Model
     protected $table = "PRINCIPAL";
     protected $connection = "mysql";
 
-    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname", "latest_passport", "spouse", "principal_name", "parent"];
+    protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname", "latest_passport", "spouse", "principal_name", "parent", "children"];
 
     protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "PLACE_OF_BIRTH", "NATIONALITY", "GENDER", "ADDRESS", "RESIDENCE", "OLD_REF_ID"];
 
@@ -34,6 +34,10 @@ class Principal extends Model
 
     public function getParentAttribute(){
         return $this->dependents->whereIn('RELATIONSHIP_ID', [5,6])->first();
+    }
+
+    public function getChildrenAttribute(){
+        return $this->dependents->whereIn('RELATIONSHIP_ID', [3,4])->all();
     }
 
     public function passports(){

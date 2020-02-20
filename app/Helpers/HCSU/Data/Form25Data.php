@@ -34,6 +34,7 @@ class Form25Data{
 	        $clientObj->passport->place_of_issue = ($principal->latest_passport) ? $principal->latest_passport->PLACE_OF_ISSUE : "N/A";
 	        $clientObj->passport->passport_type = ($principal->latest_passport) ? $principal->latest_passport->type->PPT_TYPE : "N/A";
 	        $clientObj->dependents = $principal->dependents;
+	        $clientObj->children = $principal->children;
 		}else if($clientType == "domestic-worker"){
 			$domesticWorker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $case_data->HOST_COUNTRY_ID)->first();
 			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$domesticWorker->principal->HOST_COUNTRY_ID})"))->first();
