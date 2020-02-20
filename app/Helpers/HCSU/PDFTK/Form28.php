@@ -34,7 +34,7 @@ class Form28{
 			'depfullname'		=>	ucwords(strtolower($dependent->OTHER_NAMES)) . " " . strtoupper($dependent->LAST_NAME),
 			'address'			=>	$dependent->principal->RESIDENCE,
 			'dsex'				=>	$dependent->GENDER,
-			'dmaritalstatus'	=>	($dependent->relationship->RELATIONSHIP == "Spouse") ? "Married" : "Sigle",
+			'dmaritalstatus'	=>	($dependent->relationship->RELATIONSHIP == "Spouse") ? "Married" : "Single",
 			'ddob'				=>	date('Y-m-d', strtotime($dependent->DATE_OF_BIRTH)),
 			'dpob'				=>	$dependent->PLACE_OF_BIRTH,
 			'dpptno'			=>	($dependent->latest_passport) ? $dependent->latest_passport->PASSPORT_NO : "N/A",
