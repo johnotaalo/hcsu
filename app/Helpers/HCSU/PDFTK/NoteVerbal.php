@@ -155,7 +155,7 @@ class NoteVerbal {
 				$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
 				$body .= "\r";
 				if ($this->data->client->contract_type == "Consultant") {
-					$body .= "Kindly note that the staff member is a consultant and does not qualify for diplomatic privileges hence the attached NoA and copy of the ground pass.\r";
+					$body .= "Kindly note that the staff member is a consultant and does not qualify for diplomatic privileges hence the attached NoA and copy of the ground pass.\r\r";
 				}
 				$body .= "Mohamed Mubarak, UN ID Card No. 711305, Patrick Mwololo, UN ID Card No. 945740, Evans MWANZI, UN ID Card No. 292241 and Lilliya LIECH, UN ID Card No. 549559 are authorized to handle the PIN application of the above-mentioned {$this->data->client->contract_type} of {$this->data->client->organization}.";
 			break;
