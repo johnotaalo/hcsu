@@ -228,7 +228,7 @@ class NoteVerbal {
 
 					if($this->process == "work-permit-new-case" || ($this->process == "work-permit-renewal" && $this->data->caseData->TYPE == "renewal")){
 						$include_28 = (!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != "") ? "& 28" : "";
-						$body .= "Duly commpleted Forms 25 {$include_28} together with a copy of the above mentioned passport is attached herewith.\r";
+						$body .= "\rDuly commpleted Forms 25 {$include_28} together with a copy of the above mentioned passport is attached herewith.\r";
 					}else if ($this->process == "work-permit-endorsement"){
 						$body .= "\rThe above mentioned passport is attached herewith.";
 					}else if ($this->process == "work-permit-renewal" && $this->data->caseData->TYPE == "transfer"){
@@ -238,6 +238,10 @@ class NoteVerbal {
 
 				if($this->data->caseData->COMMENTS && $this->data->client->type == "staff"){
 					$body .= "\r{$this->data->caseData->COMMENTS}\r";
+				}
+
+				if($this->data->caseData->ADDITIONAL_COMMENTS){
+					$body .= "\r{$this->data->caseData->ADDITIONAL_COMMENTS}\r";
 				}
 
 				if($this->data->caseData->JUSTIFICATION && $this->data->client->type == "domestic-worker"){

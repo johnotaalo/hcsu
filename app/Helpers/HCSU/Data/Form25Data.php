@@ -3,6 +3,7 @@
 namespace App\Helpers\HCSU\Data;
 
 use \App\WorkPermitApplication;
+use \App\WorkPermitRenewal;
 
 class Form25Data{
 	public static function get($case_no){
@@ -10,6 +11,9 @@ class Form25Data{
 		$clientObj = new \StdClass;
 
 		$case_data = WorkPermitApplication::where('CASE_NO', $case_no)->first();
+		if(!$case_data){
+			$case_data = WorkPermitRenewal::where('CASE_NO', $case_no)->first();
+		}
 		$clientType = identify_hcsu_client($case_data->HOST_COUNTRY_ID); 
 		$clientObj->type = $clientType;
 		$clientObj->passport = new \StdClass;
