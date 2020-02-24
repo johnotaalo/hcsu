@@ -44,16 +44,24 @@ class NoteVerbal {
 				break;
 			case 'work-permit-new-case':
 			case 'work-permit-endorsement':
+			case 'work-permit-renewal':
 				if ($this->data->client->type == "staff") {
 					$connector = "submit an application for";
 					$end_header = "";
 					if ($this->data->type == "new-case") {
 						$end_header .= "issuance";
-					}else{
+					}else if ($this->data->type == "endorsement"){
 						$end_header .= "endorsement";
+					} else if ($this->data->type == "renewal"){
+						$end_header .= "the ";
+						if($this->data->caseData->TYPE == "renewal"){
+							$end_header .= "renewal";
+						}else{
+							$end_header .= "transfer";
+						}
 					}
 
-					if($this->process == "work-permit-endorsement"){
+					if($this->process == "work-permit-endorsement" || $this->process == "work-permit-renewal"){
 						$your_ref = "Your Ref: {$this->data->client->RNO}\n";
 					}
 
@@ -81,6 +89,10 @@ class NoteVerbal {
 						$relationshipString = implode(" and ", $uniqueRelationships);
 
 						$end_header .= " and his {$relationshipString}";
+					}
+
+					if ($this->data->type == "renewal" && $this->data->caseData->TYPE == "transfer"){
+						$end_header .= " from the old passports to the new ones";
 					}
 
 					$end_header .= ".";
@@ -187,6 +199,7 @@ class NoteVerbal {
 
 			case 'work-permit-new-case':
 			case 'work-permit-endorsement':
+			case 'work-permit-renewal':
 				$body = "Details are as follows:\r";
 
 				$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
@@ -213,11 +226,13 @@ class NoteVerbal {
 						}
 					}
 
-					if($this->process == "work-permit-new-case"){
+					if($this->process == "work-permit-new-case" || ($this->process == "work-permit-renewal" && $this->data->caseData->TYPE == "renewal")){
 						$include_28 = (!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != "") ? "& 28" : "";
 						$body .= "Duly commpleted Forms 25 {$include_28} together with a copy of the above mentioned passport is attached herewith.\r";
-					}else{
+					}else if ($this->process == "work-permit-endorsement"){
 						$body .= "\rThe above mentioned passport is attached herewith.";
+					}else if ($this->process == "work-permit-renewal" && $this->data->caseData->TYPE == "transfer"){
+						$body .= "\rAttached herewith is the above mentioned passport(s). Also attached is a copy/copies of previous exemption from the old passports";
 					}
 				}
 

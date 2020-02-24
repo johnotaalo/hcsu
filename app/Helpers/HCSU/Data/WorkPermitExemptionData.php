@@ -4,6 +4,7 @@ namespace App\Helpers\HCSU\Data;
 
 use \App\WorkPermitApplication;
 use \App\WorkPermitEndorsement;
+use \App\WorkPermitRenewal;
 
 class WorkPermitExemptionData{
 	public static function get($case_no, $type = "new"){
@@ -13,6 +14,9 @@ class WorkPermitExemptionData{
 		}elseif ($type == "endorsement") {
 			$caseData = WorkPermitEndorsement::where('CASE_NO', $case_no)->first();
 			$endorsementCase = WorkPermitApplication::where('ENDORSEMENT_CASE_NO', $case_no)->first();
+		}elseif ($type == "renewal") {
+			$caseData = WorkPermitRenewal::where('CASE_NO', $case_no)->first();
+			// $renewalCase = WorkPermitApplication::where('ENDORSEMENT_CASE_NO', $case_no)->first();
 		}
 		
 		$data = new \StdClass;
@@ -38,6 +42,10 @@ class WorkPermitExemptionData{
 
 			if($type == "endorsement"){
 				$clientObj->RNO = $endorsementCase->RNUMBER;
+			}
+
+			if($type == "renewal"){
+				$clientObj->RNO = $principal->R_NO;
 			}
 
 			$clientObj->name = $client_name;

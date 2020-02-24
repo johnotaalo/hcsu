@@ -423,7 +423,10 @@ ORDER BY
                 $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'new-case');
                 break;
             case 'work-permit-endorsement':
-                $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'endorsement');;
+                $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'endorsement');
+                break;
+            case 'work-permit-renewal':
+                $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'renewal');
                 break;
         }
 
