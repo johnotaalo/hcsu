@@ -16,6 +16,9 @@ class Form28{
 	public function getData($case_no, $document, $extraParams){
 		$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $extraParams['host_country_id'])->first();
 		$casedata = \App\WorkPermitApplication::where('CASE_NO', $case_no)->first();
+		if(!$casedata){
+			$casedata = \App\WorkPermitRenewal::where('CASE_NO', $case_no)->first();
+		}
 		$dependentsArray = explode(",", $casedata->DEPENDENTS);
 		$otherDependents = collect($dependentsArray)->filter(function($dep) use ($extraParams){
 			return $dep != $extraParams['host_country_id'];
