@@ -42,8 +42,10 @@ class WorkPermitExemptionData{
 
 			if($type == "endorsement" && !$endorsementCase){
 				$clientObj->RNO = $principal->R_NO;
+				$data->endorsementType = "dependant_pass";
 			}else{
 				$clientObj->RNO = $endorsementCase->RNUMBER;
+				$data->endorsementType = "new_case";
 			}
 
 			if($type == "renewal"){

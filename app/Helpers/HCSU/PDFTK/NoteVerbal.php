@@ -51,7 +51,8 @@ class NoteVerbal {
 					if ($this->data->type == "new-case") {
 						$end_header .= "issuance";
 					}else if ($this->data->type == "endorsement"){
-						$end_header .= "endorsement";
+						if($this->data->endorsementType == "new_case")
+							$end_header .= "endorsement";
 					} else if ($this->data->type == "renewal"){
 						$end_header .= "the ";
 						if($this->data->caseData->TYPE == "renewal"){
@@ -65,13 +66,24 @@ class NoteVerbal {
 						$your_ref = "Your Ref: {$this->data->client->RNO}\n";
 					}
 
-					$end_header .= " of Exemption from Kenya Work Permit";
-
-					if($this->data->client->dependents){
-						$end_header .= " and Dependants Pass";
+					if ($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
+						$end_header .= " Exemption from Dependants Pass";
+					}else{
+						$end_header .= " of Exemption from Kenya Work Permit";
 					}
 
-					$end_header .= " for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
+					
+
+					if($this->data->client->dependents){
+						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
+
+						}else{
+							$end_header .= " and Dependants Pass";
+						}
+						
+					}
+
+					$relationshipString = "";
 
 					if($this->data->client->relationships){
 						$relationships = [];
@@ -87,8 +99,20 @@ class NoteVerbal {
 
 						$uniqueRelationships = collect($relationships)->unique()->toArray();
 						$relationshipString = implode(" and ", $uniqueRelationships);
+					}
 
-						$end_header .= " and his {$relationshipString}";
+					if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
+						$end_header .= " for the under mentioned {$relationshipString} of {$this->data->client->name}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
+					}else{
+						$end_header .= " for the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
+					}
+
+					if($this->data->client->relationships){
+						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
+
+						}else{
+							$end_header .= " and his {$relationshipString}";
+						}
 					}
 
 					if ($this->data->type == "renewal" && $this->data->caseData->TYPE == "transfer"){
@@ -202,20 +226,44 @@ class NoteVerbal {
 			case 'work-permit-renewal':
 				$body = "Details are as follows:\r";
 
-				$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
-				$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
-				$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
-				if($this->data->type == "new-case"){
-					$body .= str_pad("R. No: ", $padding) . "New Case\r";
+				if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
+
 				}else{
-					$body .= str_pad("R. No: ", $padding) . "{$this->data->client->RNO}\r";
+					$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+					$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
+					$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+					if($this->data->type == "new-case"){
+						$body .= str_pad("R. No: ", $padding) . "New Case\r";
+					}else{
+						$body .= str_pad("R. No: ", $padding) . "{$this->data->client->RNO}\r";
+					}
+					$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 				}
-				$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 
 				if($this->data->client->type == "staff"){
 					
 					if(!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != ""){
-						$body .= "\rSpouse and Dependants\r";
+						$relationshipString = "";
+						if($this->data->client->relationships){
+							$relationships = [];
+							foreach ($this->data->client->relationships as $relationship) {
+								if ($relationship != "Spouse") {
+									$relationship = ucwords("dependants");
+								}else{
+									$relationship = ucwords(strtolower($relationship));
+								}
+
+								array_push($relationships, $relationship);
+							}
+
+							$uniqueRelationships = collect($relationships)->unique()->toArray();
+							$relationshipString = implode(" and ", $uniqueRelationships);
+						}
+
+						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
+						}else{ 
+							$body .= "\r{$relationshipString}\r";
+						}
 						$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
 						foreach ($this->data->client->dependents as $dependant) {
 							// dd($dependant->latest_passport);
