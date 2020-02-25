@@ -304,7 +304,7 @@
 				var em = this
 				if(newVal.HOST_COUNTRY_ID){
 					if(this.application == 'pin'){
-						if (newVal.PIN_NO != null && newVal.PIN_NO != "null") {
+						if (newVal.PIN_NO != null && newVal.PIN_NO != "null" && newVal.PIN_NO != "NULL") {
 							this.$swal({
 								title: "PIN Exists", 
 								text: `The staff member already has a PIN (${newVal.PIN_NO}). If you proceed, the staff member's PIN shall be cleared from the system. Proceed?`, 
@@ -403,6 +403,11 @@
 					if(this.application == 'visa_extension' || this.application == 'work-permit-new-case'){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker'
+						})
+					}
+					else if(this.application == "work-permit-endorsement"){
+						result = _.filter(list, (obj) => {
+							return obj.value == 'staff-member'
 						})
 					}
 					else if (this.application == 'diplomatic_id') {
