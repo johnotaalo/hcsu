@@ -40,7 +40,9 @@ class WorkPermitExemptionData{
 				$relationships = ($dependents->pluck('relationship.RELATIONSHIP'))->unique()->toArray();
 			}
 
-			if($type == "endorsement"){
+			if($type == "endorsement" && !$endorsementCase){
+				$clientObj->RNO = $principal->R_NO;
+			}else{
 				$clientObj->RNO = $endorsementCase->RNUMBER;
 			}
 
