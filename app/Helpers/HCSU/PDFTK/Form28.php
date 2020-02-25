@@ -35,7 +35,7 @@ class Form28{
 			'mobile'			=>	$dependent->principal->MOBILE_NO,
 			'pobox_email'		=>	$dependent->principal->ADDRESS . " {$dependent->principal->EMAIL}",
 			'nationality'		=>	$dependent->principal->nationality->official_name,
-			'rNo'				=>	($dependent->principal->RNO) ? $dependent->principal->RNO : "N/A",
+			'rNo'				=>	($dependent->principal->R_NO) ? $dependent->principal->R_NO : "N/A",
 			'drelationship'		=>	$dependent->relationship->RELATIONSHIP,
 			'depfullname'		=>	ucwords(strtolower($dependent->OTHER_NAMES)) . " " . strtoupper($dependent->LAST_NAME),
 			'address'			=>	$dependent->principal->RESIDENCE,
