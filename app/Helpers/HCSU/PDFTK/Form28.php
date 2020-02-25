@@ -18,6 +18,9 @@ class Form28{
 		$casedata = \App\WorkPermitApplication::where('CASE_NO', $case_no)->first();
 		if(!$casedata){
 			$casedata = \App\WorkPermitRenewal::where('CASE_NO', $case_no)->first();
+			if(!$casedata){
+				$casedata = \App\WorkPermitEndorsement::where('CASE_NO', $case_no)->first();
+			}
 		}
 		$dependentsArray = explode(",", $casedata->DEPENDENTS);
 		$otherDependents = collect($dependentsArray)->filter(function($dep) use ($extraParams){
