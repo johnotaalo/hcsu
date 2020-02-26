@@ -125,6 +125,8 @@ class NoteVerbal {
 					$end_header = "";
 					if ($this->data->type == "new-case") {
 						$end_header .= "issuance";
+					}else if ($this->data->type == "endorsement"){
+						$end_header .= "endorsement";
 					}
 
 					$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
