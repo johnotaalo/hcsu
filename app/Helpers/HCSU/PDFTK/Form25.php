@@ -22,8 +22,8 @@ class Form25{
 		$dependent_data = [];
 
 		if($form_data->client->type == "staff"){
+			$no = 1;
 			foreach ($form_data->client->children as $dependent) {
-				$no = 1;
 				if ($dependent->RELATIONSHIP_ID != 2) {
 					$dependent_data["owner{$no}"] = ucwords(strtolower($dependent->OTHER_NAMES)) . " " . strtoupper($dependent->LAST_NAME);
 					$dependent_data["sex{$no}"] = $dependent->GENDER;

@@ -60,6 +60,7 @@ class Form28{
 				$otherDependentsData["{$innerKey}_relationship"]	=	$depData->relationship->RELATIONSHIP;
 				$otherDependentsData["{$innerKey}_age"]				=	\Carbon\Carbon::parse($depData->DATE_OF_BIRTH)->age;;
 				$otherDependentsData["{$innerKey}_residence"]		=	$dependent->principal->RESIDENCE;
+				$key++;
 			}
 		}
 
