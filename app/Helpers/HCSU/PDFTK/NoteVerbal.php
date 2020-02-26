@@ -141,6 +141,17 @@ class NoteVerbal {
 
 				$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, {$this->data->client->contract->DESIGNATION} with {$this->data->client->organization} in Kenya.";
 				break;
+
+			case 'pro1a':
+				$connector = "forward the following PRO1A for";
+				if ($this->data->client->type == "staff") {
+					$end_header .= " the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
+				}else if($this->data->client->type == "agency"){
+					$end_header .= " {$this->data->client->fullname}";
+				}
+
+				$end_header .= ", for approval.";
+				break;
 		}
 
 		$this->header = "{$your_ref}Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
@@ -313,6 +324,16 @@ class NoteVerbal {
 
 			$body .= "\rThe Host Country Agreement signed between UNEP and Government of Kenya provides in article XI, section 22 (a)i, that privileges granted to officials of the United Nations include among other things residence Permits for \"Members\" of permanent missions and other representatives of Member States, their families and other members of their households.\r";
 			$body .= "\rThe office of the Director General, UNON wishes to inform the esteemed Ministry that {$this->data->caseData->JUSTIFICATION} and therefore issuance of Exemption from Kenya Work Permit to her domestic worker is highly recommended.\r";
+			break;
+
+		case 'pro1a':
+			$body = "Details are as follows:\r";
+			$body .= str_pad("Serial No: ", $padding) . "{$this->data->case_no}\r";
+			$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+			$body .= str_pad("Description: ", $padding) . "{$this->data->description}\r";
+			$body .= str_pad("AWB/BL NO: ", $padding) . "{$this->data->caseData->AIRWAY_BILL_NO}\r";
+			$body .= str_pad("Invoice No: ", $padding) . "{$this->data->caseData->INVOICE_NO}\r";
+
 			break;
 			
 		}

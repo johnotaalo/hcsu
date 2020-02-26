@@ -428,6 +428,9 @@ ORDER BY
             case 'work-permit-renewal':
                 $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'renewal');
                 break;
+            case 'pro1a':
+                $data = \App\Helpers\HCSU\Data\Pro1AData::get($case->app_number);
+                break;
         }
 
         // dd($data);
