@@ -40,7 +40,7 @@ class Pro1AData{
 
 			$clientObj->name = $client_name;
 			$clientObj->designation = $contract->DESIGNATION;
-			$clientObj->fullname = "{$client_name}; {$contract->DESIGNATION}";
+			$clientObj->fullname = "{$client_name}";
 			$clientObj->contract_type = $contract->C_TYPE;
 			$clientObj->organization = $mission;
 		}else if($clientObj->type == "agency"){
@@ -61,8 +61,8 @@ class Pro1AData{
 			$client_name = $name;
 
 			$clientObj->name = $client_name;
-			$clientObj->designation = $contract->DESIGNATION;
-			$clientObj->fullname = "{$client_name}; {$contract->DESIGNATION}";
+			$clientObj->designation = "{$dependent->relationship->RELATIONSHIP} of {$dependent->principal->fullname}";
+			$clientObj->fullname = "{$client_name} {$clientObj->designation}";
 			$clientObj->principal = $dependent->principal;
 			$clientObj->contract_type = $contract->C_TYPE;
 			$clientObj->organization = $mission;
