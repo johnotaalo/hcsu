@@ -67,7 +67,7 @@ class NoteVerbal {
 					}
 
 					if ($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
-						$end_header .= " Exemption from Dependants Pass";
+						$end_header .= " of Exemption from Dependants Pass";
 					}else{
 						$end_header .= " of Exemption from Kenya Work Permit";
 					}
