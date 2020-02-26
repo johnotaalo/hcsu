@@ -17,6 +17,7 @@ class Pro1A{
 		$form_data = \App\Helpers\HCSU\Data\Pro1AData::get($case_no);
 		
 		$tabData = [
+			'serial_no'				=>	$form_data->caseData->NV_SERIAL_NO,
 			'agency'				=>	$form_data->client->organization,
 			'today'					=>	date('F d, Y'),
 			'fullname'				=>	$form_data->client->fullname,
@@ -31,7 +32,7 @@ class Pro1A{
 			'last_application_date'	=>	'N/A',
 			'port_of_clearance'		=>	$form_data->caseData->port->PORT_OF_CLEARANCE
 		];
-		
+
 		return $tabData;
 	}
 }
