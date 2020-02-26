@@ -48,6 +48,25 @@ class Pro1AData{
 			$clientObj->name = $agency->ACRONYM;
 			$clientObj->fullname = $agency->AGENCYNAME;
 			$clientObj->organization = $agency->ACRONYM;
+		}else if($clientObj->type == "dependent"){
+			$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
+			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dependent->PRINCIPAL_ID})"))->first();
+
+			$mission = $contract->ACRONYM;
+			
+			$relationship = $dependent->relationship->RELATIONSHIP;
+			$relationship = ($relationship == "Spouse") ? strtolower($relationship) : "dependent";
+
+			$name = format_other_names($dependent->OTHER_NAMES) . " " . strtoupper($dependent->LAST_NAME);
+			$client_name = $name;
+
+			$clientObj->name = $client_name;
+			$clientObj->designation = $contract->DESIGNATION;
+			$clientObj->fullname = "{$client_name}; {$contract->DESIGNATION}";
+			$clientObj->principal = $dependent->principal;
+			$clientObj->contract_type = $contract->C_TYPE;
+			$clientObj->organization = $mission;
+			$clientObj->relationship = $relationship;
 		}
 
 		$data->client = $clientObj;

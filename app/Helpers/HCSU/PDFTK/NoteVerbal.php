@@ -148,6 +148,8 @@ class NoteVerbal {
 					$end_header .= " the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
 				}else if($this->data->client->type == "agency"){
 					$end_header .= " {$this->data->client->fullname}";
+				}else if($this->data->client->type == "dependent"){
+					$end_header .= " the under mentioned {$this->data->client->relationship} of {$this->data->client->principal->fullname}, a {$this->data->client->contract_type}  of {$this->data->client->organization}";
 				}
 
 				$end_header .= ", for approval.";
