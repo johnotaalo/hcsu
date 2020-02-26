@@ -51,7 +51,7 @@ class NoteVerbal {
 					if ($this->data->type == "new-case") {
 						$end_header .= "issuance";
 					}else if ($this->data->type == "endorsement"){
-						if($this->data->endorsementType == "new_case")
+						if($this->data->endorsementType == "new_case" || $this->data->endorsementType == "dependant_pass")
 							$end_header .= "endorsement";
 					} else if ($this->data->type == "renewal"){
 						$end_header .= "the ";
