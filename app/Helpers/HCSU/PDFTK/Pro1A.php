@@ -21,7 +21,7 @@ class Pro1A{
 			'agency'				=>	$form_data->client->organization,
 			'today'					=>	date('F d, Y'),
 			'fullname'				=>	$form_data->client->fullname,
-			'designation'			=>	$form_data->client->designation,
+			'designation'			=>	($form_data->client->type != "agency") ? $form_data->client->designation : "",
 			'cl_agent_name'			=>	$form_data->caseData->clearing_agent->CLEARING_AGENT_NAME,
 			'cl_agent_address'		=>	$form_data->caseData->clearing_agent->CLEARING_AGENT_ADDRESS,
 			'spirits'				=>	($form_data->caseData->SPIRITS != 0) ? "{$form_data->caseData->SPIRITS} Pieces" : "",
