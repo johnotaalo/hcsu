@@ -28,7 +28,7 @@ class Pro1A{
 			'wine'					=>	($form_data->caseData->WINES != 0) ? "{$form_data->caseData->WINES} Pieces" : "",
 			'beer'					=>	($form_data->caseData->BEERS != 0) ? "{$form_data->caseData->BEERS} Pieces" : "",
 			'tobacco'				=>	($form_data->caseData->TOBACCO != 0) ? "{$form_data->caseData->TOBACCO} Pieces" : "",
-			'awl_bl_invoice'		=>	"BL/AWB No: {$form_data->caseData->AIRWAY_BILL_NO}; Invoice No: {$form_data->caseData->INVOICE_NO}; Port of Clearance: {$form_data->caseData->port->PORT_OF_CLEARANCE}",
+			'awb_bl_invoice'		=>	"BL/AWB No: {$form_data->caseData->AIRWAY_BILL_NO}; Invoice No: {$form_data->caseData->INVOICE_NO}; Port of Clearance: {$form_data->caseData->port->PORT_OF_CLEARANCE}",
 			'last_application_date'	=>	'N/A',
 			'port_of_clearance'		=>	$form_data->caseData->port->PORT_OF_CLEARANCE
 		];
