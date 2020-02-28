@@ -255,7 +255,7 @@
 												</button>
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuButtonTwo" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, -2px, 0px);">
 													<b-link class="dropdown-item" v-b-modal.dependent-passport-modal @click="selectedDependent = row.index">Passports</b-link>
-													<b-link class="dropdown-item" @click="editDependent(row.index)" v-b-modal.dependent-modal>Edit</b-link>
+													<b-link class="dropdown-item" @click="editDependent(row.index)">Edit</b-link>
 													<b-link class="dropdown-item" @click="removeDependent(row.index)">Delete</b-link>
 												</div>
 											</div>
@@ -1120,30 +1120,31 @@
 				var dependent = this.principal.dependents[index]
 				var _this = this
 
-				var countryObj = _.find(_this.options.countries, [ 'label', dependent.COUNTRY ]);
-				var relationshipObj = _.find(_this.options.relationships, [ 'id', dependent.RELATIONSHIP_ID ]);
+				// var countryObj = _.find(_this.options.countries, [ 'label', dependent.COUNTRY ]);
+				// var relationshipObj = _.find(_this.options.relationships, [ 'id', dependent.RELATIONSHIP_ID ]);
 
-				countryObj = (typeof countryObj == "undefined") ? {} : countryObj
-				relationshipObj = (typeof relationshipObj == "undefined") ? {} : relationshipObj
+				// countryObj = (typeof countryObj == "undefined") ? {} : countryObj
+				// relationshipObj = (typeof relationshipObj == "undefined") ? {} : relationshipObj
 
-				_this.modal.dependent.id = dependent.ID
-				_this.modal.dependent.lastName = dependent.LAST_NAME
-				_this.modal.dependent.relationshipType  = relationshipObj
-				_this.modal.dependent.passport  = dependent.PASSPORT_NO
-				_this.modal.dependent.otherNames  = dependent.OTHER_NAMES
-				_this.modal.dependent.country  = countryObj
-				_this.modal.dependent.dob  = dependent.DATE_OF_BIRTH
-				_this.modal.dependent.employment  = dependent.EMPLOYMENT_DETAILS
-				_this.modal.dependent.imageURL = dependent.image_link
-				_this.modal.dependent.imageFile = ""
-				_this.modal.dependent.editIndex = index
-				_this.dependents.editIndex = index
+				// _this.modal.dependent.id = dependent.ID
+				// _this.modal.dependent.lastName = dependent.LAST_NAME
+				// _this.modal.dependent.relationshipType  = relationshipObj
+				// _this.modal.dependent.passport  = dependent.PASSPORT_NO
+				// _this.modal.dependent.otherNames  = dependent.OTHER_NAMES
+				// _this.modal.dependent.country  = countryObj
+				// _this.modal.dependent.dob  = dependent.DATE_OF_BIRTH
+				// _this.modal.dependent.employment  = dependent.EMPLOYMENT_DETAILS
+				// _this.modal.dependent.imageURL = dependent.image_link
+				// _this.modal.dependent.imageFile = ""
+				// _this.modal.dependent.editIndex = index
+				// _this.dependents.editIndex = index
 
-				if(dependent.image_link != ""){
-					this.options.imageProps.blank = false
-				}else{
-					this.options.imageProps.blank = true
-				}
+				// if(dependent.image_link != ""){
+				// 	this.options.imageProps.blank = false
+				// }else{
+				// 	this.options.imageProps.blank = true
+				// }
+				window.open(`/#/dependent/edit/${dependent.HOST_COUNTRY_ID}?type=iframe`);
 			},
 
 			removeDependent: function(index){
