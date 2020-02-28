@@ -48,7 +48,7 @@
 			<div class="col-md">
 				<div class="form-group">
 					<label for="from">From</label>
-					<datetime value-zone="UTC+3" v-model="value.contractFrom" input-id="from" input-class="form-control" :max-datetime="maxDateTime"></datetime>
+					<datetime value-zone="UTC+3" v-model="value.contractFrom" input-id="from" input-class="form-control"></datetime>
 					<div v-if="$v.data.contractFrom.$error" class="my-invalid-feedback">Please provide a contract start date.</div>
 				</div>
 			</div>
