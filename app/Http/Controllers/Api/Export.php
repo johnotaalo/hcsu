@@ -83,13 +83,35 @@ class Export extends Controller
                 'DATE_APPLIED_AT_MFA'   =>  \Carbon\Carbon::parse($data->vatObj->ipmis_log->CREATED_AT)->format('d/m/Y'),
                 'DATE_APPLIED_AT_KRA'   =>  '',
                 'DATE_APPROVED'         =>  '',
+                'ACRONYM'               =>  $data->vatObj->supplier->ABBREV,
                 'PIN'                   =>  $data->vatObj->supplier->PIN,
                 'SUPPLIER_NAME'         =>  $data->vatObj->supplier->NAME,
                 'ACCOUNT NO'            =>  $data->vatObj->ACCOUNT_NO,
             ];
         });
 
-        $exportData = new \App\Exports\BlanketVATExport($list, $batch);
+        $supplierList = [];
+
+        foreach ($list as $key => $value) {
+           $supplierList[$value['ACRONYM']][] = [
+                'NO'                    =>  $key + 1,
+                'ORGANIZAITON'          =>  $value['ORGANIZAITON'],
+                'CASE_NO'               =>  $value['CASE_NO'],
+                'DATE_APPLIED_AT_MFA'   =>  $value['DATE_APPLIED_AT_MFA'],
+                'DATE_APPLIED_AT_KRA'   =>  $value['DATE_APPLIED_AT_KRA'],
+                'DATE_APPROVED'         =>  $value['DATE_APPROVED'],
+                'PIN'                   =>  $value['PIN'],
+                'SUPPLIER_NAME'         =>  $value['SUPPLIER_NAME'],
+                'ACCOUNT NO'            =>  $value['ACCOUNT NO'],
+           ];
+        }
+
+        // 
+        $suppliers = array_keys($supplierList);
+        // dd($suppliers);
+        $supplierList = collect($supplierList);
+
+        $exportData = new \App\Exports\BlanketVATExport($suppliers, $supplierList, $batch);
         return \Excel::download($exportData, 'Blanket VAT List for Batch: ' . \Carbon\Carbon::parse($batch->batch_date)->format('d_m_Y') . '.xlsx');
     }
 }
