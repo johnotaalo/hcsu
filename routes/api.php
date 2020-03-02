@@ -164,6 +164,10 @@ Route::prefix('data')->group(function(){
 		Route::get('/search', 'Api\SupplierController@searchSupplier');
 	});
 
+	Route::prefix('designations')->group(function(){
+		Route::post('/', 'Api\DataController@addDesignation');
+	});
+
 	Route::prefix('management')->group(function(){
 		Route::prefix('pending')->group(function(){
 			Route::get('principals', 'Api\DataController@pendingPrincipals');

@@ -334,7 +334,7 @@
 
 		<!-- contract modal -->
 		<b-modal id="modal-contract" title="Add Contract" @ok="addContract" @cancel="cancelContractModal">
-			<contract-details :agencies="options.agencies" :contractTypes="options.contractTypes" :grades="options.grades" v-model="modal.contract" :designations="filteredDesignations"></contract-details>
+			<contract-details :agencies="options.agencies" :contractTypes="options.contractTypes" :grades="options.grades" v-model="modal.contract" :designations="filteredDesignations" @refresh="refreshData"></contract-details>
 		</b-modal>
 
 		<b-modal id="dependent-modal" ref="dependent-modal" title="Add Dependent" size="lg" @ok="addDependent" @cancel="cancelDependentModal">
@@ -721,6 +721,9 @@
 				this.form.principal.image.url = ""
 				this.form.principal.image.file = ""
 				this.principal.image_link = "/storage/"
+			},
+			refreshData: function(data){
+				this.getFormOptions();
 			},
 			onPrincipalFileChange(fieldName, file){
 				const { maxSize } = this

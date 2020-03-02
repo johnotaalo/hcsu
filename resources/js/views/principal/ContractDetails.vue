@@ -46,7 +46,7 @@
 		<b-button size="sm" variant="success" class = "mb-3" @click="toggleDesignation" :disabled="showDesignation"><i class = "fe fe-plus"></i>&nbsp;Add Designation</b-button>
 		<div class="row">
 			<div class="col-md-12">
-				<designation v-if="showDesignation" @cancel="toggleDesignation"></designation>
+				<designation v-if="showDesignation" @cancel="toggleDesignation" @saved="refreshDesignations" :grade="value.grade"></designation>
 			</div>
 		</div>
 		
@@ -172,6 +172,12 @@
 			},
 			toggleDesignation(){
 				this.showDesignation = !this.showDesignation
+			},
+			refreshDesignations(designation){
+				// this.designations.push(designation)
+				this.value.designation = designation
+				this.$emit('refresh', designation)
+				this.toggleDesignation()
 			}
 		},
 		computed: {
@@ -191,6 +197,11 @@
 			},
 			minDateTime: function(){
 				return this.$moment(this.data.contractFrom).add(3, 'months').format()
+			}
+		},
+		watch: {
+			'value.grade': function(newVal, oldVal){
+				this.showDesignation = false
 			}
 		}
 	}

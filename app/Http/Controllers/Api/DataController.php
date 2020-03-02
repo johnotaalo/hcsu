@@ -307,6 +307,17 @@ class DataController extends Controller
       ];
     }
 
+    function addDesignation(Request $request){
+      $designation = $request->designation;
+      $grade_id = $request->grade_id;
+
+      $grade = \App\Models\Grade::where('ID', $grade_id)->firstOrFail();
+      $designation = \App\Models\ContractDesignation::firstOrCreate(
+        ['GRADE' => $grade->GRADE, 'DESIGNATION' => $designation, 'CATEGORY' => $grade->CATEGORY]
+      );
+      return $designation;
+    }
+
     function pendingPrincipals(Request $request){
       $searchQueries = $request->get('query');
       $limit = $request->get('limit');
