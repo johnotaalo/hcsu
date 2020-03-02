@@ -400,9 +400,14 @@
 				}
 				else{
 					var result = [];
-					if(this.application == 'visa_extension' || this.application == 'work-permit-new-case'){
+					if(this.application == 'work-permit-new-case'){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker'
+						})
+					}
+					else if(this.application == 'visa_extension'){
+						result = _.filter(list, (obj) => {
+							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent'
 						})
 					}
 					else if(this.application == "work-permit-endorsement"){
