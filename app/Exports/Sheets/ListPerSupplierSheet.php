@@ -47,7 +47,7 @@ class ListPerSupplierSheet implements FromCollection, WithHeadings, WithColumnFo
 
 	public function headings(): array
     {
-        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME", 'ACCOUNT NO'];
+        return ['SN No', 'ORGANISATION/MISSION', 'REF NO/CASE NUMBER', 'DATE APPLIED AT MFA', 'DATE APPLIED AT KRA', 'DATE APPROVED', 'VAT/PIN NO', "SUPPLIER'S NAME", 'ACCOUNT NO', 'YEAR'];
     }
 
     public function registerEvents(): array

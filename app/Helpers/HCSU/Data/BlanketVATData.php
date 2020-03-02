@@ -61,7 +61,7 @@ try{
 			$clientObj->arrival = $arrival;
 		}
 	}catch(\Exception $ex){
-		dd($case_no);
+		die("There is a problem with this case no: {$case_no}");
 	}
 
 		$durationFrom = new \Carbon\Carbon($blanketData->DURATION_FROM);

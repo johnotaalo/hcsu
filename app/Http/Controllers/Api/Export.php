@@ -87,6 +87,7 @@ class Export extends Controller
                 'PIN'                   =>  $data->vatObj->supplier->PIN,
                 'SUPPLIER_NAME'         =>  $data->vatObj->supplier->NAME,
                 'ACCOUNT NO'            =>  $data->vatObj->ACCOUNT_NO,
+                'YEAR'                  =>  \Carbon\Carbon::parse($data->vatObj->DURATION_TO)->format('Y')
             ];
         });
 
@@ -103,6 +104,7 @@ class Export extends Controller
                 'PIN'                   =>  $value['PIN'],
                 'SUPPLIER_NAME'         =>  $value['SUPPLIER_NAME'],
                 'ACCOUNT NO'            =>  $value['ACCOUNT NO'],
+                'YEAR'                  =>  $value['YEAR']
            ];
         }
 
