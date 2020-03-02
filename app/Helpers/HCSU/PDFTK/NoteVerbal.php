@@ -74,9 +74,9 @@ class NoteVerbal {
 
 					
 
-					if($this->data->client->dependents){
+					if(count($this->data->client->dependents) > 0){
 						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
-
+							
 						}else{
 							$end_header .= " and Dependants Pass";
 						}

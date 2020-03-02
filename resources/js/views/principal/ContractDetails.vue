@@ -24,7 +24,7 @@
 				<div class="form-group">
 					<label for="designation">Designation</label>
 					<!-- <b-input v-model="data.designation" id="designation" /> -->
-					<v-select id="designation" :options="designations" v-model="value.designation"></v-select>
+					<v-select id="designation" :options="designations" v-model="value.designation" class = "mb-2"></v-select>
 					<div v-if="$v.data.designation.$error" class="my-invalid-feedback">Please provide a designation.</div>
 				</div>
 			</div>
@@ -42,6 +42,14 @@
 				</div>
 			</div>
 		</div>
+
+		<b-button size="sm" variant="success" class = "mb-3" @click="toggleDesignation" :disabled="showDesignation"><i class = "fe fe-plus"></i>&nbsp;Add Designation</b-button>
+		<div class="row">
+			<div class="col-md-12">
+				<designation v-if="showDesignation" @cancel="toggleDesignation"></designation>
+			</div>
+		</div>
+		
 
 		<div class="row">
 			<legend>Contract Duration</legend>
@@ -65,11 +73,12 @@
 
 <script type="text/javascript">
 	import { Datetime } from 'vue-datetime'
+	import Designation from './Designation'
 	import { required, minLength, between, email } from 'vuelidate/lib/validators'
 
 	export default {
 		name: "ContractDetails",
-		components: {datetime: Datetime},
+		components: {datetime: Datetime, Designation},
 		props: {
 			'value': { type: null, default: null },
 			agencies: {
@@ -87,6 +96,7 @@
 		},
 		data(){
 			return {
+				showDesignation: false,
 				data: {
 					agency : "",
 					contractType : "",
@@ -159,6 +169,9 @@
 				var isValid = !this.$v.value.$invalid
 				this.$emit('on-validate', this.$value, isValid)
 				return isValid
+			},
+			toggleDesignation(){
+				this.showDesignation = !this.showDesignation
 			}
 		},
 		computed: {
