@@ -42,19 +42,19 @@
 					</div>
 					<div class="table-responsive mb-0">
 						<b-table class="table table-sm table-nowrap card-table" :fields="fields" :items="items" show-empty>
-							<template slot='#' slot-scope="data">
+							<template v-slot:cell(#)="data">
 								{{ data.index + 1 }}
 							</template>
-							<template slot = "organizations" slot-scope="data">
+							<template v-slot:cell(organizations)="data">
 								<ul>
 									<li v-for = "agency in data.item.agencies">{{ agency.agency_data.ACRONYM }}</li>
 								</ul>
 								<!-- {{ data.item.agencies | combineArray('agency_data["ACRONYM"]') }} -->
 							</template>
-							<template slot="empty" slot-scope="scope">
+							<template v-slot:cell(empty)="data">
 								<h4>{{ scope.emptyText }}</h4>
 							</template>
-							<template slot="actions" slot-scope="scope" class="align-middle">
+							<template v-slot:cell(actions)="scope" class="align-middle">
 								<b-button-group size="sm">
 									<b-button variant="success" @click="openComponent(scope.item, 'edit')"><i class="fe fe-edit"></i>&nbsp;Edit</b-button>
 									<b-button variant="info" @click="openComponent(scope.item, 'organizations')"><i class="fe fe-grid"></i>&nbsp;Organizations</b-button>
