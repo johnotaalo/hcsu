@@ -118,7 +118,7 @@ class VATData{
 
             return $data;
         }catch(\Exception $ex){
-            $case_issues[] = $case_no;
+            $case_issues[] = ['case' => $case_no, 'error' => $ex->getMessage()];
         }
 
         dd($case_issues);
