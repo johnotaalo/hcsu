@@ -97,7 +97,7 @@ ORDER BY
     }
 
     function getAgencies(){
-    	return Agency::all();
+    	return Agency::where('IS_ACTIVE', false)->all();
     }
 
     function getPassportTypes(){

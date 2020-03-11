@@ -15,7 +15,7 @@ class AgenciesController extends Controller
 
     function searchAgencies(Request $request){
     	$searchTerm = $request->query('q');
-    	return Agency::where('ACRONYM', 'LIKE', "%{$searchTerm}%")->orWhere('AGENCYNAME', 'LIKE', '%{$searchTerm}%')->get();
+    	return Agency::where('IS_ACTIVE', true)->where('ACRONYM', 'LIKE', "%{$searchTerm}%")->orWhere('AGENCYNAME', 'LIKE', '%{$searchTerm}%')->get();
     }
 
     function addAgencies(Request $request){
