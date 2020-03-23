@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 // use Tymon\JWTAuth\Contracts\JWTSubject;
 
 use App\Enums\UserType;
+use Yadahan\AuthenticationLog\AuthenticationLogable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, AuthenticationLogable;
 
     /**
      * The attributes that are mass assignable.
@@ -58,5 +59,10 @@ class User extends Authenticatable
         if ($this->user_type == UserType::getInstance(UserType::FocalPoint) && $this->ext_id != null ) {
             return \App\AgencyFocalPoint::with('agency')->find($this->ext_id);
         }
+    }
+
+    public function notifyAuthenticationLogVia()
+    {
+        return ['mail'];
     }
 }

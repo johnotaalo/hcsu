@@ -16,7 +16,7 @@ class AuthController extends Controller
      * 
      * @return \Illuminate\Http\Response 
      */
-    public function login(){ 
+    public function login(){
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('hcsu')-> accessToken; 
@@ -29,6 +29,7 @@ class AuthController extends Controller
 
     public function details(Request $request) 
     {
+      // dd($request->session()->all());
       if(isset($request->type)){
         $user_ip = $request->getClientIp();
         $user_ip = ($user_ip == "10.0.2.2" || $user_ip == "127.0.0.1") ? "10.98.111.148" : $user_ip;
@@ -40,7 +41,11 @@ class AuthController extends Controller
         return response()->json(['error'=>'Unauthorised'], 401);
       }
       $user = Auth::user();
-      return response()->json($user, $this-> successStatus); 
+      if (!$user) {
+        dd("User not found");
+        Auth::logout();
+      }
+      return response()->json($user, $this->successStatus); 
     }
   //   function login(Request $request){
   //   	$credentials = $request->only('email', 'password');

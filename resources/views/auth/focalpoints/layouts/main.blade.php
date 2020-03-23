@@ -43,5 +43,6 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="{{ asset('js/hcsu-auth.js') }}"></script>
+	@yield('js')
 </body>
 </html>

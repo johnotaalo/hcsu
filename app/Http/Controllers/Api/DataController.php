@@ -17,10 +17,11 @@ use App\Models\PrincipalDependent;
 class DataController extends Controller
 {
     function importData(){
-      $ids = Principal::pluck('OLD_REF_ID')->toArray();
+      $ids = Principal::where('OLD_REF_ID', '!=', 0)->pluck('OLD_REF_ID')->toArray();
       // dd($ids);
-      $members = StaffMember::whereNotIn('record_id', $ids)->pluck('record_id');
-      // dd($members);
+      $members = StaffMember::where('OLD_REF_ID', '!=', 0)->whereNotIn('record_id', $ids)->pluck('record_id');
+      // $members = StaffMember::all();
+      dd($members);
       foreach ($members as $id) {
             $this->importStaffData($id);
       }

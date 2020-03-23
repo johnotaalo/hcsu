@@ -45,6 +45,11 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
+
+        'ldap'  =>  [
+            'driver'    =>  'session',
+            'provider'  =>  'ldap'
+        ]
     ],
 
     /*
@@ -69,6 +74,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
+        'ldap'  =>  [
+            'driver'    =>  'ldap',
+            'model'     =>  App\UserLDAP::class  
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
