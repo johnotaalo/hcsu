@@ -410,7 +410,7 @@
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent'
 						})
 					}
-					else if(this.application == "work-permit-endorsement"){
+					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass"){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member'
 						})

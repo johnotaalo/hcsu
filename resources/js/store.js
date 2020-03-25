@@ -35,7 +35,7 @@ export default new Vuex.Store({
 				}).catch((error) => {
 					// console.log(error)
 					this.commit('loadingOff');
-					// this.commit('gotoLogin')
+					this.commit('gotoLogin')
 					// return new Promise((error))
 				});
 			}
