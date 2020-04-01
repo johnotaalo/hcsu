@@ -23,6 +23,7 @@ class AddManagerApprovalToIm06 extends Migration
             $table->boolean('PASSPORT_SUBMITTED')->after('IMMIGRATION_FEEDBACK_COMMENT')->nullable();
             $table->boolean('PASSPORT_RECEIVED')->after('PASSPORT_SUBMITTED')->nullable();
             $table->boolean('PASSPORT_COLLECTED')->after('PASSPORT_RECEIVED')->nullable();
+            $table->string('PASSPORT_COLLECTED_BY')->after('PASSPORT_COLLECTED')->nullable();
         });
     }
 
@@ -34,7 +35,7 @@ class AddManagerApprovalToIm06 extends Migration
     public function down()
     {
         Schema::connection('pm_data')->table('IM_06', function (Blueprint $table) {
-            $table->dropColumn();
+            $table->dropColumns(['MANAGER_APPROVAL', 'MANAGER_APPROVAL_COMMENT', 'SUBMIT_TO_IMMIGRATION', 'SUBMIT_TO_IMMIGRATION_COMMENT', 'IMMIGRATION_FEEDBACK', 'IMMIGRATION_FEEDBACK_COMMENT', 'PASSPORT_SUBMITTED', 'PASSPORT_RECEIVED', 'PASSPORT_COLLECTED', 'PASSPORT_COLLECTED_BY']);
         });
     }
 }
