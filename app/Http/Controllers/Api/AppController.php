@@ -431,6 +431,9 @@ ORDER BY
             case 'pro1a':
                 $data = \App\Helpers\HCSU\Data\Pro1AData::get($case->app_number);
                 break;
+            case 'internship-pass':
+                $data = \App\Helpers\HCSU\Data\InternshipPassData::get($case->app_number);
+                break;
         }
 
         // dd($data);
