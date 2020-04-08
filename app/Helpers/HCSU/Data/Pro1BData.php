@@ -22,11 +22,14 @@ class Pro1BData{
 			$name = format_other_names($principal->OTHER_NAMES) . " " . strtoupper($principal->LAST_NAME);
 			$client_name = $name;
 
+			$arrivalDate = ($principal->current_arrival) ? $principal->current_arrival->ARRIVAL : "N/A";
+
 			$clientObj->name = $client_name;
 			$clientObj->designation = $contract->DESIGNATION;
 			$clientObj->fullname = "{$client_name}";
 			$clientObj->contract_type = $contract->C_TYPE;
 			$clientObj->organization = $mission;
+			$clientObj->doa = $arrivalDate;
 		}else if($clientObj->type == "agency"){
 			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
 			$clientObj->name = $agency->ACRONYM;
