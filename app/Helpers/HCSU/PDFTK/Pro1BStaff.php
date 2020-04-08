@@ -14,7 +14,7 @@ class Pro1BStaff{
 	}
 
 	public function getData($case_no, $document){
-		$form_data = \App\Helpers\HCSU\Data\Pro1bData::get($case_no);
+		$form_data = \App\Helpers\HCSU\Data\Pro1BData::get($case_no);
 		$description = ($form_data->caseData->TYPE_OF_GOODS == "other") ? $form_data->description . "; INVOICE NO: {$form_data->caseData->INVOICE_NO}" : $form_data->description;
 		
 		$tabData = [
