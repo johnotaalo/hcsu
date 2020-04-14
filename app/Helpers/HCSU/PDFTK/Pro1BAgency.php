@@ -29,7 +29,7 @@ class Pro1BAgency{
 			'cl_agent_address'		=>	$form_data->caseData->clearing_agent->CLEARING_AGENT_ADDRESS,
 			'mechandise_desc'		=>	$description,
 			'bl_awb'				=>	$form_data->caseData->AIRWAY_BILL_NO,
-			'carrier'				=>	$form_data->caseData->INVOICE_NO,
+			'carrier'				=>	$form_data->caseData->CARRIER,
 			'clearance_port'		=>	$form_data->caseData->port->PORT_OF_CLEARANCE
 		];
 
