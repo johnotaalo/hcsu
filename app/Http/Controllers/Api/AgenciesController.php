@@ -19,7 +19,10 @@ class AgenciesController extends Controller
     }
 
     function addAgencies(Request $request){
-    	$uploadPath = $request->file('agencyDetails.agency_hca')->store('hca');
+    	$uploadPath = null;
+    	if($request->hasFile('agencyDetails.agency_hca')){
+    		$uploadPath = $request->file('agencyDetails.agency_hca')->store('hca');
+    	}
     	$data = [
 			'ACRONYM'			=>	$request->input('agencyDetails.agency_acronym'),
 			'AGENCYNAME'		=>	$request->input('agencyDetails.agency_name'),
