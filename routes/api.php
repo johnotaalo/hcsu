@@ -210,6 +210,10 @@ Route::prefix('data')->group(function(){
 	Route::prefix('users')->group(function(){
 		Route::get('/', 'Api\AppController@getUsers');
 	});
+
+	Route::get('nationalities', function(){
+		return \App\Models\Country::all();
+	});
 });
 
 Route::prefix('documents')->group(function(){
@@ -249,3 +253,8 @@ Route::prefix('processmaker')->group(function(){
 });
 
 Route::get('user/reset/{id}', 'Api\AgenciesController@sendResetPassword');
+
+Route::prefix('/other/clients')->group(function(){
+	Route::get('/', 'Api\OtherClientsController@index');
+	Route::post('/', 'Api\OtherClientsController@store');
+});

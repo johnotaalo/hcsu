@@ -131,6 +131,9 @@ import OrganizationDataExport from './views/exports/OrganizationDataExport'
 
 import EditDomesticWorker from './views/domestic-worker/EditDomesticWorker'
 
+import Clients from './views/other/Clients'
+import AddOtherClient from './views/other/AddOtherClient'
+
 // Auth
 // import Login from './views/Login'
 
@@ -190,6 +193,16 @@ Vue.component(
 	 		path: '/dependent/add/:id',
 	 		name: 'dependent.add',
 	 		component: AddDependent
+	 	},
+	 	{
+	 		path: '/clients/other',
+	 		name: 'clients.other',
+	 		component: Clients
+	 	},
+	 	{
+	 		path: '/clients/other/add',
+	 		name: 'clients.other.add',
+	 		component: AddOtherClient
 	 	},
 	 	{
 	 		path: '/agencies',

@@ -91,8 +91,16 @@
 			<!-- Navigation -->
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'home' }">Home</router-link></li>
-				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'principal' }">Principals</router-link></li>
-				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'agencies' }">Agencies</router-link></li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">Clients</a>
+					<ul class="dropdown-menu">
+						<li><router-link class="dropdown-item" :to="{ name: 'principal' }">Principals</router-link></li>
+						<li><router-link class="dropdown-item" :to="{ name: 'agencies' }">Agencies</router-link></li>
+						<li><router-link class="dropdown-item" :to="{ name: 'clients.other' }">Others (Meeting Participants etc.)</router-link></li>
+					</ul>
+				</li>
+				<!-- <li class="nav-item"></li> -->
+				<li class="nav-item"></li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'vehicles' }">Vehicles</router-link></li>
 				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'data-management' }">Data</router-link></li>
 				<li class="nav-item dropdown">
