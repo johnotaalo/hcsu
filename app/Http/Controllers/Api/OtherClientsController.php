@@ -46,6 +46,19 @@ class OtherClientsController extends Controller
 		return $data;
 	}
 
+	function search(Request $request){
+		$query = $request->q;
+		$queryBuilder = OtherClient::where('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
+									->orWhere('LAST_NAME', 'LIKE', "%{$query}%")
+									->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
+									->orWhere('PASSPORT_NO', 'LIKE', "%{$query}%")
+									->with(['agency', 'nationality'])
+									->get();
+
+
+		return $queryBuilder;
+	}
+
 	function store(Request $request){
 		$client = new OtherClient;
 

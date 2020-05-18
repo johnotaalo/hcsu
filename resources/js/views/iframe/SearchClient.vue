@@ -142,13 +142,49 @@
 						</template>
 					</v-select>
 				</div>
+
+				<div v-if="clientType == 'other-clients'">
+					<label class="control-label">Please type to search for client</label>
+					<v-select label = "LAST_NAME" :filterable="false" :options="otherClients" @search="onOtherClientsSearch" v-model="selectedOtherClient">
+						<template slot="no-options">
+							Type to search for a Client
+						</template>
+
+						<template slot="selected-option" slot-scope="option">
+							<span v-if="option.LAST_NAME">
+								<div class = "row align-items-center">
+									<div class = "col-auto">
+										<img style="width: 50px;height: 50px;" :src="no_avatar_img"/>
+									</div>
+									<div class="col ml-n2">
+										<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+										<p class="card-text text-muted">Passport No: {{ option.PASSPORT_NO }}, Affiliated with {{ option.agency.ACRONYM }}, Nationality: {{ option.nationality.name }}</p>
+									</div>
+								</div>
+							</span>
+						</template>
+
+						<template slot="option" slot-scope="option">
+							<span v-if="option.LAST_NAME">
+								<div class = "row align-items-center">
+									<div class = "col-auto">
+										<img style="width: 50px;height: 50px;" :src="no_avatar_img"/>
+									</div>
+									<div class="col ml-n2">
+										<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+										<p class="card-text">Passport No: {{ option.PASSPORT_NO }}, Affiliated with {{ option.agency.ACRONYM }}, Nationality: {{ option.nationality.name }}</p>
+									</div>
+								</div>
+							</span>
+						</template>
+					</v-select>
+				</div>
 			</div>
 
 			<div v-if="host_country_id != 0" class="mt-5">
 				<center><button class="btn btn-primary" v-on:click="proceedClient" id = "proceed-button">Proceed with selected client</button></center>
 
 				<div v-if="clientType == 'dependent' || clientType == 'staff-member'">
-					
 				</div>
 			</div>
 		</b-card>
@@ -172,16 +208,19 @@
 					{ text: "Agency", value: 'agency' },
 					{ text: "Staff Member", value: 'staff-member' },
 					{ text: "Dependent", value: 'dependent' },
-					{ text: "Domestic Worker", value: 'domestic-worker' }
+					{ text: "Domestic Worker", value: 'domestic-worker' },
+					{ text: "Other Clients", value: 'other-clients' }
 				],
 				agencies: [],
 				staffMembers: [],
 				dependents: [],
 				domesticWorkers: [],
+				otherClients: [],
 				selectedAgency: {},
 				selectedStaff: {},
 				selectedDependent: {},
 				selectedDomesticWorker: {},
+				selectedOtherClient: {},
 				host_country_id: 0,
 				finalisedHCSUID: 0,
 				no_avatar_img: "/images/no_avatar.svg"
@@ -217,6 +256,10 @@
 				loading(true)
 				this.domesticWorkerSearch(loading, search, this)
 			},
+			onOtherClientsSearch(search, loading){
+				loading(true)
+				this.otherclientsSearch(loading, search, this)
+			},
 			getSelectedClient(host_country_id){
 				// this.isLoading = true;
 				alert(host_country_id)
@@ -246,6 +289,13 @@
 				axios(`api/principal/domesticworker/search?q=${escape(search)}`)
 				.then(res=>{
 					vm.domesticWorkers = res.data
+					loading(false)
+				})
+			}, 200),
+			otherclientsSearch: _.debounce((loading, search, vm) => {
+				axios(`api/other/clients/search?q=${escape(search)}`)
+				.then(res=>{
+					vm.otherClients = res.data
 					loading(false)
 				})
 			}, 200),
@@ -371,6 +421,14 @@
 				}else{
 					this.host_country_id = 0
 				}
+			},
+			selectedOtherClient: function(newVal, oldVal) {
+				var em = this
+				if (newVal.HOST_COUNTRY_ID) {
+					this.host_country_id = newVal.HOST_COUNTRY_ID
+				}else{
+					this.host_country_id = 0
+				}
 			}
 		},
 		computed: {
@@ -407,7 +465,7 @@
 					}
 					else if(this.application == 'visa_extension'){
 						result = _.filter(list, (obj) => {
-							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent'
+							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent' || obj.value == 'other-clients'
 						})
 					}
 					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass"){

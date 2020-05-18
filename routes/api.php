@@ -259,4 +259,5 @@ Route::prefix('/other/clients')->group(function(){
 	Route::post('/', 'Api\OtherClientsController@store');
 	Route::put('/', 'Api\OtherClientsController@update');
 	Route::get('/get/{host_country_id}', 'Api\OtherClientsController@getClient');
+	Route::get('/search', 'Api\OtherClientsController@search');
 });
