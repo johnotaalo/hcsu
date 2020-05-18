@@ -71,6 +71,22 @@ class VISAExtensionData{
 			$clientObj->passport->place_of_issue = ($domesticWorker->latest_passport) ? $domesticWorker->latest_passport->PLACE_OF_ISSUE : "N/A";
         }
 
+        else if($clientType == "other-clients"){
+        	$otherClients = \App\Models\otherClient::where('HOST_COUNTRY_ID', $case_data->HOST_COUNTRY_ID)->first();
+
+        	$c_name = strtoupper($otherClients->LAST_NAME). ", " . format_other_names($otherClients->OTHER_NAMES);
+        	$mission = $otherClients->agency->ACRONYM;
+
+        	$clientObj->name = $c_name;
+			$clientObj->clientdata = $otherClients;
+			$clientObj->organization = $mission;
+			$clientObj->contract_type = $otherClients->TYPE;
+			$clientObj->nationality = $otherClients->nationality->name;
+			$clientObj->passport->passport_no = $otherClients->PASSPORT_NO;
+			$clientObj->passport->issue_date = $otherClients->ISSUE_DATE;
+			$clientObj->passport->place_of_issue = $otherClients->passport_issue->name;
+        }
+
         $data->client = $clientObj;
         $data->case_no = $case_no;
         $data->ref = $case_data->SERIAL_NO;

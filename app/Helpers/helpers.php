@@ -21,6 +21,8 @@ if (! function_exists('identify_hcsu_client') ) {
 			return 'agency';
 		} else if ( $firstIDChar == 4 ) {
 			return 'domestic-worker';
+		} else if ( $firstIDChar == 6 ) {
+			return 'other-clients';
 		}
 	}
 }
