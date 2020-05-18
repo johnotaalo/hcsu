@@ -132,7 +132,6 @@
 							nav: "fixed",
 							dropdown: false,
 							edge: true,
-
 						},
 						requestFunction: (data) => {
 							return axios.get(`${this.baseUrl}/api/principal`, {

@@ -133,6 +133,7 @@ import EditDomesticWorker from './views/domestic-worker/EditDomesticWorker'
 
 import Clients from './views/other/Clients'
 import AddOtherClient from './views/other/AddOtherClient'
+import EditOtherClient from './views/other/EditOtherClient'
 
 // Auth
 // import Login from './views/Login'
@@ -203,6 +204,11 @@ Vue.component(
 	 		path: '/clients/other/add',
 	 		name: 'clients.other.add',
 	 		component: AddOtherClient
+	 	},
+	 	{
+	 		path: '/clients/other/edit/:id',
+	 		name: 'clients.other.edit',
+	 		component: EditOtherClient
 	 	},
 	 	{
 	 		path: '/agencies',

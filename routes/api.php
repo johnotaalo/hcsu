@@ -257,4 +257,6 @@ Route::get('user/reset/{id}', 'Api\AgenciesController@sendResetPassword');
 Route::prefix('/other/clients')->group(function(){
 	Route::get('/', 'Api\OtherClientsController@index');
 	Route::post('/', 'Api\OtherClientsController@store');
+	Route::put('/', 'Api\OtherClientsController@update');
+	Route::get('/get/{host_country_id}', 'Api\OtherClientsController@getClient');
 });

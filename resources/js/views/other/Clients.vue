@@ -23,68 +23,57 @@
 
 			<v-server-table
 			class="table-sm table-nowrap card-table"
-			url = "/api/other/clients"
-			:columns="tableOptions.columns"
+			:columns="tableOptions.columnsx"
 			:options="tableOptions.options"
-			size="sm"></v-server-table>
+			size="sm">
+				<div slot="NAME" slot-scope="props">
+					{{ props.row.LAST_NAME }}, {{ props.row.OTHER_NAMES }}
+				</div>
+
+				<div slot="AGENCY" slot-scope="props">
+					{{ props.row.ACRONYM }}
+				</div>
+
+				<div slot="ACTIONS" slot-scope="props">
+					<b-button :to="{name: 'clients.other.edit', params: {id: props.row.HOST_COUNTRY_ID}}" href="#" class="btn btn-success btn-sm">Edit</b-button>
+				</div>
+			</v-server-table>
 		</div>
 	</div>
 </template>
 
 <script type="text/javascript">
+	import VueTables from 'vue-tables-2'
+	const Event = VueTables.Event
 	export default{
 		data(){
 			return {
 				searchTerm: '',
 				tableOptions:{
-					columns: [
-						{
-							label: "HOST COUNTRY ID",
-							name: "HOST_COUNTRY_ID",
-							filterable: true,
-							orderable: true
-						},
-						// {
-						// 	label: "NAME",
-						// 	// name: "fullName",
-						// 	filterable: true,
-						// 	orderable: true
-						// },
-						{
-							label: "PASSPORT NO",
-							name: "PASSPORT_NO",
-							filterable: true,
-							orderable: true
-						},
-						{
-							label: "TYPE",
-							name: "TYPE",
-							filterable: true,
-							orderable: true
-						},
-						{
-							label: "AGENCY",
-							name: "AGENCYNAME",
-							filterable: true,
-							orderable: true
-						}, 
-						{
-							label: "",
-							name: "ACTIONS",
-							filterable: false,
-							orderable: false,
-							// event: "click",
-							// component: PrincipalActionsComponent,
-							// handler: this.viewPrincipal
-						}
-					],
+					columnsx: ["HOST_COUNTRY_ID", "NAME", "TYPE", "NATIONALITY", "PASSPORT_NO", "AGENCY", "ACTIONS"],
 					options: {
 						perPage: 50,
 						perPageValues: [],
 						filterable: false,
 						customFilters: ['normalSearch'],
+						requestFunction: (data) => {
+							return axios.get(`/api/other/clients`, {
+								params: data
+							})
+							.catch(function (e) {
+								console.log('error', e);
+							}.bind(this));
+						}
 					}
 				}
+			}
+		},
+		methods: {
+			editClient(id){
+				alert(id)
+			},
+			applySearchFilter: function(term){
+				Event.$emit('vue-tables.filter::normalSearch', term);
 			}
 		}
 	}

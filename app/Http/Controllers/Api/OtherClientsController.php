@@ -20,7 +20,7 @@ class OtherClientsController extends Controller
         $orderBy = $request->get('orderBy');
 
         $queryBuilder = \DB::table('other_clients')
-        	->select('other_clients.HOST_COUNTRY_ID', 'other_clients.LAST_NAME', 'other_clients.OTHER_NAMES', 'agencies.AGENCYNAME', 'other_clients.PASSPORT_NO', 'other_clients.TYPE', \DB::raw('country.name AS NATIONALITY'))
+        	->select('other_clients.HOST_COUNTRY_ID', 'other_clients.LAST_NAME', 'other_clients.OTHER_NAMES', 'agencies.AGENCYNAME', 'other_clients.PASSPORT_NO', 'agencies.ACRONYM','other_clients.TYPE', \DB::raw('country.name AS NATIONALITY'))
         	->join('pm_ref_data.agencies', 'agencies.AGENCY_ID', 'other_clients.AFFILIATED_AGENCY')
         	->join('pm_ref_data.country', 'country.id', "other_clients.NATIONALITY");
 
@@ -71,8 +71,28 @@ class OtherClientsController extends Controller
 		return $client;
 	}
 
-	function update(Request $request){
+	function getClient(Request $request){
+		return OtherClient::where('HOST_COUNTRY_ID', $request->host_country_id)->with(['agency', 'nationality', 'passportCountry'])->firstOrFail();
+	}
 
+	function update(Request $request){
+		$client = OtherClient::where('HOST_COUNTRY_ID', $request->host_country_id)->firstOrFail();
+
+		$client->LAST_NAME = $request->lastName;
+		$client->OTHER_NAMES = $request->otherNames;
+		$client->NATIONALITY = $request->nationality['id'];
+		$client->DATE_OF_BIRTH = $request->dob;
+		$client->TYPE = $request->clientType;
+		$client->AFFILIATED_AGENCY = $request->agency['id'];
+		$client->DESCRIPTION = $request->description;
+		$client->PASSPORT_NO = $request->passport['no'];
+		$client->ISSUE_DATE = $request->passport['issue_date'];
+		$client->EXPIRY_DATE = $request->passport['expiry_date'];
+		$client->COUNTRY_OF_ISSUE = $request->passport['country']['id'];
+
+		$client->save();
+
+		return $client;
 	}
 
 	function generateHostCountryId(OtherClient $client){
