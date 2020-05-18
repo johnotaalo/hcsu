@@ -84,7 +84,7 @@ class VISAExtensionData{
 			$clientObj->nationality = $otherClients->nationality->name;
 			$clientObj->passport->passport_no = $otherClients->PASSPORT_NO;
 			$clientObj->passport->issue_date = $otherClients->ISSUE_DATE;
-			$clientObj->passport->place_of_issue = $otherClients->passport_issue->name;
+			$clientObj->passport->place_of_issue = $otherClients->passport_country->name;
         }
 
         $data->client = $clientObj;
