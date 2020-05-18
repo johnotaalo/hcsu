@@ -72,7 +72,7 @@ class VISAExtensionData{
         }
 
         else if($clientType == "other-clients"){
-        	$otherClients = \App\Models\otherClient::where('HOST_COUNTRY_ID', $case_data->HOST_COUNTRY_ID)->first();
+        	$otherClients = \App\Models\OtherClient::where('HOST_COUNTRY_ID', $case_data->HOST_COUNTRY_ID)->first();
 
         	$c_name = strtoupper($otherClients->LAST_NAME). ", " . format_other_names($otherClients->OTHER_NAMES);
         	$mission = $otherClients->agency->ACRONYM;
