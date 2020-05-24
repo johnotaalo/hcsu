@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\SendUNSOSDataCron::class
     ];
 
     /**
@@ -26,24 +26,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $organization_groups = [
-            'UNSOS' => [
-                'UNSOS',
-                'UNSOS (SO)',
-                'UNSOA',
-                'UNSOM'
-            ],
-            'UNICEF'    =>  [
-                'UNICEF (ESARO) (RO)',
-                'UNICEF (KCO)',
-                'UNICEF USSC SO'
-            ]
-        ];
+        // $organization_groups = [
+        //     'UNSOS' => [
+        //         'UNSOS',
+        //         'UNSOS (SO)',
+        //         'UNSOA',
+        //         'UNSOM'
+        //     ],
+        //     'UNICEF'    =>  [
+        //         'UNICEF (ESARO) (RO)',
+        //         'UNICEF (KCO)',
+        //         'UNICEF USSC SO'
+        //     ]
+        // ];
 
-        foreach ($organization_groups as $group => $organizations) {
-            $schedule->job(new ExportOrganizationData($organizations, $group), 'organization_data')->dailyAt('19:20');
-        }
-        
+        // foreach ($organization_groups as $group => $organizations) {
+        //     $schedule->job(new ExportOrganizationData($organizations, $group), 'organization_data')->dailyAt('19:20');
+        // }
+        $schedule->command("senddata:unsos")->everyMinute();
     }
 
     /**
