@@ -56,7 +56,7 @@ class SendUNSOSDataCron extends Command
         $exportData = new \App\Exports\OrganizationDataExport($data);
         $date = date('Y-m-d');
         $datetime = date('Y_m_d_H_i_s');
-        \Excel::store($exportData, "data-exports/{$date}/{$this->group}/New_PM_{$datetime}.xlsx");
+        \Excel::store($exportData, "data-exports/{$date}/UNSOS/New_PM_{$datetime}.xlsx");
         \Log::info("Cron is working fine!");
 
         $this->info('Demo:Cron Command Run successfully!');
