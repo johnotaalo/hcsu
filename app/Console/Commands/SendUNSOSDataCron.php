@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Jobs\ExportOrganizationData;
+use Illuminate\Support\Facades\Mail;
 
 class SendUNSOSDataCron extends Command
 {
@@ -39,6 +40,9 @@ class SendUNSOSDataCron extends Command
      */
     public function handle()
     {
+        // $sampleFile = "data-exports/2020-01-27/UNSOS/New_PM_2020_01_27_16_41_38.xlsx";
+        // Mail::to('john.otaalo@strathmore.edu')->send(new \App\Mail\DataDumpSent($sampleFile));
+        // die;
         $statuses = ['TO_DO', 'COMPLETED'];
         $years = [];
 
@@ -56,7 +60,11 @@ class SendUNSOSDataCron extends Command
         $exportData = new \App\Exports\OrganizationDataExport($data);
         $date = date('Y-m-d');
         $datetime = date('Y_m_d_H_i_s');
-        \Excel::store($exportData, "data-exports/{$date}/UNSOS/New_PM_{$datetime}.xlsx");
+        $filename = "data-exports/{$date}/UNSOS/New_PM_{$datetime}.xlsx";
+        \Excel::store($exportData, $filename);
+
+        Mail::to('john.otaalo@strathmore.edu')->send(new \App\Mail\DataDumpSent($filename));
+
         \Log::info("Cron is working fine!");
 
         $this->info('Demo:Cron Command Run successfully!');
