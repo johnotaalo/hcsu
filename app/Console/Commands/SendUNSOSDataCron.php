@@ -44,13 +44,24 @@ class SendUNSOSDataCron extends Command
         // Mail::to('john.otaalo@strathmore.edu')->send(new \App\Mail\DataDumpSent($sampleFile));
         // die;
         $statuses = ['TO_DO', 'COMPLETED'];
+        $config = ((array)json_decode(\Storage::get('backup-settings.json')))['UNSOS'];
+        $organizations = explode(',', $config->organizations);
+        $recepients = explode(',', $config->recepients);
+        $organizations = collect($organizations)->map(function($organization){
+            return trim($organization);
+        })->toArray();
+
+        $recepients = collect($recepients)->map(function($recepient){
+            return trim($recepient);
+        })->toArray();
+
         $years = [];
 
         for ($i=2019; $i < date('Y'); $i++) {
             $years[] = $i;
         }
 
-        $organizations = ['UNSOS', 'UNSOA', 'UNSOM'];
+        // $organizations = ['UNSOS', 'UNSOA', 'UNSOM', 'UNSOS (SO)'];
 
         $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO');
         $data = $queryBuilder->whereIn('agency', $organizations)
@@ -63,7 +74,7 @@ class SendUNSOSDataCron extends Command
         $filename = "data-exports/{$date}/UNSOS/New_PM_{$datetime}.xlsx";
         \Excel::store($exportData, $filename);
 
-        Mail::to('john.otaalo@strathmore.edu')->send(new \App\Mail\DataDumpSent($filename));
+        Mail::to($recepients)->send(new \App\Mail\DataDumpSent($filename));
 
         \Log::info("Cron is working fine!");
 
