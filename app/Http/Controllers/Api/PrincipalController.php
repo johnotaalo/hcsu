@@ -119,6 +119,40 @@ class PrincipalController extends Controller
               ->get();
     }
 
+    function getDependents(Request $request){
+        $searchQueries = $request->get('normalSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $queryBuilder = \DB::table("PRINCIPAL_DEPENDENT")
+                        ->select("PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID", \DB::raw("CONCAT(PRINCIPAL_DEPENDENT.LAST_NAME, ' ', PRINCIPAL_DEPENDENT.OTHER_NAMES) AS DEPENDENT_NAME"), \DB::raw("CONCAT(PRINCIPAL.LAST_NAME, ' ', PRINCIPAL.OTHER_NAMES) AS PRINCIPAL"), "ref_relationships.RELATIONSHIP")
+                        ->join('PRINCIPAL', 'PRINCIPAL.HOST_COUNTRY_ID', '=', 'PRINCIPAL_DEPENDENT.PRINCIPAL_ID')
+                        ->join('pm_ref_data.ref_relationships', 'ref_relationships.REL_ID', '=', 'PRINCIPAL_DEPENDENT.RELATIONSHIP_ID');
+
+        if($searchQueries){
+            $queryBuilder = $queryBuilder->where('PRINCIPAL.LAST_NAME', 'LIKE', "%{$searchQueries}%");
+            $queryBuilder = $queryBuilder->orWhere('PRINCIPAL.OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
+            $queryBuilder = $queryBuilder->orWhere('PRINCIPAL_DEPENDENT.OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
+            $queryBuilder = $queryBuilder->orWhere('PRINCIPAL_DEPENDENT.LAST_NAME', 'LIKE', "%{$searchQueries}%");
+            $queryBuilder = $queryBuilder->orWhere('PRINCIPAL.HOST_COUNTRY_ID', 'LIKE', "%{$searchQueries}%");
+            $queryBuilder = $queryBuilder->orWhere('PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID', 'LIKE', "%{$searchQueries}%");
+        }
+
+        $count = $queryBuilder->count();
+
+        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+        $dependents = $queryBuilder->get();
+
+        return [
+            'count' =>  $count,
+            'data'  =>  $dependents
+        ];
+
+    }
+
     function getDependent(Request $request){
       $host_country_id = $request->host_country_id;
 

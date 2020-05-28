@@ -97,6 +97,7 @@ import ViewPrincipal from './views/ViewPrincipal'
 import ViewDependent from './views/dependent/ViewDependent'
 import EditDependent from './views/dependent/EditDependent'
 import AddDependent from './views/dependent/AddDependent'
+import DependentsList from './views/dependent/DependentsList'
 import Agencies from './views/Agencies'
 import AddAgency from './views/AddAgency'
 import ViewAgency from './views/agency/ViewAgency'
@@ -194,6 +195,11 @@ Vue.component(
 	 		path: '/dependent/add/:id',
 	 		name: 'dependent.add',
 	 		component: AddDependent
+	 	},
+	 	{
+	 		name: 'dependents.list',
+	 		component: DependentsList,
+	 		path: '/dependents/list'
 	 	},
 	 	{
 	 		path: '/clients/other',

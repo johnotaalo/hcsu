@@ -96,6 +96,7 @@
 					<ul class="dropdown-menu">
 						<li><router-link class="dropdown-item" :to="{ name: 'principal' }">Principals</router-link></li>
 						<li><router-link class="dropdown-item" :to="{ name: 'agencies' }">Agencies</router-link></li>
+						<li><router-link class="dropdown-item" :to="{ name: 'dependents.list' }">Dependents List</router-link></li>
 						<li><router-link class="dropdown-item" :to="{ name: 'clients.other' }">Others (Meeting Participants etc.)</router-link></li>
 					</ul>
 				</li>
