@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
         // foreach ($organization_groups as $group => $organizations) {
         //     $schedule->job(new ExportOrganizationData($organizations, $group), 'organization_data')->dailyAt('19:20');
         // }
-        $schedule->command("senddata:unsos")->everyMinute();
+        $schedule->command("senddata:unsos")->daily();
     }
 
     /**
