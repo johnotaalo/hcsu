@@ -64,15 +64,13 @@ class SendUNSOSDataCron extends Command
         // $organizations = ['UNSOS', 'UNSOA', 'UNSOM', 'UNSOS (SO)'];
 
         $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO');
-        $data = $queryBuilder->whereIn('agency', $organizations)
+        $data = $queryBuilder->where('agency', 'LIKE', 'UNSO%')
                                         ->whereIn('CASE_STATUS', $statuses)
-                                        ->whereIn(\DB::raw('YEAR(CASE_START_DATE)'), $years)
                                         ->get();
 
         $oldDataQuery = \DB::connection('old_pm')->table('vw_case_data_no_task');
-        $oldData = $oldDataQuery->whereIn('agency', $organizations)
+        $oldData = $oldDataQuery->where('agency', 'LIKE', 'UNSO%')
                                     ->whereIn('CASE_STATUS', $statuses)
-                                    ->whereIn(\DB::raw('YEAR(CASE_START_DATE)'), $years)
                                     ->get();
 
         $exportData = new \App\Exports\OrganizationDataExport($data);
