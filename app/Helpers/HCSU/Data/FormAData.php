@@ -29,6 +29,7 @@ class FormAData{
 			$clientObj->contract_type = $contract->C_TYPE;
 			$clientObj->organization = $mission;
 			$clientObj->doa = $arrivalDate;
+			$clientObj->fullObj = $principal;
 		}else if($clientObj->type == "agency"){
 			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
 			$clientObj->name = $agency->ACRONYM;

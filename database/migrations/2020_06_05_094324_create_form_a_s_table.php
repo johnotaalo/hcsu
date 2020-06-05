@@ -19,6 +19,8 @@ class CreateFormASTable extends Migration
             $table->integer('PRO_1B_CASE_NO')->nullable();
             $table->integer('HOST_COUNTRY_ID');
             $table->string('SERIAL_NO');
+            $table->string('INSURANCE_COMPANY');
+            $table->string('POLICY_NO');
             $table->string('USE_ROAD');
             $table->string('USE_ESTATE');
             $table->string('USE_TOWN');
