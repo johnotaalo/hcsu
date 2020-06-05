@@ -156,6 +156,18 @@ class NoteVerbal {
 
 				$end_header .= ", for approval.";
 				break;
+			case 'form_a':
+				$connector = "submit the attached Form A for";
+				if ($this->data->client->type == "staff") {
+					$end_header .= "{$this->data->client->fullname}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
+				}else if($this->data->client->type == "agency"){
+					$end_header .= " {$this->data->client->fullname}";
+				}else if($this->data->client->type == "dependent"){
+					$end_header .= "{$this->data->client->fullname}, {$this->data->client->relationship} of {$this->data->client->principal->fullname}, a {$this->data->client->contract_type}  of {$this->data->client->organization}";
+				}
+
+				$end_header .= ", for approval.";
+				break;
 		}
 
 		$this->header = "{$your_ref}Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
@@ -344,7 +356,16 @@ class NoteVerbal {
 			}
 
 			break;
-			
+		case 'form_a':
+			$body = "Vehicle details are as follows:\r";
+
+			$body .= "\r{$this->data->caseData->EXTRA_COMMENTS}\r";
+			$body .= str_pad("Make: ", $padding) . "{$this->data->caseData->vehicle->make->MAKE_MODEL}\r";
+			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->caseData->vehicle->ENGINE_NO}\r";
+			$body .= str_pad("Engine No: ", $padding) . "{$this->data->caseData->vehicle->CHASSIS_NO}\r";
+
+			$body .= "\rA copy of duplicate Insurance Certificate and two copies of approved Pro 1B are attached herewith.";
+			break;
 		}
 
 		$this->body = $body;
