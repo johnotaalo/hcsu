@@ -12,6 +12,6 @@ class AdobeSignApiController extends Controller
 	}
 
     function callback(Request $request){
-    	dd($request);
+    	\Log::debug("Callback successfully pulled in...");
     }
 }

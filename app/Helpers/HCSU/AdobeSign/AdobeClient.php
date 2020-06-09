@@ -20,7 +20,9 @@ class AdobeClient{
 
 		// $adobeSign = new AdobeSign($provider);
 
-		$url = "https://ims-na1.adobelogin.com/ims/authorize?client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&redirect_uri=https://hcsudev.unon.org/adobe-sign/callback&scope=openid&response_type=code";
+		// https://hcsudev.unon.org/adobe-sign/callback
+
+		$url = "https://ims-na1.adobelogin.com/ims/authorize?client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&redirect_uri=http://hcsudev.unon.org/adobe-sign/callback&scope=openid&response_type=code";
 		$client = new Client();
 
 		$res = $client->request('GET', $url);
