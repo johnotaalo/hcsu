@@ -438,6 +438,7 @@ ORDER BY
                 $data = \App\Helpers\HCSU\Data\InternshipPassData::get($case->app_number);
                 break;
             case 'form_a':
+            case 'form_a_ntsa':
                 $data = \App\Helpers\HCSU\Data\FormAData::get($case->app_number);
                 break;
         }

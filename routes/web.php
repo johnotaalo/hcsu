@@ -87,6 +87,11 @@ Route::get('/docusign/afterSignature/{case}/{process}/{task}', 'Api\DocusignAPIC
 Route::get('/docusign/document-sign', 'Api\DocusignAPIController@generateSigningDocument');
 Route::get('/docusign/document-download/{envelope_id}', 'Api\DocusignAPIController@downloadDocument')->name('download-docusigned-doc');
 
+Route::prefix('adobe-sign')->group(function(){
+	Route::get('test', 'Api\AdobeSignApiController@test');
+	Route::get('callback', 'Api\AdobeSignApiController@callback');
+});
+
 Route::middleware('auth')->prefix('focal-point')->group(function(){
 	Route::get('/', 'FocalPoints\DashboardController@index')->name('focalpoints-home');
 	Route::get('/login', 'Auth\FocalPointAuthController@login')->name('focalpoints-login');
