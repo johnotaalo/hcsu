@@ -23,6 +23,7 @@ class AdobeClient{
 		// https://hcsudev.unon.org/adobe-sign/callback
 
 		$url = "https://ims-na1.adobelogin.com/ims/authorize?client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&redirect_uri=https://hcsudev.unon.org/adobe-sign/callback&scope=openid&response_type=code";
+		// dd($url);
 		$client = new Client();
 
 		$res = $client->request('GET', $url);
@@ -33,6 +34,6 @@ class AdobeClient{
 			'scope'				=>	'*',
 			'response_type'		=>	'code'
 		]*/
-		dd($res->getBody());
+		// dd($res->getBody());
 	}
 }
