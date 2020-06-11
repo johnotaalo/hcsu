@@ -34,7 +34,7 @@
 
 								<!-- Button -->
 								<a @click="openComponent({}, 'add')" class="btn btn-sm btn-white">
-									Add Prefix
+									Add Plates
 								</a>
 
 							</div>

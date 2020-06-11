@@ -22,4 +22,8 @@ class Pro1B extends Model
     	$port = \App\Models\Ref\PortsOfClearance::where('ID', $this->attributes['PORT_OF_CLEARANCE'])->first();
     	return $port;
     }
+
+    public function vehicle(){
+        return $this->hasOne(\App\Models\Pro1BVehicles::class, 'CASE_NO', 'CASE_NO');
+    }
 }

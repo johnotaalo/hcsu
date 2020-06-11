@@ -41,10 +41,11 @@ class VehicleController extends Controller
 
     function addPrefix(Request $request){
         $validatedData = $request->validate([
-            'prefix'    =>  'required|unique:2019.VEHICLE_PLATE_PREFIX'
+            'prefix'    =>  'required|unique:2019.VEHICLE_PLATE_PREFIX',
+            'suffix'    =>  'required'
         ]);
 
-        return VehiclePlatePrefix::create(['prefix' =>  $request->prefix]);
+        return VehiclePlatePrefix::create(['prefix' =>  $request->prefix, 'suffix'  =>  $request->suffix]);
     }
 
     function updatePrefix(Request $request){
