@@ -348,8 +348,9 @@ class NoteVerbal {
 			$body = "Details are as follows:\r";
 			$body .= str_pad("Serial No: ", $padding) . "{$this->data->case_no}\r";
 			$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
-			if($this->process == "pro1b" && $this->data->caseData->TYPE_OF_GOODS == "vehicle")
+			if($this->process == "pro1b" && $this->data->caseData->TYPE_OF_GOODS == "vehicle"){
 				$this->data->description = "1 (ONE) {$this->data->caseData->vehicle->VEHICLE_CATEGORY} vehicle, ({$this->data->caseData->vehicle->make->MAKE_MODEL}) Chassis No. {$this->data->caseData->vehicle->CHASSIS_NO}; YOM {$this->data->caseData->vehicle->YOM}; Engine No. {$this->data->caseData->vehicle->ENGINE_NO}; Rating: {$this->data->caseData->vehicle->RATING} CC; Color: {$this->data->caseData->vehicle->color->COLOUR}";
+			}
 			$body .= str_pad("Description: ", $padding) . "{$this->data->description}\r";
 			$body .= str_pad("AWB/BL NO: ", $padding) . "{$this->data->caseData->AIRWAY_BILL_NO}\r";
 			$body .= str_pad("Invoice No: ", $padding) . "{$this->data->caseData->INVOICE_NO}\r";
