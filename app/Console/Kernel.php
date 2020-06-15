@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SendUNSOSDataCron::class
+        Commands\SendUNSOSDataCron::class,
+        Commands\TestCommand::class
     ];
 
     /**
