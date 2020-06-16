@@ -168,15 +168,36 @@ class NoteVerbal {
 
 				$end_header .= ", for approval.";
 				break;
+			case 'logbook':
+				if ($this->data->client->type == "staff") {
+					$end_header .= "{$this->data->client->name}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
+				}else if($this->data->client->type == "agency"){
+					$end_header .= " {$this->data->client->name}";
+				}else if($this->data->client->type == "dependent"){
+					$end_header .= "{$this->data->client->name}, {$this->data->client->relationship} of {$this->data->client->principal->fullname}, a {$this->data->client->contract_type}  of {$this->data->client->organization}";
+				}
+				break;
 		}
 
-		$this->header = "{$your_ref}Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
+		if($this->process == "logbook"){
+			$this->header = "Your Ref:";
+			$this->header .= "\rOur Ref:{$this->data->ref}/$this->initials\n\n";
+			$this->header .= "                            VEHICLE REGISTRATION\n";
+			$this->header .= "Please find enclosed approved registration Form A for {$end_header}, for the registration of his vehicle whose details are given below:\n\n";
+		}else{
+			$this->header = "{$your_ref}Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
+		}
+		
 
 		return $this;
 	}
 
 	public function getFooter(){
-		$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs of the Republic of Kenya the assurances of its highest consideration.\r\r\r\r\r\r\r\r                            {$this->data->date}";
+		if($this->process == "logbook"){
+			$this->footer = "Your assistance to facilitate the registration of the vehicle will be highly appreciated\r\r\r\r\r\r\r\r                            {$this->data->date}";
+		}else{
+			$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs of the Republic of Kenya the assurances of its highest consideration.\r\r\r\r\r\r\r\r                            {$this->data->date}";
+		}
 
 		return $this;
 	}
@@ -369,6 +390,36 @@ class NoteVerbal {
 			$body .= str_pad("Engine No: ", $padding) . "{$this->data->caseData->vehicle->CHASSIS_NO}\r";
 
 			$body .= "\rA copy of duplicate Insurance Certificate and two copies of approved Pro 1B are attached herewith.";
+			break;
+
+		case 'logbook':
+			$padding = $padding + 3;
+			$body = str_pad("Registration No:", $padding) . "{$this->data->caseData->forma->PLATE_NO}\r";
+			$body .= str_pad("Chassis No:", $padding) . "{$this->data->caseData->forma->vehicle->CHASSIS_NO}\r";
+			$body .= str_pad("Engine No:", $padding) . "{$this->data->caseData->forma->vehicle->ENGINE_NO}\r";
+			$body .= str_pad("Make:", $padding) . "{$this->data->caseData->forma->vehicle->make->MAKE_MODEL}\r";
+
+			$body .= "\rThe following documents are also enclosed:\n";
+			// $documents = json_decode($this->data->caseData->SUBMITTED_DOCUMENTS);
+			$documents = [
+				'Original approved Form Pro-1B',
+				'Original Form C-17B',
+				'Original Form C-17B receipt',
+				'Original Bill of Lading/Airway Bill',
+				'Original Invoice',
+				'Original Insurance Certificate',
+				'Original Form A',
+				'Copy of Import Declaration Form',
+				'Original Export Certificate',
+				'Original Certificate of Roadworthiness',
+				"Copy of Buyer's PIN",
+				"Copy of Buyer's Passport"
+			];
+			$count = 1;
+			foreach ($documents as $document) {
+				$body .= "{$count}. {$document}\n";
+				$count++;
+			}
 			break;
 		}
 

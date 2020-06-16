@@ -387,7 +387,8 @@ ORDER BY
 
         $case = $this->getCaseInformation($request->case_no);
         $creator = $case->app_init_usr_username;
-        $creatorFrags = explode(" ", $creator);
+        $currentUser = $case->current_task[0]->usr_name;
+        $creatorFrags = explode(" ", $currentUser);
 
         $initials = "";
         if (count($creatorFrags) > 0) {
@@ -441,6 +442,9 @@ ORDER BY
             case 'form_a_ntsa':
                 $data = \App\Helpers\HCSU\Data\FormAData::get($case->app_number);
                 break;
+            case 'logbook':
+                $data = \App\Helpers\HCSU\Data\LogbookData::get($case->app_number);
+                break;
         }
 
         // dd($data);
@@ -454,8 +458,12 @@ ORDER BY
                 'useExec'   =>  true
             ];
         }
-
-        $pdf = new Pdf(public_path('templates/NV.pdf'), $config);
+        if ($request->process == "logbook") {
+            $pdf = new Pdf(public_path('templates/General_Note_Verbal_Ntsa.pdf'), $config);
+        }
+        else{
+            $pdf = new Pdf(public_path('templates/NV.pdf'), $config);
+        }
         $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
                 ->flatten()
                 ->execute();
