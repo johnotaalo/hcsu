@@ -59,6 +59,25 @@
 										</div>
 									</li>
 									<li class="nav-item">
+										<router-link class="nav-link" :to="{ name: 'tims-list' }" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="sibebarTims">
+											<i class="fe fe-hash"></i> Tims Registation
+										</router-link>
+										<div class="collapse show" id="sibebarTims">
+											<ul class="nav nav-sm flex-column">
+												<li class="nav-item">
+													<router-link class="nav-link" :to="{ name: 'tims-list' }">
+														<i class="fe fe-file-text"></i> Tims Registrations
+													</router-link>
+												</li>
+												<li class="nav-item">
+													<router-link class="nav-link" :to="{ name: 'tims-registration' }">
+														<i class="fe fe-plus"></i> New Registration
+													</router-link>
+												</li>
+											</ul>
+										</div>
+									</li>
+									<li class="nav-item">
 										<a class="nav-link" href="#">
 											<i class="fe fe-truck"></i> Vehicles Database
 										</a>
@@ -86,6 +105,9 @@
 		data() {
 			return {
 			}
-		}
+		},
+		mounted(){
+			this.$parent.isContainer = false
+		},
 	}
 </script>

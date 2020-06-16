@@ -74,4 +74,43 @@ class VehicleController extends Controller
         // TODO: CHECK WHETHER THERE IS SOME DATA TIED TO THIS
         return VehiclePlatePrefixAgency::destroy($request->id);
     }
+
+    function registerTims(Request $request){
+        $tims = new \App\Models\TimsRegistration();
+
+        $tims->HOST_COUNTRY_ID = $request->host_country_id;
+        $tims->DIP_ID_NO = $request->diplomatic_id;
+        $tims->MOBILE_NO = $request->mobile_no;
+        $tims->KRA_PIN_NO = $request->pin;
+        $tims->USERNAME = $request->username;
+        $tims->PASSWORD  = \Crypt::encrypt($request->password);
+        $tims->REGISTRATION_DATE = date('Y-m-d', strtotime($request->registrationDate));
+
+        $tims->save();
+
+        return $tims;
+    }
+
+    function searchTims(Request $request){
+        $searchQueries = $request->get('normalSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $queryBuilder = \DB::table("TIMS_REGISTRATION")
+                            ->select('TIMS_REGISTRATION.HOST_COUNTRY_ID', 'TIMS_REGISTRATION.DIP_ID_NO', 'TIMS_REGISTRATION.MOBILE_NO', 'TIMS_REGISTRATION.USERNAME', 'TIMS_REGISTRATION.KRA_PIN_NO', 'TIMS_REGISTRATION.REGISTRATION_DATE', \DB::raw("(CASE WHEN PRINCIPAL.HOST_COUNTRY_ID IS NOT NULL THEN CONCAT(PRINCIPAL.LAST_NAME, ', ', PRINCIPAL.OTHER_NAMES) WHEN PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID IS NOT NULL THEN CONCAT(PRINCIPAL_DEPENDENT.LAST_NAME, ', ', PRINCIPAL_DEPENDENT.OTHER_NAMES) END) AS CLIENT"))
+                            ->leftJoin('PRINCIPAL', 'PRINCIPAL.HOST_COUNTRY_ID', '=', 'TIMS_REGISTRATION.HOST_COUNTRY_ID')
+                            ->leftJoin('PRINCIPAL_DEPENDENT', 'PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID', '=', 'TIMS_REGISTRATION.HOST_COUNTRY_ID');
+        $count = $queryBuilder->count();
+
+        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+        $registrations = $queryBuilder->get();
+
+        return [
+            'count' =>  $count,
+            'data'  =>  $registrations
+        ];
+    }
 }

@@ -120,6 +120,9 @@ import VehicleList from './views/vehicle/VehicleList'
 import Plates from './views/vehicle/Plates'
 import Prefix from './views/vehicle/plates/Prefix'
 import PlatesOrder from './views/vehicle/plates/PlatesOrder'
+import Tims from './views/vehicle/tims/Tims'
+import TimsList from './views/vehicle/tims/TimsList'
+import TimsRegistration from './views/vehicle/tims/TimsRegistration'
 
 // Data
 import DataManagement from './views/data/DataManagement'
@@ -270,6 +273,23 @@ Vue.component(
 	 						path: 'order',
 	 						component: PlatesOrder,
 	 						name: 'vehicle-plates-orders'
+	 					}
+	 				]
+	 			},
+	 			{
+	 				path: 'tims',
+	 				component: Tims,
+	 				name: 'tims',
+	 				children: [
+	 					{
+	 						path: 'list',
+			 				component: TimsList,
+			 				name: 'tims-list',
+	 					},
+	 					{
+	 						path: 'registration',
+	 						component: TimsRegistration,
+	 						name: 'tims-registration'
 	 					}
 	 				]
 	 			}

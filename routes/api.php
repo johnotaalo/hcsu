@@ -215,6 +215,11 @@ Route::prefix('data')->group(function(){
 	Route::get('nationalities', function(){
 		return \App\Models\Country::all();
 	});
+
+	Route::prefix('tims')->group(function(){
+		Route::get('/list', 'Api\VehicleController@searchTims');
+		Route::post('/registration', 'Api\VehicleController@registerTims');
+	});
 });
 
 Route::prefix('documents')->group(function(){
