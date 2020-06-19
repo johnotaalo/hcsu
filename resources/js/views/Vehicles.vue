@@ -55,6 +55,12 @@
 														<i class="fe fe-shopping-bag"></i> Plate Orders
 													</router-link>
 												</li>
+
+												<li class="nav-item">
+													<router-link class="nav-link" :to="{ name: 'rnp-list' }">
+														<i class="fe fe-corner-up-left"></i> Returned Number Plates
+													</router-link>
+												</li>
 											</ul>
 										</div>
 									</li>

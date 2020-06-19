@@ -96,6 +96,23 @@ ORDER BY
         abort(404);
     }
 
+    function validateSession(Request $request){
+        // dd("Session data is here");
+        $session = $request->session_id;
+        $session = "KRbhNqovZo5ZSdi9iUX0ITCBqpOtaLt1zTf8ryrV";
+
+        $mysession = session()->getId();
+        dd(\Hash::check($session, $mysession));
+        dd("{$session} => {$mysession}");
+
+
+        $sessionData = \DB::table('sessions')->where('id', $session)->where('ip_address', $request->ip_address)->where('user_agent', $request->user_agent)->first();
+
+        $payload = unserialize(base64_decode($sessionData->payload));
+
+        dd($payload);
+    }
+
     function getAgencies(){
     	return Agency::where('IS_ACTIVE', true)->get();
     }

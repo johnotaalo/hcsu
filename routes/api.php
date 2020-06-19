@@ -35,7 +35,7 @@ Route::prefix('auth')->group(function(){
 
 Route::prefix('kiosk')->group(function(){
 	Route::get('clients/search', 'API\AppController@searchClient');
-	Route::post('client/session/validate', 'API\AppController@searchClient');
+	Route::post('client/session/validate', 'API\AppController@validateSession');
 });
 
 Route::get('test', function(){

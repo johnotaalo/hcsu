@@ -123,6 +123,8 @@ import PlatesOrder from './views/vehicle/plates/PlatesOrder'
 import Tims from './views/vehicle/tims/Tims'
 import TimsList from './views/vehicle/tims/TimsList'
 import TimsRegistration from './views/vehicle/tims/TimsRegistration'
+import RNPList from './views/vehicle/plates/rnp/RNPList'
+import RNPCreate from './views/vehicle/plates/rnp/RNPCreate'
 
 // Data
 import DataManagement from './views/data/DataManagement'
@@ -273,6 +275,16 @@ Vue.component(
 	 						path: 'order',
 	 						component: PlatesOrder,
 	 						name: 'vehicle-plates-orders'
+	 					},
+	 					{
+	 						path: 'rnp/list',
+	 						component: RNPList,
+	 						name: 'rnp-list'
+	 					},
+	 					{
+	 						path: 'rnp/create',
+	 						component: RNPCreate,
+	 						name: 'rnp-create'
 	 					}
 	 				]
 	 			},
