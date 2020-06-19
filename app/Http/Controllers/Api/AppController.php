@@ -99,7 +99,7 @@ ORDER BY
     function validateSession(Request $request){
         // dd("Session data is here");
         $session = $request->session_id;
-        $session = "KRbhNqovZo5ZSdi9iUX0ITCBqpOtaLt1zTf8ryrV";
+        // $session = "KRbhNqovZo5ZSdi9iUX0ITCBqpOtaLt1zTf8ryrV";
 
         $mysession = session()->getId();
         dd(\Hash::check($session, $mysession));
