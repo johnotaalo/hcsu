@@ -405,7 +405,7 @@ ORDER BY
         $case = $this->getCaseInformation($request->case_no);
         $creator = $case->app_init_usr_username;
         $currentUser = $case->current_task[0]->usr_name;
-        $creatorFrags = explode(" ", $currentUser);
+        $creatorFrags = ($currentUser) ? explode(" ", $currentUser) : explode(" ", $creator);
 
         $initials = "";
         if (count($creatorFrags) > 0) {
