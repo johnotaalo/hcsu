@@ -113,4 +113,131 @@ class VehicleController extends Controller
             'data'  =>  $registrations
         ];
     }
+
+    function searchRNP(Request $request){
+        $searchQueries = $request->get('normalSearch');
+        $dateQuery = $request->get('dateSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $queryBuilder = \App\ReturnedPlate::with('plates', 'plates.client');
+        if($searchQueries){
+            $queryBuilder = $queryBuilder->whereHas('plates', function($query) use ($searchQueries){
+                $number = str_replace(' ', '', $searchQueries);
+                return $query->where('PLATE_NO', 'LIKE', "%{$number}%")
+                                ->orWhereHas('client', function ($q) use ($searchQueries){
+                                    return $q->where('LAST_NAME', 'LIKE', "%{$searchQueries}%")->orWhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
+                                });
+            });
+        }
+
+        if($dateQuery){
+            $queryBuilder = $queryBuilder->where('RNP_DATE', new \Carbon\Carbon($dateQuery));
+        }
+
+        $count = $queryBuilder->count();
+        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+
+        $lists = $queryBuilder->get();
+
+        return [
+            'count' =>  $count,
+            'data'  =>  $lists
+        ];
+    }
+
+    function createRNPList(Request $request){
+        $validatedData = $request->validate([
+            'rnpDate'  =>  ['required', 'unique:RETURNED_PLATES,RNP_DATE']
+        ]);
+
+        $date = $request->input('rnpDate');
+
+        $rnp = new \App\ReturnedPlate();
+
+        $rnp->RNP_DATE = new \Carbon\Carbon($date);
+
+        $rnp->save();
+
+        $rnpId = $rnp->id;
+        // $rnpId = 0;
+
+        $list = collect($request->returnedPlates)->map(function($plate) use ($rnpId){
+            // dd($plate);
+            $client = [];
+
+            if ($plate['clientType'] == 'agency') {
+                $client = $plate['selectedAgency'];
+            }
+            elseif ($plate['clientType'] == 'staff') {
+                $client = $plate['selectedStaff'];
+            }
+            elseif ($plate['clientType'] == 'dependant') {
+                $client = $plate['selectedDependent'];
+            }
+
+            return [
+                'RETURNED_PLATE_ID' =>  $rnpId,
+                'HOST_COUNTRY_ID'   =>  (int)$client['HOST_COUNTRY_ID'],
+                'PLATE_NO'          =>  $plate['plateNo'],
+                'MEASUREMENTS'       =>  $plate['measurements']
+            ];
+        })->toArray();
+
+        \App\ReturnedPlateList::insert($list);
+        $data = \App\ReturnedPlate::with(['plates'])->find($rnp->id);
+
+        return $data;
+    }
+
+    function uploadSignedList(Request $request){
+        $rnp = \App\ReturnedPlate::where('id', $request->id)->firstOrFail();
+
+        $file = $request->file('uploadedList');
+
+        $path = $file->store('rnp/lists/signed');
+
+        $rnp->SIGNED_DOCUMENT = $path;
+
+        $rnp->save();
+
+    }
+
+    function downloadSignedList(Request $request){
+        $rnp = \App\ReturnedPlate::where('id', $request->id)->firstOrFail();
+
+        if ($rnp->SIGNED_DOCUMENT) {
+            $file = \Storage::download($rnp->SIGNED_DOCUMENT);
+            return response()->download(storage_path("app/rnp/{$filename}"));
+        //     $file = \Storage::get($rnp->SIGNED_DOCUMENT);
+        //     $type = \Storage::mimeType($file);
+
+        //     $response = Response::make($file, 200);
+        //     $response->header("Content-Type", $type);
+
+        // return $response;
+            // return;
+        }else{abort_404();}
+    }
+
+    function downloadUnsignedList(Request $request){
+        $id = $request->id;
+
+        $rnp = \App\ReturnedPlate::where('id', $id)->firstOrFail();
+
+        // foreach ($rnp->plates as $plate) {
+        //     if($plate->clientType == "dependent")
+        //         dd($plate->client->principal->latest_contract);
+        // }
+
+        $data['data'] = $rnp;
+        $data['date'] = date('d F Y');
+
+        $pdf = \PDF::loadView('pdf.rnp', $data);
+
+        return $pdf->stream('Returned_Plates_' . $rnp->RNP_DATE . '.pdf');
+    }
 }

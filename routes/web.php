@@ -40,6 +40,8 @@ Route::get('/photos/principal/{host_country_id}', function($host_country_id){
 	}
 })->name('principal-photo');
 
+Route::get('vehicle/plates/returned/download/list/signed/{id}' , 'Api\VehicleController@downloadSignedList');
+
 Route::get('/photos/dependent/{host_country_id}', function($host_country_id){
 	$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();
 	$filename = $dependent->IMAGE;

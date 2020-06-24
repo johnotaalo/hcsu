@@ -230,6 +230,7 @@ class NoteVerbal {
 				$body .= str_pad("Invoice No:", $padding) . "{$this->data->vatObj->INVOICE_NO}\r";
 				$body .= str_pad("Invoice Date:", $padding) . "{$this->data->vatObj->INVOICE_DATE}\r";
 				$body .= str_pad("Duration:", $padding) . "{$this->data->vatObj->DURATION_FROM} to {$this->data->vatObj->DURATION_TO}\r";
+				$body .= str_pad("PIN", $padding) . "";
 				$body .= "\r";
 				$body .= "UNON is therefore seeking the esteemed Ministry's approval of the annual VAT exemption.";
 			break;

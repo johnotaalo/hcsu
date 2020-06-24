@@ -29,20 +29,79 @@
 				<div class="row">
 					<div class="col-md">
 						<b-form-group label="RNP Date">
-							<b-input type="date"/>
+							<b-input type="date" v-model="form.rnpDate"/>
 						</b-form-group>
 					</div>
 				</div>
-				<div class="row">
-					
+				<div class="row align-items-center">
+					<div class="col"></div>
+					<div class="col-auto">
+						<b-button variant="outline-primary" size="sm"  @click="addRow(form.returnedPlates)"><i class="fe fe-plus"></i>&nbsp;Add Row</b-button>
+					</div>
 				</div>
+
+				<div class="row">
+					<div class="col-md">
+						<div v-if="form.returnedPlates.length">
+							<plate-row v-for="(row, index) in form.returnedPlates" :key="row.id" v-model="form.returnedPlates[index]" @duplicate="duplicateRow($event, form.returnedPlates)"  @remove="removeRow($event, form.returnedPlates)"></plate-row>
+							<b-button variant="primary" size="sm" @click="submitData">Create RNP</b-button>
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 	</div>
 </template>
 
 <script type="text/javascript">
+	import PlateRow from './components/PlateRow'
+	import Form from '../../../../core/Form'
+	import rowForm from '../../../../mixins/rowForm'
 	export default{
+		components: { PlateRow },
+		mixins: [rowForm],
+		data(){
+			return {
+				form: new Form({
+					rnpDate: "",
+					returnedPlates: []
+				})
+			}
+		},
+		methods: {
+			submitData: function(){
+				this.form.post('vehicle/plates/returned/create')
+				.then(res => {
+					this.$swal(`Success`, "The RNP was successfully created!", "success")
+					this.$router.push({ name: 'rnp-list'})
+				})
+				.catch( error => {
+					this.$swal(`Error`, error.message, "error")
+					var errorString = "";
+					if(error.errors){
+						errorString = "<ul>";
+						_.each(error.errors, (errorArr, k) => {
+							errorString += `<li>${k}</li>`;
+							errorString += "<ul>";
+							_.each(errorArr, (e) => {
+								errorString += `<li>${e}</li>`;
+							})
+							errorString += "</ul>";
+						})
+						errorString += "</ul>";
 
+						this.$notify({
+							group: 'foo',
+							title: 'Validation Errors',
+							text: errorString,
+							duration: -1,
+							type: "error"
+						});
+					}
+				})
+			}
+		}
 	}
 </script>

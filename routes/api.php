@@ -39,13 +39,15 @@ Route::prefix('kiosk')->group(function(){
 });
 
 Route::get('test', function(){
-	$faker = \Faker\Factory::create();
-	$tests = \App\Test::insert([
-		['name' => $faker->name],
-		['name' => $faker->name]
-	]);
+	// $faker = \Faker\Factory::create();
+	// $tests = \App\Test::insert([
+	// 	['name' => $faker->name],
+	// 	['name' => $faker->name]
+	// ]);
 
-	dd($tests);
+	// dd($tests);
+	$plates = \App\ReturnedPlate::with('plates')->get();
+	return $plates;
 });
 
 Route::get('/test/queue', function(){
@@ -156,6 +158,14 @@ Route::prefix('vehicle')->group(function(){
 
 	Route::post('plates/organization/prefix', 'Api\VehicleController@addOrganizationPrefix');
 	Route::delete('plates/organization/prefix/{id}', 'Api\VehicleController@removeOrganizationPrefix');
+
+	Route::prefix('plates/returned')->group(function(){
+		Route::post('create', 'Api\VehicleController@createRNPList');
+		Route::get('list', 'Api\VehicleController@searchRNP');
+		Route::post('upload/list/signed', 'Api\VehicleController@uploadSignedList');
+		// Route::get('download/list/signed/{id}', 'Api\VehicleController@downloadSignedList');
+		Route::get('download/list/unsigned/{id}', 'Api\VehicleController@downloadUnsignedList');
+	});
 });
 
 Route::prefix('data')->group(function(){
