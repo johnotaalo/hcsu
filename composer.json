@@ -24,7 +24,8 @@
         "mikehaertl/php-pdftk": "^0.5.0",
         "niklasravnsborg/laravel-pdf": "^4.0",
         "tymon/jwt-auth": "dev-develop",
-        "yadahan/laravel-authentication-log": "^1.2"
+        "yadahan/laravel-authentication-log": "^1.2",
+        "symfony/translation": "4.3.8"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
