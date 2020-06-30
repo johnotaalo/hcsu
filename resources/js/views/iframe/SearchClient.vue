@@ -468,12 +468,12 @@
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent' || obj.value == 'other-clients'
 						})
 					}
-					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass" || this.application == "pro-1c"){
+					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass"){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member'
 						})
 					}
-					else if (this.application == 'diplomatic_id') {
+					else if (this.application == 'diplomatic_id' || this.application == "pro-1c") {
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'dependent'
 						})
