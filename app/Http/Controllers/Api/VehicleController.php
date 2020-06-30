@@ -167,25 +167,27 @@ class VehicleController extends Controller
 
         $list = collect($request->returnedPlates)->map(function($plate) use ($rnpId){
             // dd($plate);
-            $client = [];
+            // $client = [];
 
-            if ($plate['clientType'] == 'agency') {
-                $client = $plate['selectedAgency'];
-            }
-            elseif ($plate['clientType'] == 'staff') {
-                $client = $plate['selectedStaff'];
-            }
-            elseif ($plate['clientType'] == 'dependant') {
-                $client = $plate['selectedDependent'];
-            }
+            // if ($plate['clientType'] == 'agency') {
+            //     $client = $plate['selectedAgency'];
+            // }
+            // elseif ($plate['clientType'] == 'staff') {
+            //     $client = $plate['selectedStaff'];
+            // }
+            // elseif ($plate['clientType'] == 'dependant') {
+            //     $client = $plate['selectedDependent'];
+            // }
 
             return [
                 'RETURNED_PLATE_ID' =>  $rnpId,
-                'HOST_COUNTRY_ID'   =>  (int)$client['HOST_COUNTRY_ID'],
+                'HOST_COUNTRY_ID'   =>  $plate['id'],
                 'PLATE_NO'          =>  $plate['plateNo'],
                 'MEASUREMENTS'       =>  $plate['measurements']
             ];
         })->toArray();
+
+        // dd($list);
 
         \App\ReturnedPlateList::insert($list);
         $data = \App\ReturnedPlate::with(['plates'])->find($rnp->id);

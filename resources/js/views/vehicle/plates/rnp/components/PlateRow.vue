@@ -111,6 +111,9 @@
 				agencies: [],
 				staffMembers: [],
 				dependents: [],
+				client: {
+					host_country_id: 0
+				},
 				selectedAgency: {},
 				selectedStaff: {},
 				selectedDependent: {}
@@ -159,6 +162,11 @@
 			removeRow () {
 				this.$emit('remove', this.value.id)
 			},
+		},
+		watch: {
+			selectedAgency: function(newVal, oldVal){
+
+			}
 		}
 	}
 </script>
