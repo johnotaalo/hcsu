@@ -27,6 +27,7 @@ try{
             $clientObj->name = $client_name;
             $clientObj->type = "staff";
             $clientObj->organization = $mission;
+            $clientObj->pin = $principal->PIN_NO;
 		}else if($firstIDChar == "3"){
 			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $blanketData->HOST_COUNTRY_ID)->first();
             $name = $agency->ACRONYM;
@@ -59,6 +60,7 @@ try{
 			$clientObj->index_no = $dependent->principal->latest_contract->INDEX_NO;
 			$clientObj->type = "dependent";
 			$clientObj->arrival = $arrival;
+			$clientObj->pin = $principal->PIN;
 		}
 	}catch(\Exception $ex){
 		die("There is a problem with this case no: {$case_no}");
