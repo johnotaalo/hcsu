@@ -81,7 +81,7 @@ class Principal extends Model
         });
 
         if (count($currentArrival) > 0) {
-            return $currentArrival[0];
+            return $currentArrival->first();
         }
 
         return null;
