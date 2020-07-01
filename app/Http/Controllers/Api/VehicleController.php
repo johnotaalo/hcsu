@@ -166,24 +166,11 @@ class VehicleController extends Controller
         // $rnpId = 0;
 
         $list = collect($request->returnedPlates)->map(function($plate) use ($rnpId){
-            // dd($plate);
-            // $client = [];
-
-            // if ($plate['clientType'] == 'agency') {
-            //     $client = $plate['selectedAgency'];
-            // }
-            // elseif ($plate['clientType'] == 'staff') {
-            //     $client = $plate['selectedStaff'];
-            // }
-            // elseif ($plate['clientType'] == 'dependant') {
-            //     $client = $plate['selectedDependent'];
-            // }
-
             return [
                 'RETURNED_PLATE_ID' =>  $rnpId,
                 'HOST_COUNTRY_ID'   =>  $plate['id'],
                 'PLATE_NO'          =>  $plate['plateNo'],
-                'MEASUREMENTS'       =>  $plate['measurements']
+                'MEASUREMENTS'      =>  $plate['measurements']
             ];
         })->toArray();
 
@@ -241,5 +228,14 @@ class VehicleController extends Controller
         $pdf = \PDF::loadView('pdf.rnp', $data);
 
         return $pdf->stream('Returned_Plates_' . $rnp->RNP_DATE . '.pdf');
+    }
+
+    function getVehicleDetails(Request $request){
+        $id = $request->id;
+        $type = $request->type;
+        if($type == "old"){
+            $vehicle = \DB::connection('old_pm')->table('unon_sm_vehicle')->where('record_id', $id)->first();
+            return [ 'data' => $vehicle ];
+        }
     }
 }

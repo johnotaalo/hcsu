@@ -69,7 +69,7 @@
 	</table>
 	<div style="margin-bottom: 130px;">
 		<p>The United Nations Office at Nairobi (UNON) is hereby returning to National Transport and Safety Authority (NTSA) used red reflective number plates for disposal.</p>
-		<p>The used reflective number plates have been retrieved from personal UN diplomatic vehicles that have been disposed. A list is attached herewith for ease of reference.</p>
+		<p>The used reflective number plates have been retrieved from personal and official UN diplomatic vehicles that have been disposed. A list is attached herewith for ease of reference.</p>
 		<p>UNON would be grateful for NTSA's acknowledgement for receiving the number plates.</p>
 		<p>Thank you for your usual cooperation.</p>
 	</div>

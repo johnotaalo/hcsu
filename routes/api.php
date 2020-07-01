@@ -151,7 +151,7 @@ Route::prefix('data')->group(function(){
 Route::prefix('vehicle')->group(function(){
 	Route::get('/', 'Api\VehicleController@getVehicles');
 	Route::get('/{host_country_id}', 'Api\VehicleController@getVehicles');
-
+	Route::get('/get/{id}/{type}', 'Api\VehicleController@getVehicleDetails');
 	Route::get('plates/agency/prefixes', 'Api\VehicleController@getPrefixes');
 	Route::post('plates/prefix', 'Api\VehicleController@addPrefix');
 	Route::put('plates/prefix', 'Api\VehicleController@updatePrefix');
