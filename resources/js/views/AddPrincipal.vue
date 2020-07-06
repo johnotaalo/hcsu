@@ -515,6 +515,7 @@
 				}
 				else{
 					var currKeys = _.keys(this.validationStates[name])
+					dd(currKeys);
 					_.forOwn(currKeys, (key) => {
 						this.validationStates[name][key] = !this.$v.form[key].$error
 					})
