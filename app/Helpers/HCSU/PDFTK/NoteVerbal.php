@@ -144,6 +144,7 @@ class NoteVerbal {
 
 			case 'pro1a':
 			case 'pro1b':
+			case 'pro1c':
 				$processTitle = strtoupper($this->process);
 				$connector = "forward the following {$processTitle} for";
 				if ($this->data->client->type == "staff") {
@@ -383,6 +384,15 @@ class NoteVerbal {
 				$body .= "\r{$this->data->caseData->EXTRA_COMMENTS}\r";
 			}
 
+			break;
+		case 'pro1c':
+			$body = "Details are as follows:\r";
+			$padding += 3;
+			$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+			$body .= str_pad("Registration No: ", $padding) . "{$this->data->vehicle->registration}\r";
+			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->vehicle->chassis_no}\r";
+			$body .= str_pad("Engine No: ", $padding) . "{$this->data->vehicle->engine_no}\r";
+			$body .= str_pad("Make: ", $padding) . "{$this->data->vehicle->make_model}\r";
 			break;
 		case 'form_a':
 			$body = "Vehicle details are as follows:\r";
