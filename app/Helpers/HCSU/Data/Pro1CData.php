@@ -61,12 +61,16 @@ class Pro1CData{
 		$data->date = date('F d, Y');
 		$data->caseData = $caseData;
 		$data->vehicle = new \StdClass;
+		$data->vehicleExcelList = new \StdClass;
 
 		if ($caseData->VEHICLE_DATA_ORIGIN == "old") {
 			$data->vehicle->registration = $caseData->vehicle->regt_no;
-			$data->vehicle->engine_no = $caseData->vehicle->engine_no;
-			$data->vehicle->chassis_no = $caseData->vehicle->chassis_no;
-			$data->vehicle->make_model = $caseData->vehicle->make_model;
+			$data->vehicle->engine_no = ($caseData->vehicle->engine_no) ? $caseData->vehicle->engine_no : $caseData->vehicle_excel_list->{'ENGINE NO'};
+			$data->vehicle->chassis_no = ($caseData->vehicle->engine_no) ? $caseData->vehicle->chassis_no : $caseData->vehicle_excel_list->{'CHASSIS NO'};
+			$data->vehicle->make_model = ($caseData->vehicle->make_model) ? $caseData->vehicle->make_model : $caseData->vehicle_excel_list->{'MAKE AND MODEL'};
+			$data->vehicle->yom = $caseData->vehicle->year_of_manufacture;
+			$data->vehicle->dateOfRegistration = $caseData->vehicle->regt_date;
+			$data->vehicle->purchaseDate = $caseData->vehicle->ce_date;
 		}
 
 		return $data;
