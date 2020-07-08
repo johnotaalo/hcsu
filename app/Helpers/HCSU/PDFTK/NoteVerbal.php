@@ -392,7 +392,32 @@ class NoteVerbal {
 			$body .= str_pad("Registration No: ", $padding) . "{$this->data->vehicle->registration}\r";
 			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->vehicle->chassis_no}\r";
 			$body .= str_pad("Engine No: ", $padding) . "{$this->data->vehicle->engine_no}\r";
-			$body .= str_pad("Make: ", $padding) . "{$this->data->vehicle->make_model}\r";
+			$body .= str_pad("Make: ", $padding) . "{$this->data->vehicle->make_model}\r\r";
+			if($this->data->caseData->DUTY_PAID){
+				$body .= "All relevant taxes have been duly paid at Kenya Revenue Authority as confirmed by the provided copy of duty payment receipt. ";
+			}
+
+			$body .= "Find attached herewith, copies of Log book, previous approved PRO 1B and C17B. ";
+
+			if($this->data->caseData->NUMBER_PLATES_STATUS == 1){
+				$body .= "The number plates have been surrendered as confirmed by the attached list of returned number plates acknowledged by NTSA.";
+			}
+
+			if($this->data->caseData->TYPE_OF_BUYER == "privileged"){
+				if ($this->data->caseData->BUYER_AGENCY) {
+					$agency = $this->data->client->organization;
+
+					$buyerAgency = \App\Models\Agency::where('AGENCY_ID', $this->data->caseData->BUYER_AGENCY)->first();
+
+					if ($buyerAgency->ACRONYM == $agency) {
+						$body .= "The number plates have been reassigned to the buyer in line with the attached Note Verbale Ref. No. MFA/PROT. 7/2 dated March 14, 2014 from the Ministry.";
+					}
+				}
+			}
+
+			if ($this->data->caseData->ADDITIONAL_COMMENTS) {
+				$body .= "\r\r{$this->data->caseData->ADDITIONAL_COMMENTS}\r";
+			}
 			break;
 		case 'form_a':
 			$body = "Vehicle details are as follows:\r";
