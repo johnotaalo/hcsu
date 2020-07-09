@@ -35,7 +35,7 @@ class Pro1C{
 			'engine_no'				=>	$form_data->vehicle->engine_no,
 			'chassis_no'			=>	$form_data->vehicle->chassis_no,
 			'disposal_reason'		=>	$form_data->caseData->REASON_FOR_DISPOSAL,
-			'buyer_name_address'	=>	($form_data->caseData->BUYER_IDENTIFIED) ? "{$form_data->caseData->BUYER_FULL_NAMES}, {$form_data->caseData->BUYER_ADDRESS}" : "Ownership remain with applicant",
+			'buyer_name_address'	=>	($form_data->caseData->BUYER_IDENTIFIED) ? "{$form_data->caseData->BUYER_FULL_NAMES}, {$form_data->caseData->BUYER_ADDRESS}" : "Ownership remains with applicant",
 			'sale_price'			=>	($form_data->caseData->BUYER_IDENTIFIED && $form_data->caseData->SALE_PRICE) ? $form_data->caseData->SALE_CURRENCY ." " . number_format($form_data->caseData->SALE_PRICE) : "Not Yet Determined",
 			'previously_disposed_other_vehicles'	=>	'None'
 		];
