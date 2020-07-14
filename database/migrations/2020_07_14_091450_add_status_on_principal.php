@@ -14,7 +14,7 @@ class AddStatusOnPrincipal extends Migration
     public function up()
     {
         Schema::table('PRINCIPAL', function (Blueprint $table) {
-            $table->boolean('STATUS');
+            $table->boolean('STATUS')->default(true);
         });
     }
 
@@ -26,7 +26,7 @@ class AddStatusOnPrincipal extends Migration
     public function down()
     {
         Schema::table('PRINCIPAL', function (Blueprint $table) {
-            $table->dropColumns(['STATUS']);
+            $table->dropColumn(['STATUS']);
         });
     }
 }
