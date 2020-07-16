@@ -404,7 +404,7 @@ class PrincipalController extends Controller
         $passport->PASSPORT_TYPE_ID = $request->passport_type;
         $passport->PASSPORT_NO = $request->passportNo;
         $passport->PLACE_OF_ISSUE = $request->place_issue;
-        $passport->COUNTRY_OF_ISSUE = $request->country_issue;
+        $passport->COUNTRY_OF_ISSUE = $request->country_issue['label'];
         $passport->ISSUE_DATE = \Carbon\Carbon::parse($request->date_issue);
         $passport->EXPIRY_DATE = \Carbon\Carbon::parse($request->expiry_date);
 
