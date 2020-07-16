@@ -60,7 +60,7 @@ try{
 			$clientObj->index_no = $dependent->principal->latest_contract->INDEX_NO;
 			$clientObj->type = "dependent";
 			$clientObj->arrival = $arrival;
-			$clientObj->pin = $principal->PIN;
+			$clientObj->pin = $dependent->PIN;
 		}
 	}catch(\Exception $ex){
 		die("There is a problem with this case no: {$case_no}");
