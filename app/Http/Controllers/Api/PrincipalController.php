@@ -311,6 +311,15 @@ class PrincipalController extends Controller
             $contractRenewal->save();
         }
 
+        if ($_POST['doa']) {
+            $principalArrivalDeparture = new \App\PrincipalArrivalDeparture();
+
+            $principalArrivalDeparture->HOST_COUNTRY_ID = $host_country_id;
+            $principalArrivalDeparture->ARRIVAL = \Carbon\Carbon::parse($request->input('doa'));
+
+            $principalArrivalDeparture->save();
+        }
+
         if($case_no){
             $pmData = [
                 'host_country_id'           =>  $principal->HOST_COUNTRY_ID,

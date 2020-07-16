@@ -48,7 +48,13 @@
 									<label for="dob">Date of Birth</label>
 									<datetime :state="validationStates.personal.dob" v-model="form.dob" type="date" input-id="dob" input-class="form-control" :auto="dateAutoProp" :max-datetime="maxDobPrincipal"></datetime>
 									<div class="invalid-feedback">Please provide a date of birth.</div>
-								</div>						
+								</div>	
+
+								<div class="form-group">
+									<label for="dependentDob">Date of Arrival</label>
+									<datetime :state="validationStates.personal.doa" v-model="form.doa" type="date" input-id="doa" input-class="form-control" :auto="dateAutoProp" :max-datetime="$moment().format()"></datetime>
+									<div v-if="modalErrors.dependent.dob" class="my-invalid-feedback">Please provide a date of arrival.</div>
+								</div>					
 							</div>
 						</div>
 
@@ -304,6 +310,7 @@
 						lastName: "",
 						otherNames: "",
 						dob: "",
+						doa: "",
 						mobileNo: "",
 						maritalStatus: "",
 						gender: "",
@@ -331,6 +338,7 @@
 					maxDate: new this.$moment().format(),
 					gender: "",
 					dob: "",
+					doa: "",
 					place_of_birth: "",
 					nationality: {},
 					mobileNo: "",
@@ -515,7 +523,7 @@
 				}
 				else{
 					var currKeys = _.keys(this.validationStates[name])
-					dd(currKeys);
+					// dd(currKeys);
 					_.forOwn(currKeys, (key) => {
 						this.validationStates[name][key] = !this.$v.form[key].$error
 					})
