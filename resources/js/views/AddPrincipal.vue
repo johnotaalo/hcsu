@@ -428,6 +428,9 @@
 				otherNames: {
 					required
 				},
+				doa: {
+					required
+				},
 				dob: {
 					required
 				},
