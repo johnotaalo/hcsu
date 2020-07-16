@@ -90,7 +90,8 @@ class PrincipalController extends Controller
     function searchPrincipal(Request $request){
         $query = $request->q;
         return Principal::
-                where('LAST_NAME', 'LIKE', "%{$query}%")
+                ->where('STATUS', 1)
+                ->where('LAST_NAME', 'LIKE', "%{$query}%")
                 ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
                 ->orWhere('PIN', 'LIKE', "%{$query}%")
                 ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
