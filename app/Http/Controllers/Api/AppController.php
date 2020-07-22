@@ -72,7 +72,7 @@ FROM
         JOIN `pm_master_data`.`PRINCIPAL` `P` ON ((
                 `P`.`HOST_COUNTRY_ID` = `PC`.`PRINCIPAL_ID` 
             ))) 
-            WHERE PC.PRINCIPAL_ID = '{$identity}' OR PC.INDEX_NO = '{$identity}'
+            WHERE PC.PRINCIPAL_ID = '{$identity}' OR PC.INDEX_NO = '{$identity}' AND STATUS = 1
 GROUP BY
     `PC`.`PRINCIPAL_ID`,
     `PC`.`ID`,
