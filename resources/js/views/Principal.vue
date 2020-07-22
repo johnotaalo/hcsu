@@ -40,8 +40,18 @@
 								<b-img v-else width="40" height="40" rounded="circle" alt="Circle image" src="/images/no_avatar.svg"></b-img>
 							</center>
 						</template>
+						<template slot="status" slot-scope="data">
+							<span v-if="data.row.status == 1"><span class="text-success">●</span> Active</span>
+							<span v-if="data.row.status == 0"><span class="text-danger">●</span> Inactive</span>
+						</template>
+						<template slot="name" slot-scope="data">
+							{{ data.row.last_name }}, {{ data.row.other_names }}
+						</template>
+						<template slot="organization" slot-scope="data">
+							{{ data.row.contract.ACRONYM }}
+						</template>
 						<template slot="actions" slot-scope="data">
-							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }">View</router-link> 
+							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }" v-if="data.row.status == 1">View</router-link> 
 						</template>
 					</v-server-table>
 
@@ -82,20 +92,26 @@
 							orderable: true
 						}, 
 						{
-							label: "LAST NAME",
-							name: "LAST_NAME",
+							label: "Name",
+							name: "NAME",
 							filterable: true,
 							orderable: true
-						}, 
+						},
 						{
-							label: "OTHER NAMES",
-							name: "OTHER_NAMES",
+							label: "ORGANIZATION",
+							name: "ORGANIZATION",
 							filterable: true,
 							orderable: true
-						}, 
+						},
 						{
 							label: "EMAIL",
 							name: "EMAIL",
+							filterable: true,
+							orderable: true
+						}, 
+						{
+							label: "Status",
+							name: "STATUS",
 							filterable: true,
 							orderable: true
 						}, 

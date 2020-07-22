@@ -33,7 +33,7 @@ class PrincipalController extends Controller
         	"EMAIL"			=>	"email_address"
         ];
 
-        $queryBuilder = Principal::select('IMAGE', 'HOST_COUNTRY_ID', 'LAST_NAME', 'OTHER_NAMES', 'EMAIL', 'MOBILE_NO', 'OFFICE_NO');
+        $queryBuilder = Principal::select('ID', 'IMAGE', 'HOST_COUNTRY_ID', 'LAST_NAME', 'OTHER_NAMES', 'EMAIL', 'MOBILE_NO', 'OFFICE_NO', 'STATUS');
 
         if($searchQueries){
             $queryBuilder->where('LAST_NAME', 'LIKE', "%{$searchQueries}%");
@@ -65,6 +65,8 @@ class PrincipalController extends Controller
     		$cleanedData[$key]['email_address'] = $principal->EMAIL;
             $cleanedData[$key]['id'] = $principal->ID;
             $cleanedData[$key]['host_country_id'] = $principal->HOST_COUNTRY_ID;
+            $cleanedData[$key]['status']    = $principal->STATUS;
+            $cleanedData[$key]['contract'] = (Principal::where('ID', $principal->ID)->first())->latest_contract;
 			// $agency = "N/A";
    //  		foreach($principal->contracts as $contract){
    //  			if($contract->renewals){
