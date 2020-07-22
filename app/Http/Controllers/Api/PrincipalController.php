@@ -21,6 +21,7 @@ class PrincipalController extends Controller
 {
     function getPrincipal(Request $request){
     	$searchQueries = $request->get('normalSearch');
+        $activeFilter = $request->get('activeStaffSearch');
         $limit = $request->get('limit');
         $page = $request->get('page');
         $ascending = $request->get('ascending');
@@ -46,6 +47,12 @@ class PrincipalController extends Controller
             // $queryBuilder->orWhereHas('diplomaticCards', function(Builder $query) use ($searchQueries){
             //     $query->where('DIP_ID_NO', 'LIKE', "%{$searchQueries}%");
             // });
+        }
+
+        if ($activeFilter == "active") {
+            $queryBuilder->where('STATUS', 1);
+        }else if ($activeFilter == "inactive") {
+            $queryBuilder->where('STATUS', 0);
         }
 
         $count = $queryBuilder->count();

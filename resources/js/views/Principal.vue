@@ -22,6 +22,21 @@
 
 					</div>
 					<div class="col-auto">
+						<label>Show:</label>
+					</div>
+					<div class="col-auto">
+						<b-form-select @change="applyActiveStaffFilter(activeStaff)"
+						v-model="activeStaff" :options="staffOptions"></b-form-select>
+						<!-- <b-form-radio-group
+						id="showActiveStaff"
+						@change="applyActiveStaffFilter(activeStaff)"
+						v-model="activeStaff"
+						:options="staffOptions"
+						name="showActiveStaff"
+						></b-form-radio-group> -->
+						<!-- <b-form-checkbox id="" v-model="activeStaff"  value="active" unchecked-value="all">Only Show Active Staff</b-form-checkbox> -->
+					</div>
+					<div class="col-auto">
 						<b-button class= "float-right" :to="{ name: 'principal.add' }" variant="outline-primary" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add Client</b-button>
 					</div>
 				</div>
@@ -74,9 +89,15 @@
 			return {
 				baseUrl: window.Laravel.baseUrl,
 				searchTerm: "",
+				activeStaff: "all",
 				options: {
 					principalImageProps: { blank: false, blankColor: '#777', width: 40, height: 40, class: 'm1' }
 				},
+				staffOptions: [
+					{ text: 'All Staff', value: "all" },
+					{ text: 'Active Staff', value: "active" },
+					{ text: 'Inactive Staff', value: "inactive" }
+				],
 				principal: {
 					columns: [
 						{
@@ -129,7 +150,7 @@
 						perPage: 50,
 						perPageValues: [],
 						filterable: false,
-						customFilters: ['normalSearch'],
+						customFilters: ['normalSearch', 'activeStaffSearch'],
 						columnsDisplay: {
 							last_name: 'not_mobile',
 							other_names: 'not_mobile',
@@ -218,6 +239,10 @@
 			},
 			applySearchFilter: function(term){
 				Event.$emit('vue-tables.filter::normalSearch', term);
+			},
+			applyActiveStaffFilter: function(active){
+				console.log(active)
+				Event.$emit('vue-tables.filter::activeStaffSearch', active);
 			}
 		}
 	}
