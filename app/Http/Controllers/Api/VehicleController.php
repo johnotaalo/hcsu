@@ -235,7 +235,11 @@ class VehicleController extends Controller
         $type = $request->type;
         if($type == "old"){
             $vehicle = \DB::connection('old_pm')->table('unon_sm_vehicle')->where('record_id', $id)->first();
-            return [ 'data' => $vehicle ];
+            $makeModel = new StdClass;
+            if ($vehicle) {
+                $makeModel = \App\Models\VehicleMakeModel::where('MAKE_MODEL', $vehicle->make_model)->first();
+            }
+            return [ 'data' => $vehicle, 'make_model'   =>  $makeModel ];
         }else if($type == "new"){
             $vehicle = \DB::table('VW_VEHICLE_OWNER')->where('VEHICLE_ID', $id)->first();
             return [ 'data' => $vehicle ];
