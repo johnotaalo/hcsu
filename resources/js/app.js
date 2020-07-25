@@ -118,6 +118,7 @@ import NormalVAT from './views/vat/components/NormalVAT'
 import VehicleHome from './views/vehicle/VehicleHome'
 import VehicleList from './views/vehicle/VehicleList'
 import Plates from './views/vehicle/Plates'
+import PlatesList from './views/vehicle/plates/PlatesList'
 import Prefix from './views/vehicle/plates/Prefix'
 import PlatesOrder from './views/vehicle/plates/PlatesOrder'
 import Tims from './views/vehicle/tims/Tims'
@@ -270,6 +271,11 @@ Vue.component(
 	 						path: 'prefixes',
 	 						component: Prefix,
 	 						name: 'vehicle-plates-prefix'
+	 					},
+	 					{
+	 						path: 'list',
+	 						component: PlatesList,
+	 						name: 'vehicle-plates-list'
 	 					},
 	 					{
 	 						path: 'order',

@@ -63,6 +63,6 @@ class Documentno implements Rule
      */
     public function message()
     {
-        return "The Document No {$this->document_no} for {$this->supplier_name} already exists in another case";
+        return "The Document No {$this->document_no} for {$this->supplier_name} already exists for another case";
     }
 }

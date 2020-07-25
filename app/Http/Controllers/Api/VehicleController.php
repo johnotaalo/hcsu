@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use \App\Models\Ref\VehiclePlatePrefix;
 use \App\Models\Ref\VehiclePlatePrefixAgency;
 
+use Illuminate\Validation\Rule;
+
 class VehicleController extends Controller
 {
     function getVehicles(Request $request){
@@ -244,5 +246,73 @@ class VehicleController extends Controller
             $vehicle = \DB::table('VW_VEHICLE_OWNER')->where('VEHICLE_ID', $id)->first();
             return [ 'data' => $vehicle ];
         }
+    }
+
+    function addPlate(Request $request){
+        $plate_number = $request->plate . $request->suffix;
+        $validatedData = $request->validate([
+            'prefix'    =>  'required',
+            'plate'     =>  [
+                'required'
+            ],
+            'suffix'    =>  'required'
+        ]);
+
+        $plates = \App\Models\Ref\VehiclePlate::where('plate_number', $plate_number)->where('prefix_id', $request->prefix)->exists();
+
+        if (!$plates) {
+            $newPlate = \App\Models\Ref\VehiclePlate::create([
+                'prefix_id'     =>  $request->prefix['id'],
+                'plate_number'  =>  $plate_number,
+                'suffix'        =>  $request->suffix,
+                'status'        =>  0
+            ]);
+
+            return $newPlate;
+        }
+
+        return response()->json([
+            'message'   =>  'The plate number already exists'
+        ], 422);
+    }
+
+    function bulkPlates(Request $request){
+        $validatedData = $request->validate([
+            'plates'             =>  'required',
+            'plates.*.prefix'    =>  'required',
+            'plates.*.suffix'    =>  'required',
+            'plates.*.start'     =>  'required|numeric|min:1|max:998',
+            'plates.*.end'       =>  'required|numeric|min:2|max:999|gt:plates.*.start'
+        ]);
+
+        try{
+            foreach ($request->plates as $plate) {
+                for ($i = $plate['start']; $i <= $plate['end'] ; $i++) { 
+                    $plateExists = \App\Models\Ref\VehiclePlate::where('plate_number', $i . $plate['suffix'])->where('prefix_id', $plate['prefix']['id'])->exists();
+
+                    if (!$plateExists) {
+                        $newPlate = new \App\Models\Ref\VehiclePlate();
+                        
+                        $newPlate->prefix_id = $plate['prefix']['id'];
+                        $newPlate->suffix = $plate['suffix'];
+                        $newPlate->plate_number = $i . $plate['suffix'];
+                        $newPlate->status = 0;
+
+                        $newPlate->save();
+                    }
+                }
+            }
+        }catch(\Exception $ex){
+            return response()->json(["message" => "Could not process the request at the moment", "errors" => $ex->errorInfo], 422);
+        }
+    }
+
+    function getPlatesList(Request $request){
+        $count = 0;
+        $lists = [];
+        return [
+            'count' =>  $count,
+            'data'  =>  $lists
+        ];
     }
 }

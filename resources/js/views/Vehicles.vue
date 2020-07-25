@@ -51,6 +51,11 @@
 													</router-link>
 												</li>
 												<li class="nav-item">
+													<router-link class="nav-link" :to="{ name: 'vehicle-plates-list' }">
+														<i class="fe fe-list"></i> Plates List
+													</router-link>
+												</li>
+												<li class="nav-item">
 													<router-link class="nav-link" :to="{ name: 'vehicle-plates-orders' }">
 														<i class="fe fe-shopping-bag"></i> Plate Orders
 													</router-link>

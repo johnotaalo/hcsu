@@ -155,6 +155,9 @@ Route::prefix('vehicle')->group(function(){
 	Route::get('plates/agency/prefixes', 'Api\VehicleController@getPrefixes');
 	Route::post('plates/prefix', 'Api\VehicleController@addPrefix');
 	Route::put('plates/prefix', 'Api\VehicleController@updatePrefix');
+	Route::post('plates/add', 'Api\VehicleController@addPlate');
+	Route::post('plates/add/bulk', 'Api\VehicleController@bulkPlates');
+	Route::get('plates/list', 'Api\VehicleController@getPlatesList');
 
 	Route::post('plates/organization/prefix', 'Api\VehicleController@addOrganizationPrefix');
 	Route::delete('plates/organization/prefix/{id}', 'Api\VehicleController@removeOrganizationPrefix');
