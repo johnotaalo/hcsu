@@ -308,8 +308,56 @@ class VehicleController extends Controller
     }
 
     function getPlatesList(Request $request){
-        $count = 0;
-        $lists = [];
+        $searchQueries = $request->get('normalSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $queryBuilder = \App\Models\Ref\VehiclePlate::with('prefix', 'prefix.agencies', 'client', 'client.principal', 'client.dependent', 'client.agency', 'client.dependent.principal');
+        if ($searchQueries) {
+            $queryBuilder->where('plate_number', $searchQueries);
+            $queryBuilder->orWhereHas('prefix', function($query) use ($searchQueries){
+                $prefix = str_replace(" ", "", $searchQueries);
+                return $query->where('prefix', 'LIKE', "%{$prefix}%")
+                                ->orWhere(\DB::Raw('CONCAT(VEHICLE_PLATE_PREFIX.prefix, VEHICLE_PLATES.plate_number)'), 'LIKE', "%{$prefix}%")
+                                ->orWhereHas('agencies.agency', function($q) use ($searchQueries){
+                                    return $q->where('ACRONYM', 'LIKE', "%{$searchQueries}%")
+                                                ->orWhere('AGENCYNAME', 'LIKE', "%{$searchQueries}%");
+                                });
+            });
+
+            $queryBuilder->orWhereHas('client', function($query) use ($searchQueries){
+                $query->from('pm_master_data.VEHICLE_OWNER');
+                return $query->whereHas('principal', function($q) use ($searchQueries){
+                    $q->from('pm_master_data.PRINCIPAL');
+                    return $q->where('LAST_NAME', 'LIKE', "%{$searchQueries}%")
+                                ->orWhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
+                })
+                ->orWhereHas('dependent', function($q) use ($searchQueries){
+                     $q->from('pm_master_data.PRINCIPAL_DEPENDENT');
+                    return $q->where('LAST_NAME', 'LIKE', "%{$searchQueries}%")
+                                ->orWhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%")
+                                ->orWhereHas('principal', function($pq) use ($searchQueries){
+                                    $pq->from('pm_master_data.PRINCIPAL');
+                                    return $pq->where('LAST_NAME', 'LIKE', "%{$searchQueries}%")
+                                                ->orWhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
+                                    });
+                })
+                ->orWhereHas('agency', function($q) use ($searchQueries){
+                    return $q->where('ACRONYM', 'LIKE', "%{$searchQueries}%")
+                                ->orWhere('AGENCYNAME', 'LIKE', "%{$searchQueries}%");
+                });
+            });
+
+        }
+
+        $count = $queryBuilder->count();
+        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+
+        $lists = $queryBuilder->get();
+
         return [
             'count' =>  $count,
             'data'  =>  $lists

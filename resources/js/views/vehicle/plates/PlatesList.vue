@@ -43,7 +43,43 @@
 						</div>
 					</div>
 
-					<v-server-table class="table-sm table-nowrap card-table" :columns="table.columns" :options="table.options" size="sm" url = "/api/vehicle/plates/list"></v-server-table>
+					<v-server-table class="table-sm card-table" :columns="table.columns" :options="table.options" size="sm">
+						<template slot="#" slot-scope="data">
+							{{ data.index }}
+						</template>
+						<template slot="Plate Number" slot-scope="data">
+							{{ data.row.prefix.prefix }}{{ data.row.plate_number }}
+						</template>
+
+						<template slot="Allocated To" slot-scope="data">
+							<span v-if="data.row.client != null && data.row.client.principal != null">{{ data.row.client.principal.LAST_NAME }} {{ data.row.client.principal.OTHER_NAMES }} - {{ data.row.client.principal.latest_contract.ACRONYM }}</span>
+							<span v-else-if="data.row.client != null && data.row.client.dependent != null">{{ data.row.client.dependent.LAST_NAME }} {{ data.row.client.dependent.OTHER_NAMES }} <br/><span class="text-muted">{{ data.row.client.dependent.relationship.RELATIONSHIP }} of {{ data.row.client.dependent.principal.fullname }} - {{ data.row.client.dependent.principal.latest_contract.ACRONYM }}</span></span>
+							<span v-else-if="data.row.client != null && data.row.client.agency != null">{{ data.row.client.agency.ACRONYM }}</span>
+							<span v-else>
+								<b-link>Assign to Client</b-link>
+							</span>
+						</template>
+
+						<template slot="Status" slot-scope="data">
+							<span v-if="data.row.status == 0">
+								<span class="text-success">●</span> Available
+							</span>
+							<span v-else-if="data.row.status == 1">
+								<span class="text-warning">●</span> Pending Issuance
+							</span>
+							<span v-else-if="data.row.status == 2">
+								<span class="text-info">●</span> Issued
+							</span>
+
+							<span v-else-if="data.row.status == 3">
+								<span class="text-info">●</span> Lost/Stolen
+							</span>
+						</template>
+
+						<template slot="Actions">
+							<b-button variant = "sm" class = "btn-white">Change Status</b-button>
+						</template>
+					</v-server-table>
 				</div>
 			</div>
 		</div>
@@ -51,6 +87,8 @@
 </template>
 
 <script type="text/javascript">
+	import VueTables from 'vue-tables-2'
+	const Event = VueTables.Event
 	export default {
 		data(){
 			return {
@@ -61,6 +99,15 @@
 						perPage: 50,
 						perPageValues: [],
 						filterable: false,
+						customFilters: ["normalSearch"],
+						requestFunction: (data) => {
+							return axios.get(`/api/vehicle/plates/list`, {
+								params: data
+							})
+							.catch(function (e) {
+								console.log('error', e);
+							}.bind(this));
+						},
 						columnsDropdown: false,
 						sortIcon: {
 							base: 'fe',
@@ -79,7 +126,7 @@
 		},
 		methods: {
 			applySearchFilter: function(searchTerm){
-
+				Event.$emit('vue-tables.filter::normalSearch', searchTerm);
 			}
 		}
 	}
