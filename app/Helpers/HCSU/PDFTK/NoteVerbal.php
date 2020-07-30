@@ -178,6 +178,13 @@ class NoteVerbal {
 					$end_header .= "{$this->data->client->name}, {$this->data->client->relationship} of {$this->data->client->principal->fullname}, a {$this->data->client->contract_type}  of {$this->data->client->organization}";
 				}
 				break;
+			case 'nod':
+				$end_header= "the undermentioned staff member of {$this->data->client->organization}";
+				if (isset($this->data->client->dependents)) {
+					$end_header .= " {$this->data->client->include}.";
+				}
+				$connector = "forward a completed Notification of Departure for";
+				break;
 		}
 
 		if($this->process == "logbook"){
@@ -205,7 +212,7 @@ class NoteVerbal {
 
 	public function getBody(){
 		$body = "";
-		$padding = 15;
+		$padding = 20;
 		switch($this->process){
 			case "vat":
 				$body = "Details are as follows:\r";
@@ -217,6 +224,22 @@ class NoteVerbal {
 				$body .= str_pad("Invoice No:" , $padding) . "{$this->data->vat->pfNo}\r";
 				$body .= str_pad("VAT Amount:" , $padding) . "KSH. {$this->data->vat->vatAmount}\r";
 			break;
+
+			case "nod":
+				$body = "Details are as follows:\r";
+				$body .= str_pad("Name:", $padding, " ", STR_PAD_RIGHT) . "{$this->data->client->name}\r";
+				$body .= str_pad("Nationality:", $padding, " ", STR_PAD_RIGHT) . "{$this->data->client->nationality}\r";
+				$body .= str_pad("Title:", $padding, " ", STR_PAD_RIGHT) . "{$this->data->client->designation}/{$this->data->client->grade}\r";
+
+				if (isset($this->data->client->dependents)) {
+					$body .= "\r";
+					$body .= ucwords(strtolower($this->data->client->dependentLine)) . "\r";
+					$body .= str_pad("Name", 40 , " ", STR_PAD_RIGHT) . str_pad("Nationality", 27 , " ", STR_PAD_RIGHT) . "Title\r";
+					foreach ($this->data->client->dependents as $dep) {
+						$body .= substr((str_pad(trim($dep['name']), 40, " ", STR_PAD_RIGHT) . str_pad(trim($dep['nationality']), 27, " ", STR_PAD_RIGHT) . trim($dep['title'])), 0, 78) . "\r";
+					}
+				}
+				break;
 
 			case "blanket":
 				$body = "Details are as follows:\r";
