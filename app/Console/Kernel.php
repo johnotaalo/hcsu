@@ -45,7 +45,6 @@ class Kernel extends ConsoleKernel
         //     $schedule->job(new ExportOrganizationData($organizations, $group), 'organization_data')->dailyAt('19:20');
         // }
         $schedule->command("senddata:unsos")->daily();
-        $schedule->command("test:email")->everyFiveMinutes();
     }
 
     /**
