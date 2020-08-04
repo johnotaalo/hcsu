@@ -78,14 +78,15 @@ class SendOrganizationData implements ShouldQueue
         }
 
         \Log::info("Sending emails to recepients");
-
-        try{
-            Mail::to($recepients)->send(new \App\Mail\DataDumpSent($filename, $oldDataFileName));
-            \Log::info("Successfully sent email to recepients: ", $recepients);
-        }catch(\Exception $ex){
-            \Log::error("Could not send email... Retrying");
-            throw new \Exception;
-        }
+        $response = Mail::to($this->recepients)->send(new \App\Mail\DataDumpSent($filename, $oldDataFileName));
+        \Log::debug($response);
+        // try{
+            
+        //     \Log::info("Successfully sent email to recepients: ", $recepients);
+        // }catch(\Exception $ex){
+        //     \Log::error("Could not send email... Retrying", $ex);
+        //     // throw new \Exception;
+        // }
         
     }
 }
