@@ -7,6 +7,8 @@ use Illuminate\Console\Command;
 use App\Jobs\ExportOrganizationData;
 use Illuminate\Support\Facades\Mail;
 
+use \App\Jobs\SendOrganizationData;
+
 class SendUNSOSDataCron extends Command
 {
     /**
@@ -43,7 +45,6 @@ class SendUNSOSDataCron extends Command
         // $sampleFile = "data-exports/2020-01-27/UNSOS/New_PM_2020_01_27_16_41_38.xlsx";
         // Mail::to('john.otaalo@strathmore.edu')->send(new \App\Mail\DataDumpSent($sampleFile));
         // die;
-        $statuses = ['TO_DO', 'COMPLETED'];
         $config = ((array)json_decode(\Storage::get('backup-settings.json')))['UNSOS'];
         $organizations = explode(',', $config->organizations);
         $recepients = explode(',', $config->recepients);
@@ -55,35 +56,7 @@ class SendUNSOSDataCron extends Command
             return trim($recepient);
         })->toArray();
 
-        $years = [];
-
-        for ($i=2019; $i < date('Y'); $i++) {
-            $years[] = $i;
-        }
-
-        // $organizations = ['UNSOS', 'UNSOA', 'UNSOM', 'UNSOS (SO)'];
-
-        $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO');
-        $data = $queryBuilder->where('agency', 'LIKE', 'UNSO%')
-                                        ->whereIn('CASE_STATUS', $statuses)
-                                        ->get();
-
-        $oldDataQuery = \DB::connection('old_pm')->table('vw_case_data_no_task');
-        $oldData = $oldDataQuery->where('agency', 'LIKE', 'UNSO%')
-                                    ->whereIn('CASE_STATUS', $statuses)
-                                    ->get();
-
-        $exportData = new \App\Exports\OrganizationDataExport($data);
-        $date = date('Y-m-d');
-        $datetime = date('Y_m_d_H_i_s');
-        $filename = "data-exports/{$date}/UNSOS/New_PM_{$datetime}.xlsx";
-        \Excel::store($exportData, $filename);
-
-        $oldDataExport = new \App\Exports\OrganizationDataExport($oldData);
-        $oldDataFileName = "data-exports/{$date}/UNSOS/Old_PM_{$datetime}.xlsx";
-        \Excel::store($oldDataExport, $oldDataFileName);
-
-        Mail::to($recepients)->send(new \App\Mail\DataDumpSent($filename, $oldDataFileName));
+        SendOrganizationData::dispatch($organizations, $recepients, "UNSO", "UNSOS");
 
         \Log::info("Cron is working fine!");
 
