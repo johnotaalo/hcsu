@@ -84,7 +84,7 @@ class SendOrganizationData implements ShouldQueue
             \Log::info("Successfully sent email to recepients: ", $recepients);
         }catch(\Exception $ex){
             \Log::error("Could not send email... Retrying");
-            throw new Exception;
+            throw new \Exception;
         }
         
     }
