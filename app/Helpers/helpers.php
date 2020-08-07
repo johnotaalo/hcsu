@@ -55,3 +55,15 @@ if (! function_exists('format_other_names') ) {
 		return $formatted_name;
 	}
 }
+
+if (! function_exists('combined_string') ) {
+	function combined_string($array){
+		if(count($array) == 1){
+            return $array[0];
+        }else{
+            $last = array_pop($array);
+            $combined = implode(", ", $array) . " & " . $last;
+            return $combined;
+        }
+	}
+}

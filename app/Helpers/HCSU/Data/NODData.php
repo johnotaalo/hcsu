@@ -25,6 +25,8 @@ class NODData{
 		$clientObj->contract_type = $contract->C_TYPE;
 		$clientObj->organization = $mission;
 		$clientObj->nationality = $principal->nationality->official_name;
+		$clientObj->passport = $principal->latest_passport;
+		$clientObj->arrival = $principal->current_arrival;
 
 		$dependents = $caseData->DEPENDENTS;
 

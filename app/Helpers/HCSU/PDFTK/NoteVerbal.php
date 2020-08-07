@@ -236,7 +236,43 @@ class NoteVerbal {
 					$body .= ucwords(strtolower($this->data->client->dependentLine)) . "\r";
 					$body .= str_pad("Name", 40 , " ", STR_PAD_RIGHT) . str_pad("Nationality", 27 , " ", STR_PAD_RIGHT) . "Title\r";
 					foreach ($this->data->client->dependents as $dep) {
-						$body .= substr((str_pad(trim($dep['name']), 40, " ", STR_PAD_RIGHT) . str_pad(trim($dep['nationality']), 27, " ", STR_PAD_RIGHT) . trim($dep['title'])), 0, 78) . "\r";
+						$body .= substr((str_pad(trim($dep['name']), 40, " ", STR_PAD_RIGHT) . str_pad(trim($dep['nationality']), 27, " ", STR_PAD_RIGHT) . trim($dep['title'])), 0, 78) . "\r\r";
+					}
+				}
+
+				if (count($this->data->caseData->diplomaticid_status)) {
+					$returned_statement = $lost_statement = "";
+					$keys = array_keys($this->data->caseData->diplomaticid_status);
+					if (in_array("Returned", $keys) && in_array("Lost", $keys)) {
+						$returned_connector = (count($this->data->caseData->diplomaticid_status['Returned']) > 1) ? "are" : "is";
+						$returned_pluralised = (count($this->data->caseData->diplomaticid_status['Returned']) > 1) ? "Diplomatic ID Cards No. " : "Diplomatic ID Card No.";
+
+						$lost_connector = (count($this->data->caseData->diplomaticid_status['Lost']) > 1) ? "were" : "was";
+						$lost_pluralised = (count($this->data->caseData->diplomaticid_status['Lost']) > 1) ? "Diplomatic ID Cards No. " : "Diplomatic ID Card No.";
+						$lost_connector2 = (count($this->data->caseData->diplomaticid_status['Lost']) > 1) ? "are copies" : "is a copy";
+
+						$returned_statement = "Attached herewith {$returned_connector} the original {$returned_pluralised} (" . combined_string($this->data->caseData->diplomaticid_status['Returned']) . ") for cancellation.";
+
+						$lost_statement = "The original {$lost_pluralised} (". combined_string($this->data->caseData->diplomaticid_status['Lost']) . ") {$lost_connector} reported lost. Attached herewith {$lost_connector2} of police abstract(s) for your attention.";
+
+						$body .= $returned_statement . " " . $lost_statement;
+					}else if (in_array("Returned", $keys) && !in_array("Lost", $keys)){
+						$returned_connector = (count($this->data->caseData->diplomaticid_status['Returned']) > 1) ? "are" : "is";
+						$returned_pluralised = (count($this->data->caseData->diplomaticid_status['Returned']) > 1) ? "Diplomatic ID Cards No. " : "Diplomatic ID Card No.";
+
+						$returned_statement = "Attached herewith {$returned_connector} the original {$returned_pluralised} (" . combined_string($this->data->caseData->diplomaticid_status['Returned']) . ") for cancellation.";
+
+						$body .= $returned_statement;
+					}
+
+					else if (!in_array("Returned", $keys) && in_array("Lost", $keys)){
+						$lost_connector = (count($this->data->caseData->diplomaticid_status['Lost']) > 1) ? "were" : "was";
+						$lost_pluralised = (count($this->data->caseData->diplomaticid_status['Lost']) > 1) ? "Diplomatic ID Cards No. " : "Diplomatic ID Card No.";
+						$lost_connector2 = (count($this->data->caseData->diplomaticid_status['Lost']) > 1) ? "are copies" : "is a copy";
+
+						$lost_statement = "The original {$lost_pluralised} (". combined_string($this->data->caseData->diplomaticid_status['Lost']) . ") {$lost_connector} reported lost. Attached herewith {$lost_connector2} of police abstract(s) for your attention.";
+
+						$body .= $lost_statement;
 					}
 				}
 				break;
