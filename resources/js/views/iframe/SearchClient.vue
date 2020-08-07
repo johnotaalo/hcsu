@@ -468,7 +468,7 @@
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent' || obj.value == 'other-clients'
 						})
 					}
-					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass"){
+					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass" || this.application == "nod"){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member'
 						})
