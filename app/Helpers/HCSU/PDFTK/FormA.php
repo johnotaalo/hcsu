@@ -92,10 +92,10 @@ class FormA{
 
 		if ($form_data->client->type == "staff") {
 			$mobile_no = $form_data->client->fullObj->MOBILE_NO;
-			$office_no = $form_data->client->fullObj->ADDRESS;
+			$address = $form_data->client->fullObj->ADDRESS;
 		}else if ($form_data->client->type == "dependent"){
 			$mobile_no = $form_data->client->principal->MOBILE_NO;
-			$office_no = $form_data->client->principal->ADDRESS;
+			$address = $form_data->client->principal->ADDRESS;
 		}
 
 		$tabData = [
