@@ -7,26 +7,18 @@ use GuzzleHttp\Client;
 use Storage;
 
 class AdobeClient{
-	public static function auth(){
-		// $provider = new KevinEm\OAuth2\Client\AdobeSign([
-		// 	'clientId'          => env('ADOBE_SIGN_APPLICATION_ID'),
-		// 	'clientSecret'      => env('ADOBE_SIGN_CLIENT_SECRET'),
-		// 	'redirectUri'       => '/api/',
-		// 	'scope'             => [
-		// 		'scope1:type',
-		// 		'scope2:type'
-		// 	]
-		// ]);
-
-		// $adobeSign = new AdobeSign($provider);
-
-		// https://hcsudev.unon.org/adobe-sign/callback
-
-		$url = "https://ims-na1.adobelogin.com/ims/authorize?client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&redirect_uri=https://hcsudev.unon.org/adobe-sign/callback&scope=openid&response_type=code";
+	public static function auth($code, $api_access_point){
+		$url = "{$api_access_point}oauth/token?code={$code}&client_id=".env('ADOBE_SIGN_APPLICATION_ID')."&client_secret=".env('ADOBE_SIGN_CLIENT_SECRET')."&redirect_uri=".env('ADOBE_SIGN_REDIRECT_URI')."&grant_type=authorization_code";
+		\Log::debug("Trying Adobe Sign Log in: {$url}");
 		// dd($url);
 		$client = new Client();
 
-		$res = $client->request('GET', $url);
+		$res = $client->request('POST', $url, [
+			'headers'	=>	[
+				'Content-Type'	=>	'application/x-www-form-urlencoded'
+			]
+		]);
+		\Storage::disk('local')->put('adobe-sign.json', $res->getBody()->getContents());
 
 		/*, [
 			'client_id'			=>	env('ADOBE_SIGN_APPLICATION_ID'),

@@ -87,6 +87,17 @@ class FormA{
 			$engineArray["engine_no_" . $no] = $value;
 		}
 
+		$address = "";
+		$mobile_no = "";
+
+		if ($form_data->client->type == "staff") {
+			$mobile_no = $form_data->client->fullObj->MOBILE_NO;
+			$office_no = $form_data->client->fullObj->ADDRESS;
+		}else if ($form_data->client->type == "dependent"){
+			$mobile_no = $form_data->client->principal->MOBILE_NO;
+			$office_no = $form_data->client->principal->ADDRESS;
+		}
+
 		$tabData = [
 			'serial_no'						=>	$form_data->caseData->SERIAL_NO,
 			'start_month'					=>	date('F'),
@@ -110,8 +121,8 @@ class FormA{
 			'fullname'						=>	$form_data->client->name,
 			'designation'					=>	$form_data->client->designation,
 			'agency'						=>	$form_data->client->organization,
-			'office_phone_no'				=>	($form_data->client->type == "staff") ? $form_data->client->fullObj->MOBILE_NO : "",
-			'address'						=>	($form_data->client->type == "staff") ? $form_data->client->fullObj->ADDRESS : "",
+			'office_phone_no'				=>	$mobile_no,
+			'address'						=>	$address,
 			'date_dm'						=>	date('d/m'),
 			'date_y'						=>	date('y')
 		];

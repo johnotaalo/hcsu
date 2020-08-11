@@ -92,6 +92,7 @@ Route::get('/docusign/document-download/{envelope_id}', 'Api\DocusignAPIControll
 Route::prefix('adobe-sign')->group(function(){
 	Route::get('test', 'Api\AdobeSignApiController@test');
 	Route::get('callback', 'Api\AdobeSignApiController@callback');
+	Route::get('auth-callback', 'Api\AdobeSignApiController@authCallback');
 });
 
 Route::middleware('auth')->prefix('focal-point')->group(function(){
