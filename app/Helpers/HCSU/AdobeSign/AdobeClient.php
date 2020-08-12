@@ -119,7 +119,7 @@ class AdobeClient{
 				'name'					=>	$title,
 				'signatureType'			=>	'ESIGN',
 				'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
-				'state'					=>	"IN_PROCESS",
+				'state'					=>	"AUTHORING",
 				'participantSetsInfo'	=>	[
 					[
 						"memberInfos"	=>	[
