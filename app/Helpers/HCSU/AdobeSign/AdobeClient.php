@@ -52,7 +52,7 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->transientDocumentId;
 	}
 
-	public static function uploadLibraryDocument($template_id, $data){
+	public static function uploadLibraryDocument($template_id, $data, $title){
 		$auth = Self::authdata();
 		$url = $auth->api_access_point . "api/rest/v6/agreements";
 
@@ -63,8 +63,38 @@ class AdobeClient{
 			]
 		]);
 
-		$options = [
+		$mergeFields = collect($data)->map(function($row, $key) => {
+			return [
+				'defaultValue'	=>	$row,
+				'fieldName'		=>	$key
+			];
+		});
 
+		dd($mergeFields);
+
+		$options = [
+			'json'	=>	[
+				'name'				=>	$title,
+				'signatureType'		=>	'ESIGN',
+				'fileInfos'			=>	[
+					[
+						'libraryDocumentId '	=>	$template_id
+					]
+				],
+				'state'					=>	"IN_PROCESS",
+				'participantSetsInfo'	=>	[
+					[
+						"memberInfos"	=>	[
+							[ "email"	=>	'chrispine.otaalo@un.org' ]
+						],
+						"order"			=>	1,
+						"role"			=>	"SIGNER"
+					]
+				],
+				'mergeFieldInfo'		=>	[
+
+				]
+			]
 		];
 
 	}
