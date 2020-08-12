@@ -172,7 +172,7 @@ class AdobeClient{
 			]
 		];
 
-		$response = $client->post($url, $options);
+		$response = $client->put($url, $options);
 
 		return (json_decode($response->getBody()->getContents()));
 	}
