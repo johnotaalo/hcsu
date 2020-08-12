@@ -99,7 +99,7 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()));
 	}
 
-	public static function sendDocumentForSigning($documentId){
+	public static function sendDocumentForSigning($documentId, $title){
 		$auth = Self::authdata();
 		if (time() > $auth->expiry_time) {
 			$auth = self::refreshToken();
@@ -119,6 +119,22 @@ class AdobeClient{
 				'name'					=>	'Sample Agreement',
 				'signatureType'			=>	'ESIGN',
 				'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
+				"formFields"			=>	[
+					[
+						'name'			=>	'HCSU Manager Signature',
+						'inputType'		=>	'SIGNATURE',
+						'locations'		=>	[
+							'pageNumber'	=>	1,
+							"top"			=> 520,
+							"left"			=> 162,
+							"width"			=>	280,
+							"height"		=>	30
+						],
+						"contentType" => "SIGNATURE",
+                "required" => 1,
+                "recipientIndex" => 1
+					]
+				],
 				'state'					=>	"IN_PROCESS",
 				'participantSetsInfo'	=>	[
 					[
