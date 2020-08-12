@@ -119,23 +119,7 @@ class AdobeClient{
 				'name'					=>	'Sample Agreement',
 				'signatureType'			=>	'ESIGN',
 				'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
-				"formFields"			=>	[
-					[
-						'name'			=>	'HCSU Manager Signature',
-						'inputType'		=>	'SIGNATURE',
-						'locations'		=>	[
-							'pageNumber'	=>	1,
-							"top"			=> 520,
-							"left"			=> 162,
-							"width"			=>	280,
-							"height"		=>	30
-						],
-						"contentType" => "SIGNATURE",
-                "required" => 1,
-                "recipientIndex" => 1
-					]
-				],
-				'state'					=>	"IN_PROCESS",
+				'state'					=>	"AUTHORING",
 				'participantSetsInfo'	=>	[
 					[
 						"memberInfos"	=>	[
@@ -151,6 +135,46 @@ class AdobeClient{
 		$response = $client->post($url, $options);
 
 		return (json_decode($response->getBody()->getContents()))->id;
+	}
+
+	public static function addStampandSignatureFields($agreementId){
+		$auth = Self::authdata();
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+
+		$url = $auth->api_access_point . "api/rest/v6/agreements/{$agreementId}/formFields";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}",
+				'Content-Type'	=>	'application/json'
+			]
+		]);
+
+		$options = [
+			'json'	=>	[
+				"fields"	=>	[
+					"locations"	=>	[
+						[
+							"height"		=>	36,
+							"left"			=>	75,
+							"pageNumber"	=>	"1",
+							"top"			=>	200,
+							"width"			=>	150
+						]
+					],
+					"contentType" => "SIGNATURE",
+					"name": "sigBlock1",
+					"inputType": "SIGNATURE",
+					"recipientIndex":1
+				]
+			]
+		];
+
+		$response = $client->post($url, $options);
+
+		return (json_decode($response->getBody()->getContents()));
 	}
 
 	public static function getSigningURLs($agreement_id){
