@@ -68,7 +68,7 @@ class AdobeClient{
 				'defaultValue'	=>	$row,
 				'fieldName'		=>	$key
 			];
-		});
+		})->toArray();
 
 		$mergeFields = array_values($mergeFields);
 
