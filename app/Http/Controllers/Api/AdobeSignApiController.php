@@ -27,7 +27,7 @@ class AdobeSignApiController extends Controller
 		// dd($urls);
 	}
 
-	function submitDocumentsForSigning(){
+	function submitDocumentsForSigning(Request $request){
 		$case = $this->getCaseInformation($request->case_no);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";
         // $variables = $this->getCaseVariables($request->case_no);
