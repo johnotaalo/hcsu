@@ -93,6 +93,9 @@ Route::prefix('adobe-sign')->group(function(){
 	Route::get('test', 'Api\AdobeSignApiController@test');
 	Route::get('callback', 'Api\AdobeSignApiController@callback');
 	Route::get('auth-callback', 'Api\AdobeSignApiController@authCallback');
+	Route::get('test-urls', 'Api\AdobeSignApiController@TestURL');
+	Route::get('get-signing-urls', 'Api\AdobeSignApiController@getSigningURLs');
+	Route::get('library-documents', 'Api\AdobeSignApiController@libraryDocuments');
 });
 
 Route::middleware('auth')->prefix('focal-point')->group(function(){

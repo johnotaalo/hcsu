@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use Storage;
 
 class AdobeClient{
-	public static function auth($code, $api_access_point){
+	public static function auth($code, $api_access_point, $web_access_point){
 		$url = "{$api_access_point}oauth/token?code={$code}&client_id=".env('ADOBE_SIGN_APPLICATION_ID')."&client_secret=".env('ADOBE_SIGN_CLIENT_SECRET')."&redirect_uri=".env('ADOBE_SIGN_REDIRECT_URI')."&grant_type=authorization_code";
 		\Log::debug("Trying Adobe Sign Log in: {$url}");
 		// dd($url);
@@ -18,14 +18,141 @@ class AdobeClient{
 				'Content-Type'	=>	'application/x-www-form-urlencoded'
 			]
 		]);
-		\Storage::disk('local')->put('adobe-sign.json', $res->getBody()->getContents());
+		$data = json_decode($res->getBody()->getContents());
+		$data->api_access_point = $api_access_point;
+		$data->web_access_point = $web_access_point;
+		$data->expiry_time = time() + $data->expires_in;
+		$data->edatetime = date('Y-m-d H:i:s', $data->expiry_time);
+		\Storage::disk('local')->put('adobe-sign.json', json_encode($data));
+	}
 
-		/*, [
-			'client_id'			=>	env('ADOBE_SIGN_APPLICATION_ID'),
-			'redirect_uri'		=>	'/api/adobe-sign/callback',
-			'scope'				=>	'*',
-			'response_type'		=>	'code'
-		]*/
-		// dd($res->getBody());
+	public static function uploadDocument($file, $file_name){
+		$auth = Self::authdata();
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+		$url = $auth->api_access_point . "api/rest/v6/transientDocuments";
+		$client = new Client([
+			'headers'	=>	[ 'Authorization'	=>	"Bearer {$auth->access_token}" ]
+		]);
+
+		$options = [
+			'multipart'	=>	[
+				[
+					'Content-Type'	=> 'multipart/form-data',
+					'name'			=>	'File',
+					'contents'		=>	\Storage::get($file),
+					'filename'		=>	$file_name . '.pdf'
+				]
+			]
+		];
+
+		$response = $client->post($url, $options);
+
+		return (json_decode($response->getBody()->getContents()))->transientDocumentId;
+	}
+
+	public static function sendDocumentForSigning($documentId){
+		$auth = Self::authdata();
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+
+		$url = $auth->api_access_point . "api/rest/v6/agreements";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}",
+				'Content-Type'	=>	'application/json'
+			]
+		]);
+
+		$options = [
+			'json'	=>	[
+				'name'					=>	'Sample Agreement',
+				'signatureType'			=>	'ESIGN',
+				'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
+				'state'					=>	"IN_PROCESS",
+				'participantSetsInfo'	=>	[
+					[
+						"memberInfos"	=>	[
+							[ "email"	=>	'chrispine.otaalo@un.org' ]
+						],
+						"order"			=>	1,
+						"role"			=>	"SIGNER"
+					]
+				]
+			]
+		];
+
+		$response = $client->post($url, $options);
+
+		return (json_decode($response->getBody()->getContents()))->id;
+	}
+
+	public static function getSigningURLs($agreement_id){
+		$auth = Self::authdata();
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+
+		$url = $auth->api_access_point . "api/rest/v6/agreements/{$agreement_id}/signingUrls";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}"
+			]
+		]);
+
+		$response = $client->get($url);
+
+		return json_decode($response->getBody()->getContents());
+
+	}
+
+	public static function getLibraryDocuments(){
+		$auth = Self::authdata();
+
+		$url = $auth->api_access_point . "api/rest/v6/libraryDocuments";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}"
+			]
+		]);
+
+		$response = $client->get($url);
+
+		return json_decode($response->getBody()->getContents());
+	}
+
+	protected static function refreshToken(){
+		$auth = self::authdata();
+
+		$url = "{$auth->api_access_point}oauth/token?refresh_token={$auth->refresh_token}&grant_type=refresh_token&client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&client_secret=" . env('ADOBE_SIGN_CLIENT_SECRET');
+
+		$client = new Client();
+
+		$res = $client->request('POST', $url, [
+			'headers'	=>	[
+				'Content-Type'	=>	'application/x-www-form-urlencoded'
+			]
+		]);
+
+		$data = json_decode($res->getBody()->getContents());
+		$data->api_access_point = $api_access_point;
+		$data->web_access_point = $web_access_point;
+		$data->expiry_time = time() + $data->expires_in;
+		$data->edatetime = date('Y-m-d H:i:s', $data->expiry_time);
+		\Storage::disk('local')->put('adobe-sign.json', json_encode($data));
+
+		return $data;
+		
+	}
+
+	protected static function authdata(){
+		$authdata = json_decode(\Storage::disk('local')->get('adobe-sign.json'));
+
+		return $authdata;
 	}
 }
