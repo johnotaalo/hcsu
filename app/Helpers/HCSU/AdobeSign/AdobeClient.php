@@ -63,7 +63,7 @@ class AdobeClient{
 			]
 		]);
 
-		$mergeFields = collect($data)->map(function($row, $key) => {
+		$mergeFields = collect($data)->map(function($row, $key) {
 			return [
 				'defaultValue'	=>	$row,
 				'fieldName'		=>	$key
