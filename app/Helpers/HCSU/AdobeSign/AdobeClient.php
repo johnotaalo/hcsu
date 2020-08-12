@@ -116,10 +116,10 @@ class AdobeClient{
 
 		$options = [
 			'json'	=>	[
-				'name'					=>	'Sample Agreement',
+				'name'					=>	$title,
 				'signatureType'			=>	'ESIGN',
 				'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
-				'state'					=>	"AUTHORING",
+				'state'					=>	"IN_PROCESS",
 				'participantSetsInfo'	=>	[
 					[
 						"memberInfos"	=>	[
@@ -137,45 +137,7 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->id;
 	}
 
-	public static function addStampandSignatureFields($agreementId){
-		$auth = Self::authdata();
-		if (time() > $auth->expiry_time) {
-			$auth = self::refreshToken();
-		}
-
-		$url = $auth->api_access_point . "api/rest/v6/agreements/{$agreementId}/formFields";
-
-		$client = new Client([
-			'headers'	=>	[ 
-				'Authorization'	=>	"Bearer {$auth->access_token}",
-				'Content-Type'	=>	'application/json'
-			]
-		]);
-
-		$options = [
-			'json'	=>	[
-				"fields"	=>	[
-					"locations"	=>	[
-						[
-							"height"		=>	36,
-							"left"			=>	75,
-							"pageNumber"	=>	"1",
-							"top"			=>	200,
-							"width"			=>	150
-						]
-					],
-					"contentType" => "SIGNATURE",
-					"name": "sigBlock1",
-					"inputType": "SIGNATURE",
-					"recipientIndex":1
-				]
-			]
-		];
-
-		$response = $client->post($url, $options);
-
-		return (json_decode($response->getBody()->getContents()));
-	}
+	
 
 	public static function getSigningURLs($agreement_id){
 		$auth = Self::authdata();
