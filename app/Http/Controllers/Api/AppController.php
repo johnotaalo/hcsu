@@ -381,6 +381,7 @@ ORDER BY
                 $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
                 \Storage::put($localFile, $content);
                 $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
+                \Log::info("Document ID: {$documentId}");
                 // Upload to processmaker
                 if ($document->input_document != null) {
                     $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
