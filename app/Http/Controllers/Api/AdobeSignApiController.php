@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\FormTemplate;
 use Storage;
 use mikehaertl\pdftk\Pdf;
 
