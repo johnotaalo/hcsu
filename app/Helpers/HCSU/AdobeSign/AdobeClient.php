@@ -70,6 +70,8 @@ class AdobeClient{
 			];
 		});
 
+		$mergeFields = array_values($mergeFields);
+
 		dd($mergeFields);
 
 		$options = [
