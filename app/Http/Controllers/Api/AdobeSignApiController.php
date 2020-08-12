@@ -27,6 +27,52 @@ class AdobeSignApiController extends Controller
 		// dd($urls);
 	}
 
+	function submitDocumentsForSigning(){
+		$case = $this->getCaseInformation($request->case_no);
+        $applicationType = ($request->query('type')) ? $request->query('type') : "";
+        // $variables = $this->getCaseVariables($request->case_no);
+        $extraParams = $request->query();
+
+        // dd($case);
+        $process = $case->pro_uid;
+        $currentTask = $case->current_task[0]->tas_uid;
+
+        if(!$applicationType){
+            $document = FormTemplate::where([
+                'process'   =>  $process,
+                'task'      =>  $currentTask
+            ])->first();
+        }else{
+            $document = FormTemplate::where([
+                'process'   =>  $process,
+                // 'task'      =>  $currentTask,
+                'type'      =>  $applicationType
+            ])->first();
+        }
+
+        if($document){
+            $path = storage_path('app/'. $document->path);
+            $className = "\App\Helpers\HCSU\PDFTK\\" . str_replace(" ", "", $document->form_name);
+
+            // $filename = "{$document->form_name} for {$client_name}, Vendor {$vat_data->supplier->SUPPLIER_NAME} on {$date}";
+
+            $config = [];
+            if (env('PDFTK_COMMAND')) {
+                $config = [
+                    'command'   =>  env('PDFTK_COMMAND'),
+                    'useExec'   =>  true
+                ];
+            }
+
+            $pdf = new Pdf($path, $config);
+
+            $class = new $className();
+            $data = $class->getData($case->app_number, $document, $extraParams);
+
+            dd($data);
+        }
+	}
+
 	function libraryDocuments(){
 		$documents = \App\Helpers\HCSU\AdobeSign\AdobeClient::getLibraryDocuments();
 
