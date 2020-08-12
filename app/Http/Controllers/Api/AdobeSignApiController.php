@@ -135,4 +135,13 @@ class AdobeSignApiController extends Controller
     function authCallback(Request $request){
     	\Log::debug("Auth callback called");
     }
+
+    protected function getCaseInformation($case_no){
+        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+        $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
+        // dd($response);
+
+        return $response;
+    }
 }
