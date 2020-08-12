@@ -52,6 +52,23 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->transientDocumentId;
 	}
 
+	public static function uploadLibraryDocument($template_id, $data){
+		$auth = Self::authdata();
+		$url = $auth->api_access_point . "api/rest/v6/agreements";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}",
+				'Content-Type'	=>	"application/json"
+			]
+		]);
+
+		$options = [
+
+		];
+
+	}
+
 	public static function sendDocumentForSigning($documentId){
 		$auth = Self::authdata();
 		if (time() > $auth->expiry_time) {

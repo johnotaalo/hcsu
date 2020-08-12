@@ -32,6 +32,7 @@ class AdobeSignApiController extends Controller
 
 	function submitDocumentsForSigning(Request $request){
 		$case = $this->getCaseInformation($request->case_no);
+		dd($case);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";
         // $variables = $this->getCaseVariables($request->case_no);
         $extraParams = $request->query();
@@ -72,7 +73,9 @@ class AdobeSignApiController extends Controller
             $class = new $className();
             $data = $class->getData($case->app_number, $document, $extraParams);
 
-            dd($data);
+            if ($document->ADOBE_SIGN_TEMPLATE) {
+            	$agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case_title);
+            }
         }
 	}
 
