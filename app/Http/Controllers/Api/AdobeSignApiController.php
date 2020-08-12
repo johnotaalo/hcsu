@@ -74,6 +74,8 @@ class AdobeSignApiController extends Controller
 
             if ($document->ADOBE_SIGN_TEMPLATE) {
             	$agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_name);
+
+            	dd($agreementId);
             }
         }
 	}

@@ -72,8 +72,6 @@ class AdobeClient{
 
 		$mergeFields = array_values($mergeFields);
 
-		dd($mergeFields);
-
 		$options = [
 			'json'	=>	[
 				'name'				=>	$title,
@@ -93,12 +91,12 @@ class AdobeClient{
 						"role"			=>	"SIGNER"
 					]
 				],
-				'mergeFieldInfo'		=>	[
-
-				]
+				'mergeFieldInfo'		=>	$mergeFields
 			]
 		];
 
+		$response = $client->post($url, $options);
+		return (json_decode($response->getBody()->getContents()));
 	}
 
 	public static function sendDocumentForSigning($documentId){
