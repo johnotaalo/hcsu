@@ -381,6 +381,15 @@ ORDER BY
                 $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
                 \Storage::put($localFile, $content);
                 $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
+                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::sendDocumentForSigning($documentId);
+                \Log::info("Agreement ID: {$agreementId}");
+
+                $document = new \App\AdobeSignDocuments();
+
+                $document->DOCUMENT_ID = $documentId;
+                $document->AGREEMENT_ID = $agreementId;
+
+                $document->save();
                 \Log::info("Document ID: {$documentId}");
                 // Upload to processmaker
                 if ($document->input_document != null) {
