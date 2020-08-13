@@ -158,7 +158,7 @@ class NoteVerbal {
 				$end_header .= ", for approval.";
 				break;
 			case 'form_a':
-				$connector = "submit the attached Form A for";
+				$connector = "submit the attached Form A & C for";
 				if ($this->data->client->type == "staff") {
 					$end_header .= "{$this->data->client->fullname}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
 				}else if($this->data->client->type == "agency"){
