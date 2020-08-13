@@ -74,29 +74,63 @@ class AdobeClient{
 
 		$options = [
 			'json'	=>	[
-				'name'				=>	$title,
-				'signatureType'		=>	'ESIGN',
-				'fileInfos'			=>	[
-					[
-						'libraryDocumentId '	=>	$template_id
-					]
-				],
-				'state'					=>	"IN_PROCESS",
-				'participantSetsInfo'	=>	[
-					[
-						"memberInfos"	=>	[
-							[ "email"	=>	'chrispine.otaalo@un.org' ]
-						],
-						"order"			=>	1,
-						"role"			=>	"SIGNER"
-					]
-				],
-				'mergeFieldInfo'		=>	$mergeFields
+				'documentCreationInfo'	=>	[
+					'recipientSetInfos'	=>	[
+						[
+							"recipientSetRole"			=>	"SIGNER",
+							"recipientSetMemberInfos"	=>	[
+								["email"	=>	"chrispine.otaalo@un.org"]
+							]
+						]
+					],
+					"signatureType"		=>	"ESIGN",
+					"signatureFlow"		=>	"SENDER_SIGNATURE_NOT_REQUIRED",
+					"name"				=>	$title,
+					"fileInfos"			=>	[['libraryDocumentId'	=>	$template_id]],
+					"mergeFieldInfo"	=>	$mergeFields
+					// "formFields"		=>	[
+					// 	[
+					// 		"name"			=>	"Manager Signature",
+					// 		"inputType"		=>	"SIGNATURE",
+					// 		"locations"		=>	[
+					// 			"pageNumber"	=>	1,
+					// 			"top"			=>	520,
+					// 			"left"			=>	162
+					// 		],
+					// 		"contentType" => "SIGNATURE",
+					// 		"required" => true,
+					// 		"recipientIndex" => 1
+					// 	]
+					// ]
+				]
 			]
 		];
 
+		// $options = [
+		// 	'json'	=>	[
+		// 		'name'				=>	$title,
+		// 		'signatureType'		=>	'ESIGN',
+		// 		'fileInfos'			=>	[
+		// 			[
+		// 				'libraryDocumentId '	=>	$template_id
+		// 			]
+		// 		],
+		// 		'state'					=>	"IN_PROCESS",
+		// 		'participantSetsInfo'	=>	[
+		// 			[
+		// 				"memberInfos"	=>	[
+		// 					[ "email"	=>	'chrispine.otaalo@un.org' ]
+		// 				],
+		// 				"order"			=>	1,
+		// 				"role"			=>	"SIGNER"
+		// 			]
+		// 		],
+		// 		'mergeFieldInfo'		=>	$mergeFields
+		// 	]
+		// ];
+
 		$response = $client->post($url, $options);
-		return (json_decode($response->getBody()->getContents()));
+		return (json_decode($response->getBody()->getContents()))->agreementId;
 	}
 
 	public static function sendDocumentForSigning($documentId, $title){
@@ -114,27 +148,63 @@ class AdobeClient{
 			]
 		]);
 
+		// $options = [
+		// 	'json'	=>	[
+		// 		'name'					=>	$title,
+		// 		'signatureType'			=>	'ESIGN',
+		// 		'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
+		// 		'state'					=>	"AUTHORING",
+		// 		'participantSetsInfo'	=>	[
+		// 			[
+		// 				"memberInfos"	=>	[
+		// 					[ "email"	=>	'chrispine.otaalo@un.org' ]
+		// 				],
+		// 				"order"			=>	1,
+		// 				"role"			=>	"SIGNER"
+		// 			]
+		// 		]
+		// 	]
+		// ];
+
 		$options = [
 			'json'	=>	[
-				'name'					=>	$title,
-				'signatureType'			=>	'ESIGN',
-				'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
-				'state'					=>	"AUTHORING",
-				'participantSetsInfo'	=>	[
-					[
-						"memberInfos"	=>	[
-							[ "email"	=>	'chrispine.otaalo@un.org' ]
-						],
-						"order"			=>	1,
-						"role"			=>	"SIGNER"
+				'documentCreationInfo'	=>	[
+					'recipientSetInfos'	=>	[
+						[
+							"recipientSetRole"			=>	"SIGNER",
+							"recipientSetMemberInfos"	=>	[
+								["email"	=>	"chrispine.otaalo@un.org"]
+							]
+						]
+					],
+					"signatureType"		=>	"ESIGN",
+					"signatureFlow"		=>	"SENDER_SIGNATURE_NOT_REQUIRED",
+					"name"				=>	$title,
+					"fileInfos"			=>	[['transientDocumentId'	=>	$documentId]],
+					"formFields"		=>	[
+						[
+							"name"			=>	"Manager Signature",
+							"inputType"		=>	"SIGNATURE",
+							"locations"		=>	[
+								"pageNumber"	=>	1,
+								"top"			=>	520,
+								"left"			=>	162
+							],
+							"contentType" => "SIGNATURE",
+							"required" => true,
+							"recipientIndex" => 1
+						]
 					]
 				]
 			]
 		];
 
-		$response = $client->post($url, $options);
+		die(json_encode($options));
 
-		return (json_decode($response->getBody()->getContents()))->id;
+		$response = $client->post($url, $options);
+		dd(json_decode($response->getBody()->getContents()));
+
+		return (json_decode($response->getBody()->getContents()))->agreementId;
 	}
 
 	public static function addStampandSignatureFields($agreementId){

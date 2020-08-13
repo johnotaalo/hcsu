@@ -74,8 +74,22 @@ class AdobeSignApiController extends Controller
 
             if ($document->ADOBE_SIGN_TEMPLATE) {
             	$agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_name);
+                // \App\Helpers\HCSU\AdobeSign\AdobeClient::addStampandSignatureFields($agreementId);
+                \Log::info("Agreement ID: {$agreementId}");
 
-            	dd($agreementId);
+                $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
+
+                \Log::debug("SigningURLS: " . json_encode($signingURLs));
+
+                $document = new \App\AdobeSignDocuments();
+
+                $document->AGREEMENT_ID = $agreementId;
+                $document->CASE_NO = $case->app_number;
+                $document->URLS = json_encode($signingURLs);
+
+                $document->save();
+
+                \Log::debug("Document successfully saved to database. Document ID: {$document->id}");
             }
         }
 	}
@@ -86,7 +100,7 @@ class AdobeSignApiController extends Controller
 		// dd($documents);
 		echo "<ul>";
 		foreach ($documents->libraryDocumentList as $document) {
-			echo "<li>{$document->name} - {$document->id}</li>";
+			echo "<li>{$document->name} - {$document->libraryDocumentId}</li>";
 		}
 		echo "</ul>";
 	}
