@@ -381,7 +381,7 @@ ORDER BY
                 $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
                 \Storage::put($localFile, $content);
 
-                // $stampedFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
+                $stampedFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
 
                 // $stampPdf = new Pdf(storage_path('app/' . $localFile), $config);
                 // $stampPdf->stamp(public_path() . '/documents/stamps/olago-edit.pdf')
