@@ -372,7 +372,7 @@ ORDER BY
             // $pdf->send("{$filename}", true);
             try{
                 $pdf->fillForm($data)
-                    // ->flatten()
+                    ->flatten()
                     ->execute();
                if($pdf->getError()){
                 abort(500, $pdf->getError());

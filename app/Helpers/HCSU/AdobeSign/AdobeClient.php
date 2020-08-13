@@ -54,7 +54,7 @@ class AdobeClient{
 
 	public static function uploadLibraryDocument($template_id, $data, $title){
 		$auth = Self::authdata();
-		$url = $auth->api_access_point . "api/rest/v6/agreements";
+		$url = $auth->api_access_point . "api/rest/v5/agreements";
 
 		$client = new Client([
 			'headers'	=>	[ 
@@ -105,7 +105,7 @@ class AdobeClient{
 			$auth = self::refreshToken();
 		}
 
-		$url = $auth->api_access_point . "api/rest/v6/agreements";
+		$url = $auth->api_access_point . "api/rest/v5/agreements";
 
 		$client = new Client([
 			'headers'	=>	[ 
@@ -143,7 +143,7 @@ class AdobeClient{
 			$auth = self::refreshToken();
 		}
 
-		$url = $auth->api_access_point . "api/rest/v6/agreements/{$agreementId}/formFields";
+		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreementId}/formFields";
 
 		$client = new Client([
 			'headers'	=>	[ 
@@ -183,7 +183,7 @@ class AdobeClient{
 			$auth = self::refreshToken();
 		}
 
-		$url = $auth->api_access_point . "api/rest/v6/agreements/{$agreement_id}/signingUrls";
+		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreement_id}/signingUrls";
 
 		$client = new Client([
 			'headers'	=>	[ 
@@ -200,7 +200,7 @@ class AdobeClient{
 	public static function getLibraryDocuments(){
 		$auth = Self::authdata();
 
-		$url = $auth->api_access_point . "api/rest/v6/libraryDocuments";
+		$url = $auth->api_access_point . "api/rest/v5/libraryDocuments";
 
 		$client = new Client([
 			'headers'	=>	[ 
