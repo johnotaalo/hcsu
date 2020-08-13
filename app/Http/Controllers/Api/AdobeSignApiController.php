@@ -31,8 +31,11 @@ class AdobeSignApiController extends Controller
 	}
 
 	function submitDocumentsForSigning(Request $request){
+		// $data = json_decode('{"signingUrlSetInfos":[{"signingUrls":[{"email":"chrispine.otaalo@un.org","esignUrl":"https:\/\/secure.na2.echosign.com\/public\/apiesign?pid=CBFCIBAA3AAABLblqZhCW4p0EvpASA903vkiDpcbSl_KQk9B7jrm2duYNDVqq29CLCbV-RbrWnydC5TjON1g%2A"}]}]}');
+
 		$case = $this->getCaseInformation($request->case_no);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";
+        $userid = $request->query('user');
         // $variables = $this->getCaseVariables($request->case_no);
         $extraParams = $request->query();
 
@@ -43,7 +46,7 @@ class AdobeSignApiController extends Controller
         if(!$applicationType){
             $document = FormTemplate::where([
                 'process'   =>  $process,
-                'task'      =>  $currentTask
+                // 'task'      =>  $currentTask
             ])->first();
         }else{
             $document = FormTemplate::where([
@@ -90,7 +93,26 @@ class AdobeSignApiController extends Controller
                 $document->save();
 
                 \Log::debug("Document successfully saved to database. Document ID: {$document->id}");
+
+                $user = \App\Models\PM\User::where('USR_UID', $userid)->first();
+                $email = $user->USR_EMAIL;
+
+                // $emailData = $signingURLs->signingUrlSetInfos;
+                $urls = $signingURLs->signingUrlSetInfos[0]->signingUrls;
+
+				$filtered = collect($urls)->where('email', $email)->first();
+
+				if ($filtered) {
+					// die( $filtered->email );
+					return \Redirect::to($filtered->esignUrl);
+				}else{
+					return view('');
+				}
+
+                // 
             }
+        }else{
+        	abort(404);
         }
 	}
 
