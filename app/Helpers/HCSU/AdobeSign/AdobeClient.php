@@ -31,7 +31,7 @@ class AdobeClient{
 		if (time() > $auth->expiry_time) {
 			$auth = self::refreshToken();
 		}
-		$url = $auth->api_access_point . "api/rest/v6/transientDocuments";
+		$url = $auth->api_access_point . "api/rest/v5/transientDocuments";
 		$client = new Client([
 			'headers'	=>	[ 'Authorization'	=>	"Bearer {$auth->access_token}" ]
 		]);
