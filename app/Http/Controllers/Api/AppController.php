@@ -372,7 +372,7 @@ ORDER BY
             // $pdf->send("{$filename}", true);
             try{
                 $pdf->fillForm($data)
-                    ->flatten()
+                    // ->flatten()
                     ->execute();
                if($pdf->getError()){
                 abort(500, $pdf->getError());
@@ -380,6 +380,12 @@ ORDER BY
                 $content = file_get_contents($pdf->getTmpFile());
                 $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
                 \Storage::put($localFile, $content);
+
+                $stampedFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
+
+                $stampPdf = new Pdf(storage_path('app/' . $localFile), $config);
+                $stampPdf->stamp(public_path() . '/documents/stamps/olago-edit.pdf')
+                            ->saveAs(storage_path("app/{$stampedFile}"));
                 $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
                 $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::sendDocumentForSigning($documentId, $case->app_name);
                 \App\Helpers\HCSU\AdobeSign\AdobeClient::addStampandSignatureFields($agreementId);
@@ -401,7 +407,7 @@ ORDER BY
                 if(isset($request->download) && $request->download == 1){
                     return \Storage::download($localFile);
                 }
-                return response()->file(storage_path("app/{$localFile}"));
+                return response()->file(storage_path("app/{$stampedFile}"));
             }catch(\Exception $ex){
                 dd($ex);
             }
