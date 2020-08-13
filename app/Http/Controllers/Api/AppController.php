@@ -388,7 +388,7 @@ ORDER BY
                             ->saveAs(storage_path("app/{$stampedFile}"));
                 $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
                 $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::sendDocumentForSigning($documentId, $case->app_name);
-                // \App\Helpers\HCSU\AdobeSign\AdobeClient::addStampandSignatureFields($agreementId);
+                \App\Helpers\HCSU\AdobeSign\AdobeClient::addStampandSignatureFields($agreementId);
                 \Log::info("Agreement ID: {$agreementId}");
 
                 $document = new \App\AdobeSignDocuments();
