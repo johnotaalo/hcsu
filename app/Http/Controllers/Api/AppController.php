@@ -381,24 +381,24 @@ ORDER BY
                 $localFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
                 \Storage::put($localFile, $content);
 
-                // $stampedFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
+                $stampedFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
 
-                // $stampPdf = new Pdf(storage_path('app/' . $localFile), $config);
-                // $stampPdf->stamp(public_path() . '/documents/stamps/olago-edit.pdf')
-                //             ->saveAs(storage_path("app/{$stampedFile}"));
-                // $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
-                // $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::sendDocumentForSigning($documentId, $case->app_name);
+                $stampPdf = new Pdf(storage_path('app/' . $localFile), $config);
+                $stampPdf->stamp(public_path() . '/documents/stamps/olago-edit.pdf')
+                            ->saveAs(storage_path("app/{$stampedFile}"));
+                $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
+                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::sendDocumentForSigning($documentId, $case->app_name);
                 // \App\Helpers\HCSU\AdobeSign\AdobeClient::addStampandSignatureFields($agreementId);
-                // \Log::info("Agreement ID: {$agreementId}");
+                \Log::info("Agreement ID: {$agreementId}");
 
-                // $document = new \App\AdobeSignDocuments();
+                $document = new \App\AdobeSignDocuments();
 
-                // $document->DOCUMENT_ID = $documentId;
-                // $document->AGREEMENT_ID = $agreementId;
-                // $document->CASE_NO = $case->app_number;
+                $document->DOCUMENT_ID = $documentId;
+                $document->AGREEMENT_ID = $agreementId;
+                $document->CASE_NO = $case->app_number;
 
-                // $document->save();
-                // \Log::info("Document ID: {$documentId}");
+                $document->save();
+                \Log::info("Document ID: {$documentId}");
                 // Upload to processmaker
                 if ($document->input_document != null) {
                     $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
@@ -407,7 +407,7 @@ ORDER BY
                 if(isset($request->download) && $request->download == 1){
                     return \Storage::download($localFile);
                 }
-                return response()->file(storage_path("app/{$localFile}"));
+                return response()->file(storage_path("app/{$stampedFile}"));
             }catch(\Exception $ex){
                 dd($ex);
             }
