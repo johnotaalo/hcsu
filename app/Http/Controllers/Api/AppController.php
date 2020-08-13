@@ -407,7 +407,7 @@ ORDER BY
                 if(isset($request->download) && $request->download == 1){
                     return \Storage::download($localFile);
                 }
-                return response()->file(storage_path("app/{$stampedFile}"));
+                return response()->file(storage_path("app/{$localFile}"));
             }catch(\Exception $ex){
                 dd($ex);
             }
