@@ -37,6 +37,7 @@ class AdobeSignApiController extends Controller
         $process = $case->pro_uid;
 
         $document = FormTemplate::where('process',$process)->first();
+        $extraParams = $request->query();
 
         if($document){
             $path = storage_path('app/'. $document->path);
