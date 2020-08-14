@@ -71,6 +71,7 @@ class ProcessMaker {
 				$oResponse = json_decode(curl_exec($ch));
 				$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 				// die("Sample: " . $httpStatus);
+				\Log::debug("Status code: {$httpStatus} for {$url}");
 				curl_close($ch);
 
 				return $oResponse;
