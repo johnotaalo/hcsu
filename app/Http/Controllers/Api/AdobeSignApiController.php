@@ -59,7 +59,7 @@ class AdobeSignApiController extends Controller
 
                 $urlArray = [];
                 foreach ($urls as $url) {
-                    $urlArray[$url->email] = $url->esignUrl
+                    $urlArray[$url->email] = $url->esignUrl;
                 }
 
                 return [
