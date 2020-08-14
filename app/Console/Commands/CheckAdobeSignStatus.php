@@ -66,10 +66,10 @@ class CheckAdobeSignStatus extends Command
 
                     $path = "adobe-sign/documents/{$document->CASE_NO}.pdf";
 
-                    \Storage::put("app/" . $path, $documentContent);
+                    \Storage::put($path, $documentContent);
 
-                    $this->info("Signed Document saved in: " . storage_path($path));
-                    \Log::debug("Signed Document saved in: " . storage_path($path));
+                    $this->info("Signed Document saved in: " . storage_path("app/" . $path));
+                    \Log::debug("Signed Document saved in: " . storage_path("app/" . $path));
 
                     $response = ProcessMaker::uploadGeneratedForm($case->APP_UID, $template->task, $template->input_document, $path);
                     \Log::debug("ProcessMaker upload documents: " . json_encode($response));
