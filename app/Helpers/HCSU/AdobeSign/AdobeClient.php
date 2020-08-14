@@ -231,7 +231,9 @@ class AdobeClient{
 	protected static function refreshToken(){
 		$auth = self::authdata();
 
-		$url = "{$auth->api_access_point}oauth/token?refresh_token={$auth->refresh_token}&grant_type=refresh_token&client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&client_secret=" . env('ADOBE_SIGN_CLIENT_SECRET');
+		\Log::debug("Refreshing token...");
+
+		$url = "{$auth->api_access_point}oauth/refresh?refresh_token={$auth->refresh_token}&grant_type=refresh_token&client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&client_secret=" . env('ADOBE_SIGN_CLIENT_SECRET');
 
 		$client = new Client();
 
@@ -242,10 +244,13 @@ class AdobeClient{
 		]);
 
 		$data = json_decode($res->getBody()->getContents());
-		$data->api_access_point = $api_access_point;
-		$data->web_access_point = $web_access_point;
+
+		$data->api_access_point = $auth->api_access_point;
+		$data->web_access_point = $auth->web_access_point;
 		$data->expiry_time = time() + $data->expires_in;
 		$data->edatetime = date('Y-m-d H:i:s', $data->expiry_time);
+		$data->refresh_token = $auth->refresh_token;
+		
 		\Storage::disk('local')->put('adobe-sign.json', json_encode($data));
 
 		return $data;

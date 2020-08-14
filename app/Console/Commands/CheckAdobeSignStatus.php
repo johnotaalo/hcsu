@@ -56,6 +56,7 @@ class CheckAdobeSignStatus extends Command
 
                 if ($agreementDetails->status == "SIGNED" && $document->SIGNED_DOCUMENT_PATH == NULL) {
                     $case = \App\Models\PM\Application::where('APP_NUMBER', $document->CASE_NO)->first();
+                    \Log::debug("case: {$case->APP_UID}");
                     $template = FormTemplate::where('process', $case->PRO_UID)->first();
 
                     $this->info("Downloading signed document. Agreement ID: {$agreementDetails->agreementId}");
