@@ -88,6 +88,36 @@ class ProcessMaker {
 		return Self::executeREST($url, "PUT", [], $authenticationData->access_token);
 	}
 
+	public static function getCaseInformation($case_no){
+        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+        $response = Self::executeREST($url, "GET", NULL, $authenticationData->access_token);
+        // dd($response);
+
+        return $response;
+    }
+
+    public static function uploadGeneratedForm($case_no, $task_id, $input_document, $localFile){
+        // $inputDocuments = $this->getGeneratedDocuments($case_no);
+
+        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        $authenticationData = json_decode(Storage::get("pmauthentication.json"));
+        $form = storage_path('app/'. $localFile);
+        $fx = new \CurlFile( $form );
+        // dd($fx);
+        // $form = Storage::get($localFile);
+        $data = [
+            'inp_doc_uid'       =>  $input_document,
+            'tas_uid'           =>  $task_id,
+            'app_doc_comment'   =>  "Document generated and uploaded on: " . date('F d, Y H:i'),
+            'form'              =>  new \CurlFile( $form )
+        ];
+
+        $response = Self::executeREST($url, "POST", $data, $authenticationData->access_token, true);
+
+        return $response;
+    }
+
 	private function refreshToken(){
 		$authenticationData = json_decode(Storage::get("pmauthentication.json"));
 		$server = env("PM_SERVER");

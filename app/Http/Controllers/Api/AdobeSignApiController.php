@@ -30,9 +30,47 @@ class AdobeSignApiController extends Controller
 		// dd($urls);
 	}
 
-	function submitDocumentsForSigning(Request $request){
-		// $data = json_decode('{"signingUrlSetInfos":[{"signingUrls":[{"email":"chrispine.otaalo@un.org","esignUrl":"https:\/\/secure.na2.echosign.com\/public\/apiesign?pid=CBFCIBAA3AAABLblqZhCW4p0EvpASA903vkiDpcbSl_KQk9B7jrm2duYNDVqq29CLCbV-RbrWnydC5TjON1g%2A"}]}]}');
+    function sendDocumentForSignature(Request $request){
+        $case = $this->getCaseInformation($request->input('case_no'));
+        $userId = $request->input('user');
 
+        $process = $case->pro_uid;
+
+        $document = FormTemplate::where('process',$process)->first();
+
+        if($document){
+            $path = storage_path('app/'. $document->path);
+            $className = "\App\Helpers\HCSU\PDFTK\\" . str_replace(" ", "", $document->form_name);
+            $class = new $className();
+            $data = $class->getData($case->app_number, $document, $extraParams);
+            if ($document->ADOBE_SIGN_TEMPLATE) {
+                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_name);
+                $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
+
+                $adobeSignDoc = new \App\AdobeSignDocuments();
+
+                $adobeSignDoc->AGREEMENT_ID = $agreementId;
+                $adobeSignDoc->CASE_NO = $case->app_number;
+                $adobeSignDoc->URLS = json_encode($signingURLs);
+
+                $adobeSignDoc->save();
+
+                $urls = $signingURLs->signingUrlSetInfos[0]->signingUrls;
+
+                $urlArray = [];
+                foreach ($urls as $url) {
+                    $urlArray[$url->email] = $url->esignUrl
+                }
+
+                return [
+                    'agreementId'   =>  $agreementId,
+                    'urls'          =>  $urlArray
+                ];
+            }
+        }
+    }
+
+	function submitDocumentsForSigning(Request $request){
 		$case = $this->getCaseInformation($request->case_no);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";
         $userid = $request->query('user');
@@ -106,7 +144,7 @@ class AdobeSignApiController extends Controller
 					// die( $filtered->email );
 					return \Redirect::to($filtered->esignUrl);
 				}else{
-					return view('');
+					return view('pages.adobesign.status');
 				}
 
                 // 

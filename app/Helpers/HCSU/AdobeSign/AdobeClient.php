@@ -88,46 +88,9 @@ class AdobeClient{
 					"name"				=>	$title,
 					"fileInfos"			=>	[['libraryDocumentId'	=>	$template_id]],
 					"mergeFieldInfo"	=>	$mergeFields
-					// "formFields"		=>	[
-					// 	[
-					// 		"name"			=>	"Manager Signature",
-					// 		"inputType"		=>	"SIGNATURE",
-					// 		"locations"		=>	[
-					// 			"pageNumber"	=>	1,
-					// 			"top"			=>	520,
-					// 			"left"			=>	162
-					// 		],
-					// 		"contentType" => "SIGNATURE",
-					// 		"required" => true,
-					// 		"recipientIndex" => 1
-					// 	]
-					// ]
 				]
 			]
 		];
-
-		// $options = [
-		// 	'json'	=>	[
-		// 		'name'				=>	$title,
-		// 		'signatureType'		=>	'ESIGN',
-		// 		'fileInfos'			=>	[
-		// 			[
-		// 				'libraryDocumentId '	=>	$template_id
-		// 			]
-		// 		],
-		// 		'state'					=>	"IN_PROCESS",
-		// 		'participantSetsInfo'	=>	[
-		// 			[
-		// 				"memberInfos"	=>	[
-		// 					[ "email"	=>	'chrispine.otaalo@un.org' ]
-		// 				],
-		// 				"order"			=>	1,
-		// 				"role"			=>	"SIGNER"
-		// 			]
-		// 		],
-		// 		'mergeFieldInfo'		=>	$mergeFields
-		// 	]
-		// ];
 
 		$response = $client->post($url, $options);
 		return (json_decode($response->getBody()->getContents()))->agreementId;
@@ -147,24 +110,6 @@ class AdobeClient{
 				'Content-Type'	=>	'application/json'
 			]
 		]);
-
-		// $options = [
-		// 	'json'	=>	[
-		// 		'name'					=>	$title,
-		// 		'signatureType'			=>	'ESIGN',
-		// 		'fileInfos'				=>	[['transientDocumentId'	=>	$documentId]],
-		// 		'state'					=>	"AUTHORING",
-		// 		'participantSetsInfo'	=>	[
-		// 			[
-		// 				"memberInfos"	=>	[
-		// 					[ "email"	=>	'chrispine.otaalo@un.org' ]
-		// 				],
-		// 				"order"			=>	1,
-		// 				"role"			=>	"SIGNER"
-		// 			]
-		// 		]
-		// 	]
-		// ];
 
 		$options = [
 			'json'	=>	[
@@ -311,5 +256,43 @@ class AdobeClient{
 		$authdata = json_decode(\Storage::disk('local')->get('adobe-sign.json'));
 
 		return $authdata;
+	}
+
+	public static function getAgreementDetails($agreementId){
+		$auth = Self::authdata();
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+
+		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreementId}";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}"
+			]
+		]);
+
+		$response = $client->get($url);
+
+		return json_decode($response->getBody()->getContents());
+	}
+
+	public static function downloadSignedDocument($agreementId){
+		$auth = Self::authdata();
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+
+		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreementId}/combinedDocument?auditReport=true";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}"
+			]
+		]);
+
+		$response = $client->get($url);
+
+		return $response->getBody()->getContents();
 	}
 }
