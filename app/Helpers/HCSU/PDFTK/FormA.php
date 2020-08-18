@@ -96,6 +96,9 @@ class FormA{
 		}else if ($form_data->client->type == "dependent"){
 			$mobile_no = $form_data->client->principal->MOBILE_NO;
 			$address = $form_data->client->principal->ADDRESS;
+		}else {
+			$mobile_no = $form_data->agency->OFFICE_NO;
+			$address = $form_data->agency->POBOX . " " . $form_data->agency->POSTCODE;
 		}
 
 		$tabData = [

@@ -36,6 +36,7 @@ class FormAData{
 			$clientObj->designation = "N/A";
 			$clientObj->fullname = $agency->AGENCYNAME;
 			$clientObj->organization = $agency->ACRONYM;
+			$clientObj->agency = $agency;
 		}else if($clientObj->type == "dependent"){
 			$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
 			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dependent->PRINCIPAL_ID})"))->first();
