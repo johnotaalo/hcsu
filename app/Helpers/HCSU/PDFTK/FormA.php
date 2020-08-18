@@ -98,7 +98,7 @@ class FormA{
 			$address = $form_data->client->principal->ADDRESS;
 		}else {
 			$mobile_no = $form_data->client->agency->OFFICE_NO;
-			$address = $form_data->client->agency->POBOX . " " . $form_data->agency->POSTCODE;
+			$address = $form_data->client->agency->POBOX . " " . $form_data->client->agency->POSTCODE;
 		}
 
 		$tabData = [
