@@ -22,6 +22,10 @@
 				<b-tab title="V.A.T Suppliers" active>
 					<vat-suppliers></vat-suppliers>
 				</b-tab>
+
+				<b-tab title="Clearing Agents">
+					<clearing-agents></clearing-agents>
+				</b-tab>
 				<b-tab title="Blanket V.A.T Suppliers"></b-tab>
 			</b-tabs>
 		</b-card>
@@ -30,8 +34,9 @@
 
 <script type="text/javascript">
 	import VATSuppliers from './components/VATSuppliers'
+	import ClearingAgents from './components/ClearingAgents'
 	export default {
 		name: 'DataManagement',
-		components: { "vat-suppliers": VATSuppliers }
+		components: { "vat-suppliers": VATSuppliers, ClearingAgents }
 	}
 </script>

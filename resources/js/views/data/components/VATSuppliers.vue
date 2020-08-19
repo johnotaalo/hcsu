@@ -77,6 +77,7 @@
 				columns: ['#', 'SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN', 'Actions'],
 				options: {
 					filterable: false,
+					perPage: 50,
 					perPageValues: []
 				},
 				modal: new Form({

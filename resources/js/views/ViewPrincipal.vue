@@ -1025,8 +1025,6 @@
 				_this.modal.contract.contractTo = contractData.renewals.END_DATE
 				_this.modal.contract.contract_id = contractData.ID
 				_this.modal.contract.grade = gradeObj
-
-				// console.log(_this.modal.contract);
 			},
 
 			cancelContractModal: function() {

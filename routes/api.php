@@ -179,6 +179,12 @@ Route::prefix('data')->group(function(){
 		Route::get('/search', 'Api\SupplierController@searchSupplier');
 	});
 
+	Route::prefix('clearing-agents')->group(function(){
+		Route::post('/', 'Api\ClearingAgentsController@create');
+		Route::put('/', 'Api\ClearingAgentsController@update');
+		Route::get('/all', 'Api\ClearingAgentsController@all');
+	});
+
 	Route::prefix('designations')->group(function(){
 		Route::post('/', 'Api\DataController@addDesignation');
 	});
