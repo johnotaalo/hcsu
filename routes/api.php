@@ -246,6 +246,7 @@ Route::prefix('documents')->group(function(){
 	Route::prefix('adobe-sign')->group(function(){
 		Route::get('for-signature/{case_no}', 'Api\AdobeSignApiController@submitDocumentsForSigning');
 		Route::post('send', 'Api\AdobeSignApiController@sendDocumentForSignature');
+		Route::post('test-mofa', 'Api\AdobeSignApiController@testMofa');
 	});
 	Route::get('/generate/NOA/{host_country_id}', 'Api\AppController@generateNOA');
 	Route::get('/get/note_verbal/{process}/{case_no}', 'Api\AppController@generateNoteVerbal');

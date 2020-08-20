@@ -30,9 +30,29 @@ class AdobeSignApiController extends Controller
 		// dd($urls);
 	}
 
-    function testMofa(){
-        $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::mofaTest(455);
-        
+    function testMofa(Request $request){
+        $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::mofaTest($request->input('case_no'));
+        $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
+
+        $adobeSignDoc = new \App\AdobeSignDocuments();
+
+        $adobeSignDoc->AGREEMENT_ID = $agreementId;
+        $adobeSignDoc->CASE_NO = $case->app_number;
+        $adobeSignDoc->URLS = json_encode($signingURLs);
+
+        $adobeSignDoc->save();
+
+        $urls = $signingURLs->signingUrlSetInfos[0]->signingUrls;
+
+        $urlArray = [];
+        foreach ($urls as $url) {
+            $urlArray[$url->email] = $url->esignUrl;
+        }
+
+        return [
+            'agreementId'   =>  $agreementId,
+            'urls'          =>  $urlArray
+        ];
     }
 
     function sendDocumentForSignature(Request $request){
