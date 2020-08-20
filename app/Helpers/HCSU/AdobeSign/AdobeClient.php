@@ -103,6 +103,8 @@ class AdobeClient{
 			$auth = self::refreshToken();
 		}
 
+		$url = $auth->api_access_point . "api/rest/v5/agreements";
+
 		$client = new Client([
 			'headers'	=>	[ 
 				'Authorization'	=>	"Bearer {$auth->access_token}",
