@@ -30,6 +30,11 @@ class AdobeSignApiController extends Controller
 		// dd($urls);
 	}
 
+    function testMofa(){
+        $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::mofaTest(455);
+        
+    }
+
     function sendDocumentForSignature(Request $request){
         $case = $this->getCaseInformation($request->input('case_no'));
         $userId = $request->input('user');

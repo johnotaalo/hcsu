@@ -91,6 +91,7 @@ Route::get('/docusign/document-download/{envelope_id}', 'Api\DocusignAPIControll
 
 Route::prefix('adobe-sign')->group(function(){
 	Route::get('test', 'Api\AdobeSignApiController@test');
+	Route::get('test-mofa', 'Api\AdobeSignApiController@testMofa');
 	Route::get('callback', 'Api\AdobeSignApiController@callback');
 	Route::get('auth-callback', 'Api\AdobeSignApiController@authCallback');
 	Route::get('test-urls', 'Api\AdobeSignApiController@TestURL');

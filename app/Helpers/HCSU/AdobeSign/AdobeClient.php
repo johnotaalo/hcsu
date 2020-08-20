@@ -96,6 +96,62 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->agreementId;
 	}
 
+	public static function mofaTest($case){
+		$auth = Self::authdata();
+
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}",
+				'Content-Type'	=>	"application/json"
+			]
+		]);
+
+		$data = [
+			'serial_no' => "VAT/{$case}"
+		];
+
+		$template_id = "3AAABLblqZhA5xU4JOB7lPrskJ4j0Tnmxdhhwfm9UWQsI_fKTdFLHQBtb0zamMUSW--APb0OCb0rykfPxwWltWeSVlNc3dOt5";
+
+		$options = [
+			'json'	=>	[
+				'documentCreationInfo'	=>	[
+					'recipientSetInfos'	=>	[
+						[
+							"recipientSetRole"			=>	"SIGNER",
+							"recipientSetMemberInfos"	=>	[
+								["email"	=>	"chrispine.otaalo@un.org"]
+							]
+						],
+						[
+							"recipientSetRole"			=>	"SIGNER",
+							"recipientSetMemberInfos"	=>	[
+								["email"	=>	"chrispine.otaalo@gmail.com"]
+							]
+						],
+						[
+							"recipientSetRole"			=>	"SIGNER",
+							"recipientSetMemberInfos"	=>	[
+								["email"	=>	"chrispinethesim@gmail.com"]
+							]
+						]
+					],
+					"signatureType"		=>	"ESIGN",
+					"signatureFlow"		=>	"SENDER_SIGNATURE_NOT_REQUIRED",
+					"name"				=>	"Sample Document",
+					"fileInfos"			=>	[['libraryDocumentId'	=>	$template_id]],
+					"mergeFieldInfo"	=>	$data
+				]
+			]
+		];
+
+		$response = $client->post($url, $options);
+		return (json_decode($response->getBody()->getContents()))->agreementId;
+	}
+
 	public static function sendDocumentForSigning($documentId, $title){
 		$auth = Self::authdata();
 		if (time() > $auth->expiry_time) {
