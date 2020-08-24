@@ -79,7 +79,7 @@ class AdobeClient{
 						[
 							"recipientSetRole"			=>	"SIGNER",
 							"recipientSetMemberInfos"	=>	[
-								["email"	=>	"chrispine.otaalo@un.org"]
+								["email"	=>	"olago@un.org"]
 							]
 						]
 					],
