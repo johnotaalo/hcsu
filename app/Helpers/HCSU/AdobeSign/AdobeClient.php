@@ -273,6 +273,10 @@ class AdobeClient{
 	public static function getLibraryDocuments(){
 		$auth = Self::authdata();
 
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+
 		$url = $auth->api_access_point . "api/rest/v5/libraryDocuments";
 
 		$client = new Client([
