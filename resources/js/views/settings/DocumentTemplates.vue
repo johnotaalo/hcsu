@@ -94,6 +94,7 @@
 		},
 		created(){
 			this.getProcesses()
+			this.getAdobeSignTemplates()
 			if (this.$route.params.id) {
 				this.id = this.$route.params.id
 			}
