@@ -1,6 +1,13 @@
 <template>
 	<div>
 		<b-card>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+                  <li class="breadcrumb-item"><b-link :to="{ name: 'settings' }">Settings</b-link></li>
+                  <li class="breadcrumb-item"><b-link :to="{ name: 'settings-templates' }">Templates List</b-link></li>
+                  <li class="breadcrumb-item active" aria-current="page">Add Template</li>
+                </ol>
+			</nav>
 			<div class="form-group row">
 				<div class="col-md">
 					<label>Process</label>
@@ -44,8 +51,15 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<label>Adobe Sign Template</label>
+				<v-select></v-select>
+			</div>
+			<div class="form-group">
 				<label>Template</label>
 				<b-form-file v-model="form.file"></b-form-file>
+				<div v-if="id != 0">
+					<small>File Exists</small>
+				</div>
 			</div>
 			<b-button @click="uploadTemplateFile">Upload Template</b-button>
 		</b-card>
@@ -62,7 +76,12 @@
 				processes: [],
 				processTasks: [],
 				taskSteps: [],
+				id: 0,
+				receivedData: {},
+				waitTask: false,
+				waitStep: false,
 				form: new Form({
+					id: 0,
 					name: "",
 					process: "",
 					task: "",
@@ -75,12 +94,31 @@
 		},
 		created(){
 			this.getProcesses()
+			if (this.$route.params.id) {
+				this.id = this.$route.params.id
+			}
 		},
 		methods: {
+			getTemplateData(id){
+				axios.get(`/api/template/get/${id}`)
+				.then((res) => {
+					this.receivedData = res.data
+					this.form.id = res.data.id
+					this.form.name = res.data.form_name
+					this.form.type = res.data.type
+					this.form.input_document = res.data.input_document
+					this.form.process = _.find(this.processes, ['prj_uid', res.data.process]);
+					this.waitTask = true
+					this.waitStep = true
+				})
+			},
 			getProcesses(){
 				axios.get('/api/data/processes')
 				.then((res) => {
 					this.processes = res.data
+					if (this.id != 0) {
+						this.getTemplateData(this.id)
+					}
 				});
 			},
 
@@ -88,6 +126,11 @@
 				axios.get(`/api/data/processes/${uid}/tasks`)
 				.then((res) => {
 					this.processTasks = res.data
+
+					if (this.waitTask) {
+						this.form.task = _.find(res.data, ['act_uid', this.receivedData.task])
+						this.waitTask = false
+					}
 				});
 			},
 
@@ -95,6 +138,11 @@
 				axios.get(`/api/data/processes/${process_uid}/task/${task_uid}/steps`)
 				.then((res) => {
 					this.taskSteps = res.data
+
+					if (this.waitStep) {
+						this.form.step = _.find(res.data, ['step_uid', this.receivedData.step])
+						this.waitStep = false
+					}
 				})
 			},
 			uploadTemplateFile: function(){
@@ -103,13 +151,22 @@
 				.then((res) => {
 					em.$toastr.success('Successfully added template')
 				});
+			},
+			getAdobeSignTemplates: function(){
+				axios.get("https://hcsudatatest.unon.org/api/documents/adobe-sign/library-documents")
+				.then(res => {
+					console.log(res)
+				});
 			}
 		},
 		watch: {
 			'form.process': function(val) {
 				var uid = val.prj_uid
 				this.getTasks(uid)
-				this.form.task = ""
+				if (this.id != 0) {
+					this.form.task = ""
+				}
+				
 			},
 			'form.task': function(val){
 				var task_uid = val.act_uid

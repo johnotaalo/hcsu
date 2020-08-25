@@ -183,12 +183,7 @@ class AdobeSignApiController extends Controller
 	function libraryDocuments(){
 		$documents = \App\Helpers\HCSU\AdobeSign\AdobeClient::getLibraryDocuments();
 
-		// dd($documents);
-		echo "<ul>";
-		foreach ($documents->libraryDocumentList as $document) {
-			echo "<li>{$document->name} - {$document->libraryDocumentId}</li>";
-		}
-		echo "</ul>";
+		return $documents;
 	}
 
     function callback(Request $request){

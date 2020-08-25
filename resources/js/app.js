@@ -106,6 +106,7 @@ import Vehicles from './views/Vehicles'
 import SearchClient from './views/iframe/SearchClient'
 import SettingsIndex from './views/settings/SettingsIndex'
 import DocumentTemplates from './views/settings/DocumentTemplates'
+import DocumentTemplatesList from './views/settings/DocumentTemplatesList'
 import DataMigration from './views/settings/DataMigration'
 import IPMISFunctionality from './views/settings/IPMISFunctionality'
 import VAT from './views/vat/VAT'
@@ -335,9 +336,19 @@ Vue.component(
 	 		children: [
 	 			{
 	 				path: 'document/templates',
-	 				component: DocumentTemplates,
+	 				component: DocumentTemplatesList,
 	 				name: "settings-templates"
 	 			},
+	 			{
+					path: 'document/templates/add',
+					component: DocumentTemplates,
+					name: 'settings-templates-add'
+				},
+				{
+					path: 'document/templates/edit/:id',
+					component: DocumentTemplates,
+					name: 'settings-templates-edit'
+				},
 	 			{
 	 				path: 'data/migration',
 	 				component: DataMigration,

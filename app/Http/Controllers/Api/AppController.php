@@ -251,6 +251,33 @@ ORDER BY
         return $data;
     }
 
+    function getTemplate(Request $request){
+        $id = $request->id;
+
+        $template = FormTemplate::findOrFail($id);
+
+        return $template;
+    }
+
+    function getTemplateList(Request $request){
+        $searchQueries = $request->get('normalSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $query = FormTemplate::with('process');
+
+        $data = $query->get();
+        $count = count($data);
+
+        return [
+            'data'  =>  $data,
+            'count' =>  $count
+        ];
+    }
+
     function getNVDataFields(){
         $config = [];
 

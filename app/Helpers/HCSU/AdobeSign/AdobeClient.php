@@ -54,6 +54,11 @@ class AdobeClient{
 
 	public static function uploadLibraryDocument($template_id, $data, $title){
 		$auth = Self::authdata();
+
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+		
 		$url = $auth->api_access_point . "api/rest/v5/agreements";
 
 		$client = new Client([

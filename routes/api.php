@@ -122,6 +122,8 @@ Route::prefix('principal')->group(function(){
 });
 
 Route::prefix('template')->group(function(){
+	Route::get('/get/{id}', 'Api\AppController@getTemplate');
+	Route::get("/list", 'Api\AppController@getTemplateList');
 	Route::post('/add', 'Api\AppController@addTemplate');
 	Route::get('/nv/data-fields', 'Api\AppController@getNVDataFields');
 });
@@ -142,6 +144,7 @@ Route::prefix('agencies')->group(function(){
 Route::prefix('agency')->group(function(){
 	Route::get('focal-point/{host_country_id}', 'Api\AgenciesController@getFocalPoints');
 });
+
 Route::get('passport-types', 'Api\AppController@getPassportTypes');
 Route::get('countries', 'Api\AppController@getCountries');
 Route::prefix('data')->group(function(){
@@ -247,6 +250,7 @@ Route::prefix('documents')->group(function(){
 		Route::get('for-signature/{case_no}', 'Api\AdobeSignApiController@submitDocumentsForSigning');
 		Route::post('send', 'Api\AdobeSignApiController@sendDocumentForSignature');
 		Route::post('test-mofa', 'Api\AdobeSignApiController@testMofa');
+		Route::get('library-documents', 'Api\AdobeSignApiController@libraryDocuments');
 	});
 	Route::get('/generate/NOA/{host_country_id}', 'Api\AppController@generateNOA');
 	Route::get('/get/note_verbal/{process}/{case_no}', 'Api\AppController@generateNoteVerbal');
