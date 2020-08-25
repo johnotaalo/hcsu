@@ -110,6 +110,9 @@
 						<li>
 							<router-link class="dropdown-item" :to="{ name: 'blanket-vat' }">Blanket VAT</router-link>
 						</li>
+						<li>
+							<router-link class="dropdown-item" :to="{ name: 'subprocesses-ipmis' }">Subprocesses</router-link>
+						</li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">
