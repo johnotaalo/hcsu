@@ -71,13 +71,15 @@ class AdobeSignApiController extends Controller
             $class = new $className();
             $data = $class->getData($case->app_number, $document, $extraParams);
             if ($document->ADOBE_SIGN_TEMPLATE) {
-                $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
-                $documentId = null;
-                if (\Storage::exists($noteVerbale)) {
-                    $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($noteVerbale, "Note Verbal - {$case->app_number}");
-                }
+                // $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
+                // $documentId = null;
+                // if (\Storage::exists($noteVerbale)) {
+                //     $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($noteVerbale, "Note Verbal - {$case->app_number}");
+                // }
+
+                $nvTemplate = \Storage::get('adobe-sign-nv.txt');
                 
-                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $documentId);
+                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate);
                 $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
 
                 $adobeSignDoc = new \App\AdobeSignDocuments();

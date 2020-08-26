@@ -79,7 +79,7 @@ class AdobeClient{
 
 		$files = [['libraryDocumentId'	=>	$template_id]];
 		if($nv){
-			$files[] = ['transientDocumentId'	=>	$nv];
+			$files[] = ['libraryDocumentId'	=>	$nv];
 		}
 
 		$options = [
@@ -95,22 +95,6 @@ class AdobeClient{
 					"signatureFlow"		=>	"SENDER_SIGNATURE_NOT_REQUIRED",
 					"name"				=>	$title,
 					"fileInfos"			=>	$files,
-					"formFields"		=>	[
-						[
-							"name"			=>	"Signature (Manager)",
-							"inputType"		=>	"SIGNATURE",
-							"locations"		=>	[
-								"pageNumber"	=>	2,
-								"top"			=>	312,
-								"left"			=>	154,
-								"width"			=>	280,
-								"height"		=>	30
-							],
-							"contentType"		=>	"SIGNATURE",
-							"required"			=>	1,
-							"recipientIndex"	=>	1
-						]
-					],
 					"mergeFieldInfo"	=>	$mergeFields
 				]
 			]
