@@ -85,7 +85,7 @@ class AdobeSignApiController extends Controller
                 $adobeSignDoc = new \App\AdobeSignDocuments();
 
                 $adobeSignDoc->AGREEMENT_ID = $agreementId;
-                $adobeSignDoc->DOCUMENT_ID = $documentId;
+                // $adobeSignDoc->DOCUMENT_ID = $documentId;
                 $adobeSignDoc->CASE_NO = $case->app_number;
                 $adobeSignDoc->URLS = json_encode($signingURLs);
 
