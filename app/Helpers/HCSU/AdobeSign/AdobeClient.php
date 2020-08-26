@@ -103,7 +103,7 @@ class AdobeClient{
 		\Log::debug("options: " . json_encode($options['json']));
 
 		$response = $client->post($url, $options);
-		\Log::error("Response: " . $response->getBody()->getContents());
+		// \Log::error("Response: " . $response->getBody()->getContents());
 		return (json_decode($response->getBody()->getContents()))->agreementId;
 	}
 
