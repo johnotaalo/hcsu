@@ -29,14 +29,11 @@ class CreateTimsRegistrationView extends Migration
     }
 
     private function dropView() : string {
-        return <<<SQL
-        DROP VIEW IF EXISTS `VW_TIMS_REGISTRATIONS`
-        SQL;
+        return "DROP VIEW IF EXISTS `VW_TIMS_REGISTRATIONS`;";
     }
 
     private function createView() : string {
-        return <<<SQL
-        CREATE VIEW `VW_TIMS_REGISTRATIONS` AS SELECT
+        return 'CREATE VIEW `VW_TIMS_REGISTRATIONS` AS SELECT
             TR.HOST_COUNTRY_ID,
             TR.DIP_ID_NO,
             TR.MOBILE_NO,
@@ -52,7 +49,6 @@ class CreateTimsRegistrationView extends Migration
             TIMS_REGISTRATION TR
             LEFT JOIN PRINCIPAL P ON P.HOST_COUNTRY_ID = TR.HOST_COUNTRY_ID
             LEFT JOIN PRINCIPAL_DEPENDENT D ON D.HOST_COUNTRY_ID = TR.HOST_COUNTRY_ID
-            LEFT JOIN pm_data.VW_STAFF_LATEST_CONTRACT CONTRACT ON CONTRACT.PRINCIPAL_ID = P.HOST_COUNTRY_ID OR CONTRACT.PRINCIPAL_ID = D.PRINCIPAL_ID;
-        SQL;
+            LEFT JOIN pm_data.VW_STAFF_LATEST_CONTRACT CONTRACT ON CONTRACT.PRINCIPAL_ID = P.HOST_COUNTRY_ID OR CONTRACT.PRINCIPAL_ID = D.PRINCIPAL_ID;';
     }
 }
