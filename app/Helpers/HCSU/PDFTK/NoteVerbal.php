@@ -206,7 +206,7 @@ class NoteVerbal {
 			$this->footer = "Your assistance to facilitate the registration of the vehicle will be highly appreciated\r\r\r\r\r\r\r\r                            {$this->data->date}";
 		}else{
 			$dateContent = "";
-			if ($showdate) {
+			if ($this->showdate) {
 				$dateContent = "\r\r\r\r\r\r\r\r                            {$this->data->date}";
 			}
 			$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs of the Republic of Kenya the assurances of its highest consideration.{$dateContent}";
