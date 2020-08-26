@@ -61,6 +61,7 @@ class AdobeSignApiController extends Controller
 
         $process = $case->pro_uid;
         $processName = $request->input('process');
+        $includeNV = $request->input('include_nv');
 
         $document = FormTemplate::where('process',$process)->first();
         $extraParams = $request->query();
@@ -86,14 +87,17 @@ class AdobeSignApiController extends Controller
             }
 
             if ($document->ADOBE_SIGN_TEMPLATE) {
-                $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
+                // $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
                 // $documentId = null;
-                if (\Storage::exists($noteVerbale)) {
+                if ($includeNV) {
                     $nvData = $this->getNVData($processName, $case, $initials);
+                    $nvData['date'] = "F D, Y";
                 }
 
+                $data = $data + $nvData;
+
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
-                \Log::debug("NV Data: " . json_encode($nvData));
+                \Log::debug("NV Data: " . json_encode($data));
                 $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate);
                 $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
 
@@ -176,7 +180,7 @@ class AdobeSignApiController extends Controller
 
         // dd($data);
 
-        return new \App\Helpers\HCSU\PDFTK\NoteVerbal($process, $data, $initials);
+        return new \App\Helpers\HCSU\PDFTK\NoteVerbal($process, $data, $initials, false)->getContent();
     }
 
 	function submitDocumentsForSigning(Request $request){

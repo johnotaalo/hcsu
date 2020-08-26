@@ -5,12 +5,13 @@ namespace App\Helpers\HCSU\PDFTK;
 class NoteVerbal {
 	protected $process;
 	public $header, $footer, $body;
-	protected $data, $initials;
+	protected $data, $initials, $showdate;
 
-	public function __construct($process, $data, $initials){
+	public function __construct($process, $data, $initials, $showdate=true){
 		$this->process = $process;
 		$this->data = $data;
 		$this->initials = $initials;
+		$this->showdate = $showdate;
 	}
 
 	public function getHeader(){
@@ -204,7 +205,11 @@ class NoteVerbal {
 		if($this->process == "logbook"){
 			$this->footer = "Your assistance to facilitate the registration of the vehicle will be highly appreciated\r\r\r\r\r\r\r\r                            {$this->data->date}";
 		}else{
-			$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs of the Republic of Kenya the assurances of its highest consideration.\r\r\r\r\r\r\r\r                            {$this->data->date}";
+			$dateContent = "";
+			if ($showdate) {
+				$dateContent = "\r\r\r\r\r\r\r\r                            {$this->data->date}";
+			}
+			$this->footer = "The United Nations Office at Nairobi (UNON) avails itself of this opportunity to renew to the Ministry of Foreign Affairs of the Republic of Kenya the assurances of its highest consideration.{$dateContent}";
 		}
 
 		return $this;
