@@ -292,7 +292,7 @@ class AdobeClient{
 
 		$response = $client->get($url);
 
-		\Log::debug("Library Documents Reponse: " . $response->getBody()->getContents());
+		// \Log::debug("Library Documents Reponse: " . $response->getBody()->getContents());
 
 		return json_decode($response->getBody()->getContents());
 	}

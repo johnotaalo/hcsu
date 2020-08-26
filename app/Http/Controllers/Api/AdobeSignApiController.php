@@ -70,7 +70,7 @@ class AdobeSignApiController extends Controller
             $class = new $className();
             $data = $class->getData($case->app_number, $document, $extraParams);
             if ($document->ADOBE_SIGN_TEMPLATE) {
-                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_name);
+                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name);
                 $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
 
                 $adobeSignDoc = new \App\AdobeSignDocuments();
@@ -183,7 +183,7 @@ class AdobeSignApiController extends Controller
 	function libraryDocuments(){
 		$documents = \App\Helpers\HCSU\AdobeSign\AdobeClient::getLibraryDocuments();
 
-		return $documents;
+		return ['documents' => $documents];
 	}
 
     function callback(Request $request){
@@ -245,5 +245,47 @@ class AdobeSignApiController extends Controller
         // dd($response);
 
         return $response;
+    }
+
+    function getSignatories(Request $request){
+        $signatories = \App\Models\AdobeSignSignatory::all();
+
+        return $signatories;
+    }
+
+    function addSignatory(Request $request){
+        $validatedData = $request->validate([
+            'other_names'   =>  'required',
+            'last_name'     =>  'required',
+            'email'         =>  'required|unique:ADOBE_SIGN_SIGNATORIES,email'
+        ]);
+
+        $data = \App\Models\AdobeSignSignatory::create([
+            'other_names'   =>  $request->input('other_names'),
+            'last_name'     =>  strtoupper($request->input('last_name')),
+            'email'         =>  $request->input('email'),
+            'status'        =>  ($request->input('status') == "active") ? true : false 
+        ]);
+
+        return $data;
+    }
+
+    function updateSignatory(Request $request){
+        $validatedData = $request->validate([
+            'other_names'   =>  'required',
+            'last_name'     =>  'required',
+            'email'         =>  'required'
+        ]);
+
+        \App\Models\AdobeSignSignatory::where('id', $request->id)->update([
+            'other_names'   =>  $request->input('other_names'),
+            'last_name'     =>  strtoupper($request->input('last_name')),
+            'email'         =>  $request->input('email'),
+            'status'        =>  ($request->input('status') == "active") ? true : false 
+        ]);
+    }
+
+    function getSignatory(Request $request){
+        return \App\Models\AdobeSignSignatory::findOrFail($request->id);
     }
 }

@@ -125,6 +125,7 @@ Route::prefix('template')->group(function(){
 	Route::get('/get/{id}', 'Api\AppController@getTemplate');
 	Route::get("/list", 'Api\AppController@getTemplateList');
 	Route::post('/add', 'Api\AppController@addTemplate');
+	Route::put('/edit', 'Api\AppController@editTemplate');
 	Route::get('/nv/data-fields', 'Api\AppController@getNVDataFields');
 });
 
@@ -241,6 +242,13 @@ Route::prefix('data')->group(function(){
 	Route::prefix('tims')->group(function(){
 		Route::get('/list', 'Api\VehicleController@searchTims');
 		Route::post('/registration', 'Api\VehicleController@registerTims');
+	});
+
+	Route::prefix('adobe-sign')->group(function(){
+		Route::get('/signatories', 'Api\AdobeSignApiController@getSignatories');
+		Route::post('/signatories', 'Api\AdobeSignApiController@addSignatory');
+		Route::put('/signatories', 'Api\AdobeSignApiController@updateSignatory');
+		Route::get('/signatories/get/{id}', 'Api\AdobeSignApiController@getSignatory');
 	});
 });
 

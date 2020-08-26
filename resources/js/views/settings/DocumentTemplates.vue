@@ -52,16 +52,16 @@
 			</div>
 			<div class="form-group">
 				<label>Adobe Sign Template</label>
-				<v-select></v-select>
+				<v-select :options="adobeTemplates" v-model = "form.adobe_sign_template"></v-select>
 			</div>
 			<div class="form-group">
 				<label>Template</label>
 				<b-form-file v-model="form.file"></b-form-file>
 				<div v-if="id != 0">
-					<small>File Exists</small>
+					<small><b-link :href="`/templates/file/${receivedData.id}`" target="_blank">Download previously uploaded file</b-link></small>
 				</div>
 			</div>
-			<b-button @click="uploadTemplateFile">Upload Template</b-button>
+			<b-button @click="uploadTemplateFile" class = "btn btn-sm btn-primary"><i class="fe fe-upload-cloud"></i>&nbsp;Upload Template</b-button>
 		</b-card>
 	</div>
 </template>
@@ -69,17 +69,20 @@
 <script type="text/javascript">
 	import vSelect from 'vue-select'
 	import Form from '../../core/Form'
+	
 	export default {
 		components: { 'v-select': vSelect, Form },
 		data(){
 			return {
 				processes: [],
 				processTasks: [],
+				adobeTemplates: [],
 				taskSteps: [],
 				id: 0,
 				receivedData: {},
 				waitTask: false,
 				waitStep: false,
+				waitTemplates: false,
 				form: new Form({
 					id: 0,
 					name: "",
@@ -88,7 +91,8 @@
 					step: "",
 					type: "",
 					input_document: "",
-					file: ""
+					file: "",
+					adobe_sign_template: ""
 				})
 			}
 		},
@@ -111,6 +115,7 @@
 					this.form.process = _.find(this.processes, ['prj_uid', res.data.process]);
 					this.waitTask = true
 					this.waitStep = true
+					this.waitTemplates = true
 				})
 			},
 			getProcesses(){
@@ -148,15 +153,61 @@
 			},
 			uploadTemplateFile: function(){
 				var em = this
-				this.form.post('/template/add')
-				.then((res) => {
-					em.$toastr.success('Successfully added template')
-				});
+				if(em.id == 0){
+					this.form.post('/template/add')
+					.then((res) => {
+						this.$notify({
+							group: 'foo',
+							title: 'Success',
+							text: 'Successfully added template',
+							type: "success"
+						});
+						em.$router.push({ name: 'settings-templates' })
+					})
+					.catch((error) => {
+						this.$notify({
+							group: 'foo',
+							title: 'Error',
+							text: 'There was an error adding the template',
+							type: "error"
+						});
+						console.log(error)
+					});
+				}else{
+					this.form.put('/template/edit')
+					.then((res) => {
+						this.$notify({
+							group: 'foo',
+							title: 'Success',
+							text: 'Successfully updated template',
+							type: "success"
+						});
+						em.$router.push({ name: 'settings-templates' })
+					})
+					.catch((error) => {
+						this.$notify({
+							group: 'foo',
+							title: 'Error',
+							text: 'There was an error updating the template',
+							type: "error"
+						});
+						console.log(error)
+					});
+				}
 			},
 			getAdobeSignTemplates: function(){
-				axios.get("https://hcsudatatest.unon.org/api/documents/adobe-sign/library-documents")
+				axios.get("/api/documents/adobe-sign/library-documents")
 				.then(res => {
-					console.log(res)
+					this.adobeTemplates = _.map(res.data.documents.libraryDocumentList, (o) => {
+						return {
+							label: o.name,
+							value: o.libraryDocumentId
+						}
+					})
+
+					if (this.waitTemplates) {
+						this.form.adobe_sign_template = _.find(this.adobeTemplates, ['value', this.receivedData.ADOBE_SIGN_TEMPLATE])
+					}
 				});
 			}
 		},

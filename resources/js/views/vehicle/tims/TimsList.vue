@@ -18,6 +18,28 @@
 		</div>
 
 		<div class="card">
+			<div class="card-header">
+				<div class="row align-items-center">
+					<div class="col">
+						<form class="row align-items-center">
+							<div class="col-auto pr-0">
+								<span class="fe fe-search text-muted"></span>
+							</div>
+
+							<div class="col">
+								<b-input type="search" class="form-control form-control-flush search" v-model = "searchTerm" placeholder="Search" v-on:keyup="applySearchFilter(searchTerm)"/>
+							</div>
+						</form>
+					</div>
+					<!-- <div class="col-auto">
+						<label>Filter By Agency:</label>
+					</div>
+					<div class="col-auto">
+						<b-form-select @change="applyActiveStaffFilter(activeStaff)"
+						v-model="activeStaff" :options="staffOptions"></b-form-select>
+					</div> -->
+				</div>
+			</div>
 			<v-server-table
 				class="table-sm table-nowrap card-table"
 				:columns="serverColumns"
@@ -30,6 +52,10 @@
 				<template slot="KRA_PIN_NO" slot-scope="data">
 					{{ data.row.KRA_PIN_NO }}
 				</template>
+
+				<template slot="AGENCY" slot-scope="data">
+					{{ data.row.ACRONYM }}
+				</template>
 			</v-server-table>
 		</div>
 	</div>
@@ -41,7 +67,7 @@
 	export default{
 		data(){
 			return {
-				serverColumns: ["HOST_COUNTRY_ID", "CLIENT", "DIPLOMATIC ID", "USERNAME", "KRA_PIN_NO", "REGISTRATION_DATE"],
+				serverColumns: ["HOST_COUNTRY_ID", "CLIENT", "AGENCY", "DIPLOMATIC ID", "USERNAME", "KRA_PIN_NO", "REGISTRATION_DATE"],
 				options: {
 					perPage: 50,
 					perPageValues: [],

@@ -218,6 +218,12 @@ ORDER BY
 
     function addTemplate(Request $request){
         // dd($request);
+        $validatedData = $request->validate([
+            'name' =>  'required',
+            'process'   =>  'required',
+            'task'      =>  'required',
+            'file'      =>  'required|mimes:pdf'
+        ]);
         $process = $request->input('process');
         $task = $request->input('task');
         $step = $request->input('step');
@@ -225,13 +231,14 @@ ORDER BY
         $path = storage_path('app/'. $template);
 
         $template = FormTemplate::create([
-            "form_name"         => $request->input('name'),
-            "input_document"    => $request->input('input_document'),
-            "process"           => $process['prj_uid'],
-            "task"              => $task['act_uid'],
-            "step"              =>  $step['step_uid'],
-            "path"              => $template,
-            "type"              =>  $request->input('type')
+            "form_name"             => $request->input('name'),
+            "input_document"        => $request->input('input_document'),
+            "process"               => $process['prj_uid'],
+            "task"                  => $task['act_uid'],
+            "step"                  =>  $step['step_uid'],
+            "path"                  => $template,
+            "type"                  =>  $request->input('type'),
+            "ADOBE_SIGN_TEMPLATE"   =>  $request->input('adobe_sign_template')['value']
         ]);
 
         $config = [];
@@ -248,7 +255,56 @@ ORDER BY
         $fileName = str_replace(" ", "", $request->input('name')) ;
         Storage::disk('local')->put("templates/{$process['prj_uid']}/{$task['act_uid']}/{$fileName}.json", json_encode($data));
 
-        return $data;
+        return ['data' => $data];
+    }
+
+    function editTemplate(Request $request){
+        $validatedData = $request->validate([
+            'name'      =>  'required',
+            'process'   =>  'required',
+            'task'      =>  'required'
+        ]);
+
+        $process = $request->input('process');
+        $task = $request->input('task');
+        $step = $request->input('step');
+
+        if ($request->has('file') && !is_null($request->file('file'))) {
+            $template = $request->file('file')->store("templates/{$process['prj_uid']}/{$task['act_uid']}");
+            $path = storage_path('app/'. $template);
+        }else{
+            $template = FormTemplate::find($request->id)->path;
+        }
+
+        $template = FormTemplate::where('id', $request->id)->update([
+            "form_name"             => $request->input('name'),
+            "input_document"        => $request->input('input_document'),
+            "process"               => $process['prj_uid'],
+            "task"                  => $task['act_uid'],
+            "step"                  =>  $step['step_uid'],
+            "path"                  =>  $template,
+            "type"                  =>  ($request->input('type') == "null") ? null : $request->input('type'),
+            "ADOBE_SIGN_TEMPLATE"   =>  $request->input('adobe_sign_template')['value']
+        ]);
+
+        $fileName = str_replace(" ", "", $request->input('name')) ;
+
+        if($request->file('file') != NULL){
+            if (env('PDFTK_COMMAND')) {
+                $config = [
+                    'command'   =>  env('PDFTK_COMMAND'),
+                    'useExec'   =>  true
+                ];
+            }
+
+            $pdf = new Pdf($path, $config);
+            $data = $pdf->getDataFields();
+            Storage::disk('local')->put("templates/{$process['prj_uid']}/{$task['act_uid']}/{$fileName}.json", json_encode($data));
+
+            return ['data' => $data];
+        }
+
+        return ['data' => json_decode(Storage::disk('local')->get("templates/{$process['prj_uid']}/{$task['act_uid']}/{$fileName}.json"))];
     }
 
     function getTemplate(Request $request){

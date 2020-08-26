@@ -80,6 +80,21 @@ Route::get('/uploads/vat/{upload_id}', function($upload_id){
 	}
 	abort(404);
 });
+
+Route::get('/templates/file/{template_id}', function($template_id){
+	$file = \App\FormTemplate::find($template_id);
+
+	if (\Storage::exists($file->path)) {
+		$filex = \Storage::get($file->path);
+		$type = \Storage::mimeType($file->path);
+
+		$response = Response::make($filex, 200);
+		$response->header("Content-Type", $type);
+
+		return $response;
+	}
+	abort(404);
+});
 Route::get('/sample', 'Test\SampleController@index');
 Route::get('/pmauthentication', 'Test\SampleController@pmauth');
 Route::get('/docusign', 'Api\DocusignAPIController@index')->name('docusign-client');

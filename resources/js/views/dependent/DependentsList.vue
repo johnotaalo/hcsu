@@ -16,23 +16,11 @@
 					</div>
 				</div>
 			</div>
-			<div class="card-body">
 				<v-server-table
 					class="table-sm table-nowrap card-table"
 					:columns="table.columns"
 					:options="table.options"
-					size="sm">
-						<!-- <template slot="IMAGE" slot-scope="data">
-							<center>
-								<b-img v-if="data.row.image !='' && data.row.image != '/storage/'" v-bind="options.principalImageProps" rounded="circle" :src="data.row.image"></b-img>
-								<b-img v-else width="40" height="40" rounded="circle" alt="Circle image" src="/images/no_avatar.svg"></b-img>
-							</center>
-						</template>
-						<template slot="actions" slot-scope="data">
-							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }">View</router-link> 
-						</template> -->
-					</v-server-table>
-			</div>
+					size="sm"></v-server-table>
 		</div>
 	</div>
 </template>

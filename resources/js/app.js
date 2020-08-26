@@ -143,6 +143,9 @@ import Clients from './views/other/Clients'
 import AddOtherClient from './views/other/AddOtherClient'
 import EditOtherClient from './views/other/EditOtherClient'
 
+import AdobeSignSignatories from './views/settings/adobesign/AdobeSignSignatories'
+import AddAdobeSignSignatory from './views/settings/adobesign/AddAdobeSignSignatory'
+
 // Auth
 // import Login from './views/Login'
 
@@ -358,6 +361,21 @@ Vue.component(
 	 				path: 'processmaker/ipmis/functionality',
 	 				component: IPMISFunctionality,
 	 				name: 'settings-ipmis-functionality'
+	 			},
+	 			{
+	 				path: 'adobe-sign/signatories',
+	 				component: AdobeSignSignatories,
+	 				name: 'settings-signatories'
+	 			},
+	 			{
+	 				path: 'adobe-sign/signatories/add',
+	 				component: AddAdobeSignSignatory,
+	 				name: 'setting-signatories-add'
+	 			},
+	 			{
+	 				name: 'setting-signatories-edit',
+	 				path: 'adobe-sign/signatories/edit/:id',
+	 				component: AddAdobeSignSignatory,
 	 			}
 	 		]
 	 	},

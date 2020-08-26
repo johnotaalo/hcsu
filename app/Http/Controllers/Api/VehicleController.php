@@ -101,10 +101,21 @@ class VehicleController extends Controller
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = \DB::table("TIMS_REGISTRATION")
-                            ->select('TIMS_REGISTRATION.HOST_COUNTRY_ID', 'TIMS_REGISTRATION.DIP_ID_NO', 'TIMS_REGISTRATION.MOBILE_NO', 'TIMS_REGISTRATION.USERNAME', 'TIMS_REGISTRATION.KRA_PIN_NO', 'TIMS_REGISTRATION.REGISTRATION_DATE', \DB::raw("(CASE WHEN PRINCIPAL.HOST_COUNTRY_ID IS NOT NULL THEN CONCAT(PRINCIPAL.LAST_NAME, ', ', PRINCIPAL.OTHER_NAMES) WHEN PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID IS NOT NULL THEN CONCAT(PRINCIPAL_DEPENDENT.LAST_NAME, ', ', PRINCIPAL_DEPENDENT.OTHER_NAMES) END) AS CLIENT"))
-                            ->leftJoin('PRINCIPAL', 'PRINCIPAL.HOST_COUNTRY_ID', '=', 'TIMS_REGISTRATION.HOST_COUNTRY_ID')
-                            ->leftJoin('PRINCIPAL_DEPENDENT', 'PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID', '=', 'TIMS_REGISTRATION.HOST_COUNTRY_ID');
+        // $queryBuilder = \DB::table("TIMS_REGISTRATION")
+        //                     ->select('TIMS_REGISTRATION.HOST_COUNTRY_ID', 'TIMS_REGISTRATION.DIP_ID_NO', 'TIMS_REGISTRATION.MOBILE_NO', 'TIMS_REGISTRATION.USERNAME', 'TIMS_REGISTRATION.KRA_PIN_NO', 'TIMS_REGISTRATION.REGISTRATION_DATE', \DB::raw("(CASE WHEN PRINCIPAL.HOST_COUNTRY_ID IS NOT NULL THEN CONCAT(PRINCIPAL.LAST_NAME, ', ', PRINCIPAL.OTHER_NAMES) WHEN PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID IS NOT NULL THEN CONCAT(PRINCIPAL_DEPENDENT.LAST_NAME, ', ', PRINCIPAL_DEPENDENT.OTHER_NAMES) END) AS CLIENT"))
+        //                     ->leftJoin('PRINCIPAL', 'PRINCIPAL.HOST_COUNTRY_ID', '=', 'TIMS_REGISTRATION.HOST_COUNTRY_ID')
+        //                     ->leftJoin('PRINCIPAL_DEPENDENT', 'PRINCIPAL_DEPENDENT.HOST_COUNTRY_ID', '=', 'TIMS_REGISTRATION.HOST_COUNTRY_ID');
+
+        $queryBuilder = \App\Models\TimsRegistrationView::select('*');
+        if($searchQueries){
+            $queryBuilder->where('CLIENT', 'LIKE', "%{$searchQueries}%")
+            ->orWhere('DIP_ID_NO', 'LIKE', "%{$searchQueries}%")
+            ->orWhere('KRA_PIN_NO', 'LIKE', "%{$searchQueries}%")
+            ->orWhere('MOBILE_NO', 'LIKE', "%{$searchQueries}%")
+            ->orWhere('USERNAME', 'LIKE', "%{$searchQueries}%")
+            ->orWhere('ACRONYM', 'LIKE', "%{$searchQueries}%");
+        }
+
         $count = $queryBuilder->count();
 
         $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));

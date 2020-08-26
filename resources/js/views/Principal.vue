@@ -27,14 +27,6 @@
 					<div class="col-auto">
 						<b-form-select @change="applyActiveStaffFilter(activeStaff)"
 						v-model="activeStaff" :options="staffOptions"></b-form-select>
-						<!-- <b-form-radio-group
-						id="showActiveStaff"
-						@change="applyActiveStaffFilter(activeStaff)"
-						v-model="activeStaff"
-						:options="staffOptions"
-						name="showActiveStaff"
-						></b-form-radio-group> -->
-						<!-- <b-form-checkbox id="" v-model="activeStaff"  value="active" unchecked-value="all">Only Show Active Staff</b-form-checkbox> -->
 					</div>
 					<div class="col-auto">
 						<b-button class= "float-right" :to="{ name: 'principal.add' }" variant="outline-primary" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add Client</b-button>
