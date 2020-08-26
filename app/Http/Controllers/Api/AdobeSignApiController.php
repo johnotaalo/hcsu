@@ -93,7 +93,7 @@ class AdobeSignApiController extends Controller
                 }
 
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
-                \Log::debug("NV Data: " . json_decode($nvData));
+                \Log::debug("NV Data: " . json_encode($nvData));
                 $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate);
                 $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
 
