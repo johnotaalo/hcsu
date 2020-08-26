@@ -70,15 +70,30 @@ class AdobeSignApiController extends Controller
             $className = "\App\Helpers\HCSU\PDFTK\\" . str_replace(" ", "", $document->form_name);
             $class = new $className();
             $data = $class->getData($case->app_number, $document, $extraParams);
+            $creator = $case->app_init_usr_username;
+            $currentUser = $case->current_task[0]->usr_name;
+            $creatorFrags = ($currentUser) ? explode(" ", $currentUser) : explode(" ", $creator);
+
+            $initials = "";
+            if (count($creatorFrags) > 0) {
+                if (count($creatorFrags) == 1) {
+                    $initials = strtoupper($creatorFrags[0][0] . $creatorFrags[0][1]);
+                }elseif (count($creatorFrags) == 2) {
+                    $initials = strtoupper($creatorFrags[0][0] . $creatorFrags[1][0]);
+                }elseif(count($creatorFrags) > 2){
+                    $initials = strtoupper($creatorFrags[0][0] . end($creatorFrags)[0]);
+                }
+            }
+
             if ($document->ADOBE_SIGN_TEMPLATE) {
-                // $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
+                $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
                 // $documentId = null;
-                // if (\Storage::exists($noteVerbale)) {
-                //     $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($noteVerbale, "Note Verbal - {$case->app_number}");
-                // }
+                if (\Storage::exists($noteVerbale)) {
+                    $nvData = $this->getNVData($processName, $case, $initials);
+                }
 
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
-                
+                \Log::debug("NV Data: " . json_decode($nvData));
                 $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate);
                 $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
 
@@ -104,6 +119,64 @@ class AdobeSignApiController extends Controller
                 ];
             }
         }
+    }
+
+    function getNVData($process, $case, $initials){
+        $data = new \StdClass;
+
+        switch($process){
+            case 'vat':
+                $data = \App\Helpers\HCSU\Data\VATData::get($case->app_number);
+                break;
+            case 'blanket':
+                $data = \App\Helpers\HCSU\Data\BlanketVATData::get($case->app_number);
+                break;
+            case 'pin':
+                $data = \App\Helpers\HCSU\Data\PINData::get($case->app_number);
+                break;
+            case 'diplomatic-id':
+                $data = \App\Helpers\HCSU\Data\DiplomaticIDData::get($case->app_number, 'new');
+                break;
+            case 'diplomatic-id-renewal':
+                $data = \App\Helpers\HCSU\Data\DiplomaticIDData::get($case->app_number, 'renewal');
+                break;
+            case 'work-permit-new-case':
+            case 'domestic-worker-justification':
+                $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'new-case');
+                break;
+            case 'work-permit-endorsement':
+                $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'endorsement');
+                break;
+            case 'work-permit-renewal':
+                $data = \App\Helpers\HCSU\Data\WorkPermitExemptionData::get($case->app_number, 'renewal');
+                break;
+            case 'pro1a':
+                $data = \App\Helpers\HCSU\Data\Pro1AData::get($case->app_number);
+                break;
+            case 'pro1b':
+                $data = \App\Helpers\HCSU\Data\Pro1BData::get($case->app_number);
+                break;
+            case 'pro1c':
+                $data = \App\Helpers\HCSU\Data\Pro1CData::get($case->app_number);
+                break;
+            case 'internship-pass':
+                $data = \App\Helpers\HCSU\Data\InternshipPassData::get($case->app_number);
+                break;
+            case 'nod':
+                $data = \App\Helpers\HCSU\Data\NODData::get($case->app_number);
+                break;
+            case 'form_a':
+            case 'form_a_ntsa':
+                $data = \App\Helpers\HCSU\Data\FormAData::get($case->app_number);
+                break;
+            case 'logbook':
+                $data = \App\Helpers\HCSU\Data\LogbookData::get($case->app_number);
+                break;
+        }
+
+        // dd($data);
+
+        return new \App\Helpers\HCSU\PDFTK\NoteVerbal($process, $data, $initials);
     }
 
 	function submitDocumentsForSigning(Request $request){
