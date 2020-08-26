@@ -52,7 +52,7 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->transientDocumentId;
 	}
 
-	public static function uploadLibraryDocument($template_id, $data, $title){
+	public static function uploadLibraryDocument($template_id, $data, $title, $nv = null){
 		$auth = Self::authdata();
 
 		if (time() > $auth->expiry_time) {
@@ -77,21 +77,24 @@ class AdobeClient{
 
 		$mergeFields = array_values($mergeFields);
 
+		$files = [['libraryDocumentId'	=>	$template_id]];
+		if($nv){
+			$files[] = ['transientDocumentId'	=>	$nv];
+		}
+
 		$options = [
 			'json'	=>	[
 				'documentCreationInfo'	=>	[
 					'recipientSetInfos'	=>	[
 						[
 							"recipientSetRole"			=>	"SIGNER",
-							"recipientSetMemberInfos"	=>	[
-								["email"	=>	"olago@un.org"]
-							]
+							"recipientSetMemberInfos"	=>	Self::getSignatories()
 						]
 					],
 					"signatureType"		=>	"ESIGN",
 					"signatureFlow"		=>	"SENDER_SIGNATURE_NOT_REQUIRED",
 					"name"				=>	$title,
-					"fileInfos"			=>	[['libraryDocumentId'	=>	$template_id]],
+					"fileInfos"			=>	$files,
 					"mergeFieldInfo"	=>	$mergeFields
 				]
 			]
@@ -99,6 +102,20 @@ class AdobeClient{
 
 		$response = $client->post($url, $options);
 		return (json_decode($response->getBody()->getContents()))->agreementId;
+	}
+
+	public static function getSignatories(){
+		$signatories = \App\Models\AdobeSignSignatory::where('status', 1)->get();
+		$signatoriesData = [];
+		if ($signatories) {
+			foreach ($signatories as $signatory) {
+				$signatoriesData[] = [
+					"email"		=>	$signatory->email
+				];
+			}
+		}
+
+		return $signatoriesData;
 	}
 
 	public static function mofaTest($case){
