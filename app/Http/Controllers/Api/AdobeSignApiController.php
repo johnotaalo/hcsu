@@ -90,7 +90,7 @@ class AdobeSignApiController extends Controller
                 // $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
                 // $documentId = null;
                 if ($includeNV) {
-                    $nvData = $this->getNVData($processName, $case, $initials);
+                    $nvData['main_body'] = $this->getNVData($processName, $case, $initials);
                     $nvData['date'] = "F D, Y";
                 }
 
