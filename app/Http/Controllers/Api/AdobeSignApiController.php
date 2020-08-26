@@ -180,7 +180,7 @@ class AdobeSignApiController extends Controller
 
         // dd($data);
 
-        return new \App\Helpers\HCSU\PDFTK\NoteVerbal($process, $data, $initials, false)->getContent();
+        return (new \App\Helpers\HCSU\PDFTK\NoteVerbal($process, $data, $initials, false))->getContent();
     }
 
 	function submitDocumentsForSigning(Request $request){
