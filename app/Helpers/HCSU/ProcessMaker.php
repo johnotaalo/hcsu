@@ -114,6 +114,8 @@ class ProcessMaker {
             'form'              =>  new \CurlFile( $form )
         ];
 
+        \Log::debug("Data Sent: " . json_encode($data));
+
         $response = Self::executeREST($url, "POST", $data, $authenticationData->access_token, true);
 
         return $response;
