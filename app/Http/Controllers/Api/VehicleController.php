@@ -129,7 +129,6 @@ class VehicleController extends Controller
         $count = $queryBuilder->count();
 
         $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
-        $queryBuilder->
         $registrations = $queryBuilder->get();
 
         return [
