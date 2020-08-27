@@ -32,6 +32,8 @@ class Pro1BStaff{
 			'clearance_port'		=>	$form_data->caseData->port->PORT_OF_CLEARANCE
 		];
 
+		$this->filename = "{$document->form_name} for {$form_data->client->name} - {$date}";
+
 		return $tabData;
 	}
 }

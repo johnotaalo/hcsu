@@ -156,13 +156,13 @@ class AdobeClient{
 						[
 							"recipientSetRole"			=>	"SIGNER",
 							"recipientSetMemberInfos"	=>	[
-								["email"	=>	"chrispine.otaalo@gmail.com"]
+								["email"	=>	"mainapurity@gmail.com"]
 							]
 						],
 						[
 							"recipientSetRole"			=>	"SIGNER",
 							"recipientSetMemberInfos"	=>	[
-								["email"	=>	"chrispinethesim@gmail.com"]
+								["email"	=>	"mdkimani@gmail.com"]
 							]
 						]
 					],

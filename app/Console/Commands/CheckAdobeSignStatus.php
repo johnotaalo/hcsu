@@ -64,7 +64,7 @@ class CheckAdobeSignStatus extends Command
 
                     $documentContent = AdobeClient::downloadSignedDocument($agreementDetails->agreementId);
 
-                    $path = "adobe-sign/documents/{$document->CASE_NO}.pdf";
+                    $path = "adobe-sign/documents/{$document->CASE_NO}-signed.pdf";
 
                     \Storage::put($path, $documentContent);
 

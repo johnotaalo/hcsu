@@ -33,6 +33,8 @@ class Pro1A{
 			'port_of_clearance'		=>	$form_data->caseData->port->PORT_OF_CLEARANCE
 		];
 
+		$this->filename = "{$document->form_name} for {$form_data->client->name} - {$date}";
+
 		return $tabData;
 	}
 }
