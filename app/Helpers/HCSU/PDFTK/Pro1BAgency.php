@@ -15,6 +15,7 @@ class Pro1BAgency{
 
 	public function getData($case_no, $document){
 		$form_data = \App\Helpers\HCSU\Data\Pro1BData::get($case_no);
+		$date = date('F d, Y');
 
 		$description = ($form_data->caseData->TYPE_OF_GOODS == "other") ? $form_data->description . "; INVOICE NO: {$form_data->caseData->INVOICE_NO};  AWB/BL NO. {$form_data->caseData->AIRWAY_BILL_NO};" : $form_data->description;
 		

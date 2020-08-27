@@ -15,6 +15,7 @@ class Pro1A{
 
 	public function getData($case_no, $document){
 		$form_data = \App\Helpers\HCSU\Data\Pro1AData::get($case_no);
+		$date = date('F d, Y');
 		
 		$tabData = [
 			'serial_no'				=>	$form_data->caseData->NV_SERIAL_NO,
