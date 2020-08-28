@@ -340,10 +340,13 @@ class NoteVerbal {
 					$body .= "{$this->data->dipData->NV_COMMENTS}{$period}\r\r";
 				}
 
-				if($this->data->type == "new")
+				if($this->data->type == "new"){
 					$body .= "The Ministry's assistance in issuance of a Diplomatic Identity Card will be highly appreciated.";
-				else
-					$body .= "The Ministry's assistance in renewal of the Diplomatic Identity Card would be highly appreciated.";
+				}
+				else{
+					$body .= "Attached herewith is a copy of the {$this->data->dipData->REPLACEMENT_REASON}.\r";
+					$body .= "The Ministry's assistance in {$this->data->dipData->APPLICATION_TYPE} of the Diplomatic Identity Card would be highly appreciated.";
+				}
 			break;
 
 			case 'work-permit-new-case':
