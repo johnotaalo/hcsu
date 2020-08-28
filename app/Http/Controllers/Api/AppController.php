@@ -597,7 +597,8 @@ ORDER BY
         ])->first();
         if($document){
             if ($document->input_document != null) {
-                $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+                $res = $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+                \Log::debug("ProcessMaker upload documents: " . json_encode($res));
             }
         }
 
