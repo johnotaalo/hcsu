@@ -344,7 +344,6 @@ class NoteVerbal {
 					$body .= "The Ministry's assistance in issuance of a Diplomatic Identity Card will be highly appreciated.";
 				}
 				else{
-					$body .= "Attached herewith is a copy of the {$this->data->dipData->REPLACEMENT_REASON}.\r";
 					$body .= "The Ministry's assistance in {$this->data->dipData->APPLICATION_TYPE} of the Diplomatic Identity Card would be highly appreciated.";
 				}
 			break;
