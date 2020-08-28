@@ -91,7 +91,7 @@ class AdobeSignApiController extends Controller
                 // $documentId = null;
                 if ($includeNV) {
                     $nvData['main_body'] = $this->getNVData($processName, $case, $initials);
-                    $nvData['date'] = date("F D, Y");
+                    $nvData['date'] = date("F d, Y");
                 }
 
                 $data = $data + $nvData;

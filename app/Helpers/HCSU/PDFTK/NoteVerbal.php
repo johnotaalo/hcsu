@@ -38,10 +38,17 @@ class NoteVerbal {
 			case 'diplomatic-id-renewal':
 				$end_header = (isset($this->data->client->relationship)) ? "the under mentioned {$this->data->client->relationship} of {$this->data->client->principal}" : "{$this->data->client->name}";
 				$end_header .= ", an internationally recruited staff member of {$this->data->client->organization}";
-				if($this->data->type == "new")
+				if($this->data->type == "new"){
 					$connector = "apply for a diplomatic identity card for";
-				else
-					$connector = "apply for renewal of Diplomatic ID card for";
+				}
+				else{
+					$connector = "apply for {$this->data->dipData->APPLICATION_TYPE} of Diplomatic ID card for";
+					if ($this->data->dipData->REPLACEMENT_REASON == "lost") {
+						$end_header .= ". The original ID card was stolen as confirmed by the attached original Abstracts from Police Records.";
+					}else{
+						$end_header .= ". The original ID card was defaced as confirmed by the attached original Abstracts from Police Records.";
+					}
+				}
 				break;
 			case 'work-permit-new-case':
 			case 'work-permit-endorsement':
