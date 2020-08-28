@@ -72,6 +72,7 @@ class ProcessMaker {
 				$httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 				// die("Sample: " . $httpStatus);
 				\Log::debug("Status code: {$httpStatus} for {$url}");
+
 				curl_close($ch);
 
 				return $oResponse;
@@ -117,6 +118,7 @@ class ProcessMaker {
         \Log::debug("Data Sent: " . json_encode($data));
 
         $response = Self::executeREST($url, "POST", $data, $authenticationData->access_token, true);
+        \Log::debug("ProcessMaker upload documents: " . json_encode($response));
 
         return $response;
     }
