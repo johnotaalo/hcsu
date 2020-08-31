@@ -68,9 +68,12 @@ class AdobeSignApiController extends Controller
 
         if($document){
             $path = storage_path('app/'. $document->path);
-            $className = "\App\Helpers\HCSU\PDFTK\\" . str_replace(" ", "", $document->form_name);
-            $class = new $className();
-            $data = $class->getData($case->app_number, $document, $extraParams);
+            $data = [];
+            if($document->type !== "nv"){
+                $className = "\App\Helpers\HCSU\PDFTK\\" . str_replace(" ", "", $document->form_name);
+                $class = new $className();
+                $data = $class->getData($case->app_number, $document, $extraParams);
+            }
             $creator = $case->app_init_usr_username;
             $currentUser = $case->current_task[0]->usr_name;
             $creatorFrags = ($currentUser) ? explode(" ", $currentUser) : explode(" ", $creator);
@@ -89,7 +92,7 @@ class AdobeSignApiController extends Controller
             if ($document->ADOBE_SIGN_TEMPLATE) {
                 // $noteVerbale = "note-verbals/{$processName}/Note Verbal - {$case->app_number}.pdf";
                 // $documentId = null;
-                if ($includeNV) {
+                if ($includeNV || $document->type == "nv") {
                     $nvData['main_body'] = $this->getNVData($processName, $case, $initials);
                     $nvData['date'] = date("F d, Y");
                 }

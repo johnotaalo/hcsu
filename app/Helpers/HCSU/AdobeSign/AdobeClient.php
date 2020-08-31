@@ -76,8 +76,11 @@ class AdobeClient{
 		})->toArray();
 
 		$mergeFields = array_values($mergeFields);
-
-		$files = [['libraryDocumentId'	=>	$template_id]];
+		$files = [];
+		if($template_id != $nv){
+			$files = [['libraryDocumentId'	=>	$template_id]];
+		}
+		
 		if($nv){
 			$files[] = ['libraryDocumentId'	=>	$nv];
 		}

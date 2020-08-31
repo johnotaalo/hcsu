@@ -24,7 +24,7 @@ class VATExemptionForm{
 
 	function data(){
 		return [
-			'agency' 			=>	$this->mission,
+			'agency' 			=>	(string) $this->mission,
 			'today'				=>	$this->date,
 			'name_title'		=>	$this->nameTitle,
 			'supplier_name'		=>	$this->supplierName,
