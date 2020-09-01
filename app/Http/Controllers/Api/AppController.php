@@ -493,6 +493,7 @@ ORDER BY
 
     function generateNoteVerbal(Request $request){
         $downloadType = ($request->query('download')) ? (bool)$request->query('download') : false;
+        $nvOnly = ($request->query('type') == "nv") ? true : false;
         $path = public_path();
 
         $case = $this->getCaseInformation($request->case_no);
@@ -591,10 +592,17 @@ ORDER BY
         $case = $this->getCaseInformation($request->case_no);
         $process = $case->pro_uid;
         $currentTask = $case->current_task[0]->tas_uid;
-        $document = FormTemplate::where([
+        $search = [
             'process'   =>  $process,
             'task'      =>  $currentTask
-        ])->first();
+        ];
+        
+        if ($nvOnly) {
+            $search['type'] = "nv";
+        }
+
+        $document = FormTemplate::where($search)->first();
+
         if($document){
             if ($document->input_document != null) {
                 $res = $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);

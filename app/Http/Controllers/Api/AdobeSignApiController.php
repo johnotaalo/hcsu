@@ -62,8 +62,13 @@ class AdobeSignApiController extends Controller
         $process = $case->pro_uid;
         $processName = $request->input('process');
         $includeNV = $request->input('include_nv');
+        $nvOnly = ($request->has('nvOnly')) ? true : false;
 
-        $document = FormTemplate::where('process',$process)->first();
+        $search = ['process' => $process];
+        if ($nvOnly) {
+            $search['type'] = 'nv';
+        }
+        $document = FormTemplate::where($search)->first();
         $extraParams = $request->query();
 
         if($document){
