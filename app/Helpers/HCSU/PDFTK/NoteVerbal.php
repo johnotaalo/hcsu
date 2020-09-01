@@ -43,10 +43,12 @@ class NoteVerbal {
 				}
 				else{
 					$connector = "apply for {$this->data->dipData->APPLICATION_TYPE} of Diplomatic ID card for";
-					if ($this->data->dipData->REPLACEMENT_REASON == "lost") {
-						$end_header .= ". The original ID card was stolen as confirmed by the attached original Abstract from Police Records.";
-					}else{
-						$end_header .= ". The original ID card was defaced as confirmed by the attached original Abstract from Police Records.";
+					if($this->data->dipData->REPLACEMENT_REASON){
+						if ($this->data->dipData->REPLACEMENT_REASON == "lost") {
+							$end_header .= ". The original ID card was stolen as confirmed by the attached original Abstract from Police Records.";
+						}else{
+							$end_header .= ". The original ID card was defaced as confirmed by the attached original Abstract from Police Records.";
+						}
 					}
 				}
 				break;
