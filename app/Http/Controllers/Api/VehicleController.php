@@ -223,7 +223,7 @@ class VehicleController extends Controller
 
         if ($rnp->SIGNED_DOCUMENT) {
             $file = \Storage::download($rnp->SIGNED_DOCUMENT);
-            return response()->download(storage_path("app/rnp/{$filename}"));
+            return response()->download(storage_path("app/rnp/{$file}"));
         //     $file = \Storage::get($rnp->SIGNED_DOCUMENT);
         //     $type = \Storage::mimeType($file);
 
