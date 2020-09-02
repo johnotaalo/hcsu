@@ -1,10 +1,23 @@
 <template>
 	<div>
+		<div class="row align-items-center mb-2">
+			<div class="col">
+				<form class="row align-items-center">
+					<div class="col-auto pr-0">
+						<span class="fe fe-search text-muted"></span>
+					</div>
 
-		<v-client-table :columns="columns" :data="suppliers" :options="options" class="table-sm">
-			<div slot="afterFilter">
+					<div class="col">
+						<b-input type="search" class="form-control " v-model = "searchTerm" placeholder="Search" v-on:keyup="applySearchFilter(searchTerm)"/>
+					</div>
+				</form>
+
+			</div>
+			<div class="col-auto">
 				<b-button v-b-modal.manage-supplier variant="primary" size="sm">Add Supplier</b-button>
 			</div>
+		</div>
+		<v-server-table :columns="columns" :data="suppliers" :options="options" class="table-sm">
 			<template slot="#" slot-scope="props">
 				{{ props.index }}
 			</template>
@@ -22,7 +35,7 @@
 			<template slot="Actions" slot-scope="props">
 				<b-button size="sm" @click="editSupplier(props.row)">Edit</b-button>
 			</template>
-		</v-client-table>
+		</v-server-table>
 
 		<b-modal id="manage-supplier" title="Add Supplier" @ok="submitModal" @hidden="resetModal">
 			<b-alert v-model="modalLoader.error" variant="danger" dismissible>
@@ -70,15 +83,36 @@
 
 <script type="text/javascript">
 	import Form from '../../../core/Form'
+	import VueTables from 'vue-tables-2'
+	const Event = VueTables.Event
+
 	export default {
 		data(){
 			return {
+				baseUrl: window.Laravel.baseUrl,
+				searchTerm: "",
 				suppliers: [],
 				columns: ['#', 'SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN', 'Actions'],
 				options: {
 					filterable: false,
 					perPage: 50,
-					perPageValues: []
+					perPageValues: [],
+					customFilters: ['normalSearch'],
+					sortable: ['SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN'],
+					sortIcon: {
+						base: 'fe',
+						up: 'fe-arrow-up',
+						down: 'fe-arrow-down',
+						is: 'fe-minus'
+					},
+					requestFunction: (data) => {
+						return axios.get(`${this.baseUrl}/api/data/suppliers/all`, {
+							params: data
+						})
+						.catch(function (e) {
+							console.log('error', e);
+						}.bind(this));
+					}
 				},
 				modal: new Form({
 					ID: "",
@@ -96,7 +130,7 @@
 			}
 		},
 		created(){
-			this.getSuppliers()
+			// this.getSuppliers()
 		},
 		methods: {
 			getSuppliers(){
@@ -108,6 +142,9 @@
 					console.log(error)
 					// this.$toastr.error('There was an error fetching suppliers');
 				});
+			},
+			applySearchFilter: function(term){
+				Event.$emit('vue-tables.filter::normalSearch', term);
 			},
 			editSupplier(data){
 				console.log(data)

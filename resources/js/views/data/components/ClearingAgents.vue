@@ -17,14 +17,17 @@
 
 			</div>
 			<div class="col-auto">
-				<b-button v-b-modal.manage-agent class= "float-right" variant="outline-primary" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add Supplier</b-button>
+				<b-button v-b-modal.manage-agent class= "float-right" variant="outline-primary" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add Clearing Agent</b-button>
 			</div>
 		</div>
-		<v-client-table :columns="columns" :data="clearingAgents" :options="options" class="table-sm">
+		<v-server-table :columns="columns" :options="options" class="table-sm">
+			<template slot="#" slot-scope="props">
+				{{ props.index }}
+			</template>
 			<template slot="Actions" slot-scope="props">
 				<b-button size="sm" @click="editAgent(props.row)">Edit</b-button>
 			</template>
-		</v-client-table>
+		</v-server-table>
 
 		<b-modal id="manage-agent" title="Add Clearing Agent" @ok="submitModal" @hidden="resetModal">
 			<b-alert v-model="modalLoader.error" variant="danger" dismissible>
@@ -69,13 +72,31 @@
 		data(){
 			return {
 				clearingAgents: [],
+				baseUrl: window.Laravel.baseUrl,
 				searchTerm: "",
 				options: {
 					filterable: false,
 					perPage: 50,
-					perPageValues: []
+					perPageValues: [],
+					customFilters: ['normalSearch'],
+					sortable: ['CLEARING_AGENT_NAME', 'CLEARING_AGENT_ADDRESS'],
+					sortIcon: {
+						base: 'fe',
+						up: 'fe-arrow-up',
+						down: 'fe-arrow-down',
+						is: 'fe-minus'
+					},
+					requestFunction: (data) => {
+						return axios.get(`${this.baseUrl}/api/data/clearing-agents/all`, {
+							params: data
+						})
+						.catch(function (e) {
+							console.log('error', e);
+						}.bind(this));
+					}
 				},
 				columns: [
+					'#',
 					"CLEARING_AGENT_NAME",
 					"CLEARING_AGENT_ADDRESS",
 					"Actions"
@@ -94,10 +115,11 @@
 			}
 		},
 		created(){
-			this.getClearingAgents()
+			// this.getClearingAgents()
 		},
 		methods: {
-			applySearchFilter: function(){
+			applySearchFilter: function(term){
+				Event.$emit('vue-tables.filter::normalSearch', term);
 			},
 			editAgent: function(data){
 				this.modal.ID = data.ID

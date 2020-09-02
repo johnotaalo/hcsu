@@ -28,6 +28,32 @@ class ClearingAgentsController extends Controller
 	}
 
     function all(Request $request){
-    	return \App\Models\Ref\ClearingAgent::orderBy('CLEARING_AGENT_NAME', 'ASC')->get();
+    	$searchQueries = $request->get('normalSearch');
+		$limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $queryBuilder = \App\Models\Ref\ClearingAgent::select("CLEARING_AGENT_NAME", "CLEARING_AGENT_ADDRESS");
+
+        if($searchQueries){
+        	$queryBuilder->where('CLEARING_AGENT_NAME', 'LIKE', "%{$searchQueries}%")
+        					->orWhere('CLEARING_AGENT_ADDRESS', 'LIKE', "%{$searchQueries}%");
+        }
+
+        if ($orderBy) {
+        	$queryBuilder->orderBy($orderBy, ($ascending == 1) ? 'ASC' : 'DESC');
+        }
+
+        $count = $queryBuilder->count();
+
+        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+        $agents = $queryBuilder->get();
+
+    	return [
+    		'data'	=>	$agents,
+    		'count'	=>	$count
+    	];
     }
 }
