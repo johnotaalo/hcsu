@@ -29,6 +29,12 @@
 							<div class="col">
 								<b-input type="search" class="form-control form-control-flush search" v-model = "searchTerm" placeholder="Search" v-on:keyup="applySearchFilter(searchTerm)"/>
 							</div>
+							<div class="col-auto">
+								<label class="float-right" for="agencies">Filter by Agency:</label>
+							</div>
+							<div class="col-auto">
+								<b-select @change="applyAgencyFilter(agencyFilter)" v-model="agencyFilter" :options="agencies" id="agencies"></b-select>
+							</div>
 						</form>
 					</div>
 					<!-- <div class="col-auto">
@@ -68,11 +74,21 @@
 		data(){
 			return {
 				serverColumns: ["HOST_COUNTRY_ID", "CLIENT", "AGENCY", "DIPLOMATIC ID", "USERNAME", "KRA_PIN_NO", "REGISTRATION_DATE"],
+				agencies: [],
+				searchTerm: "",
+				agencyFilter: "",
 				options: {
 					perPage: 50,
 					perPageValues: [],
 					filterable: false,
-					customFilters: ['normalSearch'],
+					customFilters: ['normalSearch', 'agencySearch'],
+					sortable: ["HOST_COUNTRY_ID", "CLIENT", "AGENCY", "DIPLOMATIC ID", "USERNAME", "KRA_PIN_NO", "REGISTRATION_DATE"],
+					sortIcon: {
+						base: 'fe',
+						up: 'fe-arrow-up',
+						down: 'fe-arrow-down',
+						is: 'fe-minus'
+					},
 					requestFunction: (data) => {
 						return axios.get(`/api/data/tims/list`, {
 							params: data
@@ -84,9 +100,30 @@
 				}
 			}
 		},
+		created(){
+			this.getAgencies()
+		},
 		methods: {
 			applySearchFilter: function(term){
 				Event.$emit('vue-tables.filter::normalSearch', term);
+			},
+			applyAgencyFilter: function(term){
+				Event.$emit('vue-tables.filter::agencySearch', term);
+			},
+			getAgencies(){
+				axios.get('/api/agencies')
+				.then(res => {
+					var data = _.map(res.data, (agency) => {
+						return {
+							value: agency.ACRONYM,
+							text: agency.ACRONYM
+						}
+					});
+
+					data.unshift({ value: "", text: "All Agencies" });
+
+					this.agencies = data
+				});
 			}
 		}
 	}

@@ -168,7 +168,9 @@ Route::prefix('vehicle')->group(function(){
 
 	Route::prefix('plates/returned')->group(function(){
 		Route::post('create', 'Api\VehicleController@createRNPList');
+		Route::put('edit', 'Api\VehicleController@editRNPList');
 		Route::get('list', 'Api\VehicleController@searchRNP');
+		Route::get('list/{id}', 'Api\VehicleController@getRNP');
 		Route::post('upload/list/signed', 'Api\VehicleController@uploadSignedList');
 		// Route::get('download/list/signed/{id}', 'Api\VehicleController@downloadSignedList');
 		Route::get('download/list/unsigned/{id}', 'Api\VehicleController@downloadUnsignedList');

@@ -95,6 +95,7 @@ class VehicleController extends Controller
 
     function searchTims(Request $request){
         $searchQueries = $request->get('normalSearch');
+        $agencySearch = $request->get('agencySearch');
         $limit = $request->get('limit');
         $page = $request->get('page');
         $ascending = $request->get('ascending');
@@ -102,13 +103,13 @@ class VehicleController extends Controller
         $orderBy = $request->get('orderBy');
 
         $columns = [
-            "HOST_COUNTRY_ID",
-            "CLIENT",
-            "ACRONYM",
-            "DIP_ID_NO",
-            "USERNAME",
-            "KRA_PIN_NO", 
-            "REGISTRATION_DATE"
+            "HOST_COUNTRY_ID" =>"HOST_COUNTRY_ID",
+            "CLIENT" =>"CLIENT",
+            "AGENCY" =>"ACRONYM",
+            "DIPLOMATIC ID" =>"DIP_ID_NO",
+            "USERNAME" =>"USERNAME",
+            "KRA_PIN_NO" => "KRA_PIN_NO", 
+            "REGISTRATION_DATE" =>"REGISTRATION_DATE"
         ];
 
         // $queryBuilder = \DB::table("TIMS_REGISTRATION")
@@ -124,6 +125,14 @@ class VehicleController extends Controller
             ->orWhere('MOBILE_NO', 'LIKE', "%{$searchQueries}%")
             ->orWhere('USERNAME', 'LIKE', "%{$searchQueries}%")
             ->orWhere('ACRONYM', 'LIKE', "%{$searchQueries}%");
+        }
+
+        if($agencySearch){
+            $queryBuilder->where('ACRONYM', $agencySearch);
+        }
+
+        if ($orderBy) {
+            $queryBuilder->orderBy($columns[$orderBy], ($ascending) ? "ASC" : "DESC");
         }
 
         $count = $queryBuilder->count();
@@ -205,6 +214,32 @@ class VehicleController extends Controller
         return $data;
     }
 
+    function editRNPList(Request $request){
+        $rnp = \App\ReturnedPlate::where('id', $request->input('id'))->firstOrFail();
+
+        \App\ReturnedPlateList::where('RETURNED_PLATE_ID', $rnp->id)->delete();
+
+        $rnpId = $rnp->id;
+
+        $list = collect($request->returnedPlates)->map(function($plate) use ($rnpId){
+            return [
+                'RETURNED_PLATE_ID' =>  $rnpId,
+                'HOST_COUNTRY_ID'   =>  $plate['id'],
+                'PLATE_NO'          =>  $plate['plateNo'],
+                'MEASUREMENTS'      =>  $plate['measurements']
+            ];
+        })->toArray();
+
+        \App\ReturnedPlateList::insert($list);
+        $data = \App\ReturnedPlate::with(['plates'])->find($rnp->id);
+
+        return $data;
+    }
+
+    function getRNP(Request $request){
+        return \App\ReturnedPlate::where("id", $request->id)->with(['plates'])->first();
+    }
+
     function uploadSignedList(Request $request){
         $rnp = \App\ReturnedPlate::where('id', $request->id)->firstOrFail();
 
@@ -223,16 +258,9 @@ class VehicleController extends Controller
 
         if ($rnp->SIGNED_DOCUMENT) {
             return \Storage::download($rnp->SIGNED_DOCUMENT);
-            // return response()->download(storage_path("app/rnp/{$file}"));
-        //     $file = \Storage::get($rnp->SIGNED_DOCUMENT);
-        //     $type = \Storage::mimeType($file);
-
-        //     $response = Response::make($file, 200);
-        //     $response->header("Content-Type", $type);
-
-        // return $response;
-            // return;
-        }else{abort_404();}
+        }else{
+            abort_404();
+        }
     }
 
     function downloadUnsignedList(Request $request){

@@ -10,7 +10,7 @@
 						</h6>
 						<!-- Title -->
 						<h1 class="header-title">
-							CREATE RNP LIST
+							EDIT RNP LIST
 						</h1>
 					</div>
 				</div> <!-- / .row -->
@@ -44,15 +44,7 @@
 					<div class="col-md">
 						<div v-if="form.returnedPlates.length">
 							<plate-row v-for="(row, index) in form.returnedPlates" :key="row.id" v-model="form.returnedPlates[index]" @duplicate="duplicateRow($event, form.returnedPlates)"  @remove="removeRow($event, form.returnedPlates)"></plate-row>
-
-							<div class="row align-items-center">
-								<div class="col">
-									<b-button variant="primary" size="sm" @click="submitData">Create RNP</b-button>
-								</div>
-								<div class="col-auto">
-									<b-button variant="outline-primary" size="sm"  @click="addRow(form.returnedPlates)"><i class="fe fe-plus"></i>&nbsp;Add Row</b-button>
-								</div>
-							</div>
+							<b-button variant="primary" size="sm" @click="submitData">Edit RNP</b-button>
 						</div>
 					</div>
 				</div>
@@ -72,13 +64,42 @@
 		mixins: [rowForm],
 		data(){
 			return {
+				id: this.$route.params.id,
 				form: new Form({
+					id: this.$route.params.id,
 					rnpDate: "",
 					returnedPlates: []
 				})
 			}
 		},
+		created(){
+			this.getData();
+		},
 		methods: {
+			getData(){
+				axios.get(`api/vehicle/plates/returned/list/${this.id}`)
+				.then(res => {
+					this.form.rnpDate = res.data.RNP_DATE
+					this.form.returnedPlates = _.map(res.data.plates, (plate) => {
+						var data = {
+							id: plate.id,
+							measurements: plate.MEASUREMENTS,
+							plateNo: plate.PLATE_NO,
+							clientType: plate.client_type
+						};
+
+						if (plate.client_type == "agency") {
+							data['selectedAgency'] = plate.client_details
+						} else if(plate.client_type == "staff") {
+							data['selectedStaff'] = plate.client_details
+						} else if (plate.client_type == "dependant") {
+							data['selectedDependent'] = plate.client_details
+						}
+
+						return data 
+					})
+				});
+			},
 			submitData: function(){
 				var plates = this.form.returnedPlates;
 				var newPlates = _.map(plates, (plate) => {
@@ -108,9 +129,9 @@
 
 				this.form.returnedPlates = newPlates
 				// exit;
-				this.form.post('vehicle/plates/returned/create')
+				this.form.put('vehicle/plates/returned/edit')
 				.then(res => {
-					this.$swal(`Success`, "The RNP was successfully created!", "success")
+					this.$swal(`Success`, "The RNP was successfully edited!", "success")
 					this.$router.push({ name: 'rnp-list'})
 				})
 				.catch( error => {

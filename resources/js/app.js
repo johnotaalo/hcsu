@@ -127,6 +127,7 @@ import TimsList from './views/vehicle/tims/TimsList'
 import TimsRegistration from './views/vehicle/tims/TimsRegistration'
 import RNPList from './views/vehicle/plates/rnp/RNPList'
 import RNPCreate from './views/vehicle/plates/rnp/RNPCreate'
+import RNPEdit from './views/vehicle/plates/rnp/RNPEdit'
 
 // Data
 import DataManagement from './views/data/DataManagement'
@@ -295,6 +296,11 @@ Vue.component(
 	 						path: 'rnp/create',
 	 						component: RNPCreate,
 	 						name: 'rnp-create'
+	 					},
+	 					{
+	 						path: 'rnp/edit/:id',
+	 						component: RNPEdit,
+	 						name: 'rnp-edit'
 	 					}
 	 				]
 	 			},

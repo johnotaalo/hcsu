@@ -59,6 +59,8 @@
 				<template slot="ACTIONS" slot-scope="data">
 					<!-- <b-link :href="data.SIGNED_DOCUMENT" v-if="data.SIGNED_DOCUMENT">Disabled Link</b-link>
 					<span v-else>No Document Uploaded</span> -->
+					<b-button v-if="!data.row.SIGNED_DOCUMENT" class="btn btn-success btn-sm" :to="{ name: 'rnp-edit', params: { id: data.row.id } }"><i class="fe fe-edit"></i>&nbsp;Edit</b-button>
+					<span v-else>No action allowed</span>
 				</template>
 			</v-server-table>
 
