@@ -52,7 +52,7 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->transientDocumentId;
 	}
 
-	public static function uploadLibraryDocument($template_id, $data, $title, $nv = null){
+	public static function uploadLibraryDocument($template_id, $data, $title, $nv = null, $nvOnly = false){
 		$auth = Self::authdata();
 
 		if (time() > $auth->expiry_time) {
@@ -77,10 +77,10 @@ class AdobeClient{
 
 		$mergeFields = array_values($mergeFields);
 		$files = [];
-		if($template_id != $nv){
+		if(!$nvOnly){
 			$files = [['libraryDocumentId'	=>	$template_id]];
 		}
-		
+
 		if($nv){
 			$files[] = ['libraryDocumentId'	=>	$nv];
 		}
