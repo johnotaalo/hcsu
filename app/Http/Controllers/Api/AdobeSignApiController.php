@@ -63,6 +63,7 @@ class AdobeSignApiController extends Controller
         $processName = $request->input('process');
         $includeNV = $request->input('include_nv');
         $nvOnly = ($request->has('nvOnly')) ? true : false;
+        $clientEmail = ($request->has('clientEmail')) ? $request->input('clientEmail') : null;
 
         $search = ['process' => $process];
         if ($nvOnly) {
@@ -106,7 +107,11 @@ class AdobeSignApiController extends Controller
 
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
                 \Log::debug("NV Data: " . json_encode($data));
-                $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate, $nvOnly);
+                if($processName == "form_a"){
+                    $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadMultiSignatureLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $clientEmail, null, false);
+                }else{
+                    $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate, $nvOnly);
+                }
                 $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);
 
                 $adobeSignDoc = new \App\AdobeSignDocuments();
@@ -131,6 +136,9 @@ class AdobeSignApiController extends Controller
                 ];
             }
         }
+    }
+
+    function sendFormAForSignature(Request $request){
     }
 
     function getNVData($process, $case, $initials){

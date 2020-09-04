@@ -52,6 +52,68 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->transientDocumentId;
 	}
 
+	public static function uploadMultiSignatureLibraryDocument($template_id, $data, $title, $clientEmail, $nv = null, $nvOnly = false){
+		$auth = Self::authdata();
+
+		if (time() > $auth->expiry_time) {
+			$auth = self::refreshToken();
+		}
+		
+		$url = $auth->api_access_point . "api/rest/v5/agreements";
+
+		$client = new Client([
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}",
+				'Content-Type'	=>	"application/json"
+			]
+		]);
+
+		$mergeFields = collect($data)->map(function($row, $key) {
+			return [
+				'defaultValue'	=>	$row,
+				'fieldName'		=>	$key
+			];
+		})->toArray();
+
+		$mergeFields = array_values($mergeFields);
+		$files = [];
+		if(!$nvOnly){
+			$files = [['libraryDocumentId'	=>	$template_id]];
+		}
+
+		if($nv){
+			$files[] = ['libraryDocumentId'	=>	$nv];
+		}
+
+		$options = [
+			'json'	=>	[
+				'documentCreationInfo'	=>	[
+					'recipientSetInfos'	=>	[
+						[
+							"recepientSetRole"			=>	"SIGNER",
+							"recepientSetMember"		=>	$clientEmail
+						],
+						[
+							"recipientSetRole"			=>	"SIGNER",
+							"recipientSetMemberInfos"	=>	Self::getSignatories()
+						]
+					],
+					"signatureType"		=>	"ESIGN",
+					"signatureFlow"		=>	"SENDER_SIGNATURE_NOT_REQUIRED",
+					"name"				=>	$title,
+					"fileInfos"			=>	$files,
+					"mergeFieldInfo"	=>	$mergeFields
+				]
+			]
+		];
+
+		\Log::debug("options: " . json_encode($options['json']));
+
+		$response = $client->post($url, $options);
+		// \Log::error("Response: " . $response->getBody()->getContents());
+		return (json_decode($response->getBody()->getContents()))->agreementId;
+	}
+
 	public static function uploadLibraryDocument($template_id, $data, $title, $nv = null, $nvOnly = false){
 		$auth = Self::authdata();
 
