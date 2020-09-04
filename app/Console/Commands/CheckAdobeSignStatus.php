@@ -56,13 +56,6 @@ class CheckAdobeSignStatus extends Command
                 $document->save();
 
                 if ($agreementDetails->status == "SIGNED" && $document->SIGNED_DOCUMENT_PATH == NULL) {
-                    if($document->ROUTING){
-                        $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
-                        \Log::debug("Testing Routing..." . json_encode($signingURLs));
-                        $document->URLS = json_encode($signingURLs);
-                    }
-                    $document->save();
-                    
                     $case = \App\Models\PM\Application::where('APP_NUMBER', $document->CASE_NO)->first();
                     \Log::debug("case: {$case->APP_UID}");
                     $template = FormTemplate::where('process', $case->PRO_UID)->first();
@@ -91,6 +84,12 @@ class CheckAdobeSignStatus extends Command
                 }else{
                     $this->info("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
                     \Log::debug("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
+                    if($document->ROUTING){
+                        $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
+                        \Log::debug("Testing Routing..." . json_encode($signingURLs));
+                        $document->URLS = json_encode($signingURLs);
+                    }
+                    $document->save();
                 }
             }
         }else{
