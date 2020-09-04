@@ -90,8 +90,8 @@ class AdobeClient{
 				'documentCreationInfo'	=>	[
 					'recipientSetInfos'	=>	[
 						[
-							"recipientSetRole"				=>	"SIGNER",
-							"recipientSetMemberInfos"		=>	[[ "email" => $clientEmail ]]
+							"recipientSetRole"			=>	"SIGNER",
+							"recipientSetMemberInfos"	=>	[[ "email" => $clientEmail ]]
 						],
 						[
 							"recipientSetRole"			=>	"SIGNER",

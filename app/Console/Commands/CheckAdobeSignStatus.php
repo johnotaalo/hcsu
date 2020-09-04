@@ -50,6 +50,11 @@ class CheckAdobeSignStatus extends Command
 
             foreach ($documents as $document) {
                 $agreementDetails = AdobeClient::getAgreementDetails($document->AGREEMENT_ID);
+                if($document->ROUTING){
+                    $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
+
+                    $document->URLS = json_encode($signingURLs);
+                }
                 $document->AGREEMENT_STATUS = $agreementDetails->status;
                 $document->PAYLOAD = json_encode($agreementDetails);
                 $document->save();

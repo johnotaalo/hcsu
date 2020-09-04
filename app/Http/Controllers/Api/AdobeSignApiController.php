@@ -121,6 +121,9 @@ class AdobeSignApiController extends Controller
                 // $adobeSignDoc->DOCUMENT_ID = $documentId;
                 $adobeSignDoc->CASE_NO = $case->app_number;
                 $adobeSignDoc->URLS = json_encode($signingURLs);
+                if($processName == "form_a"){
+                    $adobeSignDoc->ROUTING = true;
+                }
 
                 $adobeSignDoc->save();
 
