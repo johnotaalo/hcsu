@@ -52,7 +52,7 @@ class CheckAdobeSignStatus extends Command
                 $agreementDetails = AdobeClient::getAgreementDetails($document->AGREEMENT_ID);
                 if($document->ROUTING){
                     $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
-
+                    \Log::debug("Testing Routing..." . json_encode($signingURLs));
                     $document->URLS = json_encode($signingURLs);
                 }
                 $document->AGREEMENT_STATUS = $agreementDetails->status;
@@ -78,6 +78,13 @@ class CheckAdobeSignStatus extends Command
 
                     $response = ProcessMaker::uploadGeneratedForm($case->APP_UID, $template->task, $template->input_document, $path);
                     \Log::debug("ProcessMaker upload documents: " . json_encode($response));
+
+                    if($document->ROUTING){
+                        $this->info("Routing Case {$case->APP_NUMBER}");
+                        \Log::debug("Routing Case {$case->APP_NUMBER}");
+                        $response = ProcessMaker::routeCase($case->APP_UID);
+                        \Log::debug("Case {$case->APP_NUMBER} response: " . json_encode($response));
+                    }
                 }else{
                     $this->info("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
                     \Log::debug("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
