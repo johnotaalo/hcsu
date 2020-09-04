@@ -66,9 +66,10 @@ class AdobeSignApiController extends Controller
         $clientEmail = ($request->has('clientEmail')) ? $request->input('clientEmail') : null;
 
         $search = ['process' => $process];
-        if ($nvOnly) {
+        if ($nvOnly && is_null($clientEmail)) {
             $search['type'] = 'nv';
         }
+
         $document = FormTemplate::where($search)->first();
         $extraParams = $request->query();
 
@@ -108,7 +109,7 @@ class AdobeSignApiController extends Controller
 
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
                 \Log::debug("NV Data: " . json_encode($data));
-                if($processName == "form_a"){
+                if($processName == "form_a" && !$nvOnly){
                     $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadMultiSignatureLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $clientEmail, null, false);
                 }else{
                     $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate, $nvOnly);
@@ -121,7 +122,7 @@ class AdobeSignApiController extends Controller
                 // $adobeSignDoc->DOCUMENT_ID = $documentId;
                 $adobeSignDoc->CASE_NO = $case->app_number;
                 $adobeSignDoc->URLS = json_encode($signingURLs);
-                if($processName == "form_a"){
+                if($processName == "form_a" && !$nvOnly){
                     $adobeSignDoc->ROUTING = true;
                 }
 
