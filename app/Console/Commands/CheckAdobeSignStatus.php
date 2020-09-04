@@ -50,16 +50,19 @@ class CheckAdobeSignStatus extends Command
 
             foreach ($documents as $document) {
                 $agreementDetails = AdobeClient::getAgreementDetails($document->AGREEMENT_ID);
-                if($document->ROUTING){
-                    $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
-                    \Log::debug("Testing Routing..." . json_encode($signingURLs));
-                    $document->URLS = json_encode($signingURLs);
-                }
+                
                 $document->AGREEMENT_STATUS = $agreementDetails->status;
                 $document->PAYLOAD = json_encode($agreementDetails);
                 $document->save();
 
                 if ($agreementDetails->status == "SIGNED" && $document->SIGNED_DOCUMENT_PATH == NULL) {
+                    if($document->ROUTING){
+                        $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
+                        \Log::debug("Testing Routing..." . json_encode($signingURLs));
+                        $document->URLS = json_encode($signingURLs);
+                    }
+                    $document->save();
+                    
                     $case = \App\Models\PM\Application::where('APP_NUMBER', $document->CASE_NO)->first();
                     \Log::debug("case: {$case->APP_UID}");
                     $template = FormTemplate::where('process', $case->PRO_UID)->first();
