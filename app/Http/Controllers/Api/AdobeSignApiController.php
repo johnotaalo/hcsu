@@ -139,6 +139,8 @@ class AdobeSignApiController extends Controller
                     'urls'          =>  $urlArray
                 ];
             }
+        }else{
+            return ['message'   =>  "There is no document attached"];
         }
     }
 
