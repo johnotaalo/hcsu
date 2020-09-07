@@ -16,10 +16,12 @@ class NOD extends Model
         $diplomaticIdsArray = json_decode($diplomaticIds);
 
         $diplomaticData = [];
-        if ($diplomaticIdsArray) {
-        	foreach ($diplomaticIdsArray as $key => $card) {
-        		$diplomaticData[($card->dipIDStatus == 1) ? 'Returned' : 'Lost'][] = $card->diplomaticIDNo;
-        	}
+        if($diplomaticIds){
+            if ($diplomaticIdsArray) {
+            	foreach ($diplomaticIdsArray as $key => $card) {
+            		$diplomaticData[($card->dipIDStatus == 1) ? 'Returned' : 'Lost'][] = $card->diplomaticIDNo;
+            	}
+            }
         }
 
         return $diplomaticData;
