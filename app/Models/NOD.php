@@ -19,7 +19,9 @@ class NOD extends Model
         if($diplomaticIds){
             if ($diplomaticIdsArray) {
             	foreach ($diplomaticIdsArray as $key => $card) {
-            		$diplomaticData[($card->dipIDStatus == 1) ? 'Returned' : 'Lost'][] = $card->diplomaticIDNo;
+                    if($card){
+            		  $diplomaticData[($card->dipIDStatus == 1) ? 'Returned' : 'Lost'][] = $card->diplomaticIDNo;
+                    }
             	}
             }
         }
