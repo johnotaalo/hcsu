@@ -384,10 +384,6 @@ class PrincipalController extends Controller
     function get(Request $request){
         $principal = Principal::where('HOST_COUNTRY_ID', $request->id)->with(['contracts', 'dependents', 'passports', 'vehicles', 'domesticWorkers'])->first();
 
-        // \DB::enableQueryLog();
-      // $query = \DB::getQueryLog();
-      // dd($query);
-
         return $principal;
     }
 
