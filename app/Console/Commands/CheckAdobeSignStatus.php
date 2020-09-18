@@ -55,8 +55,9 @@ class CheckAdobeSignStatus extends Command
                 $document->PAYLOAD = json_encode($agreementDetails);
                 $document->save();
 
+                $case = \App\Models\PM\Application::where('APP_NUMBER', $document->CASE_NO)->first();
                 if ($agreementDetails->status == "SIGNED" && $document->SIGNED_DOCUMENT_PATH == NULL) {
-                    $case = \App\Models\PM\Application::where('APP_NUMBER', $document->CASE_NO)->first();
+                    
                     \Log::debug("case: {$case->APP_UID}");
                     $template = FormTemplate::where('process', $case->PRO_UID)->first();
 
