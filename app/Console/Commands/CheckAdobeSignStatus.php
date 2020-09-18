@@ -82,7 +82,7 @@ class CheckAdobeSignStatus extends Command
                         \Log::debug("Testing Routing..." . json_encode($signingURLs));
                         $email = $signingURLs->signingUrlSetInfos[0]->signingUrls[0]->email;
                         \Log::debug("Next email: {$email}");
-                        if (\App\Models\AdobeSignSignatories::where('email', $email)->exists()) {
+                        if (\App\Models\AdobeSignSignatory::where('email', $email)->exists()) {
                             \Log::debug("The next signer is a manager");
                             $this->info("Routing Case {$case->APP_NUMBER}");
                             \Log::debug("Routing Case {$case->APP_NUMBER}");
