@@ -139,13 +139,16 @@ class AdobeClient{
 
 		$mergeFields = array_values($mergeFields);
 		$files = [];
-		if(!$nvOnly){
-			$files = [['libraryDocumentId'	=>	$template_id]];
-		}
 
 		if($nv){
 			$files[] = ['libraryDocumentId'	=>	$nv];
 		}
+		
+		if(!$nvOnly){
+			$files = [['libraryDocumentId'	=>	$template_id]];
+		}
+
+		
 
 		$options = [
 			'json'	=>	[
@@ -221,13 +224,13 @@ class AdobeClient{
 						[
 							"recipientSetRole"			=>	"SIGNER",
 							"recipientSetMemberInfos"	=>	[
-								["email"	=>	"mainapurity@gmail.com"]
+								["email"	=>	"chrispine.otaalo@gmail.com"]
 							]
 						],
 						[
 							"recipientSetRole"			=>	"SIGNER",
 							"recipientSetMemberInfos"	=>	[
-								["email"	=>	"mdkimani@gmail.com"]
+								["email"	=>	"c.otaalo@gmail.com"]
 							]
 						]
 					],

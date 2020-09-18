@@ -56,6 +56,7 @@ class SendOrganizationData implements ShouldQueue
             $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO');
             $data = $queryBuilder->where('agency', 'LIKE', "{$this->searchBy}%")
                                             ->whereIn('CASE_STATUS', $statuses)
+                                            ->groupBy('PRINCIPAL_ID')
                                             ->get();
             \Log::info("Successfully queried data from new database");
             \Log::info("Querying old database");
