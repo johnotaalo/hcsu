@@ -74,13 +74,6 @@ class CheckAdobeSignStatus extends Command
 
                     $response = ProcessMaker::uploadGeneratedForm($case->APP_UID, $template->task, $template->input_document, $path);
                     \Log::debug("ProcessMaker upload documents: " . json_encode($response));
-
-                    if($document->ROUTING){
-                        $this->info("Routing Case {$case->APP_NUMBER}");
-                        \Log::debug("Routing Case {$case->APP_NUMBER}");
-                        $response = ProcessMaker::routeCase($case->APP_UID);
-                        \Log::debug("Case {$case->APP_NUMBER} response: " . json_encode($response));
-                    }
                 }else{
                     $this->info("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
                     \Log::debug("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
@@ -89,7 +82,13 @@ class CheckAdobeSignStatus extends Command
                         \Log::debug("Testing Routing..." . json_encode($signingURLs));
                         $email = $signingURLs->signingUrlSetInfos[0]->signingUrls[0]->email;
                         \Log::debug("Next email: {$email}");
-
+                        if (\App\Models\AdobeSignSignatories::where('email', $email)->exists()) {
+                            \Log::debug("The next signer is a manager");
+                            $this->info("Routing Case {$case->APP_NUMBER}");
+                            \Log::debug("Routing Case {$case->APP_NUMBER}");
+                            $response = ProcessMaker::routeCase($case->APP_UID);
+                            \Log::debug("Case {$case->APP_NUMBER} response: " . json_encode($response));
+                        }
                         $document->URLS = json_encode($signingURLs);
                     }
                     $document->save();
