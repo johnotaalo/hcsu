@@ -88,8 +88,9 @@ class CheckAdobeSignStatus extends Command
                             $this->info("Routing Case {$case->APP_NUMBER}");
                             \Log::debug("Routing Case {$case->APP_NUMBER}");
                             $response = ProcessMaker::routeCase($case->APP_UID);
+                            \Log::debug("1. Case {$case->APP_NUMBER} response: " . json_encode($response));
                             $response = ProcessMaker::routeCase($case->APP_UID);
-                            \Log::debug("Case {$case->APP_NUMBER} response: " . json_encode($response));
+                            \Log::debug("2. Case {$case->APP_NUMBER} response: " . json_encode($response));
                             $document->ROUTING = 0;
                         }
                         $document->URLS = json_encode($signingURLs);
