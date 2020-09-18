@@ -87,6 +87,9 @@ class CheckAdobeSignStatus extends Command
                     if($document->ROUTING){
                         $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
                         \Log::debug("Testing Routing..." . json_encode($signingURLs));
+                        $email = (json_decode($signingURLs))->signingUrlSetInfos[0]->signingUrls[0]->email;
+                        \Log::debug("Next email: {$email}");
+
                         $document->URLS = json_encode($signingURLs);
                     }
                     $document->save();
