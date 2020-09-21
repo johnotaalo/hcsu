@@ -145,7 +145,7 @@ class AdobeClient{
 		}
 		
 		if(!$nvOnly){
-			$files = [['libraryDocumentId'	=>	$template_id]];
+			$files[] = ['libraryDocumentId'	=>	$template_id];
 		}
 
 		\Log::debug("Documents: " . json_encode($files));
