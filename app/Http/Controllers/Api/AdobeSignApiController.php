@@ -403,7 +403,7 @@ class AdobeSignApiController extends Controller
 
     function getDocumentSigningURL(Request $request){
         $signingURLs = \App\AdobeSignDocuments::where('AGREEMENT_ID', $request->agreementId)->firstOrFail();
-        $urls = (json_decode($signingURLs))->signingUrlSetInfos[0]->signingUrls;
+        $urls = (json_decode($signingURLs->URLS))->signingUrlSetInfos[0]->signingUrls;
         $filtered = collect($urls)->where('email', $request->managerEmail)->first();
 
         if ($filtered) {
