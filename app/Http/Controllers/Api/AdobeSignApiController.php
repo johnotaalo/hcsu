@@ -400,4 +400,14 @@ class AdobeSignApiController extends Controller
     function getSignatory(Request $request){
         return \App\Models\AdobeSignSignatory::findOrFail($request->id);
     }
+
+    function getDocumentSigningURL(Request $request){
+        $signingURLs = \App\AdobeSignDocuments::where('AGREEMENT_ID', $request->agreementId)->firstOrFail();
+        $urls = (json_decode($signingURLs))->signingUrlSetInfos[0]->signingUrls;
+        $filtered = collect($urls)->where('email', $request->managerEmail)->first();
+
+        if ($filtered) {
+            return \Redirect::to($filtered->esignUrl);
+        }
+    }
 }

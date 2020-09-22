@@ -134,6 +134,8 @@ Route::middleware('auth')->prefix('clients')->group(function(){
 Route::get('pages/noaction', function(){
 	return view('pages.adobesign.no_action_required');
 });
+
+Route::get('/adobesign/signature/{agreementId}/{managerEmail}', 'Api\AppController@getDocumentSigningURL');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
