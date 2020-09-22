@@ -113,6 +113,7 @@ class AdobeSignApiController extends Controller
                     $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadMultiSignatureLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $clientEmail, null, false);
                 }else{
                     \Log::debug("Process Name: " . $processName);
+                    
                     $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $nvTemplate, $nvOnly);
                 }
                 $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($agreementId);

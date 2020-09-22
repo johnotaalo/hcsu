@@ -131,6 +131,9 @@ Route::middleware('auth')->prefix('clients')->group(function(){
 	Route::get('/', 'FocalPoints\DashboardController@index')->name('clients-home');
 });
 
+Route::get('pages/noaction', function(){
+	return view('pages.adobesign.no_action_required');
+});
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
