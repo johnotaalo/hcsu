@@ -24,7 +24,7 @@ class Pro1BStaff{
 			'today'					=>	date('F d, Y'),
 			'fullname'				=>	$form_data->client->fullname,
 			'designation'			=>	($form_data->client->type != "agency") ? $form_data->client->designation : "",
-			'doa'					=>	($form_data->client->type == "dependent") ? $form_data->client->principal->doa : $form_data->client->doa,
+			'doa'					=>	$form_data->client->doa,
 			'cl_agent_name'			=>	$form_data->caseData->clearing_agent->CLEARING_AGENT_NAME,
 			'cl_agent_address'		=>	$form_data->caseData->clearing_agent->CLEARING_AGENT_ADDRESS,
 			'mechandise_desc'		=>	$description,

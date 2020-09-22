@@ -54,6 +54,9 @@ class Pro1BData{
 			$clientObj->contract_type = $contract->C_TYPE;
 			$clientObj->organization = $mission;
 			$clientObj->relationship = $relationship;
+
+			$arrivalDate = ($dependent->principal->current_arrival) ? $dependent->principal->current_arrival->ARRIVAL : "N/A";
+			$clientObj->doa = $arrivalDate;
 		}
 
 		$data->client = $clientObj;
