@@ -679,4 +679,15 @@ class PrincipalController extends Controller
 
         return (int)$max_hcid + 1;
     }
+
+    function activateClient(Request $request){
+
+        $principal = Principal::where('id', $request->host_country_id)->firstOrFail();
+
+        $principal->status = true;
+
+        $principal->save();
+
+        return $principal;
+    }
 }

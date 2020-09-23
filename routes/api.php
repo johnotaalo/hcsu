@@ -98,6 +98,7 @@ Route::prefix('principal')->group(function(){
 	Route::post('/add', 'Api\PrincipalController@add');
 	Route::get('/get/{id}', 'Api\PrincipalController@get');
 	Route::post('/update', 'Api\PrincipalController@update');
+	Route::put('/{host_country_id}/activate', 'Api\PrincipalController@activateClient');
 
 	Route::post('/passport/add', 'Api\PrincipalController@addPassport');
 	Route::post('/passport/edit', 'Api\PrincipalController@editPassport');

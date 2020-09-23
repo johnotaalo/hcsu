@@ -37,6 +37,7 @@
 				<!-- <div class="col-md-12"> -->
 					<!-- :url="`${baseUrl}/api/principal/`" -->
 					<v-server-table
+					ref="principalTable"
 					class="table-sm table-nowrap card-table"
 					:columns="serverColumns"
 					:options="principal.options"
@@ -59,6 +60,8 @@
 						</template>
 						<template slot="actions" slot-scope="data">
 							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }" v-if="data.row.status == 1">View</router-link> 
+
+							<b-button class="btn btn-sm btn-warning" v-if="data.row.status == 0" @click="activateClient(data.row)">Activate Client</b-button>
 						</template>
 					</v-server-table>
 
@@ -206,7 +209,7 @@
 			}
 		},
 		mounted(){	
-			this.$parent.isContainer = true		
+			this.$parent.isContainer = false		
 		},
 		computed: {
 			rows() {
@@ -227,7 +230,7 @@
 		},
 		methods: {
 			viewPrincipal(data){
-				console.log(data)
+				// console.log(data)
 			},
 			applySearchFilter: function(term){
 				Event.$emit('vue-tables.filter::normalSearch', term);
@@ -235,6 +238,27 @@
 			applyActiveStaffFilter: function(active){
 				console.log(active)
 				Event.$emit('vue-tables.filter::activeStaffSearch', active);
+			},
+			activateClient: function(data, index){
+				this.$swal({
+					title: "Confirmation",
+					text: `You are going to active ${data.last_name}, ${data.other_names}. Are you sure?`,
+					icon: 'warning',
+					buttons: true,
+					dangerMode: true
+				})
+				.then((willActivate) => {
+					if (willActivate) {
+						axios.put(`api/principal/${data.id}/activate`, { "_METHOD": "PUT", id: data.id })
+						.then(res => {
+							this.$swal("Success", "Successfully activated client", "success")
+							this.$refs.principalTable.refresh()
+						})
+						.catch((error) => {
+							this.$swal("Error", "There was an error activating the client. Please contact the administrator", "error")
+						})
+					}
+				})
 			}
 		}
 	}
