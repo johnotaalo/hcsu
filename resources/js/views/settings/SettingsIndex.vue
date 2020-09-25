@@ -39,6 +39,12 @@
 										</router-link>
 									</li>
 
+									<li class="nav-item">
+										<router-link class="nav-link" :to="{ name: 'settings-reassign-cases' }">
+											<i class="fe fe-repeat"></i> Reassign Old PM Cases
+										</router-link>
+									</li>
+
 								</ul>
 
 							</div> <!-- / .navbar-collapse -->

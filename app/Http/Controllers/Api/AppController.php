@@ -774,4 +774,33 @@ ORDER BY
 
         return $date;
     }
+
+    function getOLDPMUsers(){
+        return \App\Models\OLDPM\PMUser::where('USR_STATUS', 'ACTIVE')->get();
+    }
+
+    function searchOldPMCase(Request $request){
+        $case_no = $request->case_no;
+
+        $data = \App\Models\OLDPM\Application::where('APP_NUMBER', $case_no)->with('currentUser', 'delegations')->firstOrFail();
+
+        return $data;
+    }
+
+    function reassignOLDPMCase(Request $request){
+        $APP_UID = $request->APP_UID;
+        $USR_UID = $request->USR_UID;
+
+        $application = \App\Models\OLDPM\Application::where("APP_UID", $APP_UID)->firstOrFail();
+        $application->APP_CUR_USER = $USR_UID;
+
+        // $delegation = \App\Models\OLDPM\AppDelegation::where('APP_UID', $APP_UID)->where('DEL_THREAD_STATUS', 'OPEN')->firstOrFail();
+        // $delegation->USR_UID = $USR_UID;
+
+        $delegation = \DB::connection('old_pm')->statement("UPDATE app_delegation SET USR_UID = '{$USR_UID}' WHERE APP_UID = '{$APP_UID}' AND DEL_THREAD_STATUS = 'OPEN'");
+
+        $application->save();
+
+        return $application;
+    }
 }

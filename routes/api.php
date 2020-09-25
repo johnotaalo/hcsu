@@ -223,6 +223,10 @@ Route::prefix('data')->group(function(){
 		Route::get('/ipmis', 'Api\AppController@ipmisSubprocesses');
 		Route::get('/ipmis/functionality', 'Api\AppController@ipmisFunctionality');
 		Route::put('/ipmis/functionality/{id}', 'Api\AppController@toggleIPMISFunctionality');
+
+		Route::get('oldpm/search/case/{case_no}', 'Api\AppController@searchOldPMCase');
+		Route::get('oldpm/users', 'Api\AppController@getOLDPMUsers');
+		Route::post('oldpm/reassign', 'Api\AppController@reassignOLDPMCase');
 	});
 
 	Route::prefix('applications')->group(function(){
