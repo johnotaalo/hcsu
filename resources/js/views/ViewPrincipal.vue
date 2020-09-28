@@ -3,7 +3,7 @@
 		<div class="header">
 
 			<!-- Image -->
-			<img v-if="!iframe" src="../../../public/img/covers/profile-cover-1.jpg" class="header-img-top" alt="...">
+			<!-- <img v-if="!iframe" src="../../../public/img/covers/profile-cover-1.jpg" class="header-img-top" alt="..."> -->
 
 			<div class="container-fluid">
 
@@ -145,8 +145,8 @@
 										</div>
 										<div class="col-md">
 											<div class="form-group">
-												<label for="mobile_no">Office No.</label>
-												<b-input placeholder="+xx xxx xxx xxx" v-model="form.principal.officeNo" id="mobile_no" :size="formSize" type="tel" required />
+												<label for="office_no">Office No.</label>
+												<b-input placeholder="+xx xxx xxx xxx" v-model="form.principal.officeNo" id="office_no" :size="formSize" type="tel" required />
 											</div>
 										</div>
 									</div>
@@ -168,7 +168,7 @@
 								</b-tab>
 								<b-tab title="Passports">
 									<template slot="title">
-										<i class="fe fe-book mr-2"></i>Passports <b-badge variant="success">{{ principal.passports.length }}</b-badge>
+										<i class="fe fe-book mr-2"></i>Passports <b-badge variant="success"><span v-if ="fetched">{{ principal.passports.length }}</span></b-badge>
 									</template>
 
 									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-passport><i class="fe fe-plus mr-1"></i>Add Passport</b-button>
@@ -196,7 +196,7 @@
 
 								<b-tab title="Contracts">
 									<template slot="title">
-										<i class="fe fe-file mr-2"></i> Contracts <b-badge variant="warning">{{ principal.contracts.length }}</b-badge>
+										<i class="fe fe-file mr-2"></i> Contracts <b-badge variant="warning"><span v-if ="fetched">{{ principal.contracts.length }}</span></b-badge>
 									</template>
 									<b-button class="mb-3" variant="success" size="sm" v-b-modal.modal-contract><i class="fe fe-plus mr-1"></i>Add Contract</b-button>
 									<b-table :fields="contracts.table.fields" :items="principal.contracts">
@@ -229,7 +229,7 @@
 								<b-tab title="Dependents">
 									<b-button class="mb-3" variant="success" size="sm" v-b-modal.dependent-modal><i class="fe fe-plus mr-1"></i>Add Dependent</b-button>
 									<template slot="title">
-										<i class="fe fe-users mr-2"></i>Dependents <b-badge variant="warning">{{ principal.dependents.length }}</b-badge>
+										<i class="fe fe-users mr-2"></i>Dependents <b-badge variant="warning"><span v-if ="fetched">{{ principal.dependents.length }}</span></b-badge>
 									</template>
 									<b-table :fields="dependents.table.fields" :items="principal.dependents">
 										<template v-slot:cell(IMAGE)="data">
@@ -265,7 +265,7 @@
 
 								<b-tab title="Domestic Workers">
 									<template slot="title">
-										<i class="fe fe-home mr-2"></i>Domestic Workers <b-badge variant="warning">{{ principal.domestic_workers.length }}</b-badge>
+										<i class="fe fe-home mr-2"></i>Domestic Workers <b-badge variant="warning"><span v-if ="fetched">{{ principal.domestic_workers.length }}</span></b-badge>
 									</template>
 
 									<b-button class="mb-3" variant="success" size="sm" v-b-modal.domestic-worker-modal><i class="fe fe-plus mr-1"></i>Add Domestic Worker</b-button>
@@ -287,7 +287,7 @@
 								</b-tab>
 								<b-tab title="Vehicles">
 									<template slot="title">
-										<i class="fe fe-truck mr-2"></i>Vehicles <b-badge variant="warning">{{ principal.vehicles.length }}</b-badge>
+										<i class="fe fe-truck mr-2"></i>Vehicles <b-badge variant="warning"><span v-if ="fetched">{{ principal.vehicles.length }}</span></b-badge>
 									</template>
 									<vehicle-list v-if="typeof principal.HOST_COUNTRY_ID != 'undefined'" :host_country_id="principal.HOST_COUNTRY_ID"></vehicle-list>
 								</b-tab>
@@ -434,6 +434,7 @@
 		components: { datetime: Datetime, ContractDetails, VehicleList, Passports, vUploader, DomesticWorker },
 		data() {
 			return {
+				fetched: false,
 				userId: this.$route.params.id,
 				formSize: "sm",
 				dateAutoProp: true,
@@ -771,8 +772,10 @@
 				}
 			},
 			getPrincipalData: function(){
+				this.fetched = false
 				axios('/api/principal/get/' + this.userId)
 				.then((res) => {
+					this.fetched = true
 					this.principal = res.data
 					this.form.principal.id = this.principal.ID
 					this.modal.passport.principal_id = this.principal.ID

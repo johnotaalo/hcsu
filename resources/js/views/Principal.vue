@@ -59,9 +59,11 @@
 							{{ data.row.contract.ACRONYM }}
 						</template>
 						<template slot="actions" slot-scope="data">
-							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }" v-if="data.row.status == 1">View</router-link> 
+							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }" v-if="data.row.status == 1"><i class="fe fe-eye"></i>&nbsp;&nbsp;View Client</router-link>
+							<b-button class="btn btn-sm btn-warning text-white" v-if="data.row.status == 0" @click="activateClient(data.row)"><i class="fe fe-check"></i>&nbsp;&nbsp;Activate Client</b-button>
+							<b-button @click="downloadNOA(data.row.host_country_id)" class = "btn btn-sm btn-danger"><i class="fe fe-download"></i>&nbsp;&nbsp;Download NOA</b-button> 
 
-							<b-button class="btn btn-sm btn-warning" v-if="data.row.status == 0" @click="activateClient(data.row)">Activate Client</b-button>
+							
 						</template>
 					</v-server-table>
 
@@ -238,6 +240,10 @@
 			applyActiveStaffFilter: function(active){
 				console.log(active)
 				Event.$emit('vue-tables.filter::activeStaffSearch', active);
+			},
+			downloadNOA(host_country_id){
+				// console.log(host_country_id)
+				window.open(`/api/documents/generate/NOA/${host_country_id}`);
 			},
 			activateClient: function(data, index){
 				this.$swal({
