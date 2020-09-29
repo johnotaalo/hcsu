@@ -465,7 +465,7 @@
 					}
 					else if (this.application == 'work-permit-renewal'){
 						result = _.filter(list, (obj) => {
-							return obj.value == 'staff-member' || obj.value = "dependent" || obj.value == 'domestic-worker'
+							return obj.value == 'staff-member' || obj.value = 'dependent' || obj.value == 'domestic-worker'
 						})
 					}
 					else if(this.application == 'visa_extension'){
