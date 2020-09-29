@@ -137,9 +137,17 @@ class NoteVerbal {
 						$end_header .= "issuance";
 					}else if ($this->data->type == "endorsement"){
 						$end_header .= "endorsement";
+					}else if($this->data->type == "renewal"){
+						$end_header .= "the renewal";
 					}
 
-					$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
+					if ($this->data->client->type == "dependent") {
+						// dd($this->data->client->principal);
+						$your_ref = "Your Ref: {$this->data->client->principal->R_NO}\n";
+						$end_header .= " of Dependants Pass for the under mentioned dependant of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}.";
+					}else{
+						$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}.";
+					}
 				}
 				break;
 			case 'domestic-worker-justification':
@@ -355,18 +363,29 @@ class NoteVerbal {
 			case 'work-permit-renewal':
 				$body = "Details are as follows:\r";
 
+				// dd($this->data->type);
+
 				if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
 
 				}else{
-					$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
-					$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
-					$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
-					if($this->data->type == "new-case"){
-						$body .= str_pad("R. No: ", $padding) . "New Case\r";
+					if($this->data->client->type == "dependent"){
+						$dependant = $this->data->client->data;
+						$passport_no = ($dependant->latest_passport) ? $dependant->latest_passport->PASSPORT_NO : "N/A";
+						$passport_validity = ($dependant->latest_passport) ? $dependant->latest_passport->EXPIRY_DATE : "N/A";
+
+						$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
+						$body .= str_pad(ucwords(strtolower($dependant->OTHER_NAMES)) . " " . strtoupper($dependant->LAST_NAME), 30) . str_pad($passport_no, 15) . str_pad($dependant->COUNTRY, 20) . str_pad($passport_validity, 20);
 					}else{
-						$body .= str_pad("R. No: ", $padding) . "{$this->data->client->RNO}\r";
+						$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+						$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
+						$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+						if($this->data->type == "new-case"){
+							$body .= str_pad("R. No: ", $padding) . "New Case\r";
+						}else{
+							$body .= str_pad("R. No: ", $padding) . "{$this->data->client->RNO}\r";
+						}
+						$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 					}
-					$body .= str_pad("Validity: ", $padding) . "{$this->data->client->passport_validity}\r";
 				}
 
 				if($this->data->client->type == "staff"){

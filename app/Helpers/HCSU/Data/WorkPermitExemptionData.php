@@ -65,7 +65,29 @@ class WorkPermitExemptionData{
 			$clientObj->passport_validity = ($principal->latest_passport) ? $principal->latest_passport->EXPIRY_DATE : "N/A";
 			$clientObj->dependents = $dependents;
 			$clientObj->relationships = $relationships;
-		}else if($clientType == "domestic-worker"){
+		}
+		else if($clientType == "dependent"){
+			$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
+
+			$relationship = $dependent->relationship->RELATIONSHIP;
+
+			// $relationship = ($relationship == "Spouse") ? "s/o" : $relationship . " of";
+
+			$name = ucwords(strtolower($dependent->OTHER_NAMES)). " " .strtoupper($dependent->LAST_NAME);
+			$client_name = $name;
+			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dependent->principal->HOST_COUNTRY_ID})"))->first();
+			$mission = $contract->ACRONYM;
+
+			$clientObj->name = $client_name;
+			$clientObj->designation = $contract->DESIGNATION;
+			$clientObj->grade = $contract->GRADE;
+			$clientObj->organization = $mission;
+			$clientObj->contract_type = $contract->C_TYPE;
+			$clientObj->principal = $dependent->principal;
+			$clientObj->passport = $dependent->latest_passport;
+			$clientObj->data = $dependent;
+		}
+		else if($clientType == "domestic-worker"){
 			$domesticWorker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
 
 			$client_name = format_other_names($domesticWorker->OTHER_NAMES) . " " . $domesticWorker->LAST_NAME;
