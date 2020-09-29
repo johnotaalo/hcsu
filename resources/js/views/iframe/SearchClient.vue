@@ -463,6 +463,11 @@
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker'
 						})
 					}
+					else if (this.application == 'work-permit-renewal'){
+						result = _.filter(list, (obj) => {
+							return obj.value == 'staff-member' || obj.value = "dependent" || obj.value == 'domestic-worker'
+						})
+					}
 					else if(this.application == 'visa_extension'){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent' || obj.value == 'other-clients'
