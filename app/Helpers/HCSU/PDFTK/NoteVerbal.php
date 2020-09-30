@@ -521,6 +521,10 @@ class NoteVerbal {
 			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->caseData->vehicle->CHASSIS_NO}\r";
 			$body .= str_pad("Engine No: ", $padding) . "{$this->data->caseData->vehicle->ENGINE_NO}\r";
 
+			if ($this->data->caseData->COMMENTS) {
+				$body .= "\r{$this->data->caseData->COMMENTS}\r";
+			}
+			
 			$body .= "\rA copy of duplicate Insurance Certificate and two copies of approved Pro 1B are attached herewith.";
 			break;
 
