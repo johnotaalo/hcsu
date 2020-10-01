@@ -88,7 +88,9 @@ class NoteVerbal {
 						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
 							
 						}else{
-							$end_header .= " and Dependants Pass";
+							if($this->data->caseData->DEPENDENTS){
+								$end_header .= " and Dependants Pass";
+							}
 						}
 						
 					}
@@ -121,7 +123,9 @@ class NoteVerbal {
 						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
 
 						}else{
-							$end_header .= " and his {$relationshipString}";
+							if($this->data->caseData->DEPENDENTS){
+								$end_header .= " and his {$relationshipString}";
+							}
 						}
 					}
 
