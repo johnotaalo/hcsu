@@ -65,6 +65,7 @@ class WorkPermitExemptionData{
 			$clientObj->passport_validity = ($principal->latest_passport) ? $principal->latest_passport->EXPIRY_DATE : "N/A";
 			$clientObj->dependents = $dependents;
 			$clientObj->relationships = $relationships;
+			$clientObj->gender = $principal->GENDER;
 		}
 		else if($clientType == "dependent"){
 			$dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();

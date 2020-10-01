@@ -124,6 +124,7 @@ class NoteVerbal {
 
 						}else{
 							if($this->data->caseData->DEPENDENTS){
+								$genderConjunction = ($this->data->client->gender == "MALE") ? "his" : "her";
 								$end_header .= " and his {$relationshipString}";
 							}
 						}
