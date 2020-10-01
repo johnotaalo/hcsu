@@ -131,7 +131,7 @@ class NoteVerbal {
 					}
 
 					if ($this->data->type == "renewal" && $this->data->caseData->TYPE == "transfer"){
-						$end_header .= " from the old passports to the new ones";
+						$end_header .= " from the old passport(s) to the new one(s)";
 					}
 
 					$end_header .= ".";
