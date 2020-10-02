@@ -188,7 +188,7 @@ ORDER BY
         $variable_name = "host_country_id";
         
 
-        $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        $url = "http://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
 
         $data = [
             $variable_name => $host_country_id,
