@@ -353,7 +353,7 @@ ORDER BY
     }
 
     function getProcessList(){
-        $url = "http://".env('PM_SERVER')."/api/1.0/workflow/project";
+        $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/project";
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
@@ -361,7 +361,7 @@ ORDER BY
     }
 
     function getProcessTasks(Request $request){
-        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
+        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
@@ -369,7 +369,7 @@ ORDER BY
     }
 
     function getTaskSteps(Request $request){
-        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
+        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
         
