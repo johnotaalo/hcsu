@@ -273,7 +273,7 @@ class PrincipalController extends Controller
 
                 $principalDependent->save();
 
-                $host_country_id = 20000000 + $principalDependent->id;
+                $host_country_id = 20000000 + $principalDependent->ID;
 
                 $principalDependent->HOST_COUNTRY_ID = $host_country_id;
 
