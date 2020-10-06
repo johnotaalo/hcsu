@@ -102,7 +102,7 @@ class ProcessMaker {
     public static function uploadGeneratedForm($case_no, $task_id, $input_document, $localFile){
         // $inputDocuments = $this->getGeneratedDocuments($case_no);
 
-        $url = "http://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $form = storage_path('app/'. $localFile);
         $fx = new \CurlFile( $form );

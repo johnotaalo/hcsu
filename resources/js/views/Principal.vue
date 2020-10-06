@@ -58,6 +58,9 @@
 						<template slot="organization" slot-scope="data">
 							{{ data.row.contract.ACRONYM }}
 						</template>
+						<template slot="index_no" slot-scope="data">
+							{{ data.row.contract.INDEX_NO }}
+						</template>
 						<template slot="actions" slot-scope="data">
 							<router-link class="btn btn-sm btn-primary" :to="{ name: 'principal.view', params: { id: data.row.host_country_id } }" v-if="data.row.status == 1"><i class="fe fe-eye"></i>&nbsp;&nbsp;View Client</router-link>
 							<b-button class="btn btn-sm btn-warning text-white" v-if="data.row.status == 0" @click="activateClient(data.row)"><i class="fe fe-check"></i>&nbsp;&nbsp;Activate Client</b-button>
@@ -118,6 +121,12 @@
 						{
 							label: "ORGANIZATION",
 							name: "ORGANIZATION",
+							filterable: true,
+							orderable: true
+						},
+						{
+							label: "INDEX_NO",
+							name: "INDEX_NO",
 							filterable: true,
 							orderable: true
 						},
