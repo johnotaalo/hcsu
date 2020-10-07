@@ -478,7 +478,7 @@
 							return obj.value == 'staff-member'
 						})
 					}
-					else if (this.application == 'diplomatic_id') {
+					else if (this.application == 'diplomatic_id' || this.application == 'driving-license') {
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'dependent'
 						})
