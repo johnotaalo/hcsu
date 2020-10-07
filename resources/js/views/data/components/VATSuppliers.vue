@@ -97,7 +97,7 @@
 					filterable: false,
 					perPage: 50,
 					perPageValues: [],
-					customFilters: ['normalSearch'],
+					customFilters: ['vatSearch'],
 					sortable: ['SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'PIN'],
 					sortIcon: {
 						base: 'fe',
@@ -144,7 +144,7 @@
 				});
 			},
 			applySearchFilter: function(term){
-				Event.$emit('vue-tables.filter::normalSearch', term);
+				Event.$emit('vue-tables.filter::vatSearch', term);
 			},
 			editSupplier(data){
 				console.log(data)

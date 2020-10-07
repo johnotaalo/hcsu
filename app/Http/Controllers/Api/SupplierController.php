@@ -8,14 +8,14 @@ use App\Http\Controllers\Controller;
 class SupplierController extends Controller
 {
 	function all(Request $request){
-		$searchQueries = $request->get('normalSearch');
+		$searchQueries = $request->get('vatSearch');
 		$limit = $request->get('limit');
         $page = $request->get('page');
         $ascending = $request->get('ascending');
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = \App\Models\Supplier::select('SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'SUPPLIER_SHORT_NAME', 'PIN');
+        $queryBuilder = \App\Models\Supplier::select('ID', 'SUPPLIER_NAME', 'SUPPLIER_ADDRESS', 'SUPPLIER_SHORT_NAME', 'PIN');
 
         if($searchQueries){
         	$queryBuilder->where('SUPPLIER_NAME', 'LIKE', "%{$searchQueries}%")

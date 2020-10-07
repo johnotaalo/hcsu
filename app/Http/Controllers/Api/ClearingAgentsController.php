@@ -35,7 +35,7 @@ class ClearingAgentsController extends Controller
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = \App\Models\Ref\ClearingAgent::select("CLEARING_AGENT_NAME", "CLEARING_AGENT_ADDRESS");
+        $queryBuilder = \App\Models\Ref\ClearingAgent::select("ID", "CLEARING_AGENT_NAME", "CLEARING_AGENT_ADDRESS");
 
         if($searchQueries){
         	$queryBuilder->where('CLEARING_AGENT_NAME', 'LIKE', "%{$searchQueries}%")
