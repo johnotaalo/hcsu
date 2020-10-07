@@ -41,7 +41,7 @@ class CheckAdobeSignStatus extends Command
      */
     public function handle()
     {
-        $documents = \App\AdobeSignDocuments::where('AGREEMENT_STATUS', '!=', 'SIGNED')->orWhere('AGREEMENT_STATUS', NULL)->get();
+        $documents = \App\AdobeSignDocuments::where('AGREEMENT_STATUS', '!=', 'SIGNED')->orWhere('AGREEMENT_STATUS', '!=', 'ABORTED')->orWhere('AGREEMENT_STATUS', NULL)->get();
 
         if ($documents) {
             $message = "There are " . count($documents) . " document(s) yet to be signed and downloaded";
