@@ -624,7 +624,7 @@ ORDER BY
         //         $this->deleteDocument($case_no, $inputDocument->app_doc_uid, $inputDocument->app_doc_index);
         //     }
         // }
-        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $form = storage_path('app/'. $localFile);
         $fx = new \CurlFile( $form );
@@ -643,7 +643,7 @@ ORDER BY
     }
 
     function getGeneratedDocuments($case_no){
-        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
+        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
