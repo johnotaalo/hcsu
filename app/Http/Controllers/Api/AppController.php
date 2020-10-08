@@ -187,8 +187,11 @@ ORDER BY
         $del_index = 1;
         $variable_name = "host_country_id";
         
-
-        $url = "http://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        }else{
+            $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        }
 
         $data = [
             $variable_name => $host_country_id,
@@ -208,7 +211,11 @@ ORDER BY
         $del_index = 1;
         $variable_name = $request->variable;
 
-        $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        }else{
+            $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
+        }
 
         $response = \Processmaker::executeREST($url, "GET", [], (new \Processmaker())->authData()->access_token);
         // dd($response);
@@ -353,7 +360,12 @@ ORDER BY
     }
 
     function getProcessList(){
-        $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/project";
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://".env('PM_SERVER')."/api/1.0/workflow/project";
+        }else{
+            $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/project";
+        }
+        
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
@@ -361,7 +373,11 @@ ORDER BY
     }
 
     function getProcessTasks(Request $request){
-        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
+        }else{
+            $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
+        }
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
@@ -369,7 +385,12 @@ ORDER BY
     }
 
     function getTaskSteps(Request $request){
-        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
+        }else{
+            $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
+        }
+        
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
         
@@ -624,7 +645,12 @@ ORDER BY
         //         $this->deleteDocument($case_no, $inputDocument->app_doc_uid, $inputDocument->app_doc_index);
         //     }
         // }
-        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        }else{
+            $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        }
+        
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $form = storage_path('app/'. $localFile);
         $fx = new \CurlFile( $form );
@@ -643,7 +669,12 @@ ORDER BY
     }
 
     function getGeneratedDocuments($case_no){
-        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
+        }else{
+            $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
+        }
+        
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
@@ -651,7 +682,11 @@ ORDER BY
     }
 
     function deleteDocument($case_no, $doc_id, $index){
-        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/2/input-document/{$doc_id}";
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/2/input-document/{$doc_id}";
+        }else{
+            $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/2/input-document/{$doc_id}";
+        }
         // dd($url);
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "DELETE", NULL, $authenticationData->access_token, true);
@@ -672,7 +707,12 @@ ORDER BY
     }
 
     function getCaseInformation($case_no){
-        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+        }else{
+            $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+        }
+        
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
         // dd($response);
@@ -681,7 +721,11 @@ ORDER BY
     }
 
     function getCaseVariables($case_no){
-        $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . '/variables';
+        if (App::environment('local') || App::environment('staging')) {
+            $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . '/variables';
+        }else{
+            $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . '/variables';
+        }
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 

@@ -27,7 +27,7 @@ class CreateNewDrivingLicensesTable extends Migration
             $table->string('COMPETENCY_NO')->nullable();
             $table->string('COURT_CONVICTION')->nullable();
             $table->string('COURT_DISQUALIFICATION')->nullable();
-            $table->string('DISABILITY')->nullable();
+            $table->string('EPILEPTIC_ATTACK')->nullable();
             $table->string('EYESIGHT')->nullable();
             $table->string('HAND_FOOT')->nullable();
             $table->text('HAND_FOOT_DETAILS')->nullable();

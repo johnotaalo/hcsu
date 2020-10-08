@@ -85,13 +85,22 @@ class ProcessMaker {
 	}
 
 	public static function routeCase($app_uid){
-		$url = "http://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/{$app_uid}/route-case";
+		if (App::environment('local') || App::environment('staging')) {
+			$url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/route-case";
+		}else{
+			$url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/{$app_uid}/route-case";
+		}
+		
 		$authenticationData = json_decode(\Storage::get("pmauthentication.json"));
 		return Self::executeREST($url, "PUT", [], $authenticationData->access_token);
 	}
 
 	public static function getCaseInformation($case_no){
-        $url = "http://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+		if (App::environment('local') || App::environment('staging')) {
+        	$url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+        }else{
+        	$url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
+        }
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = Self::executeREST($url, "GET", NULL, $authenticationData->access_token);
         // dd($response);
@@ -101,8 +110,12 @@ class ProcessMaker {
 
     public static function uploadGeneratedForm($case_no, $task_id, $input_document, $localFile){
         // $inputDocuments = $this->getGeneratedDocuments($case_no);
-
-        $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        if (App::environment('local') || App::environment('staging')) {
+        	$url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        }else{
+        	$url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
+        }
+        
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $form = storage_path('app/'. $localFile);
         $fx = new \CurlFile( $form );
@@ -165,7 +178,11 @@ class ProcessMaker {
 	}
 
 	public static function updateCaseVariables($case, $data, $del_index = 1){
-        $url = "http://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/{$case}/variable";
+		if (App::environment('local') || App::environment('staging')) {
+        	$url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$case}/variable";
+        }else{
+        	$url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/{$case}/variable";
+        }
 
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
 
