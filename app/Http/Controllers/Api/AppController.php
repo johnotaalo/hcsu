@@ -19,6 +19,8 @@ use mikehaertl\pdftk\Pdf;
 
 use App\Enums\UserType;
 
+use App;
+
 class AppController extends Controller
 {
     function index(Request $request){

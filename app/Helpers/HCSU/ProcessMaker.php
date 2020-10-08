@@ -5,6 +5,7 @@ namespace App\Helpers\HCSU;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 use Storage;
+use App;
 
 class ProcessMaker {
 	public static function executeREST($url, $method="GET", $data = [], $accessToken = '', $useCurl = false){
