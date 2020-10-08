@@ -139,7 +139,7 @@ class ProcessMaker {
 
 	private function refreshToken(){
 		$authenticationData = json_decode(Storage::get("pmauthentication.json"));
-		$server = env("PM_SERVER_DOMAIN");
+		$server = (App::environment('local') || App::environment('staging')) ? env('PM_SERVER') : env("PM_SERVER_DOMAIN");
 		$workspace = env("PM_WORKSPACE");
 		$client_id = env("PM_CLIENT_ID");
 		$client_secret = env("PM_CLIENT_SECRET");
