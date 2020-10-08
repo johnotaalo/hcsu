@@ -201,6 +201,9 @@ class AdobeSignApiController extends Controller
             case 'logbook':
                 $data = \App\Helpers\HCSU\Data\LogbookData::get($case->app_number);
                 break;
+            case 'form-7':
+                $data = \App\Helpers\HCSU\Data\DLData::get($case->app_number);
+                break;
         }
 
         // dd($data);

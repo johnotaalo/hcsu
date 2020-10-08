@@ -192,6 +192,14 @@ class NoteVerbal {
 
 				$end_header .= ", for approval.";
 				break;
+			case 'form-7':
+				$connector = "submit an application for Kenyan Driving License for the undermentioned";
+				if ($this->data->client->type == "staff") {
+					$connector .= " {$this->data->client->contract_type} of {$this->data->client->organization}.";
+				}else{
+					$connector .= " {$this->data->client->relationship} of {$this->data->client->principal->LAST_NAME}, {$this->data->client->principal->OTHER_NAMES}, a {$this->data->client->contract_type} of {$this->data->client->organization}.";
+				}
+				break;
 			case 'logbook':
 				if ($this->data->client->type == "staff") {
 					$end_header .= "{$this->data->client->name}, a {$this->data->client->contract_type} of {$this->data->client->organization}";
@@ -517,6 +525,17 @@ class NoteVerbal {
 			if ($this->data->caseData->ADDITIONAL_COMMENTS) {
 				$body .= "\r\r{$this->data->caseData->ADDITIONAL_COMMENTS}\r";
 			}
+			break;
+
+		case 'form-7':
+			$body = "Details are as follows:\r";
+			$padding += 3;
+			$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+			$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+			$body .= str_pad("License No: ", $padding) . "{$this->data->caseData->LICENSE_NO}\r";
+			$body .= str_pad("Expiry Date: ", $padding) . "{$this->data->caseData->EXPIRY_DATE}\r\r";
+
+			$body .= "Duly completed Form VII in duplicate, two passport size photos, and copies of Diplomatic ID Card and Passport are attached herewith.\r";
 			break;
 		case 'form_a':
 			$body = "Vehicle details are as follows:\r";
