@@ -74,6 +74,8 @@ class AdobeSignApiController extends Controller
         $document = FormTemplate::where($search)->first();
         $extraParams = $request->query();
 
+        \Log::debug("Document: " . json_encode($document));
+
         if($document){
             $path = storage_path('app/'. $document->path);
             $data = [];
