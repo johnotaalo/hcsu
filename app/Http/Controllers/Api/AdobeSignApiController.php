@@ -57,6 +57,7 @@ class AdobeSignApiController extends Controller
     }
 
     function sendDocumentForSignature(Request $request){
+        \Log::debug("Post data: " . json_encode($request->input()));
         $case = $this->getCaseInformation($request->input('case_no'));
         $userId = $request->input('user');
 
