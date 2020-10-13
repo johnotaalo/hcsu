@@ -114,7 +114,7 @@ class AdobeSignApiController extends Controller
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
                 \Log::debug("NV Data: " . json_encode($data));
 
-                if ($processName) {
+                if ($processName == "driving-license-duplicate") {
                     $nvTemplate = null;
                 }
                 if(($processName == "form_a" && !$nvOnly) || $processName == "form-7" && !$nvOnly){
