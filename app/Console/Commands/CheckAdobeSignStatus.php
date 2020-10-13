@@ -81,6 +81,10 @@ class CheckAdobeSignStatus extends Command
                         \Log::debug("Routing Case {$case->APP_NUMBER}");
                         $response = ProcessMaker::routeCase($case->APP_UID);
                         \Log::debug("1. Case {$case->APP_NUMBER} response: " . json_encode($response));
+
+                        $document->ROUTING = 0;
+
+                        $document->save();
                     }
                 }else{
                     $this->info("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
