@@ -112,6 +112,10 @@ class AdobeSignApiController extends Controller
 
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
                 \Log::debug("NV Data: " . json_encode($data));
+
+                if ($processName) {
+                    $nvTemplate = null;
+                }
                 if(($processName == "form_a" && !$nvOnly) || $processName == "form-7" && !$nvOnly){
                     $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadMultiSignatureLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $clientEmail, null, false);
                 }else{
