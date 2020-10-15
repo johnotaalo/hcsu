@@ -431,27 +431,33 @@ ORDER BY
     }
 
     function generateDocument(Request $request){
+        \Log::debug("Generate Document. Input Sent: " . json_encode($request->input()));
         $case = $this->getCaseInformation($request->case_no);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";
         // $variables = $this->getCaseVariables($request->case_no);
         $extraParams = $request->query();
 
         // dd($case);
+        \Log::debug("Case Information: " . json_encode($case));
         $process = $case->pro_uid;
         $currentTask = $case->current_task[0]->tas_uid;
 
         if(!$applicationType){
+            \Log::debug("No application type information");
             $document = FormTemplate::where([
                 'process'   =>  $process,
                 'task'      =>  $currentTask
             ])->first();
         }else{
+            \Log::debug("Using application type information");
             $document = FormTemplate::where([
                 'process'   =>  $process,
                 // 'task'      =>  $currentTask,
                 'type'      =>  $applicationType
             ])->first();
         }
+
+        \Log::debug("Document Information: " . json_encode($document));
 
         if($document){
             $path = storage_path('app/'. $document->path);
