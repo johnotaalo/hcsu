@@ -12,7 +12,7 @@ class AirportPassData{
 		$airportPassData = ($type == "new") ? AirportPass::where('CASE_NO', $case_no)->first() : NULL;
 
 		$principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $airportPassData->HOST_COUNTRY_ID)->first();
-		$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dipidData->HOST_COUNTRY_ID})"))->first();
+		$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$airportPassData->HOST_COUNTRY_ID})"))->first();
 
 		$mission = $contract->ACRONYM;
 
