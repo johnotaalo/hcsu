@@ -216,6 +216,9 @@ class NoteVerbal {
 				}
 				$connector = "forward a completed Notification of Departure for";
 				break;
+			case 'airport-pass':
+				$connector = "request for Ministry's assistance in the issuance of Annual Airport Passes for the year 2021 for the following staff member of {$this->data->client->organization} whose duties require them to go top the airport very often to meet senior United Nations officials arriving at JKIA, Nairobi:";
+				break;
 		}
 
 		if($this->process == "logbook"){
@@ -550,6 +553,12 @@ class NoteVerbal {
 			}
 			
 			$body .= "\rA copy of duplicate Insurance Certificate and two copies of approved Pro 1B are attached herewith.";
+			break;
+
+		case 'airport-pass':
+			$body = "Details are as follows:\r";
+			$padding += 3;
+			$body .= str_pad("{$this->data->client->name}", $padding += 8) . str_pad($this->data->client->designation, $padding += 4) . " (New)"; 
 			break;
 
 		case 'logbook':
