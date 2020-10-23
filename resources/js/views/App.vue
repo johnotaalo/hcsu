@@ -70,8 +70,9 @@
 
 						<!-- Menu -->
 						<div class="dropdown-menu dropdown-menu-right">
-							<a href="#" class="dropdown-item">Profile</a>
+							<router-link class="dropdown-item" :to="{name: 'principal'}">Profile</router-link>
 							<a href="#" class="dropdown-item">Settings</a>
+							<router-link class="dropdown-item" :to="{ name: 'settings-adobesign-documents' }">Data</router-link>
 							<hr class="dropdown-divider">
 							<a href="/logout" class="dropdown-item">Logout</a>
 						</div>

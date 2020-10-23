@@ -427,4 +427,35 @@ class AdobeSignApiController extends Controller
             return \Redirect::to($filtered->esignUrl);
         }
     }
+
+
+    function getDocuments(Request $request){
+        $searchQueries = $request->get('documentSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $documentsQuery = \App\AdobeSignDocuments::select("*");
+
+        if ($searchQueries) {
+            $documentsQuery->where('CASE_NO', 'LIKE', "%{$searchQueries}%")
+                            ->orWhere('AGREEMENT_ID', 'LIKE', "%{$searchQueries}%")
+                            ->orWhere('PAYLOAD', 'LIKE', "%{$searchQueries}%");
+        }
+        
+        $data = [];
+        $count = 0;
+
+        $count = $documentsQuery->count();
+        $documentsQuery = $documentsQuery->limit($limit)->skip($limit * ($page - 1));
+
+        $data = $documentsQuery->get();
+
+        return [
+            'data'  => $data,
+            'count' =>  $count
+        ];
+    }
 }

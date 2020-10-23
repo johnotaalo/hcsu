@@ -473,7 +473,7 @@
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker' || obj.value == 'dependent' || obj.value == 'other-clients'
 						})
 					}
-					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass" || this.application == "nod"){
+					else if(this.application == "work-permit-endorsement" || this.application == "internship-pass" || this.application == "nod" || this.application == "airport-pass"){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member'
 						})

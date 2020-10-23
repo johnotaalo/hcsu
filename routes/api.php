@@ -256,6 +256,8 @@ Route::prefix('data')->group(function(){
 		Route::post('/signatories', 'Api\AdobeSignApiController@addSignatory');
 		Route::put('/signatories', 'Api\AdobeSignApiController@updateSignatory');
 		Route::get('/signatories/get/{id}', 'Api\AdobeSignApiController@getSignatory');
+
+		Route::get('/documents', 'Api\AdobeSignApiController@getDocuments');
 	});
 });
 

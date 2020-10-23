@@ -146,6 +146,7 @@ import EditOtherClient from './views/other/EditOtherClient'
 
 import AdobeSignSignatories from './views/settings/adobesign/AdobeSignSignatories'
 import AddAdobeSignSignatory from './views/settings/adobesign/AddAdobeSignSignatory'
+import AdobeSignDocuments from './views/settings/adobesign/AdobeSignDocuments'
 
 import ReassignOldCases from './views/settings/ReassignOldCases'
 
@@ -389,6 +390,11 @@ Vue.component(
 	 				name: 'settings-reassign-cases',
 	 				path: 'reassign/oldcases',
 	 				component: ReassignOldCases
+	 			},
+	 			{
+	 				name: 'settings-adobesign-documents',
+	 				path: 'adobe-sign/documents',
+	 				component: AdobeSignDocuments
 	 			}
 	 		]
 	 	},
