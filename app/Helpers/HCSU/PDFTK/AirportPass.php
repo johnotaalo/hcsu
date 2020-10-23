@@ -2,7 +2,7 @@
 
 namespace App\Helpers\HCSU\PDFTK;
 
-class Form11{
+class AirportPass{
 	private $filename = "Airport Pass Form";
 
 	public function __construct(){
