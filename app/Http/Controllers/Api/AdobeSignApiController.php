@@ -117,7 +117,7 @@ class AdobeSignApiController extends Controller
                 if ($processName == "driving-license-duplicate") {
                     $nvTemplate = null;
                 }
-                if(($processName == "form_a" && !$nvOnly) || $processName == "form-7" && !$nvOnly){
+                if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || ($processName == "airport-pass" && !$nvOnly)){
                     $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadMultiSignatureLibraryDocument($document->ADOBE_SIGN_TEMPLATE, $data, $case->app_number . "-" . $case->app_name, $clientEmail, null, false);
                 }else{
                     \Log::debug("Process Name: " . $processName);
@@ -212,6 +212,9 @@ class AdobeSignApiController extends Controller
                 break;
             case 'form-7':
                 $data = \App\Helpers\HCSU\Data\DLData::get($case->app_number);
+                break;
+            case 'airport-pass':
+                $data = \App\Helpers\HCSU\Data\AirportPassData::get($case->app_number);
                 break;
         }
 

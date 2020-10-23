@@ -594,7 +594,6 @@ ORDER BY
             case 'form-7':
                 $data = \App\Helpers\HCSU\Data\DLData::get($case->app_number);
                 break;
-
             case 'airport-pass':
                 $data = \App\Helpers\HCSU\Data\AirportPassData::get($case->app_number);
                 break;
