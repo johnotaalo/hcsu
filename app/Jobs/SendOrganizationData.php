@@ -53,7 +53,7 @@ class SendOrganizationData implements ShouldQueue
         if (!\Storage::exists($filename) && !\Storage::exists($oldDataFileName)) {
             \Log::info("No files found. Querying database for data");
             \Log::info("Querying new database...");
-            $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO');
+            $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO')->select('CASE_UID', 'CASE_NO', 'CASE_STATUS', 'OWNER_LAST_NAME', 'OWNER_OTHER_NAMES', 'INDEX_NO', 'agency', 'application_by', 'grade', 'designation', 'contract_type', 'residence_no', 'CASE_START_DATE', 'CASE_END_DATE', 'PRO_UID', 'PRO_TITLE');
             $data = $queryBuilder->where('agency', 'LIKE', "{$this->searchBy}%")
                                             ->whereIn('CASE_STATUS', $statuses)
                                             ->get();

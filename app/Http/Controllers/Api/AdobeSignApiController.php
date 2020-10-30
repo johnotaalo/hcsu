@@ -132,7 +132,9 @@ class AdobeSignApiController extends Controller
                 // $adobeSignDoc->DOCUMENT_ID = $documentId;
                 $adobeSignDoc->CASE_NO = $case->app_number;
                 $adobeSignDoc->URLS = json_encode($signingURLs);
-                if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || $processName == "driving-license-duplicate"){
+
+
+                if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || $processName == "driving-license-duplicate" || $processName = "airport-pass"){
                     $adobeSignDoc->ROUTING = true;
                 }
 
