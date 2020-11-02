@@ -134,7 +134,7 @@ class AdobeSignApiController extends Controller
                 $adobeSignDoc->URLS = json_encode($signingURLs);
 
 
-                if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || $processName == "driving-license-duplicate" || $processName = "airport-pass"){
+                if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || ($processName == "driving-license-duplicate") || ($processName = "airport-pass")){
                     $adobeSignDoc->ROUTING = true;
                 }
 
