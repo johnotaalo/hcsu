@@ -51,46 +51,47 @@ class AppController extends Controller
 
     function searchClient(Request $request){
         $identity = $request->query('id');
-        $data = \DB::connection('pm_data')->select("SELECT
-    `PC`.`PRINCIPAL_ID` AS `PRINCIPAL_ID`,
-    `P`.`LAST_NAME` AS `LAST_NAME`,
-    `P`.`OTHER_NAMES` AS `OTHER_NAMES`,
-    `A`.`ACRONYM` AS `ACRONYM`,
-    `A`.`AGENCYNAME` AS `AGENCYNAME`,
-    `PCR`.`START_DATE` AS `START_DATE`,
-    `PC`.`DESIGNATION` AS `DESIGNATION`,
-    `PC`.`GRADE` AS `GRADE`,
-    `PC`.`INDEX_NO` AS `INDEX_NO`,
-    max( `PCR`.`END_DATE` ) AS `END_DATE` 
-FROM
-    (((
-                `pm_master_data`.`PRINCIPAL_CONTRACT` `PC`
-                JOIN `pm_ref_data`.`agencies` `A` ON ((
-                        `A`.`AGENCY_ID` = `PC`.`AGENCY_ID` 
-                    )))
-            JOIN `pm_master_data`.`PRINCIPAL_CONTRACT_RENEWALS` `PCR` ON ((
-                    `PCR`.`CONTRACT_ID` = `PC`.`ID` 
-                )))
-        JOIN `pm_master_data`.`PRINCIPAL` `P` ON ((
-                `P`.`HOST_COUNTRY_ID` = `PC`.`PRINCIPAL_ID` 
-            ))) 
-            WHERE (PC.PRINCIPAL_ID = '{$identity}' OR PC.INDEX_NO = '{$identity}') AND P.STATUS = 1
-GROUP BY
-    `PC`.`PRINCIPAL_ID`,
-    `PC`.`ID`,
-    P.HOST_COUNTRY_ID,
-    `P`.`LAST_NAME`,
-    `P`.`OTHER_NAMES`,
-    `A`.`ACRONYM`,
-`A`.`AGENCYNAME`,
-`PCR`.`START_DATE`,
-`PC`.`DESIGNATION`,
-`PC`.`GRADE`, 
-`PC`.`INDEX_NO`
-ORDER BY
-    `END_DATE` DESC
-    LIMIT 1");
+//         $data = \DB::connection('pm_data')->select("SELECT
+//     `PC`.`PRINCIPAL_ID` AS `PRINCIPAL_ID`,
+//     `P`.`LAST_NAME` AS `LAST_NAME`,
+//     `P`.`OTHER_NAMES` AS `OTHER_NAMES`,
+//     `A`.`ACRONYM` AS `ACRONYM`,
+//     `A`.`AGENCYNAME` AS `AGENCYNAME`,
+//     `PCR`.`START_DATE` AS `START_DATE`,
+//     `PC`.`DESIGNATION` AS `DESIGNATION`,
+//     `PC`.`GRADE` AS `GRADE`,
+//     `PC`.`INDEX_NO` AS `INDEX_NO`,
+//     max( `PCR`.`END_DATE` ) AS `END_DATE` 
+// FROM
+//     (((
+//                 `pm_master_data`.`PRINCIPAL_CONTRACT` `PC`
+//                 JOIN `pm_ref_data`.`agencies` `A` ON ((
+//                         `A`.`AGENCY_ID` = `PC`.`AGENCY_ID` 
+//                     )))
+//             JOIN `pm_master_data`.`PRINCIPAL_CONTRACT_RENEWALS` `PCR` ON ((
+//                     `PCR`.`CONTRACT_ID` = `PC`.`ID` 
+//                 )))
+//         JOIN `pm_master_data`.`PRINCIPAL` `P` ON ((
+//                 `P`.`HOST_COUNTRY_ID` = `PC`.`PRINCIPAL_ID` 
+//             ))) 
+//             WHERE (PC.PRINCIPAL_ID = '{$identity}' OR PC.INDEX_NO = '{$identity}') AND P.STATUS = 1
+// GROUP BY
+//     `PC`.`PRINCIPAL_ID`,
+//     `PC`.`ID`,
+//     P.HOST_COUNTRY_ID,
+//     `P`.`LAST_NAME`,
+//     `P`.`OTHER_NAMES`,
+//     `A`.`ACRONYM`,
+// `A`.`AGENCYNAME`,
+// `PCR`.`START_DATE`,
+// `PC`.`DESIGNATION`,
+// `PC`.`GRADE`, 
+// `PC`.`INDEX_NO`
+// ORDER BY
+//     `END_DATE` DESC
+//     LIMIT 1");
 
+         $data = \DB::connection('pm_data')->select("SELECT PRINCIPAL_ID, LAST_NAME, OTHER_NAMES, ACRONYM, AGENCYNAME, START_DATE, DESIGNATION, GRADE, INDEX_NO, END_DATE FROM VW_STAFF_LATEST_CONTRACT WHERE PRINCIPAL_ID = '{$identity}' OR INDEX_NO = '{$identity}'");
         if (count($data)) {
             return (array)$data[0];
         }
