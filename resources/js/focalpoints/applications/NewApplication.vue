@@ -4,7 +4,15 @@
 			<div class="card-body">
 				<div class="form-group">
 					<label>Process</label>
-					<v-select v-model="form.process"></v-select>
+					<v-select v-model="form.process" :options="processes" label="prj_name">
+						<template slot="no-options">
+							Type to search for a process
+						</template>
+
+						<template slot="option" slot-scope="option">
+							{{ option.prj_name }}
+						</template>
+					</v-select>
 				</div>
 
 				 <div class="form-group">
