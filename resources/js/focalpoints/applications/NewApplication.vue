@@ -49,7 +49,7 @@
 		},
 		methods: {
 			submitApplication: function(){
-				form.post('focal-points/applications/new')
+				this.form.post('focal-points/applications/new')
 				.then(res => {
 					console.log(res)
 				})
