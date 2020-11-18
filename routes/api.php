@@ -296,6 +296,11 @@ Route::prefix('/focal-points')->group(function(){
 			Route::get('/search', 'FocalPoints\VATController@searchApplication');
 			Route::get('/user-application/{id}', 'FocalPoints\VATController@getVATApplication');
 		});
+
+		Route::prefix('applications')->group(function(){
+			Route::get('/', 'FocalPoints\ApplicationsController@get');
+			Route::post('/new', 'FocalPoints\ApplicationsController@new');
+		});
 	});
 });
 

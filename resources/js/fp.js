@@ -18,6 +18,7 @@ import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 
 
 import VueSwal from 'vue-swal'
+import vSelect from 'vue-select'
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -26,6 +27,7 @@ Vue.component('loading', Loading);
 Vue.use(ServerTable, {}, false, 'bootstrap4', 'default');
 Vue.use(ClientTable, {}, false, 'bootstrap4', 'default');
 Vue.use(VueSwal)
+Vue.component('v-select', vSelect)
 
 import App from './focalpoints/App'
 import Dashboard from './focalpoints/dashboard/Index'
@@ -34,6 +36,8 @@ import FPNormalVATAdd from './focalpoints/applications/FPNormalVATAdd'
 import FPNormalVATEdit from './focalpoints/applications/FPNormalVATEdit'
 import FPNormalVATView from './focalpoints/applications/FPNormalVATView'
 
+import AllApplications from './focalpoints/applications/AllApplications'
+import NewApplication from './focalpoints/applications/NewApplication'
 axios.interceptors.request.use(config => {
 	NProgress.start()
 	return config;
@@ -54,7 +58,8 @@ const router = new VueRouter({
 			title: "Dashboard",
 			auth: true
 		}
-	}, {
+	}, 
+	{
 		path: "/applications/normal-vat",
 		name: "applications.normal-vat",
 		meta: {
@@ -66,6 +71,28 @@ const router = new VueRouter({
 		children: [
 			
 		]
+	},
+	{
+		path: "/applications/all",
+		name: "applications.all",
+		meta: {
+			title: "All Applications",
+			subtitle: 'Applications',
+			auth: true
+		},
+		component: AllApplications,
+		children: [
+			
+		]
+	},{
+		path: "/applications/new",
+		name: "applications.new",
+		meta: {
+			title: "New Application",
+			subtitle: 'Applications',
+			auth: true
+		},
+		component: NewApplication,
 	}, {
 		path: '/applications/normal-vat/add',
 		component: FPNormalVATAdd,
