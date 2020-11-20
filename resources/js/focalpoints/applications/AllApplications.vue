@@ -27,6 +27,16 @@
 			:columns="columns"
 			:options="options"
 			size="sm">
+			<template slot="#" slot-scope="data">
+				{{ data.index }}
+			</template>
+
+			<template slot="CASE_NO" slot-scope="data">
+				<span v-if="data.row.APP_NUMBER"> {{ data.row.APP_NUMBER }}</span>
+				<span v-else>
+					Not Assigned
+				</span>
+			</template>
 			</v-server-table>
 		</div>
 	</div>

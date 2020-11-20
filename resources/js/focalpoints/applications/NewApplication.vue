@@ -17,7 +17,7 @@
 
 				 <div class="form-group">
 				 	<label>Upload the required documents</label>
-				 	<b-form-file v-model="form.uploads" multiple></b-form-file>
+				 	<b-form-file v-model="form.uploads"></b-form-file>
 				 </div>
 
 				 <div class="form-group">
@@ -45,13 +45,18 @@
 			}
 		},
 		created(){
-			this.getProcesses()
+			// this.getProcesses()
 		},
 		methods: {
 			submitApplication: function(){
+				// this.form.outputToConsole()
 				this.form.post('focal-points/applications/new')
 				.then(res => {
-					console.log(res)
+					alert('Successfully submitted application');
+					this.$router.push({ name: 'applications.all' })
+				})
+				.catch(error => {
+					alert("There was an error processing your request");
 				})
 			},
 			getProcesses: function(){

@@ -25,7 +25,6 @@ class Form {
      */
   objectToFormData (data, formData = null, previousKey = null) {
     if (!formData) { formData = new FormData() }
-
     if (data instanceof Object) {
       Object.keys(data).forEach(key => {
         const value = data[key]
