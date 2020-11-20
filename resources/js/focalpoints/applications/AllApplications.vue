@@ -53,7 +53,7 @@
 					filterable: false,
 					customFilters: ['normalSerch'],
 					requestFunction: (data) => {
-						return axios.get(`/api/focal-points/applications/`, {
+						return axios.get(`/api/focal-points/applications`, {
 							params: data
 						})
 						.catch(function (e) {
