@@ -15,7 +15,7 @@ class ApplicationsController extends Controller
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = \App\Models\UserApplications::select('*');
+        $queryBuilder = \App\Models\UserApplications::select('*')->with('process');
 
         if ($searchQueries) {
         	$queryBuilder->where('PROCESS_UID', 'LIKE', "%{$searchQueries}%");

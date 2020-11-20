@@ -37,6 +37,10 @@
 					Not Assigned
 				</span>
 			</template>
+
+			<template slot="PROCESS NAME" slot-scope="data">
+				{{ data.row.process.PRO_TITLE }}
+			</template>
 			</v-server-table>
 		</div>
 	</div>
@@ -46,6 +50,7 @@
 	export default{
 		data(){
 			return {
+				searchTerm: "",
 				columns: ['#', 'CASE_NO', 'PROCESS NAME', 'STATUS', 'CURRENT_USER', 'CREATED_AT', 'ACTIONS'],
 				options: {
 					perPage: 50,
@@ -62,6 +67,11 @@
 					}
 				}
 			}
+		},
+		methods: {
+			applySearchFilter: function(term){
+				Event.$emit('vue-tables.filter::normalSearch', term);
+			},
 		}
 	}
 </script>
