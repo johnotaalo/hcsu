@@ -45,7 +45,7 @@
 			}
 		},
 		created(){
-			// this.getProcesses()
+			this.getProcesses()
 		},
 		methods: {
 			submitApplication: function(){
