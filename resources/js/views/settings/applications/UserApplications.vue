@@ -1,27 +1,8 @@
 <template>
 	<div>
 		<div class="card">
-			<div class="card-header">
-				<div class="row align-items-center">
-					<div class="col">
-						<form class="row align-items-center">
-							<div class="col-auto pr-0">
-								<span class="fe fe-search text-muted"></span>
-							</div>
-
-							<div class="col">
-								<b-input type="search" class="form-control form-control-flush search" v-model = "searchTerm" placeholder="Search" v-on:keyup="applySearchFilter(searchTerm)"/>
-							</div>
-
-							<div class="col-auto">
-								<b-button class="btn-sm btn-white" :to="{ name: 'applications.new' }">Start a New Application</b-button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-
-			<v-server-table
+			<div class="card-body">
+				<v-server-table
 			ref="principalTable"
 			class="table-sm table-nowrap card-table"
 			:columns="columns"
@@ -41,14 +22,19 @@
 			<template slot="PROCESS_NAME" slot-scope="data">
 				TBA
 			</template>
+
+			<template slot="UPLOADS" slot-scope="data">
+				<a class="btn btn-link btn-sm" @click="viewuploads(data.row.id)">View Uploads</a>
+			</template>
 			<template slot="CREATED_AT" slot-scope="data">
 				{{ data.row.created_at }}
 			</template>
 
 			<template slot="ACTIONS" slot-scope="data">
-				TBA
+				<b-button v-if="data.row.CURRENT_USER == 'SUPERVISOR'" @click="assignCase(data.row.id)" variant="sm" class = "btn btn-white">Assign To AA</b-button>
 			</template>
 			</v-server-table>
+			</div>
 		</div>
 	</div>
 </template>
@@ -58,7 +44,7 @@
 		data(){
 			return {
 				searchTerm: "",
-				columns: ['#', 'CASE_NO', 'PROCESS_NAME', 'STATUS', 'CURRENT_USER', 'CREATED_AT', 'ACTIONS'],
+				columns: ['#', 'CASE_NO', 'PROCESS_NAME', 'UPLOADS', 'STATUS', 'CURRENT_USER', 'CREATED_AT', 'ACTIONS'],
 				options: {
 					perPage: 50,
 					perPageValues: [],
@@ -75,10 +61,24 @@
 				}
 			}
 		},
+		created(){
+		},
 		methods: {
 			applySearchFilter: function(term){
 				Event.$emit('vue-tables.filter::normalSearch', term);
 			},
+
+			assignCase: function(id){
+				axios.get('/api/focal-points/applications/assign/' + id)
+				.then(res => {
+					alert('Successfully assigned to AA');
+					location.reload()
+				});
+			},
+
+			viewuploads: function(id){
+				window.location = "/uploads/" + id
+			}
 		}
 	}
 </script>

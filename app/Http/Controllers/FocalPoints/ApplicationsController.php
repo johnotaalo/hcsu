@@ -15,7 +15,9 @@ class ApplicationsController extends Controller
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = \App\Models\UserApplications::select('*')->with('process');
+        $queryBuilder = \App\Models\UserApplications::select('*');
+        // ->with('process')
+        /* */
 
         if ($searchQueries) {
         	$queryBuilder->where('PROCESS_UID', 'LIKE', "%{$searchQueries}%");
@@ -55,6 +57,17 @@ class ApplicationsController extends Controller
     	$file->FILE_URL = $this->uploadFile($request->file('uploads'));
 
     	$file->save();
+    }
+
+    function assign(Request $request){
+        $application = \App\Models\UserApplications::find($request->id);
+
+        $application->ASSIGNED_TO = "Chrispine Otaalo [Test]";
+        $application->CURRENT_USER = "ADMINISTRATIVE_ASSISTANT";
+        $application->STATUS = "ASSIGNED";
+        $application->save();
+
+        return $application;
     }
 
     function uploadFile($file){

@@ -26,12 +26,14 @@ class AirportPassData{
 		$clientObj->passport = ($principal->latest_passport) ? $principal->latest_passport->PASSPORT_NO : "N/A";
 		$clientObj->doa = ($principal->current_arrival) ? $principal->current_arrival->ARRIVAL : "N/A";
 		$clientObj->principal = $principal;
+		$clientObj->applicationYear = $airportPassData->YEAR;
 
 		$data->client = $clientObj;
 		$data->case_no = $case_no;
         $data->ref = $airportPassData->NV_SERIAL_NO;
         $data->date = date('F d, Y');
         $data->type = $type;
+        $data->actual = $airportPassData;
 
 		return $data;
 	}
