@@ -396,7 +396,11 @@ class NoteVerbal {
 						$body .= str_pad("Passport No.: ", $padding) . "{$this->data->client->passport}\r";
 						$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
 						if($this->data->type == "new-case"){
-							$body .= str_pad("R. No: ", $padding) . "New Case\r";
+							if ($this->data->client->RNO && $this->data->client->RNO != "NULL") {
+								$body .= str_pad("R. No: ", $padding) . "{$this->data->client->RNO}\r";
+							}else{
+								$body .= str_pad("R. No: ", $padding) . "New Case\r";
+							}
 						}else{
 							$body .= str_pad("R. No: ", $padding) . "{$this->data->client->RNO}\r";
 						}
