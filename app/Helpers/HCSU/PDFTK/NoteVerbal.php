@@ -563,7 +563,11 @@ class NoteVerbal {
 			$body = "Details are as follows:\r";
 			$padding += 3;
 			$closure = ($this->data->actual->APPLICATION_TYPE == "renewal") ? "Renewal" : "New";
-			$body .= str_pad("{$this->data->client->name}", $padding += 8) . str_pad($this->data->client->designation, $padding += 4) . " ({$closure})"; 
+			$body .= str_pad("{$this->data->client->name}", $padding += 8) . str_pad($this->data->client->designation, $padding += 4) . " ({$closure})";
+
+			if ($this->data->actual->ADDITIONAL_COMMENTS) {
+				$body .= "\r{$this->data->actual->ADDITIONAL_COMMENTS}\r";
+			}
 			break;
 
 		case 'logbook':
