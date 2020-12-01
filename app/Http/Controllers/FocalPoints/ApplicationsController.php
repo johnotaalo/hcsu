@@ -87,8 +87,8 @@ class ApplicationsController extends Controller
                 }
 
                 $caseData =[
-                    'host_country_id'           =>  $request->input('HOST_COUNTRY_ID'),
-                    'host_country_id_label'     =>  $request->input('HOST_COUNTRY_ID')
+                    'host_country_id'           =>  $request->input('host_country_id'),
+                    'host_country_id_label'     =>  $request->input('host_country_id')
                 ];
 
                 $data = [
