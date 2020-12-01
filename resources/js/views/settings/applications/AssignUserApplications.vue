@@ -134,7 +134,7 @@
 				this.form.host_country_id = this.application.HOST_COUNTRY_ID
 				this.form.post(`focal-points/applications/assign/${this.id}`)
 				.then(res => {
-
+					this.$router.push({ name: 'user-applications.all' })
 				})
 			}
 		}
