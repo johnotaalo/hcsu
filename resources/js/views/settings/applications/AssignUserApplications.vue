@@ -116,7 +116,6 @@
 		methods: {
 			getData(paramId){
 				var vm = this
-				console.log(this.application)
 				axios.get(`/api/focal-points/applications/get/${paramId}`)
 				.then(res => {
 					vm.application = res.data
@@ -132,7 +131,7 @@
 				});
 			},
 			proceed(){
-				this.form.host_country_id = application.HOST_COUNTRY_ID
+				this.form.host_country_id = this.application.HOST_COUNTRY_ID
 				this.form.post(`focal-points/applications/assign/${this.id}`)
 				.then(res => {
 
