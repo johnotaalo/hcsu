@@ -20,7 +20,7 @@
 			</template>
 
 			<template slot="PROCESS_NAME" slot-scope="data">
-				TBA
+				{{ data.row.process.PRO_TITLE }}
 			</template>
 
 			<template slot="UPLOADS" slot-scope="data">
@@ -31,7 +31,7 @@
 			</template>
 
 			<template slot="ACTIONS" slot-scope="data">
-				<b-button v-if="data.row.CURRENT_USER == 'SUPERVISOR'" @click="assignCase(data.row.id)" variant="sm" class = "btn btn-white">Assign To AA</b-button>
+				<b-button v-if="data.row.CURRENT_USER == 'SUPERVISOR'" :to="{ name: 'user-applications.assign', params: { id: data.row.id } }" variant="sm" class = "btn btn-white">Assign Case</b-button>
 			</template>
 			</v-server-table>
 			</div>
@@ -61,7 +61,8 @@
 				}
 			}
 		},
-		created(){
+		mounted(){
+			this.$parent.isContainer = false
 		},
 		methods: {
 			applySearchFilter: function(term){

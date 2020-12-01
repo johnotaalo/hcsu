@@ -11,7 +11,29 @@ class UserApplications extends Model
 
    protected $fillable = ['PROCESS_UID','HOST_COUNTRY_ID','COMMENT','APP_UID','APP_NUMBER','ASSIGNED_TO','SUPERVISOR_COMMENTS','STATUS','SUBMITTED_BY','AUTHENTICATION_SOURCE','CURRENT_USER'];
 
-	public function process(){
-		return $this->belongsTo(\App\Models\PM\Process::class, 'PROCESS_UID', 'PRO_UID');
+   protected $appends = ['process', 'applicant_details', 'applicant_type'];
+
+	// public function process(){
+	// 	return $this->belongsTo(\App\Models\PM\Process::class, 'PROCESS_UID', 'PRO_UID');
+	// }
+
+	public function getProcessAttribute(){
+		return \App\Models\PM\Process::where('PRO_UID', $this->PROCESS_UID)->first();
+	}
+
+	public function getApplicantTypeAttribute(){
+		return identify_hcsu_client($this->HOST_COUNTRY_ID);
+	}
+
+	public function getApplicantDetailsAttribute(){
+		$clientType = identify_hcsu_client($this->HOST_COUNTRY_ID);
+
+		if ($clientType  == "staff") {
+			return \App\Models\Principal::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->first();
+		}else if ($clientType == "agency") {
+			return \App\Models\Agency::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->first();
+		}else{
+			return \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->first();
+		}
 	}
 }

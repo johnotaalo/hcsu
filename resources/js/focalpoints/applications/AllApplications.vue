@@ -39,7 +39,7 @@
 			</template>
 
 			<template slot="PROCESS_NAME" slot-scope="data">
-				TBA
+				{{ data.row.process.PRO_TITLE }}
 			</template>
 			<template slot="CREATED_AT" slot-scope="data">
 				{{ data.row.created_at }}

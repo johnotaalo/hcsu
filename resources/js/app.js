@@ -151,6 +151,7 @@ import AdobeSignDocuments from './views/settings/adobesign/AdobeSignDocuments'
 import ReassignOldCases from './views/settings/ReassignOldCases'
 
 import UserApplications from './views/settings/applications/UserApplications'
+import AssignUserApplications from './views/settings/applications/AssignUserApplications'
 // Auth
 // import Login from './views/Login'
 
@@ -331,6 +332,11 @@ Vue.component(
 	 		path: '/applications/all',
 	 		name: 'user-applications.all',
 	 		component: UserApplications
+	 	},
+	 	{
+	 		path: '/applications/assign/:id',
+	 		name: 'user-applications.assign',
+	 		component: AssignUserApplications
 	 	},
 	 	{
 	 		path: '/client/search',

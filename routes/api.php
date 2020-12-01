@@ -299,7 +299,9 @@ Route::prefix('/focal-points')->group(function(){
 
 		Route::prefix('applications')->group(function(){
 			Route::get('/', 'FocalPoints\ApplicationsController@get');
-			Route::get('/assign/{id}', 'FocalPoints\ApplicationsController@assign');
+			Route::get('/users', 'FocalPoints\ApplicationsController@getUsers');
+			Route::post('/assign/{id}', 'FocalPoints\ApplicationsController@assign');
+			Route::get('/get/{id}', 'FocalPoints\ApplicationsController@getApplication');
 			Route::post('/new', 'FocalPoints\ApplicationsController@new');
 		});
 	});
