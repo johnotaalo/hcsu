@@ -92,7 +92,7 @@
 	export default {
 		data(){
 			return {
-				id: this.$route.params.id,
+				id: 0,
 				application: {},
 				users: [],
 				approveOptions: [{
@@ -101,7 +101,7 @@
 					item: false, name: "Reject"
 				}],
 				form: new Form({
-					host_country_id: application.HOST_COUNTRY_ID,
+					host_country_id: 0,
 					submitApplication: false,
 					assignedTo: "",
 					supervisorComments: ""
@@ -109,6 +109,7 @@
 			}
 		},
 		created(){
+			this.id = this.$route.params.id
 			this.getData(this.$route.params.id)
 			this.getUsers()
 		},
@@ -131,6 +132,7 @@
 				});
 			},
 			proceed(){
+				this.form.host_country_id = application.HOST_COUNTRY_ID
 				this.form.post(`focal-points/applications/assign/${this.id}`)
 				.then(res => {
 
