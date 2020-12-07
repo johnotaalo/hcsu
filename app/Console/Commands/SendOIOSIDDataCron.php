@@ -4,26 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use App\Jobs\ExportOrganizationData;
-use Illuminate\Support\Facades\Mail;
-
-use \App\Jobs\SendOrganizationData;
-
-class SendUNSOSDataCron extends Command
+class SendOIOSIDDataCron extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'senddata:unsos';
+    protected $signature = 'senddata:oiosid';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'This cron job sends data to UNSOS everyday';
+    protected $description = 'This cron job sends data to OIOS ID weekly';
 
     /**
      * Create a new command instance.
@@ -42,10 +37,8 @@ class SendUNSOSDataCron extends Command
      */
     public function handle()
     {
-        // $sampleFile = "data-exports/2020-01-27/UNSOS/New_PM_2020_01_27_16_41_38.xlsx";
-        // Mail::to('john.otaalo@strathmore.edu')->send(new \App\Mail\DataDumpSent($sampleFile));
-        // die;
-        $config = ((array)json_decode(\Storage::get('backup-settings.json')))['UNSOS'];
+        $config = ((array)json_decode(\Storage::get('backup-settings.json')))['OIOSID'];
+
         $organizations = explode(',', $config->organizations);
         $recepients = explode(',', $config->recepients);
         $organizations = collect($organizations)->map(function($organization){
@@ -56,7 +49,7 @@ class SendUNSOSDataCron extends Command
             return trim($recepient);
         })->toArray();
 
-        SendOrganizationData::dispatch($organizations, $recepients, "UNSO", "UNSOS");
+        SendOrganizationData::dispatch($organizations, $recepients, "OIOS ID", "OIOS ID");
 
         \Log::info("Cron is working fine!");
 
