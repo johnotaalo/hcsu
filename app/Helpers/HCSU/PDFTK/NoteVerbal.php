@@ -217,7 +217,7 @@ class NoteVerbal {
 				$connector = "forward a completed Notification of Departure for";
 				break;
 			case 'airport-pass':
-				$connector = "request for Ministry's assistance in the issuance of Annual Airport Passes for the year {$this->data->client->applicationYear} for the following staff member of {$this->data->client->organization} whose duties require them to go top the airport very often to meet senior United Nations officials arriving at JKIA, Nairobi:";
+				$connector = "request the esteemed Ministry's approval for the issuance of Annual Airport Passes for the year {$this->data->client->applicationYear} for the following staff member of {$this->data->client->organization} whose duties require them to visit the airport often to meet senior United Nations officials arriving at JKIA, Nairobi:";
 				break;
 		}
 
