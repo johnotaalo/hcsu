@@ -95,8 +95,11 @@ class WorkPermitExemptionData{
 			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$domesticWorker->PRINCIPAL_ID})"))->first();
 			$mission = $contract->ACRONYM;
 
-			if($type == "endorsement" || $type == "renewal"){
+			if($type == "endorsement"){
 				$clientObj->RNO = $endorsementCase->RNUMBER;
+			}
+			elseif($type == "renewal"){
+				$clientObj->RNO = $domesticWorker->R_NO;
 			}
 			else{
 				$data->endorsementType = "new_case";
