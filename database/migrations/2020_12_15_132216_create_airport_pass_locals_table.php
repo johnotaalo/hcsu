@@ -13,12 +13,15 @@ class CreateAirportPassLocalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('AP_01_LOCALS', function (Blueprint $table) {
+        Schema::connection('pm_data')->create('AP_01_LOCALS', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('CASE_NO');
             $table->string('NV_SERIAL_NO');
             $table->string('CLIENT_LAST_NAME');
             $table->string('CLIENT_OTHER_NAMES');
+            $table->string('IDENTIFICATION');
+            $table->string('PREVIOUS_PASS_NO');
+            $table->string('MOBILE_NO');
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ class CreateAirportPassLocalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('airport_pass_locals');
+        Schema::connection('pm_data')->dropIfExists('AP_01_LOCALS');
     }
 }
