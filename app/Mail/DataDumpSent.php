@@ -32,6 +32,7 @@ class DataDumpSent extends Mailable
      */
     public function build()
     {
+        \Log::debug("Data Dump sent for: {$filename}");
         return $this
                     ->from(env('MAIL_FROM_EMAIL'))
                     ->view('emails.data_sent_email')
