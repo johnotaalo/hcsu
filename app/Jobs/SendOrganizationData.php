@@ -78,7 +78,7 @@ class SendOrganizationData implements ShouldQueue
         }
 
         \Log::info("Sending emails to recepients");
-        $response = Mail::to($this->recepients)->send(new \App\Mail\DataDumpSent($filename, $oldDataFileName));
+        $response = Mail::to($this->recepients)->send(new \App\Mail\DataDumpSent($filename, $oldDataFileName, $group));
         \Log::debug($response);
         // try{
             

@@ -89,7 +89,7 @@ class CheckAdobeSignStatus extends Command
                 }else{
                     $this->info("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
                     \Log::debug("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
-                    if($document->ROUTING){
+                    if($document->ROUTING && $agreementDetails->status != "ABORTED"){
                         $signingURLs = \App\Helpers\HCSU\AdobeSign\AdobeClient::getSigningURLs($document->AGREEMENT_ID);
                         \Log::debug("Testing Routing..." . json_encode($signingURLs));
                         $email = $signingURLs->signingUrlSetInfos[0]->signingUrls[0]->email;
