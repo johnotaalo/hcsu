@@ -19,10 +19,12 @@ class DataDumpSent extends Mailable
 
     private $file;
     private $olddatafilename;
+    private $filename;
     public function __construct($file, $olddatafilename, $filename)
     {
         $this->file = $file;
         $this->olddatafilename = $olddatafilename;
+        $this->filename = $filename;
     }
 
     /**
@@ -32,11 +34,11 @@ class DataDumpSent extends Mailable
      */
     public function build()
     {
-        \Log::debug("Data Dump sent for: {$filename}");
+        \Log::debug("Data Dump sent for: {$this->filename}");
         return $this
                     ->from(env('MAIL_FROM_EMAIL'))
                     ->view('emails.data_sent_email')
-                    ->attachFromStorage($this->file, "{$filename} Data.xlsx", ['mime' =>  \Storage::mimeType($this->file)])
-                    ->attachFromStorage($this->olddatafilename, "{$filename} OLD PM.xlsx", ['mime' =>  \Storage::mimeType($this->olddatafilename)]);
+                    ->attachFromStorage($this->file, "{$this->filename} Data.xlsx", ['mime' =>  \Storage::mimeType($this->file)])
+                    ->attachFromStorage($this->olddatafilename, "{$this->filename} OLD PM.xlsx", ['mime' =>  \Storage::mimeType($this->olddatafilename)]);
     }
 }
