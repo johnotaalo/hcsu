@@ -41,6 +41,7 @@ class PrincipalController extends Controller
             $queryBuilder->orWhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%");
             $queryBuilder->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$searchQueries}%");
             $queryBuilder->orWhere('EMAIL', 'LIKE', "%{$searchQueries}%");
+            $queryBuilder->orWhere('R_NO', 'LIKE', "%{$searchQueries}%");
             // $queryBuilder->orWhereHas('passports', function(Builder $query) use ($searchQueries){
             //     $query->where('PASSPORT_NO', 'LIKE', "%{$searchQueries}%");
             // });
