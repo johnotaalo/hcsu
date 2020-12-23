@@ -56,12 +56,14 @@ class SendOrganizationData implements ShouldQueue
             $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO')->select('CASE_UID', 'CASE_NO', 'CASE_STATUS', 'OWNER_LAST_NAME', 'OWNER_OTHER_NAMES', 'INDEX_NO', 'agency', 'application_by', 'grade', 'designation', 'contract_type', 'residence_no', 'CASE_START_DATE', 'CASE_END_DATE', 'PRO_UID', 'PRO_TITLE');
             $data = $queryBuilder->where('agency', 'LIKE', "{$this->searchBy}%")
                                             ->whereIn('CASE_STATUS', $statuses)
+                                            ->whereYear('CASE_START_DATE', '>=', 2020)
                                             ->get();
             \Log::info("Successfully queried data from new database");
             \Log::info("Querying old database");
             $oldDataQuery = \DB::connection('old_pm')->table('vw_case_data_no_task');
             $oldData = $oldDataQuery->where('agency', 'LIKE', "{$this->searchBy}%")
                                         ->whereIn('CASE_STATUS', $statuses)
+                                        ->whereYear('CASE_START_DATE', '>=', 2020)
                                         ->get();
             \Log::info("Successfully queried data from old database");
 

@@ -125,6 +125,12 @@
 							orderable: true
 						},
 						{
+							label: "R_NUMBER",
+							name: "R_NUMBER",
+							filterable: true,
+							orderable: true
+						},
+						{
 							label: "INDEX_NO",
 							name: "INDEX_NO",
 							filterable: true,
