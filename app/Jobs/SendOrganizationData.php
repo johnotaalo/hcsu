@@ -50,7 +50,7 @@ class SendOrganizationData implements ShouldQueue
         $oldDataFileName = "data-exports/{$date}/{$this->group}/Old_PM_{$date}.xlsx";
 
         \Log::info("Looking for files: New PM {$filename}; Old PM {$oldDataFileName}");
-        if (!\Storage::exists($filename) && !\Storage::exists($oldDataFileName)) {
+        if (!\Storage::exists($filename) || !\Storage::exists($oldDataFileName)) {
             \Log::info("No files found. Querying database for data");
             \Log::info("Querying new database...");
             $queryBuilder = \DB::connection('pm_data')->table('VW_CASE_INFO')->select('CASE_UID', 'CASE_NO', 'CASE_STATUS', 'OWNER_LAST_NAME', 'OWNER_OTHER_NAMES', 'INDEX_NO', 'agency', 'application_by', 'grade', 'designation', 'contract_type', 'residence_no', 'CASE_START_DATE', 'CASE_END_DATE', 'PRO_UID', 'PRO_TITLE');
@@ -63,18 +63,21 @@ class SendOrganizationData implements ShouldQueue
             $oldDataQuery = \DB::connection('old_pm')->table('vw_case_data_no_task');
             $oldData = $oldDataQuery->where('agency', 'LIKE', "{$this->searchBy}%")
                                         ->whereIn('CASE_STATUS', $statuses)
-                                        ->whereYear('CASE_START_DATE', '>=', 2020)
+                                        
                                         ->get();
             \Log::info("Successfully queried data from old database");
 
-            $exportData = new \App\Exports\OrganizationDataExport($data);
-            \Excel::store($exportData, $filename);
+            if ($data) {
+                $exportData = new \App\Exports\OrganizationDataExport($data);
+                \Excel::store($exportData, $filename);
+                \Log::info("Successfully generated new database excel");
+            }
 
-            \Log::info("Successfully generated new database excel");
-
-            $oldDataExport = new \App\Exports\OrganizationDataExport($oldData);
-            \Excel::store($oldDataExport, $oldDataFileName);
-            \Log::info("Successfully generated old database excel");
+            if ($oldData) {
+                $oldDataExport = new \App\Exports\OrganizationDataExport($oldData);
+                \Excel::store($oldDataExport, $oldDataFileName);
+                \Log::info("Successfully generated old database excel");
+            }
         }else{
             \Log::info("Excel data exists");
         }

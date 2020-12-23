@@ -37,10 +37,19 @@ class DataDumpSent extends Mailable
         \Log::debug("Checking filename");
         \Log::debug($this->filename);
         \Log::debug("Data Dump sent for: {$this->filename}");
-        return $this
+
+        $mailer = $this
                     ->from(env('MAIL_FROM_EMAIL'))
-                    ->view('emails.data_sent_email')
-                    ->attachFromStorage($this->file, "{$this->filename} Data.xlsx", ['mime' =>  \Storage::mimeType($this->file)])
-                    ->attachFromStorage($this->olddatafilename, "{$this->filename} OLD PM.xlsx", ['mime' =>  \Storage::mimeType($this->olddatafilename)]);
+                    ->view('emails.data_sent_email');
+
+        if (\Storage::exists($this->file)) {
+            $mailer->attachFromStorage($this->file, "{$this->filename} Data.xlsx", ['mime' =>  \Storage::mimeType($this->file)]);
+        }
+
+        if (\Storage::exists($this->olddatafilename)) {
+            $mailer->attachFromStorage($this->olddatafilename, "{$this->filename} OLD PM.xlsx", ['mime' =>  \Storage::mimeType($this->olddatafilename)]);
+        }
+        
+        return $mailer;
     }
 }

@@ -59,9 +59,9 @@
 										<li class="nav-item">
 											<router-link class="nav-link" :to="{ name: 'applications.all' }">All Applications</router-link>
 										</li>
-										<li class="nav-item">
+										<!-- <li class="nav-item">
 											<router-link class="nav-link" :to="{ name: 'applications.normal-vat' }">Normal VAT Application</router-link>
-										</li>
+										</li> -->
 									</ul>
 								</div>
 							</li>
