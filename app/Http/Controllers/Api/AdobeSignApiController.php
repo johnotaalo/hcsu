@@ -218,6 +218,9 @@ class AdobeSignApiController extends Controller
             case 'airport-pass':
                 $data = \App\Helpers\HCSU\Data\AirportPassData::get($case->app_number);
                 break;
+            case 'airport-pass-locals':
+                $data = \App\Helpers\HCSU\Data\AirportPassLocalsData::get($case->app_number);
+                break;
         }
 
         // dd($data);

@@ -9,6 +9,7 @@ class NoteVerbal {
 
 	public function __construct($process, $data, $initials, $showdate=true){
 		$this->process = $process;
+		// dd($this->process);
 		$this->data = $data;
 		$this->initials = $initials;
 		$this->showdate = $showdate;
@@ -226,10 +227,16 @@ class NoteVerbal {
 			$this->header .= "\rOur Ref:{$this->data->ref}/$this->initials\n\n";
 			$this->header .= "                            VEHICLE REGISTRATION\n";
 			$this->header .= "Please find enclosed approved registration Form A for {$end_header}, for the registration of his vehicle whose details are given below:\n\n";
-		}else{
+		}
+		else if($this->process == "airport-pass-locals"){
+			$this->header = "Our Ref: {$this->data->ref}/{$this->initials}\t\t\t{$this->data->date}\n\n";
+			$this->header .= "General Manager\nSecurity Services\nKenya Airports Authority\nP.O Box 19087-00501\nNairobi\n\n\n";
+			$this->header .= "RE: Request for {$this->data->type} of Annual Airport Pass - {$this->data->client->organization}\n\n";
+			$this->header .= "The United Nations Office at Nairobi (UNON) wishes to apply for issuance of Annual Airport Pass for the following staff member of {$this->data->client->organization} whose duties require him to go to the airport very often to meet with senior United Nations officials arriving at JKIA, Nairobi.";
+		}
+		else{
 			$this->header = "{$your_ref}Our Ref: {$this->data->ref}/$this->initials\n\nThe United Nations Office at Nairobi (UNON) presents its compliments to the Ministry of Foreign Affairs of the Republic of Kenya and has the honour to {$connector} {$end_header}\n\n";
 		}
-		
 
 		return $this;
 	}
@@ -605,10 +612,14 @@ class NoteVerbal {
 	}
 
 	public function getContent(){
-		$this->getHeader();
-		$this->getFooter();
-		$this->getBody();
+		try{
+			$this->getHeader();
+			$this->getFooter();
+			$this->getBody();
 
-		return  $this->header . $this->body . "\n\n" . $this->footer;
+			return  $this->header . $this->body . "\n\n" . $this->footer;
+		}catch(\Exeption $ex){
+			dd($ex->getMessage());
+		}
 	}
 }

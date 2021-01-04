@@ -19,9 +19,13 @@ class CreateAirportPassLocalsTable extends Migration
             $table->string('NV_SERIAL_NO');
             $table->string('CLIENT_LAST_NAME');
             $table->string('CLIENT_OTHER_NAMES');
+            $table->string('CLIENT_ORGANIZATION');
             $table->string('IDENTIFICATION');
-            $table->string('PREVIOUS_PASS_NO');
+            $table->string('PREVIOUS_PASS_NO')->nullable();
             $table->string('MOBILE_NO');
+            $table->string('APPLICATION_TYPE');
+            $table->string('APPLICATION_YEAR');
+            $table->text('COMMENTS')->nullable();
             $table->timestamps();
         });
     }
