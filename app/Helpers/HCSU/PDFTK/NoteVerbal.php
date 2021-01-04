@@ -247,7 +247,7 @@ class NoteVerbal {
 		}
 		else if($this->process == "airport-pass-locals"){
 			$this->footer = "Any assistance that could be extended to the above-mentioned staff member of {$this->data->client->organization} to obtain the annual airport pass for the year {$this->data->actual->APPLICATION_YEAR} would be highly appreciated.\r\r\r\r\r\r\r\r                            Samuel OLAGO, Manager\n";
-			$this->footer .= "\r\r\r\r\r\r\r\r                            Host Country Services Unit, UNON";
+			$this->footer .= "                        Host Country Services Unit, UNON";
 		}
 		else{
 			$dateContent = "";
