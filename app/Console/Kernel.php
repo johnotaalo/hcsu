@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\SendUNSOSDataCron::class,
+        Commands\SendOIOSIDDataCron::class,
         Commands\TestCommand::class
     ];
 
@@ -45,7 +46,7 @@ class Kernel extends ConsoleKernel
         //     $schedule->job(new ExportOrganizationData($organizations, $group), 'organization_data')->dailyAt('19:20');
         // }
         $schedule->command("senddata:unsos")->daily();
-        // $schedule->command("senddata:oiosid")->daily();
+        $schedule->command("senddata:oiosid")->daily();
         $schedule->command("adobesign:checkstatus")->everyFiveMinutes();
     }
 
