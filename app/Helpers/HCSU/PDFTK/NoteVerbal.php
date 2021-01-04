@@ -229,7 +229,7 @@ class NoteVerbal {
 			$this->header .= "Please find enclosed approved registration Form A for {$end_header}, for the registration of his vehicle whose details are given below:\n\n";
 		}
 		else if($this->process == "airport-pass-locals"){
-			$this->header = "Our Ref: {$this->data->ref}/{$this->initials}\t\t\t{$this->data->date}\n\n";
+			$this->header = "Our Ref: {$this->data->ref}/{$this->initials}    {$this->data->date}\n\n";
 			$this->header .= "General Manager\nSecurity Services\nKenya Airports Authority\nP.O Box 19087-00501\nNairobi\n\n\n";
 			$this->header .= "RE: Request for {$this->data->type} of Annual Airport Pass - {$this->data->client->organization}\n\n";
 			$this->header .= "The United Nations Office at Nairobi (UNON) wishes to apply for issuance of Annual Airport Pass for the following staff member of {$this->data->client->organization} whose duties require him to go to the airport very often to meet with senior United Nations officials arriving at JKIA, Nairobi.";
@@ -244,7 +244,12 @@ class NoteVerbal {
 	public function getFooter(){
 		if($this->process == "logbook"){
 			$this->footer = "Your assistance to facilitate the registration of the vehicle will be highly appreciated\r\r\r\r\r\r\r\r                            {$this->data->date}";
-		}else{
+		}
+		else if($this->process == "airport-pass-locals"){
+			$this->footer = "Any assistance that could be extended to the above-mentioned staff member of {$this->data->client->organization} to obtain the annual airport pass for the year {$this->data->actual->APPLICATION_YEAR} would be highly appreciated.\r\r\r\r\r\r\r\r                            Samuel OLAGO, Manager\n";
+			$this->footer .= "\r\r\r\r\r\r\r\r                            Host Country Services Unit, UNON";
+		}
+		else{
 			$dateContent = "";
 			if ($this->showdate) {
 				$dateContent = "\r\r\r\r\r\r\r\r                            {$this->data->date}";
@@ -575,6 +580,14 @@ class NoteVerbal {
 			if ($this->data->actual->ADDITIONAL_COMMENTS) {
 				$body .= "\r{$this->data->actual->ADDITIONAL_COMMENTS}\r";
 			}
+			break;
+
+		case 'airport-pass-locals':
+			$body = "\n\nDetails are as follows:\r";
+			$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+			$body .= str_pad("National ID: ", $padding) . "{$this->data->actual->IDENTIFICATION}\r";
+
+			$body .= "\n\nFollowing the implementation of IPMIS (Integrated Protocol Management Information System) by the Ministry of Foreign Affairs and International Trade, Kenya nationals are not required to seek approval through the ministry.";
 			break;
 
 		case 'logbook':

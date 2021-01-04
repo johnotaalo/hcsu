@@ -13,6 +13,7 @@ class AirportPassLocalsData{
 
 		$mission = $airportPassData->CLIENT_ORGANIZATION;
 
+		$clientObj->name = strtoupper($airportPassData->CLIENT_LAST_NAME) . ", " . $airportPassData->CLIENT_OTHER_NAMES;
 		$clientObj->organization = $mission;
 
 		$data->client = $clientObj;

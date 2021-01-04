@@ -614,6 +614,7 @@ class AppController extends Controller
                 'useExec'   =>  true
             ];
         }
+        try{
         if ($request->process == "logbook") {
             $pdf = new Pdf(public_path('templates/General_Note_Verbal_Ntsa.pdf'), $config);
         }
@@ -623,6 +624,7 @@ class AppController extends Controller
         $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
                 ->flatten()
                 ->execute();
+        
 
         $content = file_get_contents($pdf->getTmpFile());
         $localFile = "note-verbals/{$request->process}/Note Verbal - {$case->app_number}.pdf";
@@ -653,6 +655,9 @@ class AppController extends Controller
             return \Storage::download($localFile);
         }
         return response()->file(storage_path("app/{$localFile}"));
+    }catch(\Exception $ex){
+        dd($ex);
+    }
     }
 
     function uploadGeneratedForm($case_no, $task_id, $document, $localFile){
