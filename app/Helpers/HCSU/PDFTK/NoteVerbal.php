@@ -569,7 +569,7 @@ class NoteVerbal {
 			}
 
 			if($this->data->caseData->DUTY_PAID == "YES"){
-				$body .= "\rKindly note that the vehicle is duty paid and currently registered on civilian plates Reg. {$this->data->caseData->vehicle->ORIGINAL_REGISTRATION}. The staff member would like to re-register the vehicle and change the plates for civilian to diplomatic.\r"
+				$body .= "\rKindly note that the vehicle is duty paid and currently registered on civilian plates Reg. {$this->data->caseData->vehicle->ORIGINAL_REGISTRATION}. The staff member would like to re-register the vehicle and change the plates for civilian to diplomatic.\r";
 			}
 			
 			$body .= "\rA copy of duplicate Insurance Certificate and two copies of approved Pro 1B are attached herewith.";
