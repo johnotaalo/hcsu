@@ -104,9 +104,9 @@ class ApplicationsController extends Controller
                 $app_uid = $response->app_uid;
 
                 if (\App::environment('local') || \App::environment('staging')) {
-                    $statusURL = "http://".env('PM_SERVER')."/api/1.0/workflow/extrarest/cases/status/{$app_uid}";
+                    $statusURL = "http://".env('PM_SERVER')."/api/1.0/workflow/extrarest/case/status/{$app_uid}";
                 }else{
-                    $statusURL = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/extrarest/cases/status/{$app_uid}";
+                    $statusURL = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/extrarest/case/status/{$app_uid}";
                 }
 
                 $aVars = [
