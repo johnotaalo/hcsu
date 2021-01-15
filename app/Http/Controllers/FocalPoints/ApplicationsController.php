@@ -81,7 +81,7 @@ class ApplicationsController extends Controller
             $startTask = \DB::connection('pm')->table('TASK')->where('PRO_UID', $application->PROCESS_UID)->where('TAS_TITLE', 'LIKE', 'Receive%')->first();
             if ($startTask) {
                 if (\App::environment('local') || \App::environment('staging')) {
-                    $url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases";
+                    $url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/impersonate";
                 }else{
                     $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/impersonate";
                 }
