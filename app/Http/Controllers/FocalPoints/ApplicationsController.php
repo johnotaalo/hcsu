@@ -83,17 +83,18 @@ class ApplicationsController extends Controller
                 if (\App::environment('local') || \App::environment('staging')) {
                     $url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases";
                 }else{
-                    $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases";
+                    $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/impersonate";
                 }
 
-                $caseData =[
+                $caseData =[[
                     'host_country_id'           =>  $request->input('host_country_id'),
                     'host_country_id_label'     =>  $request->input('host_country_id')
-                ];
+                ]];
 
                 $data = [
                     "pro_uid"   =>  $application->PROCESS_UID,
                     "tas_uid"   =>  $startTask->TAS_UID,
+                    "usr_uid"   =>  $request->input('assignedTo')['USR_UID'],
                     "variables" =>  $caseData
                 ];
 
