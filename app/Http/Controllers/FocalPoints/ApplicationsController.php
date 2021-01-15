@@ -103,6 +103,18 @@ class ApplicationsController extends Controller
                 $case_no = $response->app_number;
                 $app_uid = $response->app_uid;
 
+                if (\App::environment('local') || \App::environment('staging')) {
+                    $statusURL = "http://".env('PM_SERVER')."/api/1.0/workflow/extrarest/cases/status/{$app_uid}";
+                }else{
+                    $statusURL = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/extrarest/cases/status/{$app_uid}";
+                }
+
+                $aVars = [
+                    'status' => 'TO_DO'
+                ];
+
+                $res = \Processmaker::executeREST($statusURL, "PUT", $aVars, $authenticationData->access_token);
+
                 // $setVariablesURL = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/variable";
                 // $response = \Processmaker::executeREST($setVariablesURL, "PUT", $caseData, $authenticationData->access_token);
 
