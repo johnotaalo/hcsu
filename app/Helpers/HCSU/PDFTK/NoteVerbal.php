@@ -155,6 +155,13 @@ class NoteVerbal {
 						$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}.";
 					}
 				}
+
+				if ($this->data->type == "new-case") {
+					if ($this->data->caseData->TYPE == "New Status") {
+						$your_ref = "Your Ref: {$this->data->client->RNO}\n";
+					}
+				}
+
 				break;
 			case 'domestic-worker-justification':
 				$connector = "apply for";
