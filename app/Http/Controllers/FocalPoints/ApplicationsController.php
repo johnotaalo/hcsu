@@ -86,9 +86,47 @@ class ApplicationsController extends Controller
                     $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/impersonate";
                 }
 
+                $clientType = identify_hcsu_client($request->input('host_country_id'));
+                $clientObj = new \StdClass;
+
+                $host_country_id = $request->input('host_country_id');
+
+                if ($clientType == "staff") {
+                    $principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $host_country_id)->first();
+                    $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$host_country_id})"))->first();
+
+                    $mission = $contract->ACRONYM;
+                    $name = format_other_names($principal->OTHER_NAMES) . " " . strtoupper($principal->LAST_NAME);
+                    $client_name = $name;
+
+                    $clientObj->name = $client_name;
+                    $clientObj->organization = $mission;
+                }
+                else if($clientType == "agency"){
+                    $agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $host_country_id)->first();
+                    $clientObj->name = $agency->ACRONYM;
+                    $clientObj->organization = $agency->ACRONYM;
+                }else if($clientType == "dependent"){
+                    $dependent = \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first();
+                    $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dependent->PRINCIPAL_ID})"))->first();
+
+                    $mission = $contract->ACRONYM;
+                    
+                    $relationship = $dependent->relationship->RELATIONSHIP;
+                    $relationship = ($relationship == "Spouse") ? strtolower($relationship) : "dependent";
+
+                    $name = format_other_names($dependent->OTHER_NAMES) . " " . strtoupper($dependent->LAST_NAME);
+                    $client_name = $name;
+
+                    $clientObj->name = "{$client_name} {$dependent->relationship->RELATIONSHIP} of {$dependent->principal->fullname}";
+                    $clientObj->organization = $mission;
+                }
+
                 $caseData =[[
                     'host_country_id'           =>  $request->input('host_country_id'),
-                    'host_country_id_label'     =>  $request->input('host_country_id')
+                    'host_country_id_label'     =>  $request->input('host_country_id').
+                    'client_name'               =>  $clientObj->name,
+                    'clientOrganization'        =>  $clientObj->organization
                 ]];
 
                 $data = [
