@@ -126,6 +126,8 @@ class ApplicationsController extends Controller
                 $application->SUPERVISOR_COMMENTS = $request->input('supervisorComments');
 
                 $application->save();
+
+                dd($res);
             }
         }else{
             $application->STATUS = "QUERIED";
