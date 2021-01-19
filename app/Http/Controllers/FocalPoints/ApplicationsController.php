@@ -124,9 +124,9 @@ class ApplicationsController extends Controller
 
                 $caseData =[[
                     'host_country_id'           =>  $request->input('host_country_id'),
-                    'host_country_id_label'     =>  $request->input('host_country_id').
+                    'host_country_id_label'     =>  $request->input('host_country_id'),
                     'client_name'               =>  $clientObj->name,
-                    'clientOrganization'        =>  $clientObj->organization
+                    'clientOrganization'        =>  $clientObj->organization,
                 ]];
 
                 $data = [
