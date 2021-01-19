@@ -96,7 +96,7 @@ class ApplicationsController extends Controller
                     $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$host_country_id})"))->first();
 
                     $mission = $contract->ACRONYM;
-                    $name = format_other_names($principal->OTHER_NAMES) . " " . strtoupper($principal->LAST_NAME);
+                    $name = strtoupper($principal->LAST_NAME . ", " . format_other_names($principal->OTHER_NAMES));
                     $client_name = $name;
 
                     $clientObj->name = $client_name;
@@ -115,7 +115,7 @@ class ApplicationsController extends Controller
                     $relationship = $dependent->relationship->RELATIONSHIP;
                     $relationship = ($relationship == "Spouse") ? strtolower($relationship) : "dependent";
 
-                    $name = format_other_names($dependent->OTHER_NAMES) . " " . strtoupper($dependent->LAST_NAME);
+                    $name = strtoupper($dependent->LAST_NAME . ", " . format_other_names($dependent->OTHER_NAMES));
                     $client_name = $name;
 
                     $clientObj->name = "{$client_name} {$dependent->relationship->RELATIONSHIP} of {$dependent->principal->fullname}";
@@ -165,7 +165,7 @@ class ApplicationsController extends Controller
 
                 $application->save();
 
-                dd($res);
+                // dd($res);
             }
         }else{
             $application->STATUS = "QUERIED";

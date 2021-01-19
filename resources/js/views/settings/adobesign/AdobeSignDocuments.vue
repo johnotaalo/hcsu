@@ -5,13 +5,14 @@
 				
 			</div>
 			<v-server-table
+			responsive
 			ref="documentsTable"
 			class="table-sm table-nowrap card-table"
 			:columns="serverColumns"
 			:options="tableOptions"
 			size="sm">
 				<template slot="NAME" slot-scope="data">
-					{{ data.row.name }}
+					<p>{{ data.row.name }}</p>
 				</template>
 			</v-server-table>
 		</div>
