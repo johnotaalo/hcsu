@@ -77,6 +77,8 @@ class AdobeSignApiController extends Controller
             $search['type'] = $formType;
         }
 
+        \Log::debug("Search: " . json_encode($search));
+
         $document = FormTemplate::where($search)->first();
         $extraParams = $request->query();
 
