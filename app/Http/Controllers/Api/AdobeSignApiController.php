@@ -66,10 +66,15 @@ class AdobeSignApiController extends Controller
         $includeNV = $request->input('include_nv');
         $nvOnly = ($request->has('nvOnly')) ? true : false;
         $clientEmail = ($request->has('clientEmail')) ? $request->input('clientEmail') : null;
+        $formType = ($request->has('formType')) ? $request->input('formType') : null;
 
         $search = ['process' => $process];
         if ($nvOnly && is_null($clientEmail)) {
             $search['type'] = 'nv';
+        }
+
+        if($formType){
+            $search['type'] = $formType;
         }
 
         $document = FormTemplate::where($search)->first();
@@ -134,7 +139,7 @@ class AdobeSignApiController extends Controller
                 $adobeSignDoc->URLS = json_encode($signingURLs);
 
 
-                if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || ($processName == "driving-license-duplicate") || ($processName == "airport-pass")){
+                if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || ($processName == "driving-license-duplicate") || ($processName == "airport-pass" && is_null($formType))){
                     $adobeSignDoc->ROUTING = true;
                 }
 

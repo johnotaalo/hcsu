@@ -27,6 +27,8 @@ class AirportPassData{
 		$clientObj->doa = ($principal->current_arrival) ? $principal->current_arrival->ARRIVAL : "N/A";
 		$clientObj->principal = $principal;
 		$clientObj->applicationYear = $airportPassData->YEAR;
+		$clientObj->contact = $principal->MOBILE_NO;
+		$clientObj->nationality = $principal->nationality->name;
 
 		$data->client = $clientObj;
 		$data->case_no = $case_no;
