@@ -48,7 +48,7 @@ class Pro1BData{
 			$client_name = $name;
 
 			$clientObj->name = $client_name;
-			$clientObj->designation = "{$dependent->relationship->RELATIONSHIP} of {$dependent->principal->fullname}";
+			$clientObj->designation = $contract->designation;
 			$clientObj->fullname = "{$client_name} {$clientObj->designation}";
 			$clientObj->principal = $dependent->principal;
 			$clientObj->contract_type = $contract->C_TYPE;
