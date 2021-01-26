@@ -406,8 +406,8 @@ class NoteVerbal {
 					if($this->data->client->type == "dependent"){
 						$dependant = $this->data->client->data;
 						$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
-						if(count($this->data->client->dependents)){
-							foreach ($this->data->client->dependents as $dependant) {
+						if(count($this->data->client->allDependents)){
+							foreach ($this->data->client->allDependents as $dependant) {
 								$passport_no = ($dependant->latest_passport) ? $dependant->latest_passport->PASSPORT_NO : "N/A";
 								$passport_validity = ($dependant->latest_passport) ? $dependant->latest_passport->EXPIRY_DATE : "N/A";
 								$body .= str_pad(ucwords(strtolower($dependant->OTHER_NAMES)) . " " . strtoupper($dependant->LAST_NAME), 30) . str_pad($passport_no, 15) . str_pad($dependant->COUNTRY, 20) . str_pad($passport_validity, 20);

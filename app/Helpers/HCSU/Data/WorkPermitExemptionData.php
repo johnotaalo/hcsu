@@ -95,7 +95,7 @@ class WorkPermitExemptionData{
 			$clientObj->principal = $dependent->principal;
 			$clientObj->passport = $dependent->latest_passport;
 			$clientObj->data = $dependent;
-			$clientObj->allObjects = $dependents;
+			$clientObj->allDependents = $dependents;
 		}
 		else if($clientType == "domestic-worker"){
 			$domesticWorker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
