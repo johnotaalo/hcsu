@@ -150,7 +150,7 @@ class NoteVerbal {
 					if ($this->data->client->type == "dependent") {
 						// dd($this->data->client->principal);
 						$your_ref = "Your Ref: {$this->data->client->principal->R_NO}\n";
-						$end_header .= " of Dependants Pass for the under mentioned dependant of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}.";
+						$end_header .= " of Dependants Pass for the under mentioned dependant(s) of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}.";
 					}else{
 						$end_header .= " of Exemption from Kenya Work Permit for the under mentioned domestic staff of {$this->data->client->principal->principal_name}, a {$this->data->client->contract_type} of {$this->data->client->organization}.";
 					}
