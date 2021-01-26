@@ -17,6 +17,10 @@ class UserApplications extends Model
 	// 	return $this->belongsTo(\App\Models\PM\Process::class, 'PROCESS_UID', 'PRO_UID');
 	// }
 
+	public function files(){
+		return $this->hasMany(\App\Model\UserApplicationFile::class, 'USER_APPLICATION_ID');
+	}
+
 	public function getProcessAttribute(){
 		return \App\Models\PM\Process::where('PRO_UID', $this->PROCESS_UID)->first();
 	}

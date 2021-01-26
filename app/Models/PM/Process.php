@@ -8,5 +8,5 @@ class Process extends Model
 {
     protected $connection = "pm";
     protected $table = "PROCESS";
-    protected $primaryKey = "PRO_UID";
+    // protected $primaryKey = "PRO_UID";
 }

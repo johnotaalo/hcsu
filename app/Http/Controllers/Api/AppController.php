@@ -362,6 +362,12 @@ class AppController extends Controller
         die(json_encode($data));
     }
 
+    function getLocalProcessList(){
+        $processes = \App\Models\PM\Process::all();
+
+        return $processes;
+    }
+
     function getProcessList(){
         if (App::environment('local') || App::environment('staging')) {
             $url = "http://".env('PM_SERVER')."/api/1.0/workflow/project";

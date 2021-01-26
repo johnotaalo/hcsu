@@ -57,20 +57,24 @@ class ApplicationsController extends Controller
     	}
 
     	$application = \App\Models\UserApplications::create([
-    		'PROCESS_UID'			=>	$input['process']['prj_uid'],
-    		'HOST_COUNTRY_ID'		=>	'10001000',
+    		'PROCESS_UID'			=>	$input['process']['PRO_UID'],
+    		'HOST_COUNTRY_ID'		=>	$input['client']['HOST_COUNTRY_ID'],
     		'COMMENT'				=>	$input['comment'],
     		'SUBMITTED_BY'			=>	\Auth::user()->id,
     		'AUTHENTICATION_SOURCE'	=>	'USER'
     	]);
 
+        foreach ($input['uploads'] as $key => $upload) {
+            $file = new \App\Model\UserApplicationFile();
 
-    	$file = new \App\Model\UserApplicationFile();
+            $file->USER_APPLICATION_ID = $application->id;
+            $file->FILE_DESCRIPTION = $upload['description'];
+            $file->FILE_URL = $this->uploadFile($request->file('uploads')[$key]['file']);
 
-    	$file->USER_APPLICATION_ID = $application->id;
-    	$file->FILE_URL = $this->uploadFile($request->file('uploads'));
+            $file->save();
+        }
 
-    	$file->save();
+        return $application;
     }
 
     function assign(Request $request){

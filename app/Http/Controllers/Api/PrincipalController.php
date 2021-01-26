@@ -100,7 +100,9 @@ class PrincipalController extends Controller
 
     function searchPrincipal(Request $request){
         $query = $request->q;
-        return Principal::
+        $organization = (isset($request->organization)) ? $request->organization : null;
+        // $organization = null;
+        $principals = Principal::
                 where('STATUS', 1)
                 ->where('LAST_NAME', 'LIKE', "%{$query}%")
                 ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
@@ -114,22 +116,50 @@ class PrincipalController extends Controller
                 // })
                 ->limit(20)
                 ->get();
+
+        if($organization){
+            $principals = $principals->filter(function($model) use ($organization){
+                // dd($model->latest_contract);
+                if ($model->latest_contract->ACRONYM == $organization) {
+                    return true;
+                }
+
+                return false;
+            })->values();
+        }
+
+        return $principals->all();
     }
 
     function searchDependent(Request $request){
-      $query = $request->q;
+        $query = $request->q;
+        $organization = (isset($request->organization)) ? $request->organization : null;
 
-      return PrincipalDependent::
-              where('LAST_NAME', 'LIKE', "%{$query}%")
-              ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
-              ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
-              ->orWhereHas('principal', function ($modelQuery) use ($query) {
-                $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
-                ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
-              })
-              ->limit(20)
-              ->with('relationshipX', 'principal')
-              ->get();
+        $dependents = PrincipalDependent::
+            where('LAST_NAME', 'LIKE', "%{$query}%")
+            ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
+            ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
+            ->orWhereHas('principal', function ($modelQuery) use ($query) {
+            $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
+            ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
+            })
+            ->limit(20)
+            ->with('relationshipX', 'principal')
+            ->get();
+
+        if($organization){
+            $dependents = $dependents->filter(function($model) use ($organization){
+                // dd($model->latest_contract);
+                if ($model->principal->latest_contract->ACRONYM == $organization) {
+                    return true;
+                }
+
+                return false;
+            })->values();
+        } 
+
+        return $dependents->all();      
+
     }
 
     function getDependents(Request $request){
