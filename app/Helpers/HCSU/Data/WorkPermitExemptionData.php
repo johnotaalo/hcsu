@@ -79,6 +79,14 @@ class WorkPermitExemptionData{
 			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dependent->principal->HOST_COUNTRY_ID})"))->first();
 			$mission = $contract->ACRONYM;
 
+			$includedDependents = explode(',', $caseData->DEPENDENTS);
+			$dependents = [];
+			$relationships = [];
+			if (count($includedDependents)) {
+				$dependents = \App\Models\PrincipalDependent::whereIn('HOST_COUNTRY_ID', $includedDependents)->get();
+				$relationships = ($dependents->pluck('relationship.RELATIONSHIP'))->unique()->toArray();
+			}
+
 			$clientObj->name = $client_name;
 			$clientObj->designation = $contract->DESIGNATION;
 			$clientObj->grade = $contract->GRADE;
@@ -87,6 +95,7 @@ class WorkPermitExemptionData{
 			$clientObj->principal = $dependent->principal;
 			$clientObj->passport = $dependent->latest_passport;
 			$clientObj->data = $dependent;
+			$clientObj->allObjects = $dependents;
 		}
 		else if($clientType == "domestic-worker"){
 			$domesticWorker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
