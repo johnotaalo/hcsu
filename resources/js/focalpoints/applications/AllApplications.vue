@@ -14,7 +14,10 @@
 							</div>
 
 							<div class="col-auto">
-								<b-button class="btn-sm btn-white" :to="{ name: 'applications.new' }">Start a New Application</b-button>
+								<b-button class="btn btn-sm btn-white"><i class="fe fe-filter"></i>&nbsp;Filter</b-button>
+							</div>
+							<div class="col-auto">
+								<b-button class="btn-sm btn-white" :to="{ name: 'applications.new' }"><i class="fe fe-plus-circle"></i>&nbsp;Start a New Application</b-button>
 							</div>
 						</form>
 					</div>
@@ -46,7 +49,27 @@
 			</template>
 
 			<template slot="ACTIONS" slot-scope="data">
-				TBA
+				<div class="text-right">
+					<div class="dropdown">
+						<a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fe fe-more-vertical"></i>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right" style="">
+							<router-link :to="{ name: '', params: {} }" class="dropdown-item" v-if="data.row.STATUS == 'QUERIED'">
+								<i class="fe fe-edit-3"></i>&nbsp;Edit Application
+							</router-link>
+							<router-link :to="{ name: '', params: {} }" class="dropdown-item">
+								<i class="fe fe-eye"></i>&nbsp;View Application
+							</router-link>
+							<router-link :to="{ name: '', params: {} }" class="dropdown-item" v-if="data.row.STATUS == 'SUBMITTED'">
+								<i class="fe fe-x"></i>&nbsp;Cancel Application
+							</router-link>
+							<router-link :to="{ name: '', params: {} }" class="dropdown-item" v-if="data.row.STATUS == 'ASSIGNED'">
+								<i class="fe fe-navigation-2"></i>&nbsp;Track Application
+							</router-link>
+						</div>
+					</div>
+				</div>
 			</template>
 			</v-server-table>
 		</div>
@@ -64,6 +87,17 @@
 					perPageValues: [],
 					filterable: false,
 					customFilters: ['normalSerch'],
+					sortable: ["CASE_NO", "PROCESS_NAME", "CREATED_AT"],
+					sortIcon: {
+						base: 'fe',
+						up: 'fe-arrow-up',
+						down: 'fe-arrow-down',
+						is: 'fe-minus'
+					},
+					orderBy: {
+						column: "CREATED_AT",
+						ascending: false
+					},
 					requestFunction: (data) => {
 						return axios.get(`/api/focal-points/applications`, {
 							params: data

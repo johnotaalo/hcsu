@@ -38,6 +38,7 @@ import FPNormalVATView from './focalpoints/applications/FPNormalVATView'
 
 import AllApplications from './focalpoints/applications/AllApplications'
 import NewApplication from './focalpoints/applications/NewApplication'
+import ViewApplication from './focalpoints/applications/ViewApplication'
 axios.interceptors.request.use(config => {
 	NProgress.start()
 	return config;
@@ -93,6 +94,15 @@ const router = new VueRouter({
 			auth: true
 		},
 		component: NewApplication,
+	},{
+		path: "/applications/view",
+		name: "applications.view",
+		meta: {
+			title: "View Application",
+			subtitle: 'Applications',
+			auth: true
+		},
+		component: ViewApplication,
 	}, {
 		path: '/applications/normal-vat/add',
 		component: FPNormalVATAdd,

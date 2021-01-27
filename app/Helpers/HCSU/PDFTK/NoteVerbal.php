@@ -144,7 +144,11 @@ class NoteVerbal {
 					}else if ($this->data->type == "endorsement"){
 						$end_header .= "endorsement";
 					}else if($this->data->type == "renewal"){
-						$end_header .= "the renewal";
+						if($this->data->caseData->TYPE == "renewal"){
+							$end_header .= "the renewal";
+						}else{
+							$end_header .= "the transfer";
+						}
 					}
 
 					if ($this->data->client->type == "dependent") {

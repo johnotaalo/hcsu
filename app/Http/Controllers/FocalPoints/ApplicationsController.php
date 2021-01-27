@@ -19,14 +19,37 @@ class ApplicationsController extends Controller
         // ->with('process')
         /* */
 
+        $columnMap = [
+            'CASE_NO'           =>  'APP_NUMBER', 
+            'PROCESS_NAME'      =>  'PRO_TITLE',
+            'CREATED_AT'        =>  'CREATED_AT'       
+        ];
+
         if ($searchQueries) {
         	$queryBuilder->where('PROCESS_UID', 'LIKE', "%{$searchQueries}%");
         }
 
+        if ($orderBy) {
+            $column = $columnMap[$orderBy];
+
+            if ($column != "PRO_TITLE") {
+                $queryBuilder->orderBy($column, ($ascending == 1) ? 'ASC' : 'DESC');
+            }
+        }
+
         $count = $queryBuilder->count();
-        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+        $queryBuilder = $queryBuilder->with('caseDetails')->limit($limit)->skip($limit * ($page - 1));
 
         $data = $queryBuilder->get();
+
+        if ($orderBy && $columnMap[$orderBy] == "PRO_TITLE") {
+            if ($ascending == 1) {
+                $data = ($data->sortBy('process.PRO_TITLE'))->values()->all();
+            }else{
+                $data = ($data->sortByDesc('process.PRO_TITLE'))->values()->all();
+            }
+        }
+
     	return [
     		'count'	=>	$count,
     		'data'	=>	$data
