@@ -3,6 +3,10 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Jobs\ExportOrganizationData;
+use Illuminate\Support\Facades\Mail;
+
+use \App\Jobs\SendOrganizationData;
 
 class SendUNICEFROData extends Command
 {
