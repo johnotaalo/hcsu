@@ -48,6 +48,10 @@ class Kernel extends ConsoleKernel
         $schedule->command("senddata:unsos")->daily();
         $schedule->command("senddata:oiosid")->daily();
         $schedule->command("senddata:unicef-so")->daily();
+        $schedule->command("senddata:undp-kco")->daily();
+        $schedule->command("senddata:unhcr-kco")->daily();
+        $schedule->command("senddata:unicef-kco")->daily();
+        $schedule->command("senddata:unicef-ro")->daily();
         $schedule->command("adobesign:checkstatus")->everyFiveMinutes();
     }
 
