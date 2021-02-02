@@ -40,7 +40,7 @@ Route::get('/photos/principal/{host_country_id}', function($host_country_id){
 	}
 })->name('principal-photo');
 Route::get('uploads/{id}', function($id){
-	$filename = \App\Model\UserApplicationFile::where('USER_APPLICATION_ID', $id)->first();
+	$filename = \App\Model\UserApplicationFile::where('id', $id)->first();
 
 	if (\Storage::exists($filename->FILE_URL)) {
 		$file = \Storage::get($filename->FILE_URL);

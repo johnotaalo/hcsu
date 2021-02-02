@@ -304,6 +304,7 @@ Route::prefix('/focal-points')->group(function(){
 			Route::post('/assign/{id}', 'FocalPoints\ApplicationsController@assign');
 			Route::get('/get/{id}', 'FocalPoints\ApplicationsController@getApplication');
 			Route::post('/new', 'FocalPoints\ApplicationsController@new');
+			Route::get('/cancel/{id}', 'FocalPoints\ApplicationsController@cancelApplication');
 		});
 	});
 });

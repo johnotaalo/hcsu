@@ -22,7 +22,7 @@ class ApplicationsController extends Controller
         $columnMap = [
             'CASE_NO'           =>  'APP_NUMBER', 
             'PROCESS_NAME'      =>  'PRO_TITLE',
-            'CREATED_AT'        =>  'CREATED_AT'       
+            'CREATED'           =>  'CREATED_AT'       
         ];
 
         if ($searchQueries) {
@@ -65,9 +65,21 @@ class ApplicationsController extends Controller
     function getApplication(Request $request){
         $id = $request->id;
 
-        $data = \App\Models\UserApplications::findOrFail($id);
+        $data = \App\Models\UserApplications::with('files')->findOrFail($id);
 
         return $data;
+    }
+
+    function cancelApplication(Request $request){
+        $id = $request->id;
+
+        $application = \App\Models\UserApplications::findOrFail($id);
+
+        $application->STATUS = "CANCELED";
+
+        $application->save();
+
+        return $application;
     }
 
     function new(Request $request){

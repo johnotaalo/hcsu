@@ -19,6 +19,7 @@ import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 
 import VueSwal from 'vue-swal'
 import vSelect from 'vue-select'
+import VueRouterBackButton from 'vue-router-back-button'
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -38,7 +39,7 @@ import FPNormalVATView from './focalpoints/applications/FPNormalVATView'
 
 import AllApplications from './focalpoints/applications/AllApplications'
 import NewApplication from './focalpoints/applications/NewApplication'
-// import ViewApplication from './focalpoints/applications/ViewApplication'
+import ViewApplication from './focalpoints/applications/ViewApplication'
 axios.interceptors.request.use(config => {
 	NProgress.start()
 	return config;
@@ -95,16 +96,16 @@ const router = new VueRouter({
 		},
 		component: NewApplication,
 	},
-	// {
-	// 	path: "/applications/view",
-	// 	name: "applications.view",
-	// 	meta: {
-	// 		title: "View Application",
-	// 		subtitle: 'Applications',
-	// 		auth: true
-	// 	},
-	// 	component: ViewApplication,
-	// }, 
+	{
+		path: "/applications/view/:id",
+		name: "applications.view",
+		meta: {
+			title: "View Application",
+			subtitle: 'Applications',
+			auth: true
+		},
+		component: ViewApplication,
+	}, 
 	{
 		path: '/applications/normal-vat/add',
 		component: FPNormalVATAdd,
@@ -134,6 +135,8 @@ const router = new VueRouter({
 		}
 	}]
 });
+
+Vue.use(VueRouterBackButton, { router })
 
 const app = new Vue({
     el: '#app',

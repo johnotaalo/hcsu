@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="col-md-2">
-				<b-button variant="danger" size="sm">Remove File</b-button>
+				<b-button variant="danger" size="sm" @click="removeRow()">Remove File</b-button>
 			</div>
 		</div>
 	</transition>

@@ -81,14 +81,21 @@
 		methods: {
 			submitApplication: function(){
 				// this.form.outputToConsole()
-				this.form.post('focal-points/applications/new')
-				.then(res => {
-					alert('Successfully submitted application');
-					this.$router.push({ name: 'applications.all' })
-				})
-				.catch(error => {
-					alert("There was an error processing your request");
-				})
+				if (!this.form.client || !this.form.process || this.form.uploads.length == 0) {
+					this.$swal("Error", 'Please fill in all details before proceeding', "error")
+				}else{
+					this.form.post('focal-points/applications/new')
+					.then(res => {
+						this.$swal("Success", 'Successfully submitted application', "success")
+						.then(() => {
+							this.$router.push({ name: 'applications.all' })
+						})
+					})
+					.catch(error => {
+						alert("There was an error processing your request")
+					})
+				}
+				
 			},
 			getProcesses: function(){
 				axios.get('/api/data/processes/local')
