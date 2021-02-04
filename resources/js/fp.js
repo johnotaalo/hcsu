@@ -1,6 +1,7 @@
 require('./bootstrap');
 window.instance = require('./http')
 window.Vue = require('vue');
+require('highcharts-vue');
 
 import '../../public/fonts/feather/feather.min.css'
 import '../../public/css/theme.min.css'
@@ -20,6 +21,20 @@ import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 import VueSwal from 'vue-swal'
 import vSelect from 'vue-select'
 import VueRouterBackButton from 'vue-router-back-button'
+import HighchartsVue from 'highcharts-vue'
+import VueHighcharts from 'vue-highcharts';
+import Highcharts from 'highcharts';
+
+// load these modules as your need
+import { genComponent } from 'vue-highcharts';
+import loadStock from 'highcharts/modules/stock.js';
+import loadMap from 'highcharts/modules/map.js';
+import loadGantt from 'highcharts/modules/gantt.js';
+import loadDrilldown from 'highcharts/modules/drilldown.js';
+// some charts like solid gauge require `highcharts-more.js`, you can find it in official document.
+import loadHighchartsMore from 'highcharts/highcharts-more.js';
+import loadSolidGauge from 'highcharts/modules/solid-gauge.js';
+import More from 'highcharts/highcharts-more'
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -29,6 +44,17 @@ Vue.use(ServerTable, {}, false, 'bootstrap4', 'default');
 Vue.use(ClientTable, {}, false, 'bootstrap4', 'default');
 Vue.use(VueSwal)
 Vue.component('v-select', vSelect)
+
+loadStock(Highcharts);
+loadMap(Highcharts);
+loadGantt(Highcharts);
+loadDrilldown(Highcharts);
+loadHighchartsMore(Highcharts);
+loadSolidGauge(Highcharts);
+More(Highcharts)
+
+Vue.use(HighchartsVue);
+Vue.use(VueHighcharts, { Highcharts });
 
 import App from './focalpoints/App'
 import Dashboard from './focalpoints/dashboard/Index'
@@ -40,6 +66,7 @@ import FPNormalVATView from './focalpoints/applications/FPNormalVATView'
 import AllApplications from './focalpoints/applications/AllApplications'
 import NewApplication from './focalpoints/applications/NewApplication'
 import ViewApplication from './focalpoints/applications/ViewApplication'
+import EditApplication from './focalpoints/applications/EditApplication'
 axios.interceptors.request.use(config => {
 	NProgress.start()
 	return config;
@@ -105,6 +132,16 @@ const router = new VueRouter({
 			auth: true
 		},
 		component: ViewApplication,
+	},
+	{
+		path: "/applications/edit/:id",
+		name: "applications.edit",
+		meta: {
+			title: "Edit Application",
+			subtitle: 'Applications',
+			auth: true
+		},
+		component: EditApplication,
 	}, 
 	{
 		path: '/applications/normal-vat/add',

@@ -14,8 +14,15 @@
 							</div>
 
 							<div class="col-auto">
-								<b-button class="btn btn-sm btn-white"><i class="fe fe-filter"></i>&nbsp;Filter</b-button>
+								<b-select size="sm" v-model="processSearch" :options="processes" @change="applyProcessFilter(processSearch)"></b-select>
 							</div>
+
+							<div class="col-auto">
+								<b-select size="sm" v-model="statusSearch" :options="statusOptions" @change="applyStatusFilter(statusSearch)"></b-select>
+							</div>
+							<!-- <div class="col-auto">
+								<b-button class="btn btn-sm btn-white" v-b-modal.filter-modal><i class="fe fe-filter"></i>&nbsp;Filter</b-button>
+							</div> -->
 							<div class="col-auto">
 								<b-button class="btn-sm btn-white" :to="{ name: 'applications.new' }"><i class="fe fe-plus-circle"></i>&nbsp;Start a New Application</b-button>
 							</div>
@@ -59,7 +66,7 @@
 							<i class="fe fe-more-vertical"></i>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" style="">
-							<router-link :to="{ name: 'applications.view', params: {id: data.row.id} }" class="dropdown-item" v-if="data.row.STATUS == 'QUERIED'">
+							<router-link :to="{ name: 'applications.edit', params: {id: data.row.id} }" class="dropdown-item" v-if="data.row.STATUS == 'QUERIED'">
 								<i class="fe fe-edit-3"></i>&nbsp;Edit Application
 							</router-link>
 							<router-link :to="{ name: 'applications.view', params: {id: data.row.id} }" class="dropdown-item">
@@ -77,20 +84,35 @@
 			</template>
 			</v-server-table>
 		</div>
+		<b-modal id="filter-modal" title="Filter">
+			Hello From My Modal!
+		</b-modal>
 	</div>
 </template>
 
 <script type="text/javascript">
+	import VueTables from 'vue-tables-2'
+	const Event = VueTables.Event
 	export default{
 		data(){
 			return {
 				searchTerm: "",
+				statusSearch: null,
+				processSearch: null,
+				statusOptions: [
+					{ value: null, text: 'All Statuses' },
+					{ value: 'SUBMITTED', text: 'SUBMITTED' },
+					{ value: 'QUERIED', text: 'QUERIED' },
+					{ value: 'ASSIGNED', text: 'ASSIGNED' },
+					{ value: 'CANCELED', text: 'CANCELED' },
+				],
+				processes: [],
 				columns: ['CASE_NO', 'CLIENT', 'PROCESS_NAME', 'STATUS', 'CURRENT_USER', 'CREATED', 'ACTIONS'],
 				options: {
 					perPage: 50,
 					perPageValues: [],
 					filterable: false,
-					customFilters: ['normalSerch'],
+					customFilters: ['normalSearch', 'statusSearch', 'processSearch'],
 					sortable: ["CASE_NO", "PROCESS_NAME", "CREATED"],
 					sortIcon: {
 						base: 'fe',
@@ -113,9 +135,31 @@
 				}
 			}
 		},
+		created(){
+			this.getProcesses()
+		},
 		methods: {
 			applySearchFilter: function(term){
 				Event.$emit('vue-tables.filter::normalSearch', term);
+			},
+			applyStatusFilter: function(term){
+				Event.$emit('vue-tables.filter::statusSearch', term);
+			},
+			applyProcessFilter: function(term){
+				Event.$emit('vue-tables.filter::processSearch', term);
+			},
+			getProcesses: function(){
+				axios.get('/api/data/processes/local')
+				.then((res) => {
+					this.processes = _.map(res.data, (process) => {
+						return {
+							value: process.PRO_UID,
+							text: process.PRO_TITLE
+						}
+					})
+
+					this.processes.unshift({ value: null, text: 'All processes' })
+				});
 			},
 			cancelApplication: function(id){
 				this.$swal({

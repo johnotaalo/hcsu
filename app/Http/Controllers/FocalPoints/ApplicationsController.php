@@ -9,13 +9,15 @@ class ApplicationsController extends Controller
 {
     function get(Request $request){
     	$searchQueries = $request->get('normalSearch');
+        $statusQuery = $request->get('statusSearch');
+        $processQuery = $request->get('processSearch');
         $limit = $request->get('limit');
         $page = $request->get('page');
         $ascending = $request->get('ascending');
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = \App\Models\UserApplications::select('*');
+        $queryBuilder = \App\Models\UserApplications::select('*')->where('AUTHENTICATION_SOURCE', 'USER')->where('SUBMITTED_BY', \Auth::user()->id);
         // ->with('process')
         /* */
 
@@ -27,6 +29,14 @@ class ApplicationsController extends Controller
 
         if ($searchQueries) {
         	$queryBuilder->where('PROCESS_UID', 'LIKE', "%{$searchQueries}%");
+        }
+
+        if($statusQuery){
+            $queryBuilder->where('STATUS', $statusQuery);
+        }
+
+        if ($processQuery) {
+            $queryBuilder->where('PROCESS_UID', $processQuery);
         }
 
         if ($orderBy) {
@@ -54,6 +64,12 @@ class ApplicationsController extends Controller
     		'count'	=>	$count,
     		'data'	=>	$data
     	];
+    }
+
+    function getAllApplications(){
+        $data = \App\Models\UserApplications::where('AUTHENTICATION_SOURCE', 'USER')->where('SUBMITTED_BY', \Auth::user()->id)->get();
+
+        return $data;
     }
 
     function getUsers(){
@@ -105,6 +121,52 @@ class ApplicationsController extends Controller
             $file->USER_APPLICATION_ID = $application->id;
             $file->FILE_DESCRIPTION = $upload['description'];
             $file->FILE_URL = $this->uploadFile($request->file('uploads')[$key]['file']);
+
+            $file->save();
+        }
+
+        return $application;
+    }
+
+    function edit(Request $request){
+        $input = $request->input();
+
+        $application = \App\Models\UserApplications::findOrFail($request->id);
+
+        $application->PROCESS_UID = $input['process']['PRO_UID'];
+        $application->HOST_COUNTRY_ID = $input['client']['HOST_COUNTRY_ID'];
+        $application->COMMENT = $input['comment'];
+        $application->STATUS = "SUBMITTED";
+
+        $application->save();
+
+        $documents = [];
+
+        foreach ($input['uploads'] as $key => $upload) {
+            if ($request->hasFile("uploads.{$key}.file")) {
+                $filePath = $this->uploadFile($request->file('uploads')[$key]['file']);
+            }else if(!isset($upload['file']) && $upload['edit']){
+                $file = \App\Model\UserApplicationFile::find($upload['id']);
+                if ($file) {
+                    $filePath = $file->FILE_URL;
+                }
+            }
+
+            $documents[] = [
+                'USER_APPLICATION_ID'   =>  $application->id,
+                'FILE_DESCRIPTION'      =>  $upload['description'],
+                'FILE_URL'              =>  $filePath
+            ];
+        }
+
+        \App\Model\UserApplicationFile::where('USER_APPLICATION_ID', $application->id)->delete();
+
+        foreach ($documents as $document) {
+            $file = new \App\Model\UserApplicationFile();
+
+            $file->USER_APPLICATION_ID = $application->id;
+            $file->FILE_DESCRIPTION = $document['FILE_DESCRIPTION'];
+            $file->FILE_URL = $document['FILE_URL'];
 
             $file->save();
         }

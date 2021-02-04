@@ -187,6 +187,9 @@
 				return true
 			}
 		},
+		methods: {
+			
+		},
 		watch: {
 			$route (to, from){
 				this.dashboard = false;

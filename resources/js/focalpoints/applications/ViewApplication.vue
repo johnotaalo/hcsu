@@ -71,7 +71,8 @@
 		data(){
 			return {
 				application: {
-					process: {}
+					process: {},
+					files: []
 				}
 			}
 		},
@@ -80,11 +81,13 @@
 		},
 		methods: {
 			getApplicationData(id){
+				this.$store.commit('loadingOn');
 				axios.get(`/api/focal-points/applications/get/${id}`)
 				.then((res) => {
+					this.$store.commit('loadingOff');
 					this.application = res.data
 				}).catch((error) => {
-					console.log(error)
+					this.$store.commit('loadingOff');
 					alert(error.message)
 				})
 			}
