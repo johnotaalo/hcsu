@@ -27,7 +27,7 @@
 					<div v-else>
 						<p>Picked Details: <button class="btn btn-link" @click="showClientForm = true">Change</button></p>
 						<b>Type: </b>{{ application.data.applicant_type | capitalize }}<br/>
-						<b>Name: </b><span v-if="application.data.applicant_type == 'staff'">{{ application.applicant_details.data.LAST_NAME }}, {{ application.data.applicant_details.OTHER_NAMES }}</span>
+						<b>Name: </b><span v-if="application.data.applicant_type == 'staff'">{{ application.data.applicant_details.LAST_NAME }}, {{ application.data.applicant_details.OTHER_NAMES }}</span>
 									<span v-if="application.data.applicant_type == 'agency'">{{ application.data.applicant_details.ACRONYM }}</span>
 					</div>
 				</div>
