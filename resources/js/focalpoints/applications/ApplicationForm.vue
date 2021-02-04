@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="card" v-if="application.data.STATUS == 'QUERIED'"> 
+		<div class="card"> 
 			<div class="card-body">
 				<div class="form-group" v-if="id != 0">
 					<label class = "control-label">Supervisor Comments</label>
@@ -55,23 +55,17 @@
 				<b-button @click="submitApplication" variant="primary">Submit Application</b-button>
 			</div>
 		</div>
-		<div class="container-fluid" v-else>
+		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
 
 					<!-- Card -->
 					<div class="card card-inactive">
 						<div class="card-body text-center">
-
-							<!-- Image -->
 							<img src="/img/illustrations/scale.svg" alt="..." class="img-fluid" style="max-width: 182px;">
-
-							<!-- Title -->
 							<h1>
 								Action Stopped
 							</h1>
-
-							<!-- Subtitle -->
 							<p class="text-muted">
 								You are not allowed to view this page
 							</p>
@@ -79,7 +73,7 @@
 					</div>
 
 				</div>
-			</div> <!-- / .row -->
+			</div> 
 		</div>
 	</div>
 </template>
