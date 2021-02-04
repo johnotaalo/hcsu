@@ -225,7 +225,7 @@
 				var pieData = [];
 
 				pieData = _.map(this.cleanedData.statuses, (applications, status) => {
-					return [_.startCase(_.toLower(statuses)), applications.length]
+					return [_.startCase(_.toLower(status)), applications.length]
 				})
 				// this.$refs.statusChart.chart.reflow()
 				return {
