@@ -147,7 +147,24 @@
 		data(){
 			return {
 				appData: [],
-				statuses: ['ASSIGNED', 'CANCELED', 'SUBMITTED', 'QUERIED']
+				statuses: [
+					{
+						name: 'ASSIGNED',
+						color: "#1b5e20"
+					},
+					{
+						name: 'CANCELED',
+						color: "#B71C1C"
+					}, 
+					{
+						name: 'SUBMITTED',
+						color: "#0d47a1"
+					},
+					{
+						name: 'QUERIED',
+						color: "#ff6f00"
+					}
+				]
 			}
 		},
 		created(){
@@ -185,8 +202,10 @@
 
 				var statusData = {};
 				var monthlyCount = {};
+				data['statusColor'] = {};
 				_.each(this.statuses, (status) => {
-					statusData[status] = []
+					statusData[status.name] = []
+					data['statusColor'][status.name] = status.color
 				})
 
 				var year = this.$moment().format("YYYY");
@@ -200,19 +219,27 @@
 				data['months'] = previousMonths
 				data['counts']['applications']['monthly'] = {}
 
+				var monthlyInfo = {};
+
 				_.each(this.appData, (d) => {
 					statusData[d.STATUS].push(d.id)
-					_.each(previousMonths, (month) => {
-						if (!_.has(data['counts']['applications']['monthly'][month])) {
-							data['counts']['applications']['monthly'][month] = 0
-						}
+					var month = this.$moment(d.created_at).format("MMM YYYY");
+					if (!(month in monthlyInfo)) {
+						monthlyInfo[month] = [];
+					}
 
-						if(this.$moment(d.created_at).format("MMM YYYY") == month){
-							data['counts']['applications']['monthly'][month] = data['counts']['applications']['monthly'][month] + 1
-						}
-					})
+					monthlyInfo[month].push(d)
 				})
 
+				_.each(previousMonths, (month) => {
+					if (!(month in monthlyInfo)) {
+						monthlyInfo[month] = [];
+					}else{
+						monthlyInfo[month] = monthlyInfo[month]
+					}
+				})
+
+				data['counts']['applications']['monthly'] = monthlyInfo
 				data['statuses'] = statusData
 
 				return data;
@@ -225,7 +252,11 @@
 				var pieData = [];
 
 				pieData = _.map(this.cleanedData.statuses, (applications, status) => {
-					return [_.startCase(_.toLower(status)), applications.length]
+					return {
+						name: _.startCase(_.toLower(status)),
+						y: applications.length,
+						color:this.cleanedData.statusColor[status]
+					}
 				})
 				// this.$refs.statusChart.chart.reflow()
 				return {
@@ -238,7 +269,7 @@
 					series: [{
 						name: 'Applications',
 						data: pieData,
-						innerSize: '90%',
+						innerSize: '80%',
 						showInLegend:true,
 						dataLabels: {
 						enabled: false
@@ -247,9 +278,12 @@
 				}
 			},
 			monthlyApplicationsData(){
+				// var graphData = _.map(this.cleanedData.counts.applications.monthly, (monthData) => {
+				// 	return monthData.length
+				// })
 
-				var graphData = _.map(this.cleanedData.counts.applications.monthly, (monthData) => {
-					return monthData
+				var graphData = _.map(this.cleanedData.months, (month) => {
+					return this.cleanedData.counts.applications.monthly[month].length
 				})
 				return {
 				  chart: {
@@ -271,7 +305,7 @@
 				  tooltip: {
 				    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 				    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-				      '<td style="padding:0"><b>{point.y} application</b></td></tr>',
+				      '<td style="padding:0"><b>{point.y} application(s)</b></td></tr>',
 				    footerFormat: '</table>',
 				    shared: true,
 				    useHTML: true
@@ -284,7 +318,8 @@
 				  },
 				  series: [{
 				    name: 'Applications',
-				    data: graphData
+				    data: graphData,
+				    color: "#039be5"
 				  }]
 				}
 			}
