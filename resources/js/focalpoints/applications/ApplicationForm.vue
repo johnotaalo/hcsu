@@ -55,11 +55,9 @@
 				<b-button @click="submitApplication" variant="primary">Submit Application</b-button>
 			</div>
 		</div>
-		<div class="container-fluid">
+		<!-- <div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
-
-					<!-- Card -->
 					<div class="card card-inactive">
 						<div class="card-body text-center">
 							<img src="/img/illustrations/scale.svg" alt="..." class="img-fluid" style="max-width: 182px;">
@@ -74,7 +72,7 @@
 
 				</div>
 			</div> 
-		</div>
+		</div> -->
 	</div>
 </template>
 <script type="text/javascript">
