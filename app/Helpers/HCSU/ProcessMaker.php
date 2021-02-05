@@ -157,7 +157,9 @@ class ProcessMaker {
 			'refresh_token'	=>	$refreshToken 
 		];
 
-		$client = new Client();
+		$client = new Client([
+			'verify'	=>	false
+		]);
 
 		$res = $client->post("{$server}/{$workspace}/oauth2/token", [
 			'form_params'	=>	$data
