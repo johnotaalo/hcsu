@@ -26,7 +26,9 @@ class ProcessMaker {
 		
 		$params = [];
 
-		$client = new Client();
+		$client = new Client([
+			'verify' => false
+		]);
 
 		if($accessToken != ''){
 			$params['headers'] = [

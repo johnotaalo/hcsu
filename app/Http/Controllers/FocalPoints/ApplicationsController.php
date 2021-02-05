@@ -17,9 +17,13 @@ class ApplicationsController extends Controller
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = \App\Models\UserApplications::select('*')->where('AUTHENTICATION_SOURCE', 'USER')->where('SUBMITTED_BY', \Auth::user()->id);
+        $queryBuilder = \App\Models\UserApplications::select('*')->where('AUTHENTICATION_SOURCE', 'USER');
         // ->with('process')
         /* */
+
+        if (\Auth::user()->type == "1") {
+            $queryBuilder->where('SUBMITTED_BY', \Auth::user()->id);
+        }
 
         $columnMap = [
             'CASE_NO'           =>  'APP_NUMBER', 
