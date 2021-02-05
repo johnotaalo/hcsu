@@ -900,7 +900,7 @@ class AppController extends Controller
             $response = ProcessMaker::uploadGeneratedForm($case->APP_UID, $template->task, $template->input_document, $path);
             \Log::debug("ProcessMaker upload documents: " . json_encode($response));
 
-            \Storage::get($path);
+            return \Storage::get($path);
         }
 
         die("The document has not been signed yet");
