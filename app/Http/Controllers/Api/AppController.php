@@ -14,6 +14,9 @@ use App\Models\Relationship;
 use App\Models\ContractDesignation;
 use App\FormTemplate;
 
+use App\Helpers\HCSU\AdobeSign\AdobeClient;
+use App\Helpers\HCSU\ProcessMaker;
+
 use Storage;
 use mikehaertl\pdftk\Pdf;
 
@@ -875,5 +878,31 @@ class AppController extends Controller
         $application->save();
 
         return $application;
+    }
+
+    function downloadSignedApplication(Request $request){
+        $id = $request->id;
+
+        $document = \App\AdobeSignDocuments::where('AGREEMENT_STATUS', 'SIGNED')->where('id', $id)->first();
+
+        if ($document) {
+            $case = \App\Models\PM\Application::where('APP_NUMBER', $document->CASE_NO)->first();
+
+            $template = FormTemplate::where('process', $case->PRO_UID)->first();
+            \Log::debug("Downloading signed document. Agreement ID: {$document->AGREEMENT_ID}");
+
+            $documentContent = AdobeClient::downloadSignedDocument($document->AGREEMENT_ID);
+            $path = "adobe-sign/documents/{$document->CASE_NO}-signed.pdf";
+            \Storage::put($path, $documentContent);
+
+            \Log::debug("Signed Document saved in: " . storage_path("app/" . $path));
+
+            $response = ProcessMaker::uploadGeneratedForm($case->APP_UID, $template->task, $template->input_document, $path);
+            \Log::debug("ProcessMaker upload documents: " . json_encode($response));
+
+            \Storage::get($path);
+        }
+
+        die("The document has not been signed yet");
     }
 }

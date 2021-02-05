@@ -109,6 +109,7 @@ Route::get('/templates/file/{template_id}', function($template_id){
 	}
 	abort(404);
 });
+
 Route::get('/sample', 'Test\SampleController@index');
 Route::get('/pmauthentication', 'Test\SampleController@pmauth');
 Route::get('/docusign', 'Api\DocusignAPIController@index')->name('docusign-client');
@@ -126,6 +127,7 @@ Route::prefix('adobe-sign')->group(function(){
 	Route::get('test-urls', 'Api\AdobeSignApiController@TestURL');
 	Route::get('get-signing-urls', 'Api\AdobeSignApiController@getSigningURLs');
 	Route::get('library-documents', 'Api\AdobeSignApiController@libraryDocuments');
+	Route::get('download/{id}', 'Api\AppController@downloadSignedApplication');
 });
 
 Route::middleware('auth')->prefix('focal-point')->group(function(){
