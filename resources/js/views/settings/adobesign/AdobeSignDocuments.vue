@@ -36,6 +36,9 @@
 </template>
 
 <script type="text/javascript">
+	import VueTables from 'vue-tables-2'
+	const Event = VueTables.Event
+	
 	export default{
 		data(){
 			return {

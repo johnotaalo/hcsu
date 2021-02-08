@@ -32,7 +32,7 @@ class FormAData{
 			$clientObj->fullObj = $principal;
 		}else if($clientObj->type == "agency"){
 			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
-			$clientObj->name = $agency->ACRONYM;
+			$clientObj->name = $agency->AGENCYNAME;
 			$clientObj->designation = "N/A";
 			$clientObj->fullname = $agency->AGENCYNAME;
 			$clientObj->organization = $agency->ACRONYM;

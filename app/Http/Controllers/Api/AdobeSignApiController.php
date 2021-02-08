@@ -459,6 +459,15 @@ class AdobeSignApiController extends Controller
                             ->orWhere('AGREEMENT_ID', 'LIKE', "%{$searchQueries}%")
                             ->orWhere('PAYLOAD', 'LIKE', "%{$searchQueries}%");
         }
+
+        if ($orderBy) {
+            $columnMap = [
+                'CASE_NO'       =>  'CASE_NO',
+                'CREATED_AT'    =>  'created_at'
+            ];
+
+            $documentsQuery->orderBy($columnMap[$orderBy], ($ascending) ? 'ASC' : 'DESC');
+        }
         
         $data = [];
         $count = 0;
