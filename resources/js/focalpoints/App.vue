@@ -67,6 +67,10 @@
 							</li>
 
 							<li class="nav-item">
+								<a class="nav-link" :to="{ name: 'dashboard' }"><i class="fe fe-download-cloud"></i> Download Report</a>
+							</li>
+
+							<li class="nav-item">
 								<a class="nav-link" href="/logout"><i class="fe fe-lock"></i> Logout</a>
 							</li>
 						</ul>

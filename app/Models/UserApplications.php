@@ -23,6 +23,10 @@ class UserApplications extends Model
 		);
 	}
 
+	public function assigned(){
+		return $this->hasOne(\App\Models\PM\User::class, "ASSIGNED_TO", "USR_UID");
+	}
+
 	public function files(){
 		return $this->hasMany(\App\Model\UserApplicationFile::class, 'USER_APPLICATION_ID');
 	}

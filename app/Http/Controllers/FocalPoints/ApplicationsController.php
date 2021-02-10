@@ -52,7 +52,7 @@ class ApplicationsController extends Controller
         }
 
         $count = $queryBuilder->count();
-        $queryBuilder = $queryBuilder->with('caseDetails')->limit($limit)->skip($limit * ($page - 1));
+        $queryBuilder = $queryBuilder->with('caseDetails')->with('assigned')->limit($limit)->skip($limit * ($page - 1));
 
         $data = $queryBuilder->get();
 

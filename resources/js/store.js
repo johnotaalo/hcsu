@@ -20,6 +20,7 @@ export default new Vuex.Store({
 			state.loading--
 		},
 		gotoLogin() {
+			console.log("Going to login page");
 			window.location = "/login"
 		}
 	},
@@ -28,12 +29,14 @@ export default new Vuex.Store({
 			if (!state.isUserBeingRetrieved) {
 				state.isUserBeingRetrieved = true
 
+
 				this.commit('loadingOn')
 				axios.get('/api/auth/details').then((response) => {
+					console.log(response)
 					commit('fetchLoggedInUser', response.data)
 					this.commit('loadingOff')
 				}).catch((error) => {
-					// console.log(error)
+					console.log(error.message)
 					this.commit('loadingOff');
 					this.commit('gotoLogin')
 					// return new Promise((error))

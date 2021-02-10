@@ -172,10 +172,13 @@
 			this.case = case_no
 			this.user = user
 
-			if(!this.user)
+			if(!this.user){
 				this.$store.dispatch('fetchCurrentUser');
-			else
+			}
+			else{
+				console.log("User not found")
 				this.$store.dispatch('checkProcessMakerSession', {user: user});
+			}
 		},
 		computed: {
 			showMainDIV: function(){

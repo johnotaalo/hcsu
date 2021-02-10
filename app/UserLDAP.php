@@ -25,4 +25,16 @@ class UserLDAP extends Authenticatable
     {
         return ['mail'];
     }
+
+    public function findForPassport($username)
+    {
+        session(['username' => $username]);
+        return $this->where('username', $username)->first();
+    }
+
+    public function validateForPassportPasswordGrant($password)
+    {
+        $credentials = ['username' => session()->pull('username'), 'password' => $password];
+        return Auth::attempt($credentials);
+    }
 }

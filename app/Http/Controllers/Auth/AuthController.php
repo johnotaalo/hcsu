@@ -29,7 +29,6 @@ class AuthController extends Controller
 
     public function details(Request $request) 
     {
-      // dd($request->session()->all());
       if(isset($request->type)){
         $user_ip = $request->getClientIp();
         $user_ip = ($user_ip == "10.0.2.2" || $user_ip == "127.0.0.1") ? "10.98.111.148" : $user_ip;
@@ -40,6 +39,7 @@ class AuthController extends Controller
         }
         return response()->json(['error'=>'Unauthorised'], 401);
       }
+
       $user = Auth::user();
       if (!$user) {
         dd("User not found");
