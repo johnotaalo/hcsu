@@ -35,6 +35,6 @@ class UserLDAP extends Authenticatable
     public function validateForPassportPasswordGrant($password)
     {
         $credentials = ['username' => session()->pull('username'), 'password' => $password];
-        return Auth::attempt($credentials);
+        return Auth::guard('ldap')->attempt($credentials);
     }
 }

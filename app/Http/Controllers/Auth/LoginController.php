@@ -65,7 +65,6 @@ class LoginController extends Controller
         if (request()->input('location') == "client-portal") {
             $credentials = request()->only($this->username, 'password');
             Auth::guard('ldap')->attempt($credentials, true);
-            \App\UserLDAP::findForPassport($this->username);
         }else{
             Auth::attempt(['email' => request($this->username), 'password' => request('password')]);
         }
