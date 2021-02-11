@@ -111,6 +111,7 @@ class WorkPermitExemptionData{
 				$clientObj->RNO = $domesticWorker->R_NO;
 			}
 			else{
+				$clientObj->RNO = NULL;
 				$data->endorsementType = "new_case";
 			}
 
