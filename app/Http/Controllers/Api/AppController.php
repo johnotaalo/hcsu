@@ -29,8 +29,10 @@ class AppController extends Controller
     function index(Request $request){
         // dd($request->query());
         if(\Auth::check()){
-            if (\Auth::user()->user_type == UserType::getInstance(UserType::FocalPoint)) {
-                return redirect()->route('focalpoints-home');
+            $userType = \Auth::user()->user_type;
+
+            if ($userType == UserType::getInstance(UserType::FocalPoint) || is_null($userType) || !$userType) {
+                return redirect()->route('clients-home');
             }
         }
         $data = [];

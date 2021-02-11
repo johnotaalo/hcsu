@@ -64,7 +64,7 @@ class LoginController extends Controller
     protected function attemptLogin(Request $request){
         if (request()->input('location') == "client-portal") {
             $credentials = request()->only($this->username, 'password');
-            Auth::guard('ldap')->attempt($credentials, true);
+            Auth::attempt($credentials, true);
         }else{
             Auth::attempt(['email' => request($this->username), 'password' => request('password')]);
         }

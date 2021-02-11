@@ -21,7 +21,7 @@
 				<div class="form-group">
 					<label class = "control-label">Client</label>
 					<div v-if="showClientForm">
-						<search-client v-model="form"></search-client>
+						<search-client v-model="form" :applier="user.type"></search-client>
 						<button v-if="id != 0" class="btn btn-sm btn-warning" @click="showClientForm = false">Revert</button>
 					</div>
 					<div v-else>
@@ -95,6 +95,7 @@
 				application: {
 					data: {}
 				},
+				applier: "",
 				form: new Form({
 					id: 0,
 					client: "",
@@ -106,6 +107,7 @@
 		},
 		created(){
 			this.getProcesses()
+			this.applier = this.$store.state.loggedInUser.type
 			if (this.id != 0) {
 				this.getApplicationData(this.id)
 			}
@@ -172,6 +174,11 @@
 					alert(error.message)
 				})
 			}
+		},
+		computed: {
+			user: function(){
+				return this.$store.state.loggedInUser
+			},
 		}
 	}
 </script>

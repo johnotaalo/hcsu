@@ -17,7 +17,8 @@
 					</a>
 
 					<p>{{ user.name }}</p>
-					<P>{{ user.focal_point.agency.ACRONYM }}</P>
+					<P v-if="user.type == 'Focal point'">{{ user.focal_point.agency.ACRONYM }}</P>
+					<p v-else>{{ user.principal.latest_contract.ACRONYM }}</p>
 
 					<div class="navbar-user d-md-none">
 
@@ -165,7 +166,7 @@
 		created(){
 			// this.$route
 			this.$store.dispatch('fetchCurrentUser').then(res => {
-				console.log(res)
+				// console.log(res)
 			});
 		},
 		computed: {
@@ -173,7 +174,7 @@
 				if(this.$route.meta.title)
 					return this.$route.meta.title
 				else
-					return 'Focal Points Dashboard'
+					return 'Dashboard'
 			},
 			pageSubtitle: function(){
 				if(this.$route.meta.title)

@@ -24,7 +24,7 @@ class UserApplications extends Model
 	}
 
 	public function assigned(){
-		return $this->hasOne(\App\Models\PM\User::class, "ASSIGNED_TO", "USR_UID");
+		return $this->hasOne(\App\Models\PM\User::class, "USR_UID", "ASSIGNED_TO");
 	}
 
 	public function files(){

@@ -35,7 +35,13 @@
 
 									<li class="nav-item">
 										<router-link class="nav-link" :to="{ name: 'settings-signatories' }">
-											<i class="fe fe-users"></i> Adobe Sign Signatories
+											<i class="fe fe-edit-2"></i> Adobe Sign Signatories
+										</router-link>
+									</li>
+
+									<li class="nav-item">
+										<router-link class="nav-link" :to="{ name: 'settings-users' }">
+											<i class="fe fe-users"></i> User Management
 										</router-link>
 									</li>
 

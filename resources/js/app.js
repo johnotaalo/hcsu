@@ -152,6 +152,8 @@ import ReassignOldCases from './views/settings/ReassignOldCases'
 
 import UserApplications from './views/settings/applications/UserApplications'
 import AssignUserApplications from './views/settings/applications/AssignUserApplications'
+import UserIndex from './views/settings/users/Index'
+import AddUser from './views/settings/users/AddUser'
 // Auth
 // import Login from './views/Login'
 
@@ -407,6 +409,16 @@ Vue.component(
 	 				name: 'settings-adobesign-documents',
 	 				path: 'adobe-sign/documents',
 	 				component: AdobeSignDocuments
+	 			},
+	 			{
+	 				name: 'settings-users',
+	 				path: 'users',
+	 				component: UserIndex
+	 			},
+	 			{
+	 				name: 'settings-user-add',
+	 				path: 'users/add',
+	 				component: AddUser
 	 			}
 	 		]
 	 	},

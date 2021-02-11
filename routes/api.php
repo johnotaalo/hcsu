@@ -329,3 +329,9 @@ Route::prefix('adobe-sign')->group(function(){
 	Route::get('get-signing-urls', 'Api\AdobeSignApiController@testHook');
 	Route::post('get-signing-urls', 'Api\AdobeSignApiController@getSigningURLs');
 });
+
+Route::prefix('users')->middleware('auth:api')->group(function(){
+	Route::get('/all', 'Api\UserController@getUsers');
+	Route::get('/usertypes', 'Api\UserController@getUserTypes');
+	Route::post("/add", "Api\UserController@store");
+});

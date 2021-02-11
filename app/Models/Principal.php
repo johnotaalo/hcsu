@@ -14,7 +14,7 @@ class Principal extends Model
 
     protected $appends = ["image_link", "active_diplomatic_card", "latest_diplomatic_card", "current_arrival", "latest_contract", "fullname", "latest_passport", "spouse", "principal_name", "parent", "children"];
 
-    protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "PLACE_OF_BIRTH", "NATIONALITY", "GENDER", "ADDRESS", "RESIDENCE", "OLD_REF_ID"];
+    protected $fillable = ["HOST_COUNTRY_ID", "LAST_NAME", "OTHER_NAMES", "EMAIL", "MOBILE_NO", "OFFICE_NO", "R_NO", "PIN_NO", "DL_NO", "MARITAL_STATUS", "IMAGE", "DATE_OF_BIRTH", "PLACE_OF_BIRTH", "NATIONALITY", "GENDER", "ADDRESS", "RESIDENCE", "OLD_REF_ID", "USER_ID"];
 
     public function contracts(){
     	return $this->hasMany('\App\Models\PrincipalContract', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');

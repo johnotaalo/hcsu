@@ -21,7 +21,7 @@ class ApplicationsController extends Controller
         // ->with('process')
         /* */
 
-        if (\Auth::user()->type == "1") {
+        if (\Auth::user()->user_type == "1" || !\Auth::user()->user_type) {
             $queryBuilder->where('SUBMITTED_BY', \Auth::user()->id);
         }
 

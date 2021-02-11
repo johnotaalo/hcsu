@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'username', 'user_type', 'ext_id'
+        'name', 'email', 'password', 'username', 'user_type', 'ext_id', 'index_no', 'objectguid'
     ];
 
     /**
@@ -41,7 +41,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['focal_point'];
+    protected $appends = ['focal_point', 'type', 'principal'];
 
     protected $connection = 'mysql';
 
@@ -61,8 +61,33 @@ class User extends Authenticatable
         }
     }
 
+    public function getPrincipalAttribute(){
+        return \App\Models\Principal::where("USER_ID", $this->id)->first();
+    }
+
     public function notifyAuthenticationLogVia()
     {
         return ['mail'];
+    }
+
+    public function getTypeAttribute(){
+        if (is_null($this->user_type) || $this->user_type == "") {
+            return "Client";
+        }
+
+        return (UserType::fromValue((int) $this->user_type))->description;
+    }
+
+    public function findForPassport($username)
+    {
+        dd('username');
+        session(['username' => $username]);
+        return $this->where('username', $username)->first();
+    }
+
+    public function validateForPassportPasswordGrant($password)
+    {
+        $credentials = ['username' => session()->pull('username'), 'password' => $password];
+        return Auth::attempt($credentials);
     }
 }

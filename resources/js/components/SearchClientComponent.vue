@@ -1,62 +1,12 @@
 <template>
 	<div>
-		<!-- <b-form-group label="Type of Client">
+		<b-form-group>
+			<label v-if="user.type == 'Focal point'">Type of Client</label>
+			<label v-else>Application for:</label>
 			<b-form-radio-group
 				id="type-of-client"
 				v-model="value.clientType"
-				:options="clientTypes"
-				name="client-types-option"
-			></b-form-radio-group>
-		</b-form-group>
-		<div v-if="value.clientType == ''" >
-			Please select a client type above
-		</div>
-		<div v-else>
-			<div v-if="value.clientType == 'agency'">
-				<div v-if="applier != 'fp'">
-					<label class="control-label">Please type to search for an agency</label>
-					<v-select label="AGENCYNAME" :filterable="false" :options="agencies" @search="onAgencySearch" v-model="value.client">
-						<template slot="no-options">
-							Type to search for an Agency
-						</template>
-
-						<template slot="option" slot-scope="option">
-							<img style="width: 50px;height: 50px;" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}]
-						</template>
-
-						<template slot="selected-option" slot-scope="option">
-							<span v-if="option.AGENCYNAME"><img style="width: 50px;height: 50px;" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}]</span>
-						</template>
-					</v-select>
-				</div>
-				<div v-else>
-					<p>VAT Application for: {{ agency.AGENCYNAME }}</p>
-				</div>
-			</div>
-			<div v-if="value.clientType == 'staff-member'">
-				<label class="control-label">Please type to search for a staff member</label>
-				<v-select label = "LAST_NAME" :filterable="false" :options="staffMembers" @search="onStaffSearch" v-model="value.client">
-					<template slot="no-options">
-						Type to search for a staff member
-					</template>
-
-					<template slot="option" slot-scope="option">
-						<img style="width: 50px;height: 50px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="option.image_link"/><img v-else style="width: 50px;height: 50px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
-					</template>
-
-					<template slot="selected-option" slot-scope="option">
-						<span v-if="option.LAST_NAME">
-							<img style="width: 50px;height: 50px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="option.image_link"/><img v-else style="width: 50px;height: 50px;" :src="no_avatar_img"/>&nbsp;{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}
-						</span>
-					</template>
-				</v-select>
-			</div>
-		</div> -->
-		<b-form-group label="Type of Client">
-			<b-form-radio-group
-				id="type-of-client"
-				v-model="value.clientType"
-				:options="clientTypes"
+				:options="clientTypeList"
 				name="client-types-option"
 			></b-form-radio-group>
 		</b-form-group>
@@ -66,7 +16,7 @@
 		</div>
 		<div v-else>
 			<div v-if="value.clientType == 'agency'">
-				<div v-if="applier != 'fp'">
+				<div v-if="user.type != 'Focal point'">
 					<label class="control-label">Please type to search for an agency</label>
 					<v-select label="AGENCYNAME" :filterable="false" :options="agencies" @search="onAgencySearch" v-model="value.client">
 						<template slot="no-options">
@@ -87,42 +37,47 @@
 				</div>
 			</div>
 			<div v-if="value.clientType == 'staff-member'">
-				<label class="control-label">Please type to search for a staff member</label>
-				<v-select label = "LAST_NAME" :filterable="false" :options="staffMembers" @search="onStaffSearch" v-model="value.client">
-					<template slot="no-options">
-						Type to search for a staff member
-					</template>
+				<div v-if="user.type != 'Client'">
+					<label class="control-label">Please type to search for a staff member</label>
+					<v-select label = "LAST_NAME" :filterable="false" :options="staffMembers" @search="onStaffSearch" v-model="value.client">
+						<template slot="no-options">
+							Type to search for a staff member
+						</template>
 
-					<template slot="option" slot-scope="option">
-						<div class = "row align-items-center">
-							<div class="col-auto">
-								<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>
-							</div>
-							<div class="col ml-n2">
-								<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
-							</div>
-						</div>
-					</template>
-
-					<template slot="selected-option" slot-scope="option">
-						<span v-if="option.LAST_NAME">
+						<template slot="option" slot-scope="option">
 							<div class = "row align-items-center">
-							<div class="col-auto">
-								<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>
+								<div class="col-auto">
+									<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>
+								</div>
+								<div class="col ml-n2">
+									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+								</div>
 							</div>
-							<div class="col ml-n2">
-								<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
-								<span class="card-text">
-									<span>Organization (<span v-if="option.latest_contract">{{ option.latest_contract.ACRONYM }}</span><span v-else>N/A</span>)</span>, 
-									<span>Latest Passport (<span v-if="option.latest_passport">{{ option.latest_passport.PASSPORT_NO }}</span><span v-else>N/A</span>)</span>, 
-									<span>Latest DIP ID (<span v-if="option.latest_diplomatic_card">{{ option.latest_diplomatic_card.DIP_ID_NO }}</span><span v-else>N/A</span>)</span>
-								</span>
+						</template>
+
+						<template slot="selected-option" slot-scope="option">
+							<span v-if="option.LAST_NAME">
+								<div class = "row align-items-center">
+								<div class="col-auto">
+									<img class = "rounded-circle m1" style="width: 70px;height: 70px;" v-if="option.image_link != '' && option.image_link != '/storage/'" :src="`/photos/principal/${option.HOST_COUNTRY_ID}`"/><img v-else style="width: 70px;height: 70px;" :src="no_avatar_img"/>
+								</div>
+								<div class="col ml-n2">
+									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
+									<span class="card-text">
+										<span>Organization (<span v-if="option.latest_contract">{{ option.latest_contract.ACRONYM }}</span><span v-else>N/A</span>)</span>, 
+										<span>Latest Passport (<span v-if="option.latest_passport">{{ option.latest_passport.PASSPORT_NO }}</span><span v-else>N/A</span>)</span>, 
+										<span>Latest DIP ID (<span v-if="option.latest_diplomatic_card">{{ option.latest_diplomatic_card.DIP_ID_NO }}</span><span v-else>N/A</span>)</span>
+									</span>
+								</div>
 							</div>
-						</div>
-						</span>
-					</template>
-				</v-select>
-				<div v-if="agency" class="text-danger">This will only show clients from your agency</div>
+							</span>
+						</template>
+					</v-select>
+					<div v-if="agency" class="text-danger">This will only show clients from your agency</div>
+				</div>
+				<div v-else>
+					<p>Making Application for self ({{ user.principal.fullname }})</p>
+				</div>
 			</div>
 
 			<div v-if="value.clientType == 'dependent'">
@@ -139,7 +94,7 @@
 							</div>
 							<div class="col ml-n2">
 								<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
-								<p class="card-text text-muted">{{ option.relationship_x.RELATIONSHIP }} of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.ACRONYM }})</p>
+								<p class="card-text text-muted" v-if="user.type != 'Client'">{{ option.relationship_x.RELATIONSHIP }} of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.ACRONYM }})</p>
 							</div>
 						</div>
 					</template>
@@ -152,7 +107,7 @@
 								</div>
 								<div class="col ml-n2">
 									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
-									<p class="card-text text-muted">{{ option.relationship_x.RELATIONSHIP }} of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.ACRONYM }})</p>
+									<p class="card-text text-muted" v-if="user.type != 'Client'">{{ option.relationship_x.RELATIONSHIP }} of {{ option.principal.LAST_NAME }}, {{ option.principal.OTHER_NAMES }} ({{ option.principal.latest_contract.ACRONYM }})</p>
 								</div>
 							</div>
 						</span>
@@ -249,8 +204,10 @@
 		mounted() {
 			// this.clientType = this.type
 			// console.log("Client", this.client)
+			// alert("Mounted: " + this.applier);
 		},
 		created(){
+			// alert("created:" + this.applier);
 		},
 		data(){
 			return {
@@ -323,8 +280,9 @@
 				})
 			}, 350),
 			dependentSearch: _.debounce( (loading, search, vm) => {
-				var organizationString = (vm.agency) ? `&organization=${escape(vm.agency.ACRONYM)}` : "";
-				axios(`/api/dependent/search?q=${escape(search)}${organizationString}`)
+				var organizationString = (vm.agency && vm.user.type == "Focal point") ? `&organization=${escape(vm.agency.ACRONYM)}` : "";
+				var principalString = (vm.user.type == "Client") ? `&principal=${vm.user.principal.HOST_COUNTRY_ID}` : ""
+				axios(`/api/dependent/search?q=${escape(search)}${principalString}${organizationString}`)
 				.then( (res) => {
 					vm.dependents = res.data
 					loading(false)
@@ -347,11 +305,35 @@
 		},
 		computed: {
 			agency: function(){
-				if(this.$store.state.loggedInUser.focal_point){
-					return this.$store.state.loggedInUser.focal_point.agency
+				if(this.user.type == "Focal point"){
+					console.log(this.user.type)
+					return this.user.focal_point.agency
+				}else{
+					return this.user.principal.latest_contract
 				}
 
 				return null;
+			},
+
+			user: function(){
+				return this.$store.state.loggedInUser
+			},
+
+			clientTypeList: function(){
+				var result = [];
+				var list = this.clientTypes
+				if (this.user.type == "Client") {
+					result = _.filter(list, (obj) => {
+						if (obj.value == 'staff-member') {
+							obj.text = "Self"
+						}
+						return obj.value == 'staff-member' || obj.value == "dependent" || obj.value == 'domestic-worker'
+					})
+				}else{
+					result = list
+				}
+
+				return result
 			}
 		},
 		watch: {
@@ -488,6 +470,10 @@
 				this.value.client = {}
 				if (newVal == "agency") {
 					this.value.client = this.agency
+				}
+
+				if (newVal == "staff-member" && this.user.type == "Client") {
+					this.value.client = this.user.principal
 				}
 			}
 		}

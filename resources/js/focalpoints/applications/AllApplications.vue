@@ -43,12 +43,22 @@
 			<template slot="CLIENT" slot-scope="data">
 				<span v-if="data.row.applicant_type == 'staff'">{{ data.row.applicant_details.LAST_NAME }}, {{ data.row.applicant_details.OTHER_NAMES }}</span>
 				<span v-if="data.row.applicant_type == 'agency'">{{ data.row.applicant_details.ACRONYM }}</span>
+				<span v-if="data.row.applicant_type == 'dependent'">{{ data.row.applicant_details.LAST_NAME }}, {{ data.row.applicant_details.OTHER_NAMES }}<br/><small>Dependent</small></span>
 			</template>
 
 			<template slot="CASE_NO" slot-scope="data">
 				<span v-if="data.row.APP_NUMBER"> {{ data.row.APP_NUMBER }}</span>
 				<span v-else>
 					N/A
+				</span>
+			</template>
+
+			<template slot="ASSIGNED_TO" slot-scope="data">
+				<span v-if="data.row.CURRENT_USER == 'ADMINISTRATIVE_ASSISTANT'">
+					{{ data.row.assigned.USR_LASTNAME }}, {{ data.row.assigned.USR_FIRSTNAME }}
+				</span>
+				<span v-else>
+					{{ data.row.CURRENT_USER }}
 				</span>
 			</template>
 
@@ -107,7 +117,7 @@
 					{ value: 'CANCELED', text: 'CANCELED' },
 				],
 				processes: [],
-				columns: ['CASE_NO', 'CLIENT', 'PROCESS_NAME', 'STATUS', 'CURRENT_USER', 'CREATED', 'ACTIONS'],
+				columns: ['CASE_NO', 'CLIENT', 'PROCESS_NAME', 'STATUS', 'ASSIGNED_TO', 'CREATED', 'ACTIONS'],
 				options: {
 					perPage: 50,
 					perPageValues: [],
@@ -170,7 +180,6 @@
 					dangerMode: true,
 				})
 				.then((result) => {
-					alert(result)
 					if (result) {
 						axios.get(`/api/focal-points/applications/cancel/${id}`)
 						.then(res => {

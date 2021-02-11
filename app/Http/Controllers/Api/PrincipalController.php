@@ -134,19 +134,33 @@ class PrincipalController extends Controller
     function searchDependent(Request $request){
         $query = $request->q;
         $organization = (isset($request->organization)) ? $request->organization : null;
+        $principal = (isset($request->principal)) ? $request->principal : null;
 
-        $dependents = PrincipalDependent::
-            where('LAST_NAME', 'LIKE', "%{$query}%")
+        // var_dump($principal);
+
+        $dependentsQuery = PrincipalDependent::with('relationshipX', 'principal');
+        if ($principal) {
+            $dependentsQuery = $dependentsQuery->where('PRINCIPAL_ID', $principal);
+        }
+
+        $dependentsQuery = $dependentsQuery->where(function($inQuery) use ($query){
+            $inQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
             ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%")
-            ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%")
-            ->orWhereHas('principal', function ($modelQuery) use ($query) {
-            $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
-            ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
-            })
-            ->limit(20)
-            ->with('relationshipX', 'principal')
-            ->get();
+            ->orWhere('HOST_COUNTRY_ID', 'LIKE', "%{$query}%");
+        });
 
+        if (!$principal) {
+            $dependentsQuery = $dependentsQuery->orWhereHas('principal', function ($modelQuery) use ($query) {
+                $modelQuery->where('LAST_NAME', 'LIKE', "%{$query}%")
+                ->orWhere('OTHER_NAMES', 'LIKE', "%{$query}%");
+            });
+        }
+
+        // DB::enableQueryLog();
+        $dependents = $dependentsQuery->limit(20)
+                        ->get();
+        // $dQ = DB::getQueryLog();
+        // dd($dQ);
         if($organization){
             $dependents = $dependents->filter(function($model) use ($organization){
                 // dd($model->latest_contract);
@@ -156,7 +170,7 @@ class PrincipalController extends Controller
 
                 return false;
             })->values();
-        } 
+        }
 
         return $dependents->all();      
 
