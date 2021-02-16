@@ -145,6 +145,10 @@ Route::middleware('auth')->prefix('focal-point')->group(function(){
 
 Route::middleware('auth')->prefix('clients')->group(function(){
 	Route::get('/', 'FocalPoints\DashboardController@index')->name('clients-home');
+	Route::get('/confirm/{id}', 'FocalPoints\DashboardController@confirmPrincipal')->name('clients-confirm');
+	Route::post('/confirm', 'FocalPoints\DashboardController@confirmUser')->name('confirm-user');
+	Route::get('/confirmation/details/{id}', 'FocalPoints\DashboardController@confirmationDetails')->name('confirmation-cancel');
+	Route::post('confirmation/dispute', 'FocalPoints\DashboardController@storeDispute')->name('confirmation-dispute');
 });
 
 Route::get('pages/noaction', function(){

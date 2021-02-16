@@ -14,7 +14,7 @@
 							<p><b>Name:</b>
 								<span v-if="application.applicant_type == 'staff'">{{ application.applicant_details.LAST_NAME }}, {{ application.applicant_details.OTHER_NAMES }}</span>
 								<span v-if="application.applicant_type == 'agency'">{{ application.applicant_details.ACRONYM }}</span>
-								<span v-if="application.applicant_type == 'dependent'">>{{ application.applicant_details.LAST_NAME }}, {{ application.applicant_details.OTHER_NAMES }}</span>
+								<span v-if="application.applicant_type == 'dependent'">{{ application.applicant_details.LAST_NAME }}, {{ application.applicant_details.OTHER_NAMES }}<br/><small><i>Dependent of {{ application.applicant_details.principal.principal_name }} ({{ application.applicant_details.principal.latest_contract.ACRONYM }})</i></small></span>
 							</p>
 							<p  v-if="application.applicant_type == 'staff'"><b>Email:</b>
 								<span>{{ application.applicant_details.EMAIL }}</span>
@@ -36,7 +36,10 @@
 						Files
 					</label>
 					<div class="col">
-						<a class="btn btn-link btn-sm" @click="viewuploads(application.id)">View Uploads</a>
+						<ul v-if="application.files.length > 0">
+							<li v-for="(file, key) in application.files"><a target="_blank" :href="`uploads/${file.id}`">{{ file.FILE_DESCRIPTION }}</a></li>
+						</ul>
+						<h3 v-else>No files were uploaded</h3>
 					</div>
 				</div>
 
@@ -132,9 +135,18 @@
 			},
 			proceed(){
 				this.form.host_country_id = this.application.HOST_COUNTRY_ID
+				var submitApplication = this.form.submitApplication
+
 				this.form.post(`focal-points/applications/assign/${this.id}`)
 				.then(res => {
-					this.$router.push({ name: 'user-applications.all' })
+					var text = (submitApplication) ? "Successfully assigned case" : "The case has been rejected and returned to the client for updates";
+					this.$swal("Success", text, "success")
+					.then(() => {
+						this.$router.push({ name: 'user-applications.all' })
+					})
+				})
+				.catch(error => {
+					this.$swal('Error', error.message, "error")
 				})
 			}
 		}

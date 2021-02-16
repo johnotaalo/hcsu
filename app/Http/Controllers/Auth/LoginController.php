@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Adldap\Laravel\Facades\Adldap;
 use Illuminate\Support\Facades\Auth;
 
+ini_set('max_execution_time', 0);
+
 class LoginController extends Controller
 {
     /*
@@ -62,6 +64,11 @@ class LoginController extends Controller
     }
 
     protected function attemptLogin(Request $request){
+        // try {
+        //     Adldap::connect();
+        // } catch (\Exception $e) {
+        //     // \Log::error("AD is not connecting");
+        // }
         if (request()->input('location') == "client-portal") {
             $credentials = request()->only($this->username, 'password');
             Auth::attempt($credentials, true);

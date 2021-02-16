@@ -409,16 +409,6 @@ Vue.component(
 	 				name: 'settings-adobesign-documents',
 	 				path: 'adobe-sign/documents',
 	 				component: AdobeSignDocuments
-	 			},
-	 			{
-	 				name: 'settings-users',
-	 				path: 'users',
-	 				component: UserIndex
-	 			},
-	 			{
-	 				name: 'settings-user-add',
-	 				path: 'users/add',
-	 				component: AddUser
 	 			}
 	 		]
 	 	},
@@ -470,7 +460,17 @@ Vue.component(
 	 		path: '*',
 	 		component: PageNotFound,
 	 		name: '404'
-	 	}
+	 	},
+		{
+			name: 'users',
+			path: '/users',
+			component: UserIndex
+		},
+		{
+			name: 'user-add',
+			path: '/users/add',
+			component: AddUser
+		}
  	]
  });
 

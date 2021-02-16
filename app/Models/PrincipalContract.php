@@ -14,7 +14,7 @@ class PrincipalContract extends Model
 
 
     public function principal(){
-    	return $this->belongsTo('\App\Models\Principal', 'HOST_COUNTRY_ID', 'PRINCIPAL_ID');
+    	return $this->belongsTo('\App\Models\Principal', 'PRINCIPAL_ID', 'HOST_COUNTRY_ID');
     }
 
     public function agency(){

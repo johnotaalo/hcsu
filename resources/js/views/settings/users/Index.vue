@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<
 		<div class="card">
 			<div class="card-header">
 				<div class="row align-items-center">
@@ -16,7 +17,10 @@
 
 					</div>
 					<div class="col-auto">
-						<b-button class= "btn-white float-right" :to="{ name: 'settings-user-add' }" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add User</b-button>
+						<b-select size="sm" :options="usertypes" v-model="searchUserType" v-on:change="applyUserTypeFilter(searchUserType)"></b-select>
+					</div>
+					<div class="col-auto">
+						<b-button class= "btn-white float-right" :to="{ name: 'user-add' }" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add User</b-button>
 					</div>
 				</div>
 			</div>
@@ -42,13 +46,40 @@
 		data(){
 			return {
 				searchTerm: "",
+				searchUserType: "all",
+				usertypes: [
+					{
+						value: 'all',
+						text: "All User Types"
+					},
+					{
+						value: 0,
+						text: "Administrator"
+					},
+					{
+						value: 1,
+						text: "Focal Point"
+					},
+					{
+						value: 2,
+						text: "Supervisor"
+					},
+					{
+						value: 3,
+						text: "Admin Assistant"
+					},
+					{
+						value: null,
+						text: "Client"
+					}
+				],
 				table: {
 					columns: ["name", "email", "type", "created_at", "actions"],
 					options: {
 						perPage: 50,
 						perPageValues: [],
 						filterable: false,
-						customFilters: ['normalSearch'],
+						customFilters: ['normalSearch', 'userTypeFilter'],
 						columnsDropdown: false,
 						sortIcon: {
 							base: 'icon',
@@ -77,6 +108,9 @@
 			applySearchFilter: function(term){
 				Event.$emit('vue-tables.filter::normalSearch', term);
 			},
+			applyUserTypeFilter: function(type){
+				Event.$emit('vue-tables.filter::userTypeFilter', type)
+			}
 		}
 	}
 </script>

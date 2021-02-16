@@ -43,7 +43,7 @@
 			<template slot="CLIENT" slot-scope="data">
 				<span v-if="data.row.applicant_type == 'staff'">{{ data.row.applicant_details.LAST_NAME }}, {{ data.row.applicant_details.OTHER_NAMES }}</span>
 				<span v-if="data.row.applicant_type == 'agency'">{{ data.row.applicant_details.ACRONYM }}</span>
-				<span v-if="data.row.applicant_type == 'dependent'">{{ data.row.applicant_details.LAST_NAME }}, {{ data.row.applicant_details.OTHER_NAMES }}<br/><small>Dependent</small></span>
+				<span v-if="data.row.applicant_type == 'dependent'">{{ data.row.applicant_details.LAST_NAME }}, {{ data.row.applicant_details.OTHER_NAMES }}<br/><small><i>Dependent</i></small></span>
 			</template>
 
 			<template slot="CASE_NO" slot-scope="data">

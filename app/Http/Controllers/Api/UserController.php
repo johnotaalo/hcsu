@@ -16,6 +16,7 @@ class UserController extends Controller
     function getUsers(Request $request){
     	$searchQueries = $request->get('normalSearch');
         $activeFilter = $request->get('activeStaffSearch');
+        $userTypeFilter = $request->get('userTypeFilter');
         $limit = $request->get('limit');
         $page = $request->get('page');
         $ascending = $request->get('ascending');
@@ -28,6 +29,18 @@ class UserController extends Controller
         	$queryBuilder->where('name', 'LIKE', "%{$searchQueries}%");
         	$queryBuilder->orWhere('username', 'LIKE', "%{$searchQueries}%");
         	$queryBuilder->orWhere('email', 'LIKE', "%{$searchQueries}%");
+        }
+
+
+        if($userTypeFilter != "all" && $userTypeFilter != ""){
+            $queryBuilder->where('user_type', $userTypeFilter);
+        }
+
+
+
+        if (is_null($userTypeFilter)) {
+            $instance = \App\Enums\UserType::fromValue($userTypeFilter);
+            $queryBuilder->where("user_type", "");
         }
 
         $count = $queryBuilder->count();
@@ -65,5 +78,9 @@ class UserController extends Controller
     	$user->save();
 
     	return $user;
+    }
+
+    function confirmClient(Request $request){
+        return ['success' => true];
     }
 }

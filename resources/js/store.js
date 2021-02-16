@@ -20,7 +20,6 @@ export default new Vuex.Store({
 			state.loading--
 		},
 		gotoLogin() {
-			console.log("Going to login page");
 			window.location = "/login"
 		}
 	},

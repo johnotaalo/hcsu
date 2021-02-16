@@ -31,7 +31,7 @@ class AppController extends Controller
         if(\Auth::check()){
             $userType = \Auth::user()->user_type;
 
-            if ($userType == UserType::getInstance(UserType::FocalPoint) || is_null($userType) || !$userType) {
+            if ($userType == UserType::getInstance(UserType::FocalPoint) || is_null($userType) || $userType=="") {
                 return redirect()->route('clients-home');
             }
         }

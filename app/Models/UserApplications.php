@@ -47,7 +47,7 @@ class UserApplications extends Model
 		}else if ($clientType == "agency") {
 			return \App\Models\Agency::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->first();
 		}else{
-			return \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->first();
+			return \App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $this->HOST_COUNTRY_ID)->with('principal')->first();
 		}
 	}
 }

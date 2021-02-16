@@ -21,7 +21,7 @@ class ApplicationsController extends Controller
         // ->with('process')
         /* */
 
-        if (\Auth::user()->user_type == "1" || !\Auth::user()->user_type) {
+        if (\Auth::user()->user_type == "1" || \Auth::user()->user_type == NULL) {
             $queryBuilder->where('SUBMITTED_BY', \Auth::user()->id);
         }
 
@@ -71,7 +71,12 @@ class ApplicationsController extends Controller
     }
 
     function getAllApplications(){
-        $data = \App\Models\UserApplications::where('AUTHENTICATION_SOURCE', 'USER')->where('SUBMITTED_BY', \Auth::user()->id)->get();
+        if (\Auth::user()->user_type == "0" || \Auth::user()->user_type == "2") {
+             $data = \App\Models\UserApplications::get();
+        }else{
+             $data = \App\Models\UserApplications::where('AUTHENTICATION_SOURCE', 'USER')->where('SUBMITTED_BY', \Auth::user()->id)->get();
+        }
+       
 
         return $data;
     }
