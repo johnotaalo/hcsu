@@ -69,11 +69,11 @@ class LoginController extends Controller
         // } catch (\Exception $e) {
         //     // \Log::error("AD is not connecting");
         // }
-        if (request()->input('location') == "client-portal") {
+        // if (request()->input('location') == "client-portal") {
             $credentials = request()->only($this->username, 'password');
             Auth::attempt($credentials, true);
-        }else{
-            Auth::attempt(['email' => request($this->username), 'password' => request('password')]);
-        }
+        // }else{
+        //     Auth::attempt(['email' => request($this->username), 'password' => request('password')]);
+        // }
     }
 }
