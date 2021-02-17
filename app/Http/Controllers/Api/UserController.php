@@ -80,6 +80,10 @@ class UserController extends Controller
     	return $user;
     }
 
+    function getDisputes(Request $request){
+        return \App\Models\UserDispute::where('merged', 0)->get();
+    }
+
     function confirmClient(Request $request){
         return ['success' => true];
     }

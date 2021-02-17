@@ -99,7 +99,7 @@
 				.then(res => {
 					this.$swal("Success", "Successfully added user", "success")
 					.then(() => {
-						this.$router.push({ name: "settings-users" })
+						this.$router.push({ name: "users" })
 					})
 				})
 				.catch(error => {

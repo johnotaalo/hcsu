@@ -334,4 +334,5 @@ Route::prefix('users')->middleware('auth:api')->group(function(){
 	Route::get('/all', 'Api\UserController@getUsers');
 	Route::get('/usertypes', 'Api\UserController@getUserTypes');
 	Route::post("/add", "Api\UserController@store");
+	Route::get("/disputes", "Api\UserController@getDisputes");
 });

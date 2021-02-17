@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<
 		<div class="card">
 			<div class="card-header">
 				<div class="row align-items-center">
@@ -15,6 +14,9 @@
 							</div>
 						</form>
 
+					</div>
+					<div class="col-auto">
+						<router-link class="btn btn-sm btn-primary" :to="{ name: 'user-add' }">({{ disputes.length }}) Disputes</router-link>
 					</div>
 					<div class="col-auto">
 						<b-select size="sm" :options="usertypes" v-model="searchUserType" v-on:change="applyUserTypeFilter(searchUserType)"></b-select>
@@ -47,6 +49,7 @@
 			return {
 				searchTerm: "",
 				searchUserType: "all",
+				disputes: [],
 				usertypes: [
 					{
 						value: 'all',
@@ -110,7 +113,16 @@
 			},
 			applyUserTypeFilter: function(type){
 				Event.$emit('vue-tables.filter::userTypeFilter', type)
+			},
+			getDisputes(){
+				axios.get('/api/users/disputes')
+				.then(res => {
+					this.disputes = res.data
+				})
 			}
+		},
+		created(){
+			this.getDisputes()
 		}
 	}
 </script>
