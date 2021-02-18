@@ -733,7 +733,6 @@
 					}
 				})
 				.catch((error) => {
-					console.log(error)
 					this.$swal("Error!", "There was an error while performing your request!", "error")
 				});
 			}

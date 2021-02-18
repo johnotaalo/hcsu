@@ -263,6 +263,25 @@ class PrincipalController extends Controller
 
     function add(Request $request){
         $case_no = ($request->query('case_no')) ? $request->query('case_no') : "";
+
+        $validatedData = $request->validate([
+            'lastName'              =>  'required',
+            'otherNames'            =>  'required',
+            'email'                 =>  'required',
+            'mobileNo'              =>  'required',
+            'officeNo'              =>  'required',
+            'maritalStatus'         =>  'required',
+            'principalPhotoFile'    =>  'required|image|mimes:jpeg,png,jpg',
+            'dob'                   =>  'required',
+            'gender'                =>  'required',
+            'Address'               =>  'required',
+            'residence'             =>  'required',
+            'place_of_birth'        =>  'required',
+            'nationality'           =>  'required',
+            'passports'             =>  'required',
+            'contract'              =>  'required',
+            'doa'                   =>  'required',
+        ]);
         // echo $case_no;die;
         $principal = new Principal();
         $imagePath = null;
