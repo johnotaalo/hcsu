@@ -40,7 +40,7 @@ class DataDumpSent extends Mailable
 
         $mailer = $this
                     ->from(env('MAIL_FROM_EMAIL'))
-                    ->subject("Your Organization's Data Dump")
+                    ->subject("Your Organization's Data Dump - {$this->filename}")
                     ->view('emails.data_sent_email');
 
         if (\Storage::exists($this->file)) {
