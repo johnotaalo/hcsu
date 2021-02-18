@@ -8,21 +8,21 @@ use Illuminate\Support\Facades\Mail;
 
 use \App\Jobs\SendOrganizationData;
 
-class SendIOMData extends Command
+class SendICAOData extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'senddata:iom';
+    protected $signature = 'senddata:icao';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'This cron job sends data to IOM daily';
+    protected $description = 'This cron job sends data to ICAO daily';
 
     /**
      * Create a new command instance.
@@ -41,7 +41,7 @@ class SendIOMData extends Command
      */
     public function handle()
     {
-        $config = ((array)json_decode(\Storage::get('backup-settings.json')))['IOM'];
+        $config = ((array)json_decode(\Storage::get('backup-settings.json')))['ICAO'];
 
         $organizations = explode(',', $config->organizations);
         $recepients = explode(',', $config->recepients);
@@ -53,7 +53,7 @@ class SendIOMData extends Command
             return trim($recepient);
         })->toArray();
 
-        SendOrganizationData::dispatch($organizations, $recepients, "IOM", "IOM");
+        SendOrganizationData::dispatch($organizations, $recepients, "ICAO", "ICAO");
 
         \Log::info("Cron is working fine!");
 

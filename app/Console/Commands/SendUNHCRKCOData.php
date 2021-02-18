@@ -53,7 +53,7 @@ class SendUNHCRKCOData extends Command
             return trim($recepient);
         })->toArray();
 
-        SendOrganizationData::dispatch($organizations, $recepients, "UNHCR (KCO)", "UNHCR (KCO)");
+        SendOrganizationData::dispatch($organizations, $recepients, "UNHCR (BO) (KCO)", "UNHCR (BO) (KCO)");
 
         \Log::info("Cron is working fine!");
 
