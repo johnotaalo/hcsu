@@ -100,6 +100,8 @@ Route::prefix('principal')->group(function(){
 	Route::post('/update', 'Api\PrincipalController@update');
 	Route::put('/{host_country_id}/activate', 'Api\PrincipalController@activateClient');
 
+	Route::post('preflight/search', 'Api\PrincipalController@searchPreflight');
+
 	Route::post('/passport/add', 'Api\PrincipalController@addPassport');
 	Route::post('/passport/edit', 'Api\PrincipalController@editPassport');
 	Route::delete('/passport', 'Api\PrincipalController@deletePassport');

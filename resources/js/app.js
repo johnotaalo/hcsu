@@ -91,6 +91,7 @@ Vue.filter('nullable', function (value) {
 import App from './views/App'
 import Home from './views/Home'
 import PageNotFound from './views/PageNotFound'
+import Preflight from './views/principal/Preflight'
 import Principal from './views/Principal'
 import AddPrincipal from './views/AddPrincipal'
 import ViewPrincipal from './views/ViewPrincipal'
@@ -188,6 +189,11 @@ Vue.component(
 	 		path: '/principal',
 	 		name: 'principal',
 	 		component: Principal
+	 	},
+	 	{
+	 		path: '/principal/add-pre-flight',
+	 		name: 'principal.add.pre-flight',
+	 		component: Preflight
 	 	},
 	 	{
 	 		path: '/principal/add',

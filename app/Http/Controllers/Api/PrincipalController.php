@@ -98,6 +98,22 @@ class PrincipalController extends Controller
     	];
     }
 
+    function searchPreflight(Request $request){
+        $index = $request->indexNo;
+        $passportNo = $request->passportNo;
+
+        $data = Principal::where('LAST_NAME', "LIKE", "%{$request->lastName}%")
+                            ->orWhere('OTHER_NAMES', 'LIKE', "%{$request->otherNames}%")
+                            ->orWhereHas('contracts', function($query) use ($index){
+                                return $query->where('INDEX_NO', $index);
+                            })
+                            ->orWhereHas('passports', function($query) use ($passportNo){
+                                return $query->where('PASSPORT_NO', $passportNo);
+                            })->get();
+
+        return $data;
+    }
+
     function searchPrincipal(Request $request){
         $query = $request->q;
         $organization = (isset($request->organization)) ? $request->organization : null;

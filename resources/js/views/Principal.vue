@@ -29,7 +29,7 @@
 						v-model="activeStaff" :options="staffOptions"></b-form-select>
 					</div>
 					<div class="col-auto">
-						<b-button class= "float-right" :to="{ name: 'principal.add' }" variant="outline-primary" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add Client</b-button>
+						<b-button class= "float-right" :to="{ name: 'principal.add.pre-flight' }" variant="outline-primary" size ="sm"><i class="fe fe-plus-circle"></i>&nbsp;Add Client</b-button>
 					</div>
 				</div>
 			</div>
