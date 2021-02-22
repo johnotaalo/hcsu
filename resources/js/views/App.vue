@@ -61,11 +61,12 @@
 					</div>
 
 					<!-- Dropdown -->
-					<div class="dropdown">
+					<div class="dropdown" v-if="this.$store.state.isUserRetrieved">
 
 						<!-- Toggle -->
-						<a href="#" class="avatar avatar-sm avatar-online dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<img src="/img/avatars/profiles/hcsu.svg" alt="..." class="avatar-img rounded-circle">
+						<a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<img src="/img/avatars/profiles/hcsu.svg" alt="..." class="rounded-circle" height="40" width="40">
+							{{ $store.state.loggedInUser.name }}
 						</a>
 
 						<!-- Menu -->
@@ -174,6 +175,7 @@
 
 			if(!this.user){
 				this.$store.dispatch('fetchCurrentUser');
+				console.log("user being fetched")
 			}
 			else{
 				this.$store.dispatch('checkProcessMakerSession', {user: user});
@@ -190,6 +192,9 @@
 				}else{
 					return false;
 				}
+			},
+			displayUser: function(){
+				return this.$store.loggedInUser
 			}
 		}
 	}
