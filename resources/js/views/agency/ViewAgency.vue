@@ -1,15 +1,5 @@
 <template>
 	<div>
-		<!-- <b-card no-body>
-			<b-tabs pills card fill>
-				<b-tab title="Agency Details" active>
-
-				</b-tab>
-				<b-tab title="Focal Points">
-					
-				</b-tab>
-			</b-tabs>
-		</b-card> -->
 		<div class="header">
 			<!-- <img src="/img/covers/team-cover.jpg" class="header-img-top" alt="..."> -->
 			<div class="container-fluid">
@@ -17,7 +7,8 @@
 					<div class="row align-items-end">
 						<div class="col-auto">
 							<div class="avatar avatar-xxl header-avatar-top">
-								<img src="/img/unep.png" alt="..." class="avatar-img rounded border border-4 border-body" style="background-color: #f5f5f5;">
+								<b-img v-if="agency.logo_link"class="avatar-img rounded border border-4 border-body" :src="`/agency/logo/${agency.AGENCY_ID}`" style="background-color: #F2F2F2;"/>
+								<b-img v-else class="avatar-img rounded border border-4 border-body" src="/images/unlogo.jpg" />
 							</div>
 						</div>
 
@@ -79,8 +70,8 @@
 								<b-tab title="Focal Points">
 									<div class="row">
 										<div class="col-md">
-											<b-table :fields="table.focalPoints.fields" :items="focalPoints" show-empty>
-												<template slot="NAME" slot-scope="data">
+											<b-table class="card-table" :fields="table.focalPoints.fields" :items="focalPoints" show-empty>
+												<template #cell(NAME)="data">
 													{{ data.item.LAST_NAME }}, {{ data.item.OTHER_NAMES }}
 												</template>
 											</b-table>
@@ -102,7 +93,7 @@
 								</div>
 								<div class="col-auto">
 									<small class="text-muted">
-									0
+									
 									</small>
 								</div>
 							</div>

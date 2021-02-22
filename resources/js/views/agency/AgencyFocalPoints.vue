@@ -9,19 +9,24 @@
 		<div class="row">
 			<div class="col">
 				<b-table :fields="table.fields" :items="focalPoints" show-empty>
-					<template slot="focal_point" slot-scope="data">
+					<template #cell(focal_point)="data">
 						{{ data.item.last_name }}, {{ data.item.other_names }}
 					</template>
 
-					<template slot="email" slot-scope="data">
+					<template #cell(email)="data">
 						{{ data.item.email_address }}
 					</template>
 
-					<template slot="actions" slot-scope="data">
+					<template #cell(actions)="data">
+						<span v-if="data.item.action == 'edit'">
 						<b-button variant="danger" size="sm" @click="removeFocalPoint(data.index)">Remove</b-button>&nbsp;&nbsp;<b-button variant="primary" size="sm" @click="editFocalPoint(data.index)">Edit</b-button>
+						</span>
+						<span v-else>
+							<p>Deleted. <a class="btn btn-link" @click="undoDeleted(data.index)">Undo?</a></p>
+						</span>
 					</template>
 
-					<template v-slot:empty="scope">
+					<template #empty="scope">
 						<h4 class="text-center">There are no focal points registered in this organization</h4>
 					</template>
 				</b-table>
@@ -73,7 +78,8 @@
 							email_address	: fp.EMAIL,
 							extension		: fp.EXTENSION,
 							index_no		: fp.INDEX_NO,
-							mobile_no		: fp.MOBILE_NO
+							mobile_no		: fp.MOBILE_NO,
+							action 			: "edit"
 						}
 					})
 				})
@@ -105,7 +111,8 @@
 				})
 				.then((willDelete) => {
 					if (willDelete) {
-						this.focalPoints.splice(index, 1);
+						// this.focalPoints.splice(index, 1);
+						this.focalPoints[index].action = "delete"
 					}
 				});
 			},
@@ -113,6 +120,9 @@
 				this.editIndex = index
 				this.focalPoint = this.focalPoints[index]
 				this.$refs['add-focal-point'].show()
+			},
+			undoDeleted(index){
+				this.focalPoints[index].action = "edit"
 			}
 		}
 	}

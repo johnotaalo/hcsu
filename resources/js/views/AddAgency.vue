@@ -50,7 +50,14 @@
 				var em = this
 				em.form.post('/agencies/add')
 				.then((res) => {
-					console.log(res)
+					this.$swal('Success', "Successfully added agency", "success")
+					.then(() => {
+						this.$router.push({ name: 'agencies' })
+					})
+					.catch(error => {
+						this.$swal('Error', error.message, "error")
+					})
+					
 				})
 			}
 		}

@@ -54,6 +54,20 @@ Route::get('uploads/{id}', function($id){
 
 });
 
+Route::get('agency/logo/{id}', function($id){
+	$agency = \App\Models\Agency::findOrFail($id);
+
+	if (\Storage::exists($agency->logo_link)) {
+		$file = \Storage::get($agency->logo_link);
+		$type = \Storage::mimeType($agency->logo_link);
+
+		$response = Response::make($file, 200);
+		$response->header("Content-Type", $type);
+
+		return $response;
+	}
+});
+
 Route::get('vehicle/plates/returned/download/list/signed/{id}' , 'Api\VehicleController@downloadSignedList');
 
 Route::get('/photos/dependent/{host_country_id}', function($host_country_id){

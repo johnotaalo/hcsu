@@ -142,6 +142,7 @@ Route::prefix('agencies')->group(function(){
 	Route::post('/add', 'Api\AgenciesController@addAgencies');
 	Route::get('/get/{agency_id}', 'Api\AgenciesController@getAgency');
 	Route::put('/update/{agency_id}', 'Api\AgenciesController@updateAgency');
+	Route::get("/all", "Api\AgenciesController@all");
 });
 
 

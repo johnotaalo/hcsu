@@ -35,7 +35,7 @@
 						agency_hca: "",
 						image: {}
 					},
-					focalPoints: []
+					focalPoints: [],
 				})
 			}
 		},
@@ -64,7 +64,13 @@
 				// console.log(this.form.data())
 				this.form.put(`agencies/update/${this.form.agencyDetails.host_country_id}`)
 				.then(data => {
-					// console.log(data)
+					this.$swal('Success', "Successfully added agency", "success")
+					.then(() => {
+						this.$router.push({ name: 'agencies' })
+					})
+					.catch(error => {
+						this.$swal('Error', error.message, "error")
+					})
 				})
 			},
 			focalPointsChange(value){
