@@ -46,8 +46,7 @@ Route::get('test', function(){
 	// ]);
 
 	// dd($tests);
-	$plates = \App\ReturnedPlate::with('plates')->get();
-	return $plates;
+	return \App\User::with('roles')->get();
 });
 
 Route::get('/test/queue', function(){
@@ -93,7 +92,7 @@ Route::get('/test/queue', function(){
 // 	});
 // });
 
-Route::prefix('principal')->group(function(){
+Route::prefix('principal')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
 	Route::get('/', 'Api\PrincipalController@getPrincipal');
 	Route::post('/add', 'Api\PrincipalController@add');
 	Route::get('/get/{id}', 'Api\PrincipalController@get');
@@ -124,7 +123,7 @@ Route::prefix('principal')->group(function(){
 	Route::get('domesticworker/get/{host_country_id}', 'Api\PrincipalController@getDomesticWorker');
 });
 
-Route::prefix('template')->group(function(){
+Route::prefix('template')->middleware(['auth:api', 'role:Administrator'])->group(function(){
 	Route::get('/get/{id}', 'Api\AppController@getTemplate');
 	Route::get("/list", 'Api\AppController@getTemplateList');
 	Route::post('/add', 'Api\AppController@addTemplate');
@@ -136,7 +135,7 @@ Route::prefix('client')->group(function(){
 	Route::post('/update', 'Api\AppController@updateHostCountryID');
 });
 
-Route::prefix('agencies')->group(function(){
+Route::prefix('agencies')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
 	Route::get('/', 'Api\AppController@getAgencies');
 	Route::get('/search', 'Api\AgenciesController@searchAgencies');
 	Route::post('/add', 'Api\AgenciesController@addAgencies');
@@ -146,17 +145,34 @@ Route::prefix('agencies')->group(function(){
 });
 
 
-Route::prefix('agency')->group(function(){
+Route::prefix('agency')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
 	Route::get('focal-point/{host_country_id}', 'Api\AgenciesController@getFocalPoints');
 });
 
-Route::get('passport-types', 'Api\AppController@getPassportTypes');
-Route::get('countries', 'Api\AppController@getCountries');
-Route::prefix('data')->group(function(){
-	Route::get('/principal-options', 'Api\AppController@getPrincipalOptions');
+Route::middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->get('passport-types', 'Api\AppController@getPassportTypes');
+Route::middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->get('countries', 'Api\AppController@getCountries');
+
+Route::prefix('data')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
+	Route::prefix('tims')->group(function(){
+		Route::get('/list', 'Api\VehicleController@searchTims');
+		Route::post('/registration', 'Api\VehicleController@registerTims');
+	});
 });
 
-Route::prefix('vehicle')->group(function(){
+Route::prefix('data')->group(function(){
+	Route::prefix('adobe-sign')->group(function(){
+		Route::middleware(['auth:api', 'role:Administrator'])->prefix('signatories')->group(function(){
+			Route::get('/', 'Api\AdobeSignApiController@getSignatories');
+			Route::post('/', 'Api\AdobeSignApiController@addSignatory');
+			Route::put('/', 'Api\AdobeSignApiController@updateSignatory');
+			Route::get('/get/{id}', 'Api\AdobeSignApiController@getSignatory');
+		});
+
+		Route::middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->get('/documents', 'Api\AdobeSignApiController@getDocuments');
+	});
+});
+
+Route::prefix('vehicle')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
 	Route::get('/', 'Api\VehicleController@getVehicles');
 	Route::get('/{host_country_id}', 'Api\VehicleController@getVehicles');
 	Route::get('/get/{id}/{type}', 'Api\VehicleController@getVehicleDetails');
@@ -181,7 +197,7 @@ Route::prefix('vehicle')->group(function(){
 	});
 });
 
-Route::prefix('data')->group(function(){
+Route::prefix('data')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
 	Route::prefix('suppliers')->group(function(){
 		Route::post('/', 'Api\SupplierController@create');
 		Route::put('/', 'Api\SupplierController@update');
@@ -250,19 +266,7 @@ Route::prefix('data')->group(function(){
 		return \App\Models\Country::all();
 	});
 
-	Route::prefix('tims')->group(function(){
-		Route::get('/list', 'Api\VehicleController@searchTims');
-		Route::post('/registration', 'Api\VehicleController@registerTims');
-	});
-
-	Route::prefix('adobe-sign')->group(function(){
-		Route::get('/signatories', 'Api\AdobeSignApiController@getSignatories');
-		Route::post('/signatories', 'Api\AdobeSignApiController@addSignatory');
-		Route::put('/signatories', 'Api\AdobeSignApiController@updateSignatory');
-		Route::get('/signatories/get/{id}', 'Api\AdobeSignApiController@getSignatory');
-
-		Route::get('/documents', 'Api\AdobeSignApiController@getDocuments');
-	});
+	Route::get('/principal-options', 'Api\AppController@getPrincipalOptions');
 });
 
 Route::prefix('documents')->group(function(){
@@ -282,7 +286,7 @@ Route::prefix('documents')->group(function(){
 
 Route::get('/dependent/search', 'Api\PrincipalController@searchDependent');
 
-Route::prefix('/vat')->group(function(){
+Route::middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->prefix('/vat')->group(function(){
 	Route::prefix('blanket')->group(function(){
 		Route::get('batches', 'Api\VATController@getBlanketBatches');
 		Route::post('batch', 'Api\VATController@addBlanketBatch');
@@ -292,7 +296,7 @@ Route::prefix('/vat')->group(function(){
 	});
 });
 
-Route::prefix('/focal-points')->group(function(){
+Route::middleware(['auth:api', 'role:Administrator|Supervisor|Client'])->prefix('/focal-points')->group(function(){
 	Route::group(['middleware' => 'auth:api'], function(){
 		Route::prefix('vat')->group(function(){
 			Route::post('/', 'FocalPoints\VATController@addVATApplication');
@@ -320,7 +324,7 @@ Route::prefix('processmaker')->group(function(){
 
 Route::get('user/reset/{id}', 'Api\AgenciesController@sendResetPassword');
 
-Route::prefix('/other/clients')->group(function(){
+Route::prefix('/other/clients')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
 	Route::get('/', 'Api\OtherClientsController@index');
 	Route::post('/', 'Api\OtherClientsController@store');
 	Route::put('/', 'Api\OtherClientsController@update');
@@ -333,7 +337,7 @@ Route::prefix('adobe-sign')->group(function(){
 	Route::post('get-signing-urls', 'Api\AdobeSignApiController@getSigningURLs');
 });
 
-Route::prefix('users')->middleware('auth:api')->group(function(){
+Route::prefix('users')->middleware(['auth:api', 'role:Administrator|Supervisor|AdminAssistant'])->group(function(){
 	Route::get('/all', 'Api\UserController@getUsers');
 	Route::get('/usertypes', 'Api\UserController@getUserTypes');
 	Route::post("/add", "Api\UserController@store");

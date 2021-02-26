@@ -24,6 +24,7 @@
         "mikehaertl/php-pdftk": "^0.5.0",
         "niklasravnsborg/laravel-pdf": "^4.0",
         "spatie/laravel-cors": "^1.6",
+        "spatie/laravel-permission": "3.0",
         "symfony/translation": "4.3.8",
         "tymon/jwt-auth": "dev-develop",
         "yadahan/laravel-authentication-log": "^1.2"

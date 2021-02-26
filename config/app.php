@@ -187,6 +187,8 @@ return [
         Adldap\Laravel\AdldapAuthServiceProvider::class,
 
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

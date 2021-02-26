@@ -14,9 +14,9 @@
 				</button>
 
 				<!-- Brand -->
-				<a class="navbar-brand mr-auto" href="index.html">
+				<router-link class="navbar-brand mr-auto" :to="{ name: 'home' }">
 					<img src="/images/UNLOGOBW.jpg" alt="..." class="navbar-brand-img">
-				</a>
+				</router-link>
 
 				<!-- Form -->
 				<form class="form-inline mr-4 d-none d-lg-flex">
@@ -71,10 +71,10 @@
 
 						<!-- Menu -->
 						<div class="dropdown-menu dropdown-menu-right">
-							<router-link class="dropdown-item" :to="{name: 'settings'}">Settings</router-link>
-							<router-link class="dropdown-item" :to="{name: 'users'}">Users</router-link>
-							<router-link class="dropdown-item" :to="{name: 'user-applications.all'}">User Applications</router-link>
-							<router-link class="dropdown-item" :to="{ name: 'settings-adobesign-documents' }">Data</router-link>
+							<router-link class="dropdown-item" :to="{name: 'settings'}" v-if="showMenu('settings')">Settings</router-link>
+							<router-link v-if="showMenu('users')" class="dropdown-item" :to="{name: 'users'}">Users</router-link>
+							<router-link v-if="showMenu('user-applications.all')" class="dropdown-item" :to="{name: 'user-applications.all'}">User Applications</router-link>
+							<router-link v-if="showMenu('settings-adobesign-documents')" class="dropdown-item" :to="{ name: 'settings-adobesign-documents' }">Data</router-link>
 							<hr class="dropdown-divider">
 							<a href="/logout" class="dropdown-item">Logout</a>
 						</div>
@@ -93,28 +93,28 @@
 
 			<!-- Navigation -->
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'home' }">Home</router-link></li>
+				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'home' }" v-if="showMenu('home')">Home</router-link></li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">Clients</a>
 					<ul class="dropdown-menu">
-						<li><router-link class="dropdown-item" :to="{ name: 'principal' }">Principals</router-link></li>
-						<li><router-link class="dropdown-item" :to="{ name: 'agencies' }">Agencies</router-link></li>
-						<li><router-link class="dropdown-item" :to="{ name: 'dependents.list' }">Dependents List</router-link></li>
-						<li><router-link class="dropdown-item" :to="{ name: 'clients.other' }">Others (Meeting Participants etc.)</router-link></li>
+						<li><router-link class="dropdown-item" :to="{ name: 'principal' }" v-if="showMenu('principal')">Principals</router-link></li>
+						<li><router-link class="dropdown-item" :to="{ name: 'agencies' }" v-if="showMenu('principal')">Agencies</router-link></li>
+						<li><router-link class="dropdown-item" :to="{ name: 'dependents.list' }" v-if="showMenu('principal')">Dependents List</router-link></li>
+						<li><router-link class="dropdown-item" :to="{ name: 'clients.other' }" v-if="showMenu('principal')">Others (Meeting Participants etc.)</router-link></li>
 					</ul>
 				</li>
 				<!-- <li class="nav-item"></li> -->
 				<li class="nav-item"></li>
-				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'vehicles' }">Vehicles</router-link></li>
-				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'data-management' }">Data</router-link></li>
+				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'vehicles' }" v-if="showMenu('vehicles')">Vehicles</router-link></li>
+				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'data-management' }" v-if="showMenu('data-management')">Data</router-link></li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">Processes</a>
 					<ul class="dropdown-menu">
 						<li>
-							<router-link class="dropdown-item" :to="{ name: 'blanket-vat' }">Blanket VAT</router-link>
+							<router-link class="dropdown-item" v-if="showMenu('blanket-vat')" :to="{ name: 'blanket-vat' }">Blanket VAT</router-link>
 						</li>
 						<li>
-							<router-link class="dropdown-item" :to="{ name: 'subprocesses-ipmis' }">Subprocesses</router-link>
+							<router-link class="dropdown-item" v-if="showMenu('subprocesses-ipmis')" :to="{ name: 'subprocesses-ipmis' }">Subprocesses</router-link>
 						</li>
 					</ul>
 				</li>
@@ -122,14 +122,14 @@
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">Exports</a>
 					<ul class="dropdown-menu">
 						<li>
-							<router-link class="dropdown-item" :to="{ name: 'export-vat-list' }">VAT List</router-link>
+							<router-link class="dropdown-item" v-if="showMenu('export-vat-list')" :to="{ name: 'export-vat-list' }">VAT List</router-link>
 						</li>
 						<li>
-							<router-link class="dropdown-item" :to="{ name: 'export-organization-data' }">Organization Data</router-link>
+							<router-link class="dropdown-item" v-if="showMenu('export-organization-data')" :to="{ name: 'export-organization-data' }">Organization Data</router-link>
 						</li>
 					</ul>
 				</li>
-				<li class="nav-item"><router-link class="nav-link" :to="{ name: 'settings' }">Settings</router-link></li>
+				<li class="nav-item"><router-link class="nav-link" v-if="showMenu('settings')" :to="{ name: 'settings' }">Settings</router-link></li>
 			</ul>
 
           </div>
@@ -163,11 +163,13 @@
 		},
 		mounted(){
 			// console.log(typeof this.isContainer)
-			var query = this.$route.query
+            // this.findMenuRoles()
+            console.log("mounted")
+			let query = this.$route.query
 
-			var type = query.type
-			var case_no = query.case_no
-			var user = query.user
+			let type = query.type
+			let case_no = query.case_no
+			let user = query.user
 
 			this.iframe = type == "iframe"
 			this.case = case_no
@@ -175,11 +177,57 @@
 
 			if(!this.user){
 				this.$store.dispatch('fetchCurrentUser');
-				console.log("user being fetched")
 			}
 			else{
 				this.$store.dispatch('checkProcessMakerSession', {user: user});
 			}
+		},
+		methods: {
+			showMenu(name){
+				let exists = this.userRoles.some(role => {
+					return _.includes(this.menuRoles[name], role)
+				})
+
+				return exists
+			},
+            flattenChildren(children, flattenedChildren = null){
+			    let em = this
+                if(!flattenedChildren) { flattenedChildren = {} }
+                _.each(children, function(child){
+                    if ('children' in child){
+                        em.flattenChildren(child.children, flattenedChildren)
+                    }else{
+                        flattenedChildren[child.name] = child.meta.roles
+                    }
+                })
+
+                return flattenedChildren
+            },
+            findMenuRoles(){
+			    let em = this
+                let routes = this.$router.options.routes
+                let menuRoles = {}
+                // console.log(em)
+
+                _.forEach(routes, function(route) {
+                    if('children' in route){
+                        menuRoles[route.name] = route.meta.roles
+                        let flattened = em.flattenChildren(route.children)
+                        _.forEach(flattened, function(value, key){
+                            menuRoles[key] = value
+                        })
+                    }else{
+                        if('meta' in route) {
+                            menuRoles[route.name] = route.meta.roles
+                        }
+                        else {
+                            menuRoles[route.name] = []
+                        }
+                    }
+                })
+
+                return menuRoles
+            }
 		},
 		computed: {
 			showMainDIV: function(){
@@ -194,8 +242,19 @@
 				}
 			},
 			displayUser: function(){
-				return this.$store.loggedInUser
-			}
+				return this.$store.state.loggedInUser
+			},
+			userRoles: function(){
+				let roles = this.displayUser.roles
+				let rolesArray = _.map(roles, (role) => {
+					return role.name
+				})
+
+				return rolesArray
+			},
+            menuRoles: function(){
+			    return this.findMenuRoles()
+            }
 		}
 	}
 </script>

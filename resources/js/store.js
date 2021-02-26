@@ -31,14 +31,11 @@ export default new Vuex.Store({
 
 				this.commit('loadingOn')
 				axios.get('/api/auth/details').then((response) => {
-					console.log(response)
 					commit('fetchLoggedInUser', response.data)
 					this.commit('loadingOff')
 				}).catch((error) => {
-					console.log(error.message)
 					this.commit('loadingOff');
-					this.commit('gotoLogin')
-					// return new Promise((error))
+					// this.commit('gotoLogin')
 				});
 			}
 		},

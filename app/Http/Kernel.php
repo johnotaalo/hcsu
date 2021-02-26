@@ -65,6 +65,9 @@ class Kernel extends HttpKernel
 
         'isFocalPoint' => \App\Http\Middleware\CheckIsFocalPoint::class,
         'isAdmin' => \App\Http\Middleware\CheckIsAdmin::class,
+
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
     ];
 
     /**

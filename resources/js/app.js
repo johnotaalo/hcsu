@@ -87,7 +87,7 @@ Vue.filter('nullable', function (value) {
 
 
 // import App from './views/App'
-// import router from './router'
+import router from './router'
 import App from './views/App'
 import Home from './views/Home'
 import PageNotFound from './views/PageNotFound'
@@ -155,6 +155,7 @@ import UserApplications from './views/settings/applications/UserApplications'
 import AssignUserApplications from './views/settings/applications/AssignUserApplications'
 import UserIndex from './views/settings/users/Index'
 import AddUser from './views/settings/users/AddUser'
+
 // Auth
 // import Login from './views/Login'
 
@@ -173,312 +174,312 @@ Vue.component(
     require('./components/passport/PersonalAccessTokens.vue')
 );
 
- const router = new VueRouter({
- 	linkExactActiveClass: "active",
- 	routes: [
-	 	{
-	 		path: '/',
-	 		name: 'home',
-	 		component: Home,
-	 		meta: {
-	 			auth: true,
-	 			title: 'Home'
-	 		}
-	 	},
-	 	{
-	 		path: '/principal',
-	 		name: 'principal',
-	 		component: Principal
-	 	},
-	 	{
-	 		path: '/principal/add-pre-flight',
-	 		name: 'principal.add.pre-flight',
-	 		component: Preflight
-	 	},
-	 	{
-	 		path: '/principal/add',
-	 		name: 'principal.add',
-	 		component: AddPrincipal
-	 	},
-	 	{
-	 		path: '/principal/view/:id',
-	 		name: 'principal.view',
-	 		component: ViewPrincipal
-	 	},
-    	{
-	 		path: '/dependent/view/:id',
-	 		name: 'dependent.view',
-	 		component: ViewDependent
-	 	},
-	 	{
-	 		path: '/dependent/edit/:id',
-	 		name: 'dependent.edit',
-	 		component: EditDependent
-	 	},
-	 	{
-	 		path: '/dependent/add/:id',
-	 		name: 'dependent.add',
-	 		component: AddDependent
-	 	},
-	 	{
-	 		name: 'dependents.list',
-	 		component: DependentsList,
-	 		path: '/dependents/list'
-	 	},
-	 	{
-	 		path: '/clients/other',
-	 		name: 'clients.other',
-	 		component: Clients
-	 	},
-	 	{
-	 		path: '/clients/other/add',
-	 		name: 'clients.other.add',
-	 		component: AddOtherClient
-	 	},
-	 	{
-	 		path: '/clients/other/edit/:id',
-	 		name: 'clients.other.edit',
-	 		component: EditOtherClient
-	 	},
-	 	{
-	 		path: '/agencies',
-	 		name: 'agencies',
-	 		component: Agencies
-	 	},
-	 	{
-	 		path: '/agencies/add',
-	 		name: 'agencies.add',
-	 		component: AddAgency
-	 	},
-	 	{
-	 		path: '/agencies/edit/:id',
-	 		name: 'agencies.edit',
-	 		component: EditAgency
-	 	},
-	 	{
-	 		path: '/agencies/view/:id',
-	 		name: 'agencies.view',
-	 		component: ViewAgency
-	 	},
-	 	{
-	 		path: '/domestic-worker/edit/:id',
-	 		name: 'domestic-worker.edit',
-	 		component: EditDomesticWorker
-	 	},
-	 	{
-	 		path: '/vehicles',
-	 		name: 'vehicles',
-	 		component: Vehicles,
-	 		children: [
-	 			{
-	 				path: '',
-	 				component: VehicleHome,
-	 				name: 'vehicle-home'
-	 			},
-	 			{
-	 				path: '/list',
-	 				component: VehicleList,
-	 				name: 'vehicle-list'
-	 			},
-	 			{
-	 				path: 'plates',
-	 				component: Plates,
-	 				name: 'vehicle-plates',
-	 				children: [
-	 					{
-	 						path: 'prefixes',
-	 						component: Prefix,
-	 						name: 'vehicle-plates-prefix'
-	 					},
-	 					{
-	 						path: 'list',
-	 						component: PlatesList,
-	 						name: 'vehicle-plates-list'
-	 					},
-	 					{
-	 						path: 'order',
-	 						component: PlatesOrder,
-	 						name: 'vehicle-plates-orders'
-	 					},
-	 					{
-	 						path: 'rnp/list',
-	 						component: RNPList,
-	 						name: 'rnp-list'
-	 					},
-	 					{
-	 						path: 'rnp/create',
-	 						component: RNPCreate,
-	 						name: 'rnp-create'
-	 					},
-	 					{
-	 						path: 'rnp/edit/:id',
-	 						component: RNPEdit,
-	 						name: 'rnp-edit'
-	 					}
-	 				]
-	 			},
-	 			{
-	 				path: 'tims',
-	 				component: Tims,
-	 				name: 'tims',
-	 				children: [
-	 					{
-	 						path: 'list',
-			 				component: TimsList,
-			 				name: 'tims-list',
-	 					},
-	 					{
-	 						path: 'registration',
-	 						component: TimsRegistration,
-	 						name: 'tims-registration'
-	 					}
-	 				]
-	 			}
-	 		]
-	 	},
-	 	{
-	 		path: '/applications/all',
-	 		name: 'user-applications.all',
-	 		component: UserApplications
-	 	},
-	 	{
-	 		path: '/applications/assign/:id',
-	 		name: 'user-applications.assign',
-	 		component: AssignUserApplications
-	 	},
-	 	{
-	 		path: '/client/search',
-	 		name: 'search-clients',
-	 		component: SearchClient
-	 	},
-	 	{
-	 		path: '/exports/vat-list',
-	 		name: 'export-vat-list',
-	 		component: VATListExport
-	 	},
-	 	{
-	 		path: '/exports/organization-data',
-	 		name: 'export-organization-data',
-	 		component: OrganizationDataExport
-	 	},
-	 	{
-	 		path: '/settings',
-	 		name: 'settings',
-	 		component: SettingsIndex,
-	 		children: [
-	 			{
-	 				path: 'document/templates',
-	 				component: DocumentTemplatesList,
-	 				name: "settings-templates"
-	 			},
-	 			{
-					path: 'document/templates/add',
-					component: DocumentTemplates,
-					name: 'settings-templates-add'
-				},
-				{
-					path: 'document/templates/edit/:id',
-					component: DocumentTemplates,
-					name: 'settings-templates-edit'
-				},
-	 			{
-	 				path: 'data/migration',
-	 				component: DataMigration,
-	 				name: "settings-migration"
-	 			},
-	 			{
-	 				path: 'processmaker/ipmis/functionality',
-	 				component: IPMISFunctionality,
-	 				name: 'settings-ipmis-functionality'
-	 			},
-	 			{
-	 				path: 'adobe-sign/signatories',
-	 				component: AdobeSignSignatories,
-	 				name: 'settings-signatories'
-	 			},
-	 			{
-	 				path: 'adobe-sign/signatories/add',
-	 				component: AddAdobeSignSignatory,
-	 				name: 'setting-signatories-add'
-	 			},
-	 			{
-	 				name: 'setting-signatories-edit',
-	 				path: 'adobe-sign/signatories/edit/:id',
-	 				component: AddAdobeSignSignatory,
-	 			},
-	 			{
-	 				name: 'settings-reassign-cases',
-	 				path: 'reassign/oldcases',
-	 				component: ReassignOldCases
-	 			},
-	 			{
-	 				name: 'settings-adobesign-documents',
-	 				path: 'adobe-sign/documents',
-	 				component: AdobeSignDocuments
-	 			}
-	 		]
-	 	},
-	 	{
-	 		path: '/vat',
-	 		name: 'vat',
-	 		// component: VAT,
-	 		children: [
-	 			{
-	 				path: 'blanket',
-	 				component: BlanketVAT,
-	 				name: 'blanket'
-	 			},
-	 			{
-	 				path: 'normal',
-	 				component: NormalVAT,
-	 				name: 'normal-vat'
-	 			}
-	 		]
-	 	},
-	 	{
-	 		path: '/blanket-vat',
-	 		name: 'blanket-vat',
-	 		component: BlanketVAT,
-	 		children: [
-	 			{
-	 				path: 'batches',
-	 				component: BlanketVATBatch,
-	 				name: 'blanket-vat-batches'
-	 			},
-	 			{
-	 				path: 'normal',
-	 				component: NormalVAT,
-	 				name: 'normal-vat-data'
-	 			}
-	 		]
-	 	},
-	 	{
-	 		path: '/data-management',
-	 		name: 'data-management',
-	 		component: DataManagement
-	 	},
-	 	{
-	 		path: '/subprocesses/ipmis',
-	 		name: "subprocesses-ipmis",
-	 		component: Subprocesses
-	 	},
-	 	{
-	 		path: '*',
-	 		component: PageNotFound,
-	 		name: '404'
-	 	},
-		{
-			name: 'users',
-			path: '/users',
-			component: UserIndex
-		},
-		{
-			name: 'user-add',
-			path: '/users/add',
-			component: AddUser
-		}
- 	]
- });
+ // const router = new VueRouter({
+ // 	linkExactActiveClass: "active",
+ // 	routes: [
+	//  	{
+	//  		path: '/',
+	//  		name: 'home',
+	//  		component: Home,
+	//  		meta: {
+	//  			auth: true,
+	//  			title: 'Home'
+	//  		}
+	//  	},
+	//  	{
+	//  		path: '/principal',
+	//  		name: 'principal',
+	//  		component: Principal
+	//  	},
+	//  	{
+	//  		path: '/principal/add-pre-flight',
+	//  		name: 'principal.add.pre-flight',
+	//  		component: Preflight
+	//  	},
+	//  	{
+	//  		path: '/principal/add',
+	//  		name: 'principal.add',
+	//  		component: AddPrincipal
+	//  	},
+	//  	{
+	//  		path: '/principal/view/:id',
+	//  		name: 'principal.view',
+	//  		component: ViewPrincipal
+	//  	},
+ //    	{
+	//  		path: '/dependent/view/:id',
+	//  		name: 'dependent.view',
+	//  		component: ViewDependent
+	//  	},
+	//  	{
+	//  		path: '/dependent/edit/:id',
+	//  		name: 'dependent.edit',
+	//  		component: EditDependent
+	//  	},
+	//  	{
+	//  		path: '/dependent/add/:id',
+	//  		name: 'dependent.add',
+	//  		component: AddDependent
+	//  	},
+	//  	{
+	//  		name: 'dependents.list',
+	//  		component: DependentsList,
+	//  		path: '/dependents/list'
+	//  	},
+	//  	{
+	//  		path: '/clients/other',
+	//  		name: 'clients.other',
+	//  		component: Clients
+	//  	},
+	//  	{
+	//  		path: '/clients/other/add',
+	//  		name: 'clients.other.add',
+	//  		component: AddOtherClient
+	//  	},
+	//  	{
+	//  		path: '/clients/other/edit/:id',
+	//  		name: 'clients.other.edit',
+	//  		component: EditOtherClient
+	//  	},
+	//  	{
+	//  		path: '/agencies',
+	//  		name: 'agencies',
+	//  		component: Agencies
+	//  	},
+	//  	{
+	//  		path: '/agencies/add',
+	//  		name: 'agencies.add',
+	//  		component: AddAgency
+	//  	},
+	//  	{
+	//  		path: '/agencies/edit/:id',
+	//  		name: 'agencies.edit',
+	//  		component: EditAgency
+	//  	},
+	//  	{
+	//  		path: '/agencies/view/:id',
+	//  		name: 'agencies.view',
+	//  		component: ViewAgency
+	//  	},
+	//  	{
+	//  		path: '/domestic-worker/edit/:id',
+	//  		name: 'domestic-worker.edit',
+	//  		component: EditDomesticWorker
+	//  	},
+	//  	{
+	//  		path: '/vehicles',
+	//  		name: 'vehicles',
+	//  		component: Vehicles,
+	//  		children: [
+	//  			{
+	//  				path: '',
+	//  				component: VehicleHome,
+	//  				name: 'vehicle-home'
+	//  			},
+	//  			{
+	//  				path: '/list',
+	//  				component: VehicleList,
+	//  				name: 'vehicle-list'
+	//  			},
+	//  			{
+	//  				path: 'plates',
+	//  				component: Plates,
+	//  				name: 'vehicle-plates',
+	//  				children: [
+	//  					{
+	//  						path: 'prefixes',
+	//  						component: Prefix,
+	//  						name: 'vehicle-plates-prefix'
+	//  					},
+	//  					{
+	//  						path: 'list',
+	//  						component: PlatesList,
+	//  						name: 'vehicle-plates-list'
+	//  					},
+	//  					{
+	//  						path: 'order',
+	//  						component: PlatesOrder,
+	//  						name: 'vehicle-plates-orders'
+	//  					},
+	//  					{
+	//  						path: 'rnp/list',
+	//  						component: RNPList,
+	//  						name: 'rnp-list'
+	//  					},
+	//  					{
+	//  						path: 'rnp/create',
+	//  						component: RNPCreate,
+	//  						name: 'rnp-create'
+	//  					},
+	//  					{
+	//  						path: 'rnp/edit/:id',
+	//  						component: RNPEdit,
+	//  						name: 'rnp-edit'
+	//  					}
+	//  				]
+	//  			},
+	//  			{
+	//  				path: 'tims',
+	//  				component: Tims,
+	//  				name: 'tims',
+	//  				children: [
+	//  					{
+	//  						path: 'list',
+	// 		 				component: TimsList,
+	// 		 				name: 'tims-list',
+	//  					},
+	//  					{
+	//  						path: 'registration',
+	//  						component: TimsRegistration,
+	//  						name: 'tims-registration'
+	//  					}
+	//  				]
+	//  			}
+	//  		]
+	//  	},
+	//  	{
+	//  		path: '/applications/all',
+	//  		name: 'user-applications.all',
+	//  		component: UserApplications
+	//  	},
+	//  	{
+	//  		path: '/applications/assign/:id',
+	//  		name: 'user-applications.assign',
+	//  		component: AssignUserApplications
+	//  	},
+	//  	{
+	//  		path: '/client/search',
+	//  		name: 'search-clients',
+	//  		component: SearchClient
+	//  	},
+	//  	{
+	//  		path: '/exports/vat-list',
+	//  		name: 'export-vat-list',
+	//  		component: VATListExport
+	//  	},
+	//  	{
+	//  		path: '/exports/organization-data',
+	//  		name: 'export-organization-data',
+	//  		component: OrganizationDataExport
+	//  	},
+	//  	{
+	//  		path: '/settings',
+	//  		name: 'settings',
+	//  		component: SettingsIndex,
+	//  		children: [
+	//  			{
+	//  				path: 'document/templates',
+	//  				component: DocumentTemplatesList,
+	//  				name: "settings-templates"
+	//  			},
+	//  			{
+	// 				path: 'document/templates/add',
+	// 				component: DocumentTemplates,
+	// 				name: 'settings-templates-add'
+	// 			},
+	// 			{
+	// 				path: 'document/templates/edit/:id',
+	// 				component: DocumentTemplates,
+	// 				name: 'settings-templates-edit'
+	// 			},
+	//  			{
+	//  				path: 'data/migration',
+	//  				component: DataMigration,
+	//  				name: "settings-migration"
+	//  			},
+	//  			{
+	//  				path: 'processmaker/ipmis/functionality',
+	//  				component: IPMISFunctionality,
+	//  				name: 'settings-ipmis-functionality'
+	//  			},
+	//  			{
+	//  				path: 'adobe-sign/signatories',
+	//  				component: AdobeSignSignatories,
+	//  				name: 'settings-signatories'
+	//  			},
+	//  			{
+	//  				path: 'adobe-sign/signatories/add',
+	//  				component: AddAdobeSignSignatory,
+	//  				name: 'setting-signatories-add'
+	//  			},
+	//  			{
+	//  				name: 'setting-signatories-edit',
+	//  				path: 'adobe-sign/signatories/edit/:id',
+	//  				component: AddAdobeSignSignatory,
+	//  			},
+	//  			{
+	//  				name: 'settings-reassign-cases',
+	//  				path: 'reassign/oldcases',
+	//  				component: ReassignOldCases
+	//  			},
+	//  			{
+	//  				name: 'settings-adobesign-documents',
+	//  				path: 'adobe-sign/documents',
+	//  				component: AdobeSignDocuments
+	//  			}
+	//  		]
+	//  	},
+	//  	{
+	//  		path: '/vat',
+	//  		name: 'vat',
+	//  		// component: VAT,
+	//  		children: [
+	//  			{
+	//  				path: 'blanket',
+	//  				component: BlanketVAT,
+	//  				name: 'blanket'
+	//  			},
+	//  			{
+	//  				path: 'normal',
+	//  				component: NormalVAT,
+	//  				name: 'normal-vat'
+	//  			}
+	//  		]
+	//  	},
+	//  	{
+	//  		path: '/blanket-vat',
+	//  		name: 'blanket-vat',
+	//  		component: BlanketVAT,
+	//  		children: [
+	//  			{
+	//  				path: 'batches',
+	//  				component: BlanketVATBatch,
+	//  				name: 'blanket-vat-batches'
+	//  			},
+	//  			{
+	//  				path: 'normal',
+	//  				component: NormalVAT,
+	//  				name: 'normal-vat-data'
+	//  			}
+	//  		]
+	//  	},
+	//  	{
+	//  		path: '/data-management',
+	//  		name: 'data-management',
+	//  		component: DataManagement
+	//  	},
+	//  	{
+	//  		path: '/subprocesses/ipmis',
+	//  		name: "subprocesses-ipmis",
+	//  		component: Subprocesses
+	//  	},
+	//  	{
+	//  		path: '*',
+	//  		component: PageNotFound,
+	//  		name: '404'
+	//  	},
+	// 	{
+	// 		name: 'users',
+	// 		path: '/users',
+	// 		component: UserIndex
+	// 	},
+	// 	{
+	// 		name: 'user-add',
+	// 		path: '/users/add',
+	// 		component: AddUser
+	// 	}
+ // 	]
+ // });
 
 //  router.beforeResolve((to, from, next) => {
 //  	if (to.name) {
@@ -508,6 +509,7 @@ Vue.router = router
 const app = new Vue({
     el: '#app',
     components: { App },
-    router,
-    store: store
+    store: store,
+    router
+    
 });

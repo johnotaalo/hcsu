@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use App\Enums\UserType;
 use Yadahan\AuthenticationLog\AuthenticationLogable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, AuthenticationLogable;
+    use HasApiTokens, Notifiable, AuthenticationLogable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
