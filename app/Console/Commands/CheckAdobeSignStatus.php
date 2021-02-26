@@ -50,14 +50,14 @@ class CheckAdobeSignStatus extends Command
 
             foreach ($documents as $document) {
                 $agreementDetails = AdobeClient::getAgreementDetails($document->AGREEMENT_ID);
-                
+
                 $document->AGREEMENT_STATUS = $agreementDetails->status;
                 $document->PAYLOAD = json_encode($agreementDetails);
                 $document->save();
 
                 $case = \App\Models\PM\Application::where('APP_NUMBER', $document->CASE_NO)->first();
                 if ($agreementDetails->status == "SIGNED" && $document->SIGNED_DOCUMENT_PATH == NULL) {
-                    
+
                     \Log::debug("case: {$case->APP_UID}");
                     $template = FormTemplate::where('process', $case->PRO_UID)->first();
 

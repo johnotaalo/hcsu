@@ -4,6 +4,7 @@ namespace App\Helpers\HCSU\AdobeSign;
 
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
+use phpDocumentor\Reflection\Types\Array_;
 use Storage;
 
 class AdobeClient{
@@ -58,11 +59,11 @@ class AdobeClient{
 		if (time() > $auth->expiry_time) {
 			$auth = self::refreshToken();
 		}
-		
+
 		$url = $auth->api_access_point . "api/rest/v5/agreements";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
 				'Content-Type'	=>	"application/json"
 			]
@@ -120,11 +121,11 @@ class AdobeClient{
 		if (time() > $auth->expiry_time) {
 			$auth = self::refreshToken();
 		}
-		
+
 		$url = $auth->api_access_point . "api/rest/v5/agreements";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
 				'Content-Type'	=>	"application/json"
 			]
@@ -143,7 +144,7 @@ class AdobeClient{
 		if($nv){
 			$files[] = ['libraryDocumentId'	=>	$nv];
 		}
-		
+
 		if(!$nvOnly){
 			$files[] = ['libraryDocumentId'	=>	$template_id];
 		}
@@ -175,6 +176,87 @@ class AdobeClient{
 		return (json_decode($response->getBody()->getContents()))->agreementId;
 	}
 
+	public static function sendGenericDocument($template_id, $data, $title, $emails){
+        $auth = Self::authdata();
+
+        if (time() > $auth->expiry_time) {
+            $auth = self::refreshToken();
+        }
+
+        $url = $auth->api_access_point . "api/rest/v5/agreements";
+
+        $client = new Client([
+            'headers'	=>	[
+                'Authorization'	=>	"Bearer {$auth->access_token}",
+                'Content-Type'	=>	"application/json"
+            ]
+        ]);
+
+        $mergeFields = collect($data)->map(function($row, $key) {
+            return [
+                'defaultValue'	=>	$row,
+                'fieldName'		=>	$key
+            ];
+        })->toArray();
+
+        $mergeFields = array_values($mergeFields);
+        $files = ['libraryDocumentId'	=>	$template_id];
+
+        \Log::debug("Emails: " . json_encode($emails));
+        \Log::debug("Documents: " . json_encode($files));
+
+        $options = [
+            'json'	=>	[
+                'documentCreationInfo'	=>	[
+                    'recipientSetInfos'	=>	[
+                        [
+                            "recipientSetRole"			=>	"SIGNER",
+                            "recipientSetMemberInfos"	=>	$emails
+                        ]
+                    ],
+                    "signatureType"		=>	"ESIGN",
+                    "signatureFlow"		=>	"SENDER_SIGNATURE_NOT_REQUIRED",
+                    "name"				=>	$title,
+                    "fileInfos"			=>	$files,
+                    "mergeFieldInfo"	=>	$mergeFields
+                ]
+            ]
+        ];
+
+        \Log::debug("options: " . json_encode($options['json']));
+
+        $response = $client->post($url, $options);
+        // \Log::error("Response: " . $response->getBody()->getContents());
+        return (json_decode($response->getBody()->getContents()))->agreementId;
+    }
+
+    public static function sendReminder($agreementId){
+        $auth = Self::authdata();
+        if (time() > $auth->expiry_time) {
+            $auth = self::refreshToken();
+        }
+
+        $url = $auth->api_access_point . "api/rest/v5/reminders";
+
+        $client = new Client([
+            'headers'	=>	[
+                'Authorization'	=>	"Bearer {$auth->access_token}"
+            ]
+        ]);
+
+        $options = [
+            'json'  =>  [
+//                'reminderCreationInfo'  =>  [
+                    'agreementId'       =>  $agreementId
+//                ]
+            ]
+        ];
+
+        $response = $client->post($url, $options);
+
+        return json_decode($response->getBody()->getContents());
+    }
+
 	public static function getSignatories(){
 		$signatories = \App\Models\AdobeSignSignatory::where('status', 1)->get();
 		$signatoriesData = [];
@@ -199,7 +281,7 @@ class AdobeClient{
 		$url = $auth->api_access_point . "api/rest/v5/agreements";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
 				'Content-Type'	=>	"application/json"
 			]
@@ -256,7 +338,7 @@ class AdobeClient{
 		$url = $auth->api_access_point . "api/rest/v5/agreements";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
 				'Content-Type'	=>	'application/json'
 			]
@@ -312,7 +394,7 @@ class AdobeClient{
 		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreementId}/formFields";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
 				'Content-Type'	=>	'application/json'
 			]
@@ -352,7 +434,7 @@ class AdobeClient{
 		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreement_id}/signingUrls";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}"
 			]
 		]);
@@ -373,7 +455,7 @@ class AdobeClient{
 		$url = $auth->api_access_point . "api/rest/v5/libraryDocuments";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}"
 			]
 		]);
@@ -407,11 +489,11 @@ class AdobeClient{
 		$data->expiry_time = time() + $data->expires_in;
 		$data->edatetime = date('Y-m-d H:i:s', $data->expiry_time);
 		$data->refresh_token = $auth->refresh_token;
-		
+
 		\Storage::disk('local')->put('adobe-sign.json', json_encode($data));
 
 		return $data;
-		
+
 	}
 
 	protected static function authdata(){
@@ -429,7 +511,7 @@ class AdobeClient{
 		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreementId}";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}"
 			]
 		]);
@@ -448,7 +530,7 @@ class AdobeClient{
 		$url = $auth->api_access_point . "api/rest/v5/agreements/{$agreementId}/combinedDocument?auditReport=true";
 
 		$client = new Client([
-			'headers'	=>	[ 
+			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}"
 			]
 		]);

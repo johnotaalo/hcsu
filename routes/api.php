@@ -339,3 +339,8 @@ Route::prefix('users')->middleware('auth:api')->group(function(){
 	Route::post("/add", "Api\UserController@store");
 	Route::get("/disputes", "Api\UserController@getDisputes");
 });
+
+Route::prefix('control-form')->group(function(){
+    Route::post("/", "Api\ControlFormController@store");
+    Route::get("/test/{id}", "Api\ControlFormController@test");
+});
