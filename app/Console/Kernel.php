@@ -45,6 +45,8 @@ class Kernel extends ConsoleKernel
         // foreach ($organization_groups as $group => $organizations) {
         //     $schedule->job(new ExportOrganizationData($organizations, $group), 'organization_data')->dailyAt('19:20');
         // }
+
+//        Senddata scheduling
         $schedule->command("senddata:unsos")->daily();
         $schedule->command("senddata:oiosid")->daily();
         $schedule->command("senddata:unicef-so")->daily();
@@ -54,9 +56,10 @@ class Kernel extends ConsoleKernel
         $schedule->command("senddata:unicef-ro")->daily();
         $schedule->command("senddata:iom")->daily();
         $schedule->command("senddata:icao")->daily();
+//        Adobe sign scheduling
         $schedule->command("adobesign:checkstatus")->everyFiveMinutes();
-//        $schedule->command("adobesign:checksubmission-control-forms")->everyFiveMinutes();
-//        $schedule->command("adobesign:sendreminders")->dailyAt("09:30");
+        $schedule->command("adobesign:checksubmission-control-forms")->hourly();
+        $schedule->command("adobesign:sendreminders")->dailyAt("09:30");
     }
 
     /**
