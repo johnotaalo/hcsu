@@ -41,7 +41,7 @@ class CheckSubmissionControlForms extends Command
     public function handle()
     {
         try {
-            $controlForms = \App\Models\SubmissionControlForm::where('STATUS', '!=', 'SIGNED')->orWhere('STATUS', '!=', 'ABORTED')->get();
+            $controlForms = \App\Models\SubmissionControlForm::where('STATUS', 'OUT_FOR_SIGNATURE')->get();
 
             if($controlForms){
                 $message = "There are " . count($controlForms) . " control form(s) yet to be signed and downloaded";

@@ -55,8 +55,8 @@ class Kernel extends ConsoleKernel
         $schedule->command("senddata:iom")->daily();
         $schedule->command("senddata:icao")->daily();
         $schedule->command("adobesign:checkstatus")->everyFiveMinutes();
-        $schedule->command("adobesign:checksubmission-control-forms")->everyFiveMinutes();
-        $schedule->command("adobesign:sendreminders")->dailyAt("09:30");
+//        $schedule->command("adobesign:checksubmission-control-forms")->everyFiveMinutes();
+//        $schedule->command("adobesign:sendreminders")->dailyAt("09:30");
     }
 
     /**
