@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2ec73db4-163e-4d05-8c08-2f8adc522be9" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Helpers/HCSU/Data/SubmissionControlFormData.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Helpers/HCSU/PDFTK/SubmissionControlForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Console/Commands/CheckAdobeSignStatus.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Commands/CheckAdobeSignStatus.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Helpers/HCSU/AdobeSign/AdobeClient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Helpers/HCSU/AdobeSign/AdobeClient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/PM/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/PM/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
-    </list>
+    <list default="true" id="2ec73db4-163e-4d05-8c08-2f8adc522be9" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,6 +17,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="composer.json" />
+        <option value="Vue Single File Component" />
       </list>
     </option>
   </component>
@@ -215,7 +209,9 @@
       <workItem from="1614249181067" duration="17846000" />
       <workItem from="1614342629254" duration="19000" />
       <workItem from="1614342665625" duration="124000" />
-      <workItem from="1614342793973" duration="18807000" />
+      <workItem from="1614342793973" duration="19404000" />
+      <workItem from="1614518142759" duration="1234000" />
+      <workItem from="1614599659079" duration="9083000" />
     </task>
     <servers />
   </component>

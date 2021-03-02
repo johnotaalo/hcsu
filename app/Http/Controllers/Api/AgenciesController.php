@@ -215,7 +215,7 @@ class AgenciesController extends Controller
     			}
     		}
     	}
-	    
+
     }
 
     function getAgency(Request $request){
@@ -317,4 +317,32 @@ class AgenciesController extends Controller
     		'data'	=>	$data
     	];
 	}
+
+	function getAllFocalpoints(Request $request){
+        $count = 0;
+        $data = [];
+
+        $searchQueries = $request->get('normalSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $queryBuilder = AgencyFocalPoint::select('*');
+        if ($searchQueries){
+            $queryBuilder->where('LAST_NAME', 'LIKE', "%{$searchQueries}%")
+                ->orwhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%")
+                    ->orwhere('EMAIL', 'LIKE', "%{$searchQueries}%");
+        }
+
+        $count = $queryBuilder->count();
+        $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
+        $data = $queryBuilder->get();
+
+        return [
+            'count' =>  $count,
+            'data'  =>  $data
+        ];
+    }
 }

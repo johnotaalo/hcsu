@@ -74,6 +74,7 @@
 							<router-link class="dropdown-item" :to="{name: 'settings'}">Settings</router-link>
 							<router-link class="dropdown-item" :to="{name: 'users'}">Users</router-link>
 							<router-link class="dropdown-item" :to="{name: 'user-applications.all'}">User Applications</router-link>
+                            <router-link class="dropdown-item" :to="{name: 'focal-points'}">Focal Points Management</router-link>
 							<router-link class="dropdown-item" :to="{ name: 'settings-adobesign-documents' }">Data</router-link>
 							<hr class="dropdown-divider">
 							<a href="/logout" class="dropdown-item">Logout</a>

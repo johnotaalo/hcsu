@@ -311,6 +311,8 @@ Route::prefix('/focal-points')->group(function(){
 			Route::put('/edit', 'FocalPoints\ApplicationsController@edit');
 			Route::get('/cancel/{id}', 'FocalPoints\ApplicationsController@cancelApplication');
 		});
+
+		Route::get('/', 'Api\AgenciesController@getAllFocalpoints');
 	});
 });
 

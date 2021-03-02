@@ -155,6 +155,7 @@ import UserApplications from './views/settings/applications/UserApplications'
 import AssignUserApplications from './views/settings/applications/AssignUserApplications'
 import UserIndex from './views/settings/users/Index'
 import AddUser from './views/settings/users/AddUser'
+import Focalpoints from "./views/settings/users/Focalpoints";
 // Auth
 // import Login from './views/Login'
 
@@ -476,7 +477,12 @@ Vue.component(
 			name: 'user-add',
 			path: '/users/add',
 			component: AddUser
-		}
+		},
+        {
+            name: 'focal-points',
+            path: '/focal-points',
+            component: Focalpoints
+        }
  	]
  });
 
