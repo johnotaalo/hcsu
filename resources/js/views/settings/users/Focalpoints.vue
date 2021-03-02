@@ -21,7 +21,7 @@
             </div>
             </div>
             <v-server-table
-                ref="usersTable"
+                ref="focalpointsTable"
                 class="table-sm table-nowrap card-table"
                 :columns="table.columns"
                 :options="table.options"
@@ -35,23 +35,42 @@
                 </template>
 
                 <template slot="Agencies" slot-scope="data">
-                    {{ data.row }}
+                    {{ cleanAgencies(data.row.agencies) }}
                 </template>
 
-                <template slot="Map">
-                    <b-button></b-button>
+                <template slot="Map" slot-scope="data">
+                    <button class="btn btn-white btn-sm" @click="showMappingModal(data.row)">Map Organizations</button>
                 </template>
             </v-server-table>
         </div>
+
+        <b-modal id="mapping-modal" ref="mapping-modal" :title="`${focalpoint.LAST_NAME} ${focalpoint.OTHER_NAMES}`" @ok="saveMapping(focalpoint.ID)">
+            <p>Mappings</p>
+            <ul v-if="focalpoint.agencies.length > 0">
+                <li v-for="agency in focalpoint.agencies">{{ agency.ACRONYM }} <b-link @click="removeMapping(focalpoint.ID, agency.AGENCY_ID)">Remove</b-link></li>
+            </ul>
+            <p v-else>No mappings available</p>
+            <p>New Organizations</p>
+            <v-select label="label" :options="organizations" multiple v-model="form.agencies"></v-select>
+        </b-modal>
     </div>
 </template>
 
 <script>
+import Form from '../../../core/Form'
+
 export default {
-name: "Focalpoints",
+    name: "Focalpoints",
     data(){
         return{
             searchTerm: "",
+            focalpoint: {
+                agencies: []
+            },
+            form: new Form({
+                agencies: []
+            }),
+            organizations: [],
             table: {
                 columns: ["#", "Name", "Agencies", "Map"],
                 options: {
@@ -83,9 +102,56 @@ name: "Focalpoints",
             }
         }
     },
+    mounted(){
+        this.getAgencies()
+
+        this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+            if(modalId == "mapping-modal"){
+                this.form.agencies = []
+            }
+        })
+    },
     methods: {
         applySearchFilter(term) {
             return term
+        },
+        getAgencies(){
+            axios.get("/api/agencies")
+            .then(res => {
+                this.organizations = _.map(res.data, (agency) => {
+                    return {
+                        id: agency.AGENCY_ID,
+                        acronym: agency.ACRONYM,
+                        label: `${agency.ACRONYM}`
+                    }
+                })
+            })
+        },
+        cleanAgencies(agencies){
+            if (agencies.length > 0){
+                let agencyList = _.map(agencies, (agency) => {
+                    return agency.ACRONYM
+                })
+                return agencyList.join(", ")
+            }
+            return "N/A"
+        },
+        showMappingModal(focalpoint){
+            this.focalpoint = focalpoint
+            this.$refs['mapping-modal'].show()
+        },
+        saveMapping(id){
+            this.form.post(`agencies/focal-point/mapping/${id}`)
+            .then(res => {
+                this.$refs.focalpointsTable.refresh()
+            })
+        },
+        removeMapping(focalpoint_id, agency_id){
+            axios.delete(`api/agencies/focal-point/mapping`, { data: { focal_point_id: focalpoint_id, agency_id: agency_id } })
+            .then(res => {
+                this.$refs.focalpointsTable.refresh()
+                this.$refs['mapping-modal'].hide()
+            })
         }
     }
 }

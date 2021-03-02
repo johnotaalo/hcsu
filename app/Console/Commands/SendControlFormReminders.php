@@ -43,7 +43,7 @@ class SendControlFormReminders extends Command
         try {
             $type = $this->option("type");
             if ($type == "control-forms"){
-                $controlForms = SubmissionControlForm::where('STATUS', '!=', 'SIGNED')->orWhere('STATUS', '!=', 'ABORTED')->get();
+                $controlForms = SubmissionControlForm::where('STATUS', '=', 'OUT_FOR_SIGNATURE')->get();
                 if (count($controlForms) > 0){
                     $message = "There are " . count($controlForms) . " control form(s) yet to be signed";
                     $this->info($message);
@@ -51,8 +51,8 @@ class SendControlFormReminders extends Command
                     foreach ($controlForms as $form){
                         $agreementDetails = AdobeClient::getAgreementDetails($form->AGREEMENT_ID);
                         if ($agreementDetails->status == "OUT_FOR_SIGNATURE"){
-                            $this->info("Sending reminder");
-                            \Log::info("Sending reminder");
+                            $this->info("Sending reminder: {$form->CASE_NO}");
+                            \Log::info("Sending reminder: {$form->CASE_NO}");
                             $res = AdobeClient::sendReminder($agreementDetails->agreementId);
                             \Log::debug("Agreement ID: {$agreementDetails->agreementId} has not been signed yet. Sending reminder");
                             if ($res->result && $res->result == "REMINDER_SENT"){
@@ -66,6 +66,10 @@ class SendControlFormReminders extends Command
                         }else{
                             $this->info("Agreement: {$agreementDetails->agreementId} status: {$agreementDetails->status}");
                             \Log::info("Agreement: {$agreementDetails->agreementId} status: {$agreementDetails->status}");
+
+                            $form->STATUS = $agreementDetails->status;
+
+                            $form->save();
                         }
                     }
                 }else{

@@ -329,11 +329,11 @@ class AgenciesController extends Controller
         $byColumn = $request->get('byColumn');
         $orderBy = $request->get('orderBy');
 
-        $queryBuilder = AgencyFocalPoint::select('*');
+        $queryBuilder = AgencyFocalPoint::select('*')->with('agencies');
         if ($searchQueries){
             $queryBuilder->where('LAST_NAME', 'LIKE', "%{$searchQueries}%")
-                ->orwhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%")
-                    ->orwhere('EMAIL', 'LIKE', "%{$searchQueries}%");
+                            ->orwhere('OTHER_NAMES', 'LIKE', "%{$searchQueries}%")
+                                ->orwhere('EMAIL', 'LIKE', "%{$searchQueries}%");
         }
 
         $count = $queryBuilder->count();
@@ -344,5 +344,32 @@ class AgenciesController extends Controller
             'count' =>  $count,
             'data'  =>  $data
         ];
+    }
+
+    function storeMapping(Request $request){
+        $id = $request->id;
+        $agencies = $request->agencies;
+        $data = [];
+
+        foreach ($agencies as $agency){
+            $mapping = \App\Models\AgencyFocalpointMapping::firstOrNew([
+                "FOCAL_POINT_ID"    =>  $id,
+                "AGENCY_ID"         =>  $agency["id"]
+            ]);
+
+            $mapping->save();
+        }
+
+        return [
+            'type'      => "Success",
+            'message'   =>  'Successfully updated mapping'
+        ];
+    }
+
+    function removeMapping(Request $request){
+        $focal_point_id = $request->focal_point_id;
+        $agency_id = $request->agency_id;
+
+        return \App\Models\AgencyFocalpointMapping::where(['FOCAL_POINT_ID' => $focal_point_id, 'AGENCY_ID'    =>  $agency_id])->delete();
     }
 }

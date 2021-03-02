@@ -143,6 +143,8 @@ Route::prefix('agencies')->group(function(){
 	Route::get('/get/{agency_id}', 'Api\AgenciesController@getAgency');
 	Route::put('/update/{agency_id}', 'Api\AgenciesController@updateAgency');
 	Route::get("/all", "Api\AgenciesController@all");
+	Route::post("/focal-point/mapping/{id}", "Api\AgenciesController@storeMapping");
+    Route::delete("/focal-point/mapping", "Api\AgenciesController@removeMapping");
 });
 
 
