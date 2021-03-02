@@ -67,8 +67,13 @@ class CheckSubmissionControlForms extends Command
                         $this->info("Signed Document saved in: " . storage_path("app/" . $path));
                         \Log::debug("Signed Document saved in: " . storage_path("app/" . $path));
 
-                        $response = ProcessMaker::uploadGeneratedForm($case->APP_UID, $template->task, $template->input_document, $path);
-                        \Log::debug("ProcessMaker upload documents: " . json_encode($response));
+                        if($template) {
+                            $response = ProcessMaker::uploadGeneratedForm($case->APP_UID, $template->task, $template->input_document, $path);
+                            \Log::debug("ProcessMaker upload documents: " . json_encode($response));
+                        }else{
+                            \Log::debug("No template found for case: {$case->APP_NUMBER}");
+                            $this->info("No template found for case: {$case->APP_NUMBER}");
+                        }
                     }else{
                         $this->info("Agreement ID: {$agreementDetails->agreementId} has not been signed yet");
                         \Log::debug("Agreement ID: {$agreementDetails->agreementId} has not been signed yet.");
