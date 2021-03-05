@@ -314,6 +314,10 @@ Route::prefix('/focal-points')->group(function(){
 			Route::get('/cancel/{id}', 'FocalPoints\ApplicationsController@cancelApplication');
 		});
 
+		Route::prefix('report')->group(function(){
+		    Route::post("/download", "FocalPoints\ReportsController@download");
+        });
+
 		Route::get('/', 'Api\AgenciesController@getAllFocalpoints');
 	});
 });

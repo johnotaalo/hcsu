@@ -15,7 +15,14 @@ class AgenciesController extends Controller
 
     function searchAgencies(Request $request){
     	$searchTerm = $request->query('q');
-    	return Agency::where('IS_ACTIVE', true)->where('ACRONYM', 'LIKE', "%{$searchTerm}%")->orWhere('AGENCYNAME', 'LIKE', '%{$searchTerm}%')->get();
+    	$focalpoint = $request->query('focalpoint');
+    	if (!$focalpoint){
+            return Agency::where('IS_ACTIVE', true)->where('ACRONYM', 'LIKE', "%{$searchTerm}%")->orWhere('AGENCYNAME', 'LIKE', '%{$searchTerm}%')->get();
+        }
+    	else{
+    	    $agencyMapping = (\App\Models\AgencyFocalPoint::find($focalpoint))->agencies->pluck('AGENCY_ID')->toArray();
+            return Agency::where('IS_ACTIVE', true)->whereIn('AGENCY_ID', $agencyMapping)->where('ACRONYM', 'LIKE', "%{$searchTerm}%")->orWhere('AGENCYNAME', 'LIKE', '%{$searchTerm}%')->get();
+        }
     }
 
     function addAgencies(Request $request){

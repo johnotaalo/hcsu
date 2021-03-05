@@ -57,7 +57,7 @@ class User extends Authenticatable
 
     public function getFocalPointAttribute(){
         if ($this->user_type == UserType::getInstance(UserType::FocalPoint) && $this->ext_id != null ) {
-            return \App\AgencyFocalPoint::with('agency')->find($this->ext_id);
+            return \App\Models\AgencyFocalPoint::with('agency', 'agencies')->find($this->ext_id);
         }
     }
 

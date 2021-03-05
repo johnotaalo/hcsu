@@ -26,9 +26,9 @@ class ApplicationsController extends Controller
         }
 
         $columnMap = [
-            'CASE_NO'           =>  'APP_NUMBER', 
+            'CASE_NO'           =>  'APP_NUMBER',
             'PROCESS_NAME'      =>  'PRO_TITLE',
-            'CREATED'           =>  'CREATED_AT'       
+            'CREATED'           =>  'CREATED_AT'
         ];
 
         if ($searchQueries) {
@@ -73,10 +73,14 @@ class ApplicationsController extends Controller
     function getAllApplications(){
         if (\Auth::user()->user_type == "0" || \Auth::user()->user_type == "2") {
              $data = \App\Models\UserApplications::get();
+        }else if(\Auth::user()->user_type == "1") {
+            $agencyId = \Auth::user()->focal_point->agencies->pluck('AGENCY_ID');
+            $agencies = \App\Models\Agency::whereIn('AGENCY_ID', $agencyId)->pluck('HOST_COUNTRY_ID')->toArray();
+            $data = \App\Models\UserApplications::whereIn('HOST_COUNTRY_ID', $agencies)->get();
         }else{
              $data = \App\Models\UserApplications::where('AUTHENTICATION_SOURCE', 'USER')->where('SUBMITTED_BY', \Auth::user()->id)->get();
         }
-       
+
 
         return $data;
     }
@@ -221,7 +225,7 @@ class ApplicationsController extends Controller
                     $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$dependent->PRINCIPAL_ID})"))->first();
 
                     $mission = $contract->ACRONYM;
-                    
+
                     $relationship = $dependent->relationship->RELATIONSHIP;
                     $relationship = ($relationship == "Spouse") ? strtolower($relationship) : "dependent";
 
@@ -247,7 +251,7 @@ class ApplicationsController extends Controller
                 ];
 
                 $response = \Processmaker::executeREST($url, "POST", $data, $authenticationData->access_token);
-                
+
                 $case_no = $response->app_number;
                 $app_uid = $response->app_uid;
 
@@ -284,14 +288,14 @@ class ApplicationsController extends Controller
 
             $application->save();
         }
-        
-       
-        // $authenticationData = json_decode(\Storage::get("pmauthentication.json"));
-        // 
-        // $processes = \Processmaker::executeREST($url, "GET", null, $authenticationData->access_token);
-       
 
-        
+
+        // $authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+        //
+        // $processes = \Processmaker::executeREST($url, "GET", null, $authenticationData->access_token);
+
+
+
 
         // $application->ASSIGNED_TO = "Chrispine Otaalo [Test]";
         // $application->CURRENT_USER = "ADMINISTRATIVE_ASSISTANT";

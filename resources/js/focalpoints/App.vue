@@ -12,13 +12,17 @@
 						<span class="navbar-toggler-icon"></span>
 					</button>
 
-					<a class="navbar-brand" href="index.html">
+					<router-link class="navbar-brand" :to="{ name: 'dashboard' }">
 						<img src="/images/UNLOGOBW.jpg" class="navbar-brand-img mx-auto" alt="...">
-					</a>
+					</router-link>
 
-					<p>{{ user.name }}</p>
-					<P v-if="user.type == 'Focal point'">{{ user.focal_point.agency.ACRONYM }}</P>
-					<p v-else>{{ user.principal.latest_contract.ACRONYM }}</p>
+                    <div>
+                        <h4 class="mb-1 name">{{ user.name }}</h4>
+                        <p class="card-text small text-muted" v-if="user.type === 'Focal point'">
+                            {{ agencies }}
+                        </p>
+                        <p v-else>{{ user.principal.latest_contract.ACRONYM }}</p>
+                    </div>
 
 					<div class="navbar-user d-md-none">
 
@@ -68,7 +72,7 @@
 							</li>
 
 							<li class="nav-item">
-								<a class="nav-link" :to="{ name: 'dashboard' }"><i class="fe fe-download-cloud"></i> Download Report</a>
+								<router-link class="nav-link" :to="{ name: 'report.download' }"><i class="fe fe-download-cloud"></i> Download Report</router-link>
 							</li>
 
 							<li class="nav-item">
@@ -185,15 +189,23 @@
 			user: function(){
 				return this.$store.state.loggedInUser
 			},
+            agencies: function(){
+			    if (this.user.type === "Focal point"){
+			        let agencies = _.map(this.user.focal_point.agencies, (agency) => {
+			            return [
+			                agency.ACRONYM
+                        ]
+                    })
+                    return agencies.join(", ")
+                }
+            },
 			showTitle: function(){
-				if (this.$route.name == "dashboard" || this.$route.name == "applications.normal-vat") {
-					return false
-				}
-				return true
+				return !(this.$route.name === "dashboard" || this.$route.name === "applications.normal-vat");
+
 			}
 		},
 		methods: {
-			
+
 		},
 		watch: {
 			$route (to, from){

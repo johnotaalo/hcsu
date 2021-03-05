@@ -67,6 +67,9 @@ import AllApplications from './focalpoints/applications/AllApplications'
 import NewApplication from './focalpoints/applications/NewApplication'
 import ViewApplication from './focalpoints/applications/ViewApplication'
 import EditApplication from './focalpoints/applications/EditApplication'
+
+import DownloadReport from './focalpoints/reports/DownloadReport'
+
 axios.interceptors.request.use(config => {
 	NProgress.start()
 	return config;
@@ -87,7 +90,7 @@ const router = new VueRouter({
 			title: "Dashboard",
 			auth: true
 		}
-	}, 
+	},
 	{
 		path: "/applications/normal-vat",
 		name: "applications.normal-vat",
@@ -98,7 +101,7 @@ const router = new VueRouter({
 		},
 		component: FPNormalVAT,
 		children: [
-			
+
 		]
 	},
 	{
@@ -111,7 +114,7 @@ const router = new VueRouter({
 		},
 		component: AllApplications,
 		children: [
-			
+
 		]
 	},{
 		path: "/applications/new",
@@ -142,7 +145,7 @@ const router = new VueRouter({
 			auth: true
 		},
 		component: EditApplication,
-	}, 
+	},
 	{
 		path: '/applications/normal-vat/add',
 		component: FPNormalVATAdd,
@@ -170,7 +173,18 @@ const router = new VueRouter({
 			subtitle: 'View Application',
 			auth: true
 		}
-	}]
+	},
+        {
+            path: '/report/download',
+            component: DownloadReport,
+            name: 'report.download',
+            meta: {
+                title: "Download Report",
+                subtitle: "Download a report tied to you",
+                auth: true
+            }
+        }
+	]
 });
 
 Vue.use(VueRouterBackButton, { router })

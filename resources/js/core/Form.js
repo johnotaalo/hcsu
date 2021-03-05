@@ -98,8 +98,8 @@ class Form {
     }
   }
 
-  post (url) {
-    return this.submit('post', url)
+  post (url, responseType = 'json') {
+    return this.submit('post', url, responseType)
   }
 
   put (url) {
@@ -114,7 +114,7 @@ class Form {
     return this.submit('delete', url)
   }
 
-  submit (requestType, url) {
+  submit (requestType, url, responseType = 'json') {
     // app.$store.commit('loadingOn')
 
     // for (let pair of this.data().entries()) {
@@ -138,7 +138,8 @@ class Form {
       instance.default({
         method: requestType,
         url: url,
-        data: formData
+        data: formData,
+          responseType: responseType,
       }).then((response) => {
         // alert(response);
         // console.log(response.data);

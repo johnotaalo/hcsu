@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<b-form-group>
-			<label v-if="user.type == 'Focal point'">Type of Client</label>
+			<label v-if="user.type === 'Focal point'">Type of Client</label>
 			<label v-else>Application for:</label>
 			<b-form-radio-group
 				id="type-of-client"
@@ -11,12 +11,12 @@
 			></b-form-radio-group>
 		</b-form-group>
 
-		<div v-if="value.clientType == ''" >
+		<div v-if="value.clientType === ''" >
 			Please select a client type above
 		</div>
 		<div v-else>
-			<div v-if="value.clientType == 'agency'">
-				<div v-if="user.type != 'Focal point'">
+			<div v-if="value.clientType === 'agency'">
+<!--				<div v-if="user.type !== 'Focal point'">-->
 					<label class="control-label">Please type to search for an agency</label>
 					<v-select label="AGENCYNAME" :filterable="false" :options="agencies" @search="onAgencySearch" v-model="value.client">
 						<template slot="no-options">
@@ -24,20 +24,24 @@
 						</template>
 
 						<template slot="option" slot-scope="option">
-							<img style="width: 50px;height: 50px;" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}]
+                            <b-img v-if="option.logo_link" width="50" height="50" rounded="circle" alt="Circle image" :src="`/agency/logo/${option.AGENCY_ID}`" />
+                            <b-img v-else width="50" height="50" rounded="circle" alt="Circle image" src="/images/unlogo.jpg" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}]
 						</template>
 
 						<template slot="selected-option" slot-scope="option">
-							<span v-if="option.AGENCYNAME"><img style="width: 50px;height: 50px;" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}]</span>
+							<span v-if="option.AGENCYNAME">
+                                <b-img v-if="option.logo_link" width="50" height="50" rounded="circle" alt="Circle image" :src="`/agency/logo/${option.AGENCY_ID}`" />
+                            <b-img v-else width="50" height="50" rounded="circle" alt="Circle image" src="/images/unlogo.jpg" /> {{ option.AGENCYNAME }} [{{ option.ACRONYM }}]
+                            </span>
 						</template>
 					</v-select>
-				</div>
-				<div v-else>
-					<p>Making Application for: {{ agency.AGENCYNAME }}</p>
-				</div>
+<!--				</div>-->
+<!--				<div v-else>-->
+<!--					<p>Making Application for: {{ agency.AGENCYNAME }}</p>-->
+<!--				</div>-->
 			</div>
-			<div v-if="value.clientType == 'staff-member'">
-				<div v-if="user.type != 'Client'">
+			<div v-if="value.clientType === 'staff-member'">
+				<div v-if="user.type !== 'Client'">
 					<label class="control-label">Please type to search for a staff member</label>
 					<v-select label = "LAST_NAME" :filterable="false" :options="staffMembers" @search="onStaffSearch" v-model="value.client">
 						<template slot="no-options">
@@ -64,8 +68,8 @@
 								<div class="col ml-n2">
 									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
 									<span class="card-text">
-										<span>Organization (<span v-if="option.latest_contract">{{ option.latest_contract.ACRONYM }}</span><span v-else>N/A</span>)</span>, 
-										<span>Latest Passport (<span v-if="option.latest_passport">{{ option.latest_passport.PASSPORT_NO }}</span><span v-else>N/A</span>)</span>, 
+										<span>Organization (<span v-if="option.latest_contract">{{ option.latest_contract.ACRONYM }}</span><span v-else>N/A</span>)</span>,
+										<span>Latest Passport (<span v-if="option.latest_passport">{{ option.latest_passport.PASSPORT_NO }}</span><span v-else>N/A</span>)</span>,
 										<span>Latest DIP ID (<span v-if="option.latest_diplomatic_card">{{ option.latest_diplomatic_card.DIP_ID_NO }}</span><span v-else>N/A</span>)</span>
 									</span>
 								</div>
@@ -205,6 +209,7 @@
 			// this.clientType = this.type
 			// console.log("Client", this.client)
 			// alert("Mounted: " + this.applier);
+            // this.agencies = this.$store.state.loggedInUser.focal_point.agencies
 		},
 		created(){
 			// alert("created:" + this.applier);
@@ -219,7 +224,7 @@
 					{ text: "Domestic Worker", value: 'domestic-worker' },
 					{ text: "Other Clients", value: 'other-clients' }
 				],
-				agencies: [],
+				// agencies: [],
 				staffMembers: [],
 				dependents: [],
 				domesticWorkers: [],
@@ -260,7 +265,9 @@
 				alert(host_country_id)
 			},
 			search: _.debounce( (loading, search, vm) => {
-				axios(`/api/agencies/search?q=${escape(search)}`)
+			    let fpString = (vm.user.type === "Focal point") ? `&focalpoint=${vm.user.focal_point.ID}` : "";
+
+				axios(`/api/agencies/search?q=${escape(search)}${fpString}`)
 				.then((res) => {
 					vm.agencies = res.data
 					loading(false)
@@ -280,8 +287,8 @@
 				})
 			}, 350),
 			dependentSearch: _.debounce( (loading, search, vm) => {
-				var organizationString = (vm.agency && vm.user.type == "Focal point") ? `&organization=${escape(vm.agency.ACRONYM)}` : "";
-				var principalString = (vm.user.type == "Client") ? `&principal=${vm.user.principal.HOST_COUNTRY_ID}` : ""
+				var organizationString = (vm.agency && vm.user.type === "Focal point") ? `&organization=${escape(vm.agency.ACRONYM)}` : "";
+				var principalString = (vm.user.type === "Client") ? `&principal=${vm.user.principal.HOST_COUNTRY_ID}` : ""
 				axios(`/api/dependent/search?q=${escape(search)}${principalString}${organizationString}`)
 				.then( (res) => {
 					vm.dependents = res.data
@@ -305,16 +312,19 @@
 		},
 		computed: {
 			agency: function(){
-				if(this.user.type == "Focal point"){
-					console.log(this.user.type)
-					return this.user.focal_point.agency
-				}else{
+				if(this.user.type === "Focal point"){
+                    if (this.user.focal_point.agencies.length > 1) {
+                        return;
+                    }
+                    return this.user.focal_point.agency
+                }else{
 					return this.user.principal.latest_contract
 				}
-
-				return null;
 			},
 
+            agencies: function(){
+			    return this.user.focal_point.agencies
+            },
 			user: function(){
 				return this.$store.state.loggedInUser
 			},
@@ -322,12 +332,12 @@
 			clientTypeList: function(){
 				var result = [];
 				var list = this.clientTypes
-				if (this.user.type == "Client") {
+				if (this.user.type === "Client") {
 					result = _.filter(list, (obj) => {
-						if (obj.value == 'staff-member') {
+						if (obj.value === 'staff-member') {
 							obj.text = "Self"
 						}
-						return obj.value == 'staff-member' || obj.value == "dependent" || obj.value == 'domestic-worker'
+						return obj.value === 'staff-member' || obj.value === "dependent" || obj.value === 'domestic-worker'
 					})
 				}else{
 					result = list
@@ -356,11 +366,11 @@
 			selectedAgency: function(newVal, oldVal){
 				var em = this
 				if(newVal.HOST_COUNTRY_ID){
-					if(this.application == 'pin'){
-						if (newVal.PIN_NO != null && newVal.PIN_NO != "null") {
+					if(this.application === 'pin'){
+						if (newVal.PIN_NO != null && newVal.PIN_NO !== "null") {
 							this.$swal({
-								title: "PIN Exists", 
-								text: `This Organization already has a PIN (${newVal.PIN_NO}). If you proceed, the organization's PIN shall be cleared from the system. Proceed?`, 
+								title: "PIN Exists",
+								text: `This Organization already has a PIN (${newVal.PIN_NO}). If you proceed, the organization's PIN shall be cleared from the system. Proceed?`,
 								icon: "warning",
 								buttons: true,
 								dangerMode: true
@@ -389,11 +399,11 @@
 			selectedStaff: function(newVal, oldVal){
 				var em = this
 				if(newVal.HOST_COUNTRY_ID){
-					if(this.application == 'pin'){
-						if (newVal.PIN_NO != null && newVal.PIN_NO != "null" && newVal.PIN_NO != "NULL") {
+					if(this.application === 'pin'){
+						if (newVal.PIN_NO != null && newVal.PIN_NO !== "null" && newVal.PIN_NO !== "NULL") {
 							this.$swal({
-								title: "PIN Exists", 
-								text: `The staff member already has a PIN (${newVal.PIN_NO}). If you proceed, the staff member's PIN shall be cleared from the system. Proceed?`, 
+								title: "PIN Exists",
+								text: `The staff member already has a PIN (${newVal.PIN_NO}). If you proceed, the staff member's PIN shall be cleared from the system. Proceed?`,
 								icon: "warning",
 								buttons: true,
 								dangerMode: true
@@ -421,11 +431,11 @@
 			selectedDependent: function(newVal, oldVal){
 				var em = this
 				if(newVal.HOST_COUNTRY_ID){
-					if(this.application == 'pin'){
-						if (newVal.PIN != null && newVal.PIN != "null") {
+					if(this.application === 'pin'){
+						if (newVal.PIN != null && newVal.PIN !== "null") {
 							this.$swal({
-								title: "PIN Exists", 
-								text: `The client already has a PIN (${newVal.PIN}). If you proceed, the client's PIN shall be cleared from the system. Proceed?`, 
+								title: "PIN Exists",
+								text: `The client already has a PIN (${newVal.PIN}). If you proceed, the client's PIN shall be cleared from the system. Proceed?`,
 								icon: "warning",
 								buttons: true,
 								dangerMode: true
@@ -468,11 +478,11 @@
 			},
 			'value.clientType': function(newVal){
 				this.value.client = {}
-				if (newVal == "agency") {
+				if (newVal === "agency") {
 					this.value.client = this.agency
 				}
 
-				if (newVal == "staff-member" && this.user.type == "Client") {
+				if (newVal === "staff-member" && this.user.type === "Client") {
 					this.value.client = this.user.principal
 				}
 			}

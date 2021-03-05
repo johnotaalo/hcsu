@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="card"> 
+		<div class="card">
 			<div class="card-body">
 				<div class="form-group" v-if="id != 0">
 					<label class = "control-label">Supervisor Comments</label>
@@ -27,8 +27,8 @@
 					<div v-else>
 						<p>Picked Details: <button class="btn btn-link" @click="showClientForm = true">Change</button></p>
 						<b>Type: </b>{{ application.data.applicant_type | capitalize }}<br/>
-						<b>Name: </b><span v-if="application.data.applicant_type == 'staff'">{{ application.data.applicant_details.LAST_NAME }}, {{ application.data.applicant_details.OTHER_NAMES }}</span>
-									<span v-if="application.data.applicant_type == 'agency'">{{ application.data.applicant_details.ACRONYM }}</span>
+						<b>Name: </b><span v-if="application.data.applicant_type === 'staff'">{{ application.data.applicant_details.LAST_NAME }}, {{ application.data.applicant_details.OTHER_NAMES }}</span>
+									<span v-if="application.data.applicant_type === 'agency'">{{ application.data.applicant_details.ACRONYM }}</span>
 					</div>
 				</div>
 				<!-- <div class="form-group">
@@ -71,7 +71,7 @@
 					</div>
 
 				</div>
-			</div> 
+			</div>
 		</div> -->
 	</div>
 </template>
@@ -141,9 +141,9 @@
 							this.$swal("Error", "There was an error processing your request", "error")
 						})
 					}
-					
+
 				}
-				
+
 			},
 			getProcesses: function(){
 				axios.get('/api/data/processes/local')
