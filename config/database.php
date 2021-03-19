@@ -42,8 +42,8 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => env('DB_HOST', 'homestead' == gethostname() ? 'localhost' : '127.0.0.1'),
+            'port' => env('DB_PORT', 'homestead' == gethostname() ? null : 33060),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
@@ -56,13 +56,13 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : []  
+            ]) : []
         ],
 
         '2019' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => env('DB_HOST', 'homestead' == gethostname() ? 'localhost' : '127.0.0.1'),
+            'port' => env('DB_PORT', 'homestead' == gethostname() ? null : 33060),
             'database' => env('DB_DATABASE_REF', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
@@ -80,8 +80,8 @@ return [
 
         'pm_data' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => env('DB_HOST', 'homestead' == gethostname() ? 'localhost' : '127.0.0.1'),
+            'port' => env('DB_PORT', 'homestead' == gethostname() ? null : 33060),
             'database' => env('DB_DATABASE_PMDATA', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
@@ -99,8 +99,8 @@ return [
 
         'pm' => [
             'driver' => 'mysql',
-            'host' => env('PM_DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => env('PM_DB_HOST', 'homestead' == gethostname() ? 'localhost' : '127.0.0.1'),
+            'port' => env('DB_PORT', 'homestead' == gethostname() ? null : 33060),
             'database' => env('DB_DATABASE_PM', 'forge'),
             'username' => env('PM_DB_USERNAME', 'forge'),
             'password' => env('PM_DB_PASSWORD', ''),
@@ -134,11 +134,11 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
             'dump' => [
-               
+
                'use_single_transaction',
                'timeout' => 60 * 5, // 5 minute timeout
                // 'exclude_tables' => ['table1', 'table2'],
-               // 'add_extra_option' => '--optionname=optionvalue', 
+               // 'add_extra_option' => '--optionname=optionvalue',
             ]
         ],
 
@@ -160,11 +160,11 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
             'dump' => [
-               
+
                'use_single_transaction',
                'timeout' => 60 * 5, // 5 minute timeout
                // 'exclude_tables' => ['table1', 'table2'],
-               // 'add_extra_option' => '--optionname=optionvalue', 
+               // 'add_extra_option' => '--optionname=optionvalue',
             ]
         ],
 
@@ -186,11 +186,11 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
             'dump' => [
-               
+
                'use_single_transaction',
                'timeout' => 60 * 5, // 5 minute timeout
                // 'exclude_tables' => ['table1', 'table2'],
-               // 'add_extra_option' => '--optionname=optionvalue', 
+               // 'add_extra_option' => '--optionname=optionvalue',
             ]
         ],
 

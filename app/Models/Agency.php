@@ -13,7 +13,7 @@ class Agency extends Model
     protected $primaryKey = "AGENCY_ID";
 
     protected $appends = ['logo_url'];
-    
+
     public function focalPoints(){
     	return $this->hasMany('App\Models\AgencyFocalPoint', 'AGENCY_HOST_COUNTRY_ID', 'HOST_COUNTRY_ID');
     }
@@ -22,7 +22,11 @@ class Agency extends Model
     	return Storage::disk('local')->url($this->logo_link);
     }
 
+    public function focalpointMapping(){
+        return $this->belongsToMany(\App\Models\AgencyFocalPoint::class, "agency_focalpoint_mappings", "AGENCY_ID", "FOCAL_POINT_ID");
+    }
+
     public function applications(){
-    	
+
     }
 }

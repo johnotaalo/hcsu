@@ -17,7 +17,7 @@ class AgenciesController extends Controller
     	$searchTerm = $request->query('q');
     	$focalpoint = $request->query('focalpoint');
     	if (!$focalpoint){
-            return Agency::where('IS_ACTIVE', true)->where('ACRONYM', 'LIKE', "%{$searchTerm}%")->orWhere('AGENCYNAME', 'LIKE', '%{$searchTerm}%')->get();
+            return Agency::where('IS_ACTIVE', true)->where('ACRONYM', 'LIKE', "%{$searchTerm}%")->orWhere('AGENCYNAME', 'LIKE', '%{$searchTerm}%')->with("focalPointMapping")->get();
         }
     	else{
     	    $agencyMapping = (\App\Models\AgencyFocalPoint::find($focalpoint))->agencies->pluck('AGENCY_ID')->toArray();

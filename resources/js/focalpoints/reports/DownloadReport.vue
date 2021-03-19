@@ -77,9 +77,11 @@ export default {
 
                     fileLink.click()
                 }else{
-                    console.log(res.data)
-                    console.log("Sending email")
+                    this.$swal("Success", "Successfully dispatched data generation", "success")
                 }
+            })
+            .catch(error => {
+                this.$swal("Error", "There was an error generating data", "error")
             })
         },
         getProcesses(){

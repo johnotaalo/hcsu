@@ -66,19 +66,19 @@ class AppController extends Controller
 //     `PC`.`DESIGNATION` AS `DESIGNATION`,
 //     `PC`.`GRADE` AS `GRADE`,
 //     `PC`.`INDEX_NO` AS `INDEX_NO`,
-//     max( `PCR`.`END_DATE` ) AS `END_DATE` 
+//     max( `PCR`.`END_DATE` ) AS `END_DATE`
 // FROM
 //     (((
 //                 `pm_master_data`.`PRINCIPAL_CONTRACT` `PC`
 //                 JOIN `pm_ref_data`.`agencies` `A` ON ((
-//                         `A`.`AGENCY_ID` = `PC`.`AGENCY_ID` 
+//                         `A`.`AGENCY_ID` = `PC`.`AGENCY_ID`
 //                     )))
 //             JOIN `pm_master_data`.`PRINCIPAL_CONTRACT_RENEWALS` `PCR` ON ((
-//                     `PCR`.`CONTRACT_ID` = `PC`.`ID` 
+//                     `PCR`.`CONTRACT_ID` = `PC`.`ID`
 //                 )))
 //         JOIN `pm_master_data`.`PRINCIPAL` `P` ON ((
-//                 `P`.`HOST_COUNTRY_ID` = `PC`.`PRINCIPAL_ID` 
-//             ))) 
+//                 `P`.`HOST_COUNTRY_ID` = `PC`.`PRINCIPAL_ID`
+//             )))
 //             WHERE (PC.PRINCIPAL_ID = '{$identity}' OR PC.INDEX_NO = '{$identity}') AND P.STATUS = 1
 // GROUP BY
 //     `PC`.`PRINCIPAL_ID`,
@@ -90,7 +90,7 @@ class AppController extends Controller
 // `A`.`AGENCYNAME`,
 // `PCR`.`START_DATE`,
 // `PC`.`DESIGNATION`,
-// `PC`.`GRADE`, 
+// `PC`.`GRADE`,
 // `PC`.`INDEX_NO`
 // ORDER BY
 //     `END_DATE` DESC
@@ -167,9 +167,9 @@ class AppController extends Controller
         $case = $request->case_no;
         $application = $request->application;
         $host_country_id = $request->host_country_id;
+        $clientType = identify_hcsu_client($host_country_id);
 
         if ($application == 'pin') {
-            $clientType = identify_hcsu_client($host_country_id);
             switch ($clientType) {
                 case 'agency':
                     $agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $host_country_id)->first();
@@ -194,7 +194,7 @@ class AppController extends Controller
 
         $del_index = 1;
         $variable_name = "host_country_id";
-        
+
         if (App::environment('local') || App::environment('staging')) {
             $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
         }else{
@@ -205,6 +205,25 @@ class AppController extends Controller
             $variable_name => $host_country_id,
             $variable_name . '_label' => $host_country_id
         ];
+
+        if ($clientType == "agency"){
+            $email = "";
+            $agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $host_country_id)->with("focalPointMapping")->first();
+//            dd($agency->focal_point_mapping);
+            if ($agency->EMAIL){
+                $email = $agency->EMAIL;
+            }else if ($agency->focal_point_mapping != null && count($agency->focal_point_mapping)){
+                $focalpoints = $agency->focal_point_mapping;
+
+                $emailsArray = $focalpoints->map(function($focalpoint){
+                    return $focalpoint->EMAIL;
+                });
+
+                dd($emailsArray);
+            }
+            $data["clientEmail"] = "";
+        }
+
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
 
         $response = \Processmaker::executeREST($url, "PUT", $data, $authenticationData->access_token);
@@ -379,7 +398,7 @@ class AppController extends Controller
         }else{
             $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/project";
         }
-        
+
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
@@ -404,10 +423,10 @@ class AppController extends Controller
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
         }
-        
+
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
-        
+
         return $response;
     }
 
@@ -513,7 +532,7 @@ class AppController extends Controller
                 // $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
                 // \Log::info("Document ID: {$documentId}");
                 // $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::sendDocumentForSigning($documentId, $case->app_name);
-                
+
                 // Upload to processmaker
                 if ($document->input_document != null) {
                     $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
@@ -635,7 +654,7 @@ class AppController extends Controller
         $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
                 ->flatten()
                 ->execute();
-        
+
 
         $content = file_get_contents($pdf->getTmpFile());
         $localFile = "note-verbals/{$request->process}/Note Verbal - {$case->app_number}.pdf";
@@ -648,7 +667,7 @@ class AppController extends Controller
             'process'   =>  $process,
             'task'      =>  $currentTask
         ];
-        
+
         if ($nvOnly) {
             $search['type'] = "nv";
         }
@@ -684,7 +703,7 @@ class AppController extends Controller
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
         }
-        
+
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $form = storage_path('app/'. $localFile);
         $fx = new \CurlFile( $form );
@@ -708,7 +727,7 @@ class AppController extends Controller
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
         }
-        
+
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
 
@@ -746,7 +765,7 @@ class AppController extends Controller
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
         }
-        
+
         $authenticationData = json_decode(Storage::get("pmauthentication.json"));
         $response = \Processmaker::executeREST($url, "GET", NULL, $authenticationData->access_token);
         // dd($response);
@@ -806,7 +825,7 @@ class AppController extends Controller
         $filterSearch = json_decode($request->filterSearch);
         $limit = $request->get('limit');
         $page = $request->get('page');
-        
+
         // $applications = \App\Models\PM\SubApplication::all();
         $queryBuilder = \DB::connection('pm')->table('SUB_APPLICATION')->select(\DB::raw('parent.APP_NUMBER as parent_case, app.APP_NUMBER as subprocess_case, parent.APP_TITLE as case_title, content.CON_VALUE as process, concat(user.USR_LASTNAME, ", ", user.USR_FIRSTNAME) as creator'));
         $queryBuilder = $queryBuilder->join('APPLICATION AS parent', 'SUB_APPLICATION.APP_PARENT', '=', 'parent.APP_UID')
@@ -830,7 +849,7 @@ class AppController extends Controller
         $count = $queryBuilder->count();
         $queryBuilder = $queryBuilder->limit($limit)->skip($limit * ($page - 1));
         $applications = $queryBuilder->get();
-        
+
         // $data = $applications->map(function($sub_application){
         //     return [
         //         'parent_case'       =>  $sub_application->parent->APP_NUMBER,
@@ -840,7 +859,7 @@ class AppController extends Controller
         //         'creator'           =>  "{$sub_application->parent->creator->USR_FIRSTNAME} {$sub_application->parent->creator->USR_LASTNAME}"
         //     ];
         // });
-        
+
         return [
             'count' =>  $count,
             'data'  =>  $applications

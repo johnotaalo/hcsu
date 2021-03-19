@@ -62,8 +62,8 @@
 								<div class="col ml-n2">
 									<h4 class = "card-title mb-1">{{ option.LAST_NAME }}, {{ option.OTHER_NAMES }}</h4>
 									<span class="card-text">
-										<span>Organization (<span v-if="option.latest_contract">{{ option.latest_contract.ACRONYM }}</span><span v-else>N/A</span>)</span>, 
-										<span>Latest Passport (<span v-if="option.latest_passport">{{ option.latest_passport.PASSPORT_NO }}</span><span v-else>N/A</span>)</span>, 
+										<span>Organization (<span v-if="option.latest_contract">{{ option.latest_contract.ACRONYM }}</span><span v-else>N/A</span>)</span>,
+										<span>Latest Passport (<span v-if="option.latest_passport">{{ option.latest_passport.PASSPORT_NO }}</span><span v-else>N/A</span>)</span>,
 										<span>Latest DIP ID (<span v-if="option.latest_diplomatic_card">{{ option.latest_diplomatic_card.DIP_ID_NO }}</span><span v-else>N/A</span>)</span>
 									</span>
 								</div>
@@ -314,17 +314,22 @@
 					this.isLoading = false
 					this.$swal("Error", error.message, "error")
 				})
-			}
+			},
 		},
 		watch: {
 			selectedAgency: function(newVal, oldVal){
 				var em = this
 				if(newVal.HOST_COUNTRY_ID){
-					if(this.application == 'pin'){
-						if (newVal.PIN_NO != null && newVal.PIN_NO != "null") {
+				    let focalPoints = newVal.focal_point_mappings
+                    // if (!newVal.EMAIL && focalPoints.length === 0 ){
+                    //     this.$swal("Information", "Please note a document control form will not be sent because the organization has no focal point or email to it. Contact administrator to assist", "info")
+                    //
+                    // }
+					if(this.application === 'pin'){
+						if (newVal.PIN_NO != null && newVal.PIN_NO !== "null") {
 							this.$swal({
-								title: "PIN Exists", 
-								text: `This Organization already has a PIN (${newVal.PIN_NO}). If you proceed, the organization's PIN shall be cleared from the system. Proceed?`, 
+								title: "PIN Exists",
+								text: `This Organization already has a PIN (${newVal.PIN_NO}). If you proceed, the organization's PIN shall be cleared from the system. Proceed?`,
 								icon: "warning",
 								buttons: true,
 								dangerMode: true
@@ -356,8 +361,8 @@
 					if(this.application == 'pin'){
 						if (newVal.PIN_NO != null && newVal.PIN_NO != "null" && newVal.PIN_NO != "NULL") {
 							this.$swal({
-								title: "PIN Exists", 
-								text: `The staff member already has a PIN (${newVal.PIN_NO}). If you proceed, the staff member's PIN shall be cleared from the system. Proceed?`, 
+								title: "PIN Exists",
+								text: `The staff member already has a PIN (${newVal.PIN_NO}). If you proceed, the staff member's PIN shall be cleared from the system. Proceed?`,
 								icon: "warning",
 								buttons: true,
 								dangerMode: true
@@ -385,11 +390,11 @@
 			selectedDependent: function(newVal, oldVal){
 				var em = this
 				if(newVal.HOST_COUNTRY_ID){
-					if(this.application == 'pin'){
-						if (newVal.PIN != null && newVal.PIN != "null") {
+					if(this.application === 'pin'){
+						if (newVal.PIN != null && newVal.PIN !== "null") {
 							this.$swal({
-								title: "PIN Exists", 
-								text: `The client already has a PIN (${newVal.PIN}). If you proceed, the client's PIN shall be cleared from the system. Proceed?`, 
+								title: "PIN Exists",
+								text: `The client already has a PIN (${newVal.PIN}). If you proceed, the client's PIN shall be cleared from the system. Proceed?`,
 								icon: "warning",
 								buttons: true,
 								dangerMode: true
@@ -492,7 +497,7 @@
 					arr = result
 				}
 
-				return arr				
+				return arr
 			}
 		}
 	}
