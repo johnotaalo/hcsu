@@ -193,7 +193,16 @@ class NoteVerbal {
 				$end_header .= ", for approval.";
 				break;
 			case 'revalidation':
-				
+				$connector = "forward the attached {$this->data->applicationType} for";
+				if ($this->data->client->type == "staff") {
+					$end_header .= " the under mentioned {$this->data->client->contract_type} of {$this->data->client->organization}";
+				}else if($this->data->client->type == "agency"){
+					$end_header .= " {$this->data->client->fullname}";
+				}else if($this->data->client->type == "dependent"){
+					$end_header .= " the under mentioned {$this->data->client->relationship} of {$this->data->client->principal->fullname}, a {$this->data->client->contract_type}  of {$this->data->client->organization}";
+				}
+
+				$end_header .= ", for revalidation.";
 				break;
 			case 'form_a':
 				$connector = "submit the attached Form A for";
@@ -560,6 +569,20 @@ class NoteVerbal {
 
 			if ($this->data->caseData->ADDITIONAL_COMMENTS) {
 				$body .= "\r\r{$this->data->caseData->ADDITIONAL_COMMENTS}\r";
+			}
+			break;
+
+		case "revalidation":
+			$padding += 3;
+			$body .= str_pad("Serial No: ", $padding) . "{$this->data->caseData->INITIAL_CASE_NO}\r";
+			$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+			if (in_array($this->data->applicationType, ["PRO1A", "PRO1B"])) {
+				$body .= str_pad("Description: ", $padding) . "{$this->data->description}\r";
+			}else{
+				$body .= str_pad("Registration No: ", $padding) . "{$this->data->vehicle->registration}\r";
+				$body .= str_pad("Chassis No: ", $padding) . "{$this->data->vehicle->chassis_no}\r";
+				$body .= str_pad("Engine No: ", $padding) . "{$this->data->vehicle->engine_no}\r";
+				$body .= str_pad("Make: ", $padding) . "{$this->data->vehicle->make_model}\r\r";
 			}
 			break;
 
