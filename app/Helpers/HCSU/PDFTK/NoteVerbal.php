@@ -192,6 +192,9 @@ class NoteVerbal {
 
 				$end_header .= ", for approval.";
 				break;
+			case 'revalidation':
+				
+				break;
 			case 'form_a':
 				$connector = "submit the attached Form A for";
 				if ($this->data->client->type == "staff") {

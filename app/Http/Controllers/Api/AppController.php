@@ -631,6 +631,10 @@ class AppController extends Controller
             case 'airport-pass-locals':
                 $data = \App\Helpers\HCSU\Data\AirportPassLocalsData::get($case->app_number);
                 break;
+
+            case 'revalidation':
+                $data = \App\Helpers\HCSU\Data\RevalidationData::get($case->app_number);
+                break;
         }
 
         // dd($data);
@@ -645,50 +649,51 @@ class AppController extends Controller
             ];
         }
         try{
-        if ($request->process == "logbook") {
-            $pdf = new Pdf(public_path('templates/General_Note_Verbal_Ntsa.pdf'), $config);
-        }
-        else{
-            $pdf = new Pdf(public_path('templates/NV.pdf'), $config);
-        }
-        $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
-                ->flatten()
-                ->execute();
-
-
-        $content = file_get_contents($pdf->getTmpFile());
-        $localFile = "note-verbals/{$request->process}/Note Verbal - {$case->app_number}.pdf";
-        \Storage::put($localFile, $content);
-
-        $case = $this->getCaseInformation($request->case_no);
-        $process = $case->pro_uid;
-        $currentTask = $case->current_task[0]->tas_uid;
-        $search = [
-            'process'   =>  $process,
-            'task'      =>  $currentTask
-        ];
-
-        if ($nvOnly) {
-            $search['type'] = "nv";
-        }
-
-        $document = FormTemplate::where($search)->first();
-
-        if($document){
-            if ($document->input_document != null) {
-                $res = $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
-                \Log::debug("ProcessMaker upload documents: " . json_encode($res));
+            if ($request->process == "logbook") {
+                $pdf = new Pdf(public_path('templates/General_Note_Verbal_Ntsa.pdf'), $config);
             }
-        }
+            else{
+                $pdf = new Pdf(public_path('templates/NV.pdf'), $config);
+            }
+            $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
+                    ->flatten()
+                    ->execute();
+            dd($pdf);
 
-        if($downloadType){
-            return \Storage::download($localFile);
+
+            $content = file_get_contents($pdf->getTmpFile());
+            $localFile = "note-verbals/{$request->process}/Note Verbal - {$case->app_number}.pdf";
+            \Storage::put($localFile, $content);
+
+            $case = $this->getCaseInformation($request->case_no);
+            $process = $case->pro_uid;
+            $currentTask = $case->current_task[0]->tas_uid;
+            $search = [
+                'process'   =>  $process,
+                'task'      =>  $currentTask
+            ];
+
+            if ($nvOnly) {
+                $search['type'] = "nv";
+            }
+
+            $document = FormTemplate::where($search)->first();
+
+            if($document){
+                if ($document->input_document != null) {
+                    $res = $this->uploadGeneratedForm($case->app_uid, $currentTask, $document, $localFile);
+                    \Log::debug("ProcessMaker upload documents: " . json_encode($res));
+                }
+            }
+
+            if($downloadType){
+                return \Storage::download($localFile);
+            }
+            return response()->file(storage_path("app/{$localFile}"));
+        }catch(\Exception $ex){
+            dd($ex);
         }
-        return response()->file(storage_path("app/{$localFile}"));
-    }catch(\Exception $ex){
-        dd($ex);
-    }
-    }
+        }
 
     function uploadGeneratedForm($case_no, $task_id, $document, $localFile){
         $inputDocuments = $this->getGeneratedDocuments($case_no);
