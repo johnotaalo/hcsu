@@ -17,6 +17,10 @@ class Pro1C extends Model
     	}
     }
 
+    public function getDataAttribute(){
+        return \App\Helpers\HCSU\Data\Pro1CData::get($this->CASE_NO);
+    }
+
     public function getVehicleExcelListAttribute(){
     	$vehicle = $this->vehicle;
 

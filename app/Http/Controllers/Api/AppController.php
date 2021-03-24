@@ -926,4 +926,56 @@ class AppController extends Controller
 
         die("The document has not been signed yet");
     }
+
+    function getRevalidationCases(Request $request){
+        $host_country_id = $request->host_country_id;
+        $formType = $request->form_type;
+        $system = $request->system;
+
+        // dd($host_country_id ."=>".$formType."=>".$system);
+
+        if ($system == "new") {
+            if ($formType == "pro-1a") {
+                $table = "DF_01";            
+            }else if ($formType == "pro-1b") {
+                $table = "DF_02";
+            }else{
+                $table = "DF_03";
+            }
+
+            return \DB::connection('pm_data')->table($table)->select('CASE_NO')->where("HOST_COUNTRY_ID", $host_country_id)->get();
+        }else{
+            $clientType = identify_hcsu_client($host_country_id);
+
+            $index_no = "";
+
+            switch ($clientType) {
+                case 'staff':
+                    $principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $host_country_id)->first();
+                    $index_no = $principal->latest_contract->INDEX_NO;
+                    break;
+
+                case 'agency':
+                    $index_no = (\App\Models\Agency::where('HOST_COUNTRY_ID', $host_country_id)->first())->ACRONYM;
+                    break;
+
+                case 'dependent':
+                    $index_no = (\App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first())->principal->latest_contract->INDEX_NO;
+                    break;
+                
+                default:
+                    $index_no = 0;
+                    break;
+            }
+            if ($formType == "pro-1a") {
+                $table = "unon_sm_duty_free_liquor_tobacco_applications";            
+            }else if ($formType == "pro-1b") {
+                $table = "unon_sm_duty_free_goods_applications";
+            }else{
+                $table = "unon_sm_veh_duty_free_disposal_approval_application";
+            }
+
+            return \DB::connection('old_pm')->table($table)->select(\DB::raw('case_number AS case_no'))->where('index_no', $index_no)->get();
+        }
+    }
 }

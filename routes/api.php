@@ -265,6 +265,11 @@ Route::prefix('data')->group(function(){
 
 		Route::get('/documents', 'Api\AdobeSignApiController@getDocuments');
 	});
+
+
+	Route::prefix('revalidation')->group(function(){
+		Route::get("{host_country_id}/{form_type}/{system}", 'Api\AppController@getRevalidationCases');
+	});
 });
 
 Route::prefix('documents')->group(function(){

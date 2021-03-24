@@ -13,12 +13,16 @@ class Pro1A extends Model
 
     public function getClearingAgentAttribute(){
     	// return $this->hasOne(\App\Models\Ref\ClearingAgent::class, "CLEARING_AGENT", "ID");
-    	$agent = \App\Models\Ref\ClearingAgent::where('ID', $this->attributes['CLEARING_AGENT'])->first();
+    	$agent = \App\Models\Ref\ClearingAgent::where('ID', $this->aCLEARING_AGENT)->first();
     	return $agent;
     }
 
     public function getPortAttribute(){
-    	$port = \App\Models\Ref\PortsOfClearance::where('ID', $this->attributes['PORT_OF_CLEARANCE'])->first();
+    	$port = \App\Models\Ref\PortsOfClearance::where('ID', $this->PORT_OF_CLEARANCE)->first();
     	return $port;
+    }
+
+    public function getDataAttribute(){
+        return \App\Helpers\HCSU\Data\Pro1AData::get($this->CASE_NO);
     }
 }

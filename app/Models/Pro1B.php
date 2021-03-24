@@ -26,4 +26,8 @@ class Pro1B extends Model
     public function vehicle(){
         return $this->hasOne(\App\Models\Pro1BVehicles::class, 'CASE_NO', 'CASE_NO');
     }
+
+    public function getDataAttribute(){
+        return \App\Helpers\HCSU\Data\Pro1BData::get($this->CASE_NO);
+    }
 }
