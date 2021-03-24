@@ -658,7 +658,6 @@ class AppController extends Controller
             $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
                     ->flatten()
                     ->execute();
-            dd($pdf);
 
 
             $content = file_get_contents($pdf->getTmpFile());
