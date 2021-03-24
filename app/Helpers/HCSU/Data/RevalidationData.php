@@ -63,11 +63,11 @@ class RevalidationData{
 		$data->applicationType = strtoupper(str_replace("-", "", $caseData->APPLICATION_TYPE));
 
 		if ($caseData->APPLICATION_TYPE == "pro-1a") {
-			$data->description = (\App\Helpers\HCSU\Data\Pro1AData::get($case_no))->description;
+			$data->description = (\App\Helpers\HCSU\Data\Pro1AData::get($caseData->INITIAL_CASE_NO))->description;
 		} else if ($caseData->APPLICATION_TYPE == "pro-1b") {
-			$data->description = (\App\Helpers\HCSU\Data\Pro1BData::get($case_no))->description;
+			$data->description = (\App\Helpers\HCSU\Data\Pro1BData::get($caseData->INITIAL_CASE_NO))->description;
 		}else{
-			$data->vehicle = (\App\Helpers\HCSU\Data\Pro1CData::get($case_no))->vehicle;
+			$data->vehicle = (\App\Helpers\HCSU\Data\Pro1CData::get($caseData->INITIAL_CASE_NO))->vehicle;
 		}
 
 		return $data;
