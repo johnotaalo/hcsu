@@ -200,7 +200,7 @@ class VehicleController extends Controller
         $list = collect($request->returnedPlates)->map(function($plate) use ($rnpId){
             return [
                 'RETURNED_PLATE_ID' =>  $rnpId,
-                'HOST_COUNTRY_ID'   =>  $plate['id'],
+                'HOST_COUNTRY_ID'   =>  $plate['hc_id'],
                 'PLATE_NO'          =>  $plate['plateNo'],
                 'MEASUREMENTS'      =>  $plate['measurements']
             ];
@@ -224,7 +224,7 @@ class VehicleController extends Controller
         $list = collect($request->returnedPlates)->map(function($plate) use ($rnpId){
             return [
                 'RETURNED_PLATE_ID' =>  $rnpId,
-                'HOST_COUNTRY_ID'   =>  $plate['id'],
+                'HOST_COUNTRY_ID'   =>  $plate['hc_id'],
                 'PLATE_NO'          =>  $plate['plateNo'],
                 'MEASUREMENTS'      =>  $plate['measurements']
             ];
