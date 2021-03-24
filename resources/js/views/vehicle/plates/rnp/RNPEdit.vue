@@ -105,21 +105,21 @@
 				var newPlates = _.map(plates, (plate) => {
 					if (plate.clientType == "agency") {
 						return {
-							id: plate.selectedAgency.HOST_COUNTRY_ID,
+							hc_id: plate.selectedAgency.HOST_COUNTRY_ID,
 							plateNo: plate.plateNo,
 							measurements: plate.measurements,
 							clientType: plate.clientType
 						}
 					}else if(plate.clientType == "staff"){
 						return {
-							id: plate.selectedStaff.HOST_COUNTRY_ID,
+							hc_id: plate.selectedStaff.HOST_COUNTRY_ID,
 							plateNo: plate.plateNo,
 							measurements: plate.measurements,
 							clientType: plate.clientType
 						}
 					}else if(plate.clientType == "dependant"){
 						return {
-							id: plate.selectedDependent.HOST_COUNTRY_ID,
+							hc_id: plate.selectedDependent.HOST_COUNTRY_ID,
 							plateNo: plate.plateNo,
 							measurements: plate.measurements,
 							clientType: plate.clientType
