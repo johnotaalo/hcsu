@@ -975,7 +975,7 @@ class AppController extends Controller
                 $table = "unon_sm_veh_duty_free_disposal_approval_application";
             }
 
-            return \DB::connection('old_pm')->table($table)->select(\DB::raw('case_number AS case_no'))->where('index_no', $index_no)->get();
+            return \DB::connection('old_pm')->table($table)->select(\DB::raw('case_number AS CASE_NO'))->where('index_no', $index_no)->get();
         }
     }
 }
