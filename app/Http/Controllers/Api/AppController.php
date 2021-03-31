@@ -652,21 +652,21 @@ class AppController extends Controller
         try{
             $mainPath = "";
             if (public_path() == "/home/vagrant/code/hcsu/public") {
-                $mainPath = "C:\Users\otaaloc\code\hcsu/public/";
+                $mainPath = "C:\Users\otaaloc\code\hcsu/public";
             }else{
                 $mainPath = public_path();
             }
             if ($request->process == "logbook") {
-                $pdf = new Pdf($mainPath . 'templates/General_Note_Verbal_Ntsa.pdf', $config);
+                $pdf = new Pdf($mainPath . '/templates/General_Note_Verbal_Ntsa.pdf', $config);
             }
             else{
-                $pdf = new Pdf($mainPath . 'templates/NV.pdf', $config);
+                $pdf = new Pdf($mainPath . '/templates/NV.pdf', $config);
             }
             $pdf->fillForm(['main_body' => $noteVerbal->getContent()])
                     ->flatten()
                     ->execute();
 
-                     dd($pdf);
+//                     dd($pdf);
 
             $content = file_get_contents($pdf->getTmpFile());
             $localFile = "note-verbals/{$request->process}/Note Verbal - {$case->app_number}.pdf";
