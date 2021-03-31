@@ -608,10 +608,6 @@ class NoteVerbal {
 			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->caseData->vehicle->CHASSIS_NO}\r";
 			$body .= str_pad("Engine No: ", $padding) . "{$this->data->caseData->vehicle->ENGINE_NO}\r";
 
-			if ($this->data->caseData->COMMENTS) {
-				$body .= "\r{$this->data->caseData->COMMENTS}\r";
-			}
-
 			if($this->data->caseData->DUTY_PAID == "YES"){
 			    if($this->data->caseData->vehicle->type->ID == 2){
 			        if ($this->data->caseData->MOTOR_BIKE_PLATES == "1"){
@@ -631,10 +627,15 @@ class NoteVerbal {
 
 			    if ($this->data->caseData->DOCUMENTS){
 			        $docsArray = json_decode($this->data->caseData->DOCUMENTS);
+
 			        $noDocs = (count($docsArray) > 1) ? "are" : "is";
 			        $body .= combined_string($docsArray) . " {$noDocs} attached herewith. \r";
                 }else{
                     $body .= "\rCopies of current logbook and insurance certificate are attached herewith.\r";
+                }
+
+                if ($this->data->caseData->COMMENTS) {
+                    $body .= "\r{$this->data->caseData->COMMENTS}\r";
                 }
 
 			}
