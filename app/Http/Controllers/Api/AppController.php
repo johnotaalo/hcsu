@@ -649,14 +649,13 @@ class AppController extends Controller
                 'useExec'   =>  true
             ];
         }
-
-        $mainPath = "";
-        if (public_path() == "/home/vagrant/code/hcsu/public") {
-            $mainPath = "C:\Users\otaaloc\code\hcsu/public/";
-        }else{
-            $mainPath = public_path();
-        }
         try{
+            $mainPath = "";
+            if (public_path() == "/home/vagrant/code/hcsu/public") {
+                $mainPath = "C:\Users\otaaloc\code\hcsu/public/";
+            }else{
+                $mainPath = public_path();
+            }
             if ($request->process == "logbook") {
                 $pdf = new Pdf($mainPath . 'templates/General_Note_Verbal_Ntsa.pdf', $config);
             }
