@@ -629,7 +629,7 @@ class NoteVerbal {
 			        $docsArray = json_decode($this->data->caseData->DOCUMENTS);
 
 			        $noDocs = (count($docsArray) > 1) ? "are" : "is";
-			        $body .= combined_string($docsArray) . " {$noDocs} attached herewith. \r";
+			        $body .= "\r" . combined_string($docsArray) . " {$noDocs} attached herewith. \r";
                 }else{
                     $body .= "\rCopies of current logbook and insurance certificate are attached herewith.\r";
                 }
