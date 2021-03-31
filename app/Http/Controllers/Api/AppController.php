@@ -17,8 +17,9 @@ use App\FormTemplate;
 use App\Helpers\HCSU\AdobeSign\AdobeClient;
 use App\Helpers\HCSU\ProcessMaker;
 
-use Storage;
+use Illuminate\Support\Facades\Storage;
 use mikehaertl\pdftk\Pdf;
+use Illuminate\Support\Facades\Log;
 
 use App\Enums\UserType;
 
@@ -698,7 +699,8 @@ class AppController extends Controller
             }
             return response()->file(storage_path("app/{$localFile}"));
         }catch(\Exception $ex){
-            dd($ex);
+//            dd($ex);
+            \Log::error("Error: {$ex->getMessage()}");
         }
         }
 
@@ -948,7 +950,7 @@ class AppController extends Controller
 
         if ($system == "new") {
             if ($formType == "pro-1a") {
-                $table = "DF_01";            
+                $table = "DF_01";
             }else if ($formType == "pro-1b") {
                 $table = "DF_02";
             }else{
@@ -974,13 +976,13 @@ class AppController extends Controller
                 case 'dependent':
                     $index_no = (\App\Models\PrincipalDependent::where('HOST_COUNTRY_ID', $host_country_id)->first())->principal->latest_contract->INDEX_NO;
                     break;
-                
+
                 default:
                     $index_no = 0;
                     break;
             }
             if ($formType == "pro-1a") {
-                $table = "unon_sm_duty_free_liquor_tobacco_applications";            
+                $table = "unon_sm_duty_free_liquor_tobacco_applications";
             }else if ($formType == "pro-1b") {
                 $table = "unon_sm_duty_free_goods_applications";
             }else{

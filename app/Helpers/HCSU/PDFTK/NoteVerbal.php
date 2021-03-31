@@ -2,6 +2,8 @@
 
 namespace App\Helpers\HCSU\PDFTK;
 
+use App\Models\Agency;
+
 class NoteVerbal {
 	protected $process;
 	public $header, $footer, $body;
@@ -18,7 +20,7 @@ class NoteVerbal {
 	public function getHeader(){
 		$connector = "";
 		$end_header = "";
-		$body = "";
+//		$body = "";
 		$your_ref = "";
 
 		switch($this->process){
@@ -83,17 +85,17 @@ class NoteVerbal {
 						$end_header .= " of Exemption from Kenya Work Permit";
 					}
 
-					
+
 
 					if(count($this->data->client->dependents) > 0){
 						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
-							
+
 						}else{
 							if($this->data->caseData->DEPENDENTS){
 								$end_header .= " and Dependants Pass";
 							}
 						}
-						
+
 					}
 
 					$relationshipString = "";
@@ -126,7 +128,7 @@ class NoteVerbal {
 						}else{
 							if($this->data->caseData->DEPENDENTS){
 								$genderConjunction = ($this->data->client->gender == "MALE") ? "his" : "her";
-								$end_header .= " and his {$relationshipString}";
+								$end_header .= " and {$genderConjunction} {$relationshipString}";
 							}
 						}
 					}
@@ -314,7 +316,8 @@ class NoteVerbal {
 				}
 
 				if (count($this->data->caseData->diplomaticid_status)) {
-					$returned_statement = $lost_statement = "";
+					$returned_statement = "";
+                    $lost_statement = "";
 					$keys = array_keys($this->data->caseData->diplomaticid_status);
 					if (in_array("Returned", $keys) && in_array("Lost", $keys)) {
 						$returned_connector = (count($this->data->caseData->diplomaticid_status['Returned']) > 1) ? "are" : "is";
@@ -447,7 +450,7 @@ class NoteVerbal {
 				}
 
 				if($this->data->client->type == "staff"){
-					
+
 					if(!is_null($this->data->caseData->DEPENDENTS) && $this->data->caseData->DEPENDENTS != ""){
 						$relationshipString = "";
 						if($this->data->client->relationships){
@@ -467,7 +470,7 @@ class NoteVerbal {
 						}
 
 						if($this->data->type == "endorsement" && $this->data->endorsementType == "dependant_pass"){
-						}else{ 
+						}else{
 							$body .= "\r{$relationshipString}\r";
 						}
 						$body .= str_pad("Name", 30) . str_pad("Passport No", 15) . str_pad("Nationality", 20) . "Validity\r";
@@ -505,7 +508,7 @@ class NoteVerbal {
 				if($this->data->client->type == "domestic-worker"){
 					$body .= "\rDuly completed Form 25, copies of above-mentioned passport, other relevant supporting documents and a copy of the staff member's Passport No. {$this->data->client->principal->latest_passport->PASSPORT_NO} with valid Exemption from Kenya Work Permit No. R-{$this->data->client->principal->R_NO}.\r";
 				}
-				
+
 			break;
 
 		case 'domestic-worker-justification':
@@ -559,7 +562,7 @@ class NoteVerbal {
 				if ($this->data->caseData->BUYER_AGENCY) {
 					$agency = $this->data->client->organization;
 
-					$buyerAgency = \App\Models\Agency::where('AGENCY_ID', $this->data->caseData->BUYER_AGENCY)->first();
+					$buyerAgency = Agency::where('AGENCY_ID', $this->data->caseData->BUYER_AGENCY)->first();
 
 					if ($buyerAgency->ACRONYM == $agency) {
 						$body .= "The number plates have been reassigned to the buyer in line with the attached Note Verbale Ref. No. MFA/PROT. 7/2 dated March 14, 2014 from the Ministry.";
@@ -621,8 +624,8 @@ class NoteVerbal {
 			else{
 				$body .= "\rA copy of duplicate Insurance Certificate and two copies of approved Pro 1B are attached herewith.";
 			}
-			
-			
+
+
 			break;
 
 		case 'airport-pass':
