@@ -14,6 +14,10 @@ class Vehicle extends Model
 		return $this->belongsTo("\App\Models\VehicleMakeModel", "MAKE_MODEL_ID", "MAKE_MODEL_ID");
 	}
 
+	public function vehicleType(){
+	    return $this->belongsTo(\App\Models\VehicleType::class, "VEHICLE_TYPE", "ID");
+    }
+
 	public function owners(){
 		return $this->hasMany('\App\Models\VehicleOwner', 'VEHICLE_ID', 'ID');
 	}
