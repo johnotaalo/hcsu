@@ -600,11 +600,10 @@ class NoteVerbal {
 			$body .= "Duly completed Form VII in duplicate, two passport size photos, and copies of Diplomatic ID Card and Passport are attached herewith.\r";
 			break;
 		case 'form_a':
-		    $vehicle_type = $this->data->caseData->vehicle->type;
-		    dd($vehicle_type);
-			$body = "Vehicle details are as follows:\r";
+		    $vehicle_type = $this->data->caseData->vehicle->type->VEH_TYPE;
+			$body = "{$vehicle_type} details are as follows:\r";
 
-			$body .= "\r{$this->data->caseData->EXTRA_COMMENTS}\r";
+//			$body .= "\r{$this->data->caseData->EXTRA_COMMENTS}\r";
 			$body .= str_pad("Make: ", $padding) . "{$this->data->caseData->vehicle->make->MAKE_MODEL}\r";
 			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->caseData->vehicle->CHASSIS_NO}\r";
 			$body .= str_pad("Engine No: ", $padding) . "{$this->data->caseData->vehicle->ENGINE_NO}\r";
@@ -614,13 +613,30 @@ class NoteVerbal {
 			}
 
 			if($this->data->caseData->DUTY_PAID == "YES"){
-				if($this->data->caseData->PLATE_TYPE == "civilian"){
-					$body .= "\rKindly note that the vehicle is duty paid and currently registered on civilian plates Reg. {$this->data->caseData->vehicle->ORIGINAL_REGISTRATION}. The staff member would like to re-register the vehicle and change the plates from civilian to diplomatic.\r";
-				}else{
-					$body .= "\rKindly note that the vehicle is duty paid and currently registered on diplomatic plates Reg. {$this->data->caseData->vehicle->PLATE_NO}. The staff member would like to re-register the vehicle and change the plates from diplomatic to diplomatic.\r";
-				}
+			    if($this->data->caseData->vehicle->type->ID == 2){
+			        if ($this->data->caseData->MOTOR_BIKE_PLATES != "1"){
+                        if ($this->data->caseData->PLATE_TYPE == "civilian") {
+                            $body .= "\rKindly note that the {$vehicle_type} is duty paid and currently registered on civilian plates Reg. {$this->data->caseData->vehicle->ORIGINAL_REGISTRATION}. The staff member would like to re-register the vehicle and change the plates from civilian to diplomatic.\r";
+                        } else {
+                            $body .= "\rKindly note that the {$vehicle_type} is duty paid and currently registered on diplomatic plates Reg. {$this->data->caseData->vehicle->PLATE_NO}. The staff member would like to re-register the vehicle and change the plates from diplomatic to diplomatic.\r";
+                        }
+                    }
+                }else {
+                    if ($this->data->caseData->PLATE_TYPE == "civilian") {
+                        $body .= "\rKindly note that the {$vehicle_type} is duty paid and currently registered on civilian plates Reg. {$this->data->caseData->vehicle->ORIGINAL_REGISTRATION}. The staff member would like to re-register the vehicle and change the plates from civilian to diplomatic.\r";
+                    } else {
+                        $body .= "\rKindly note that the {$vehicle_type} is duty paid and currently registered on diplomatic plates Reg. {$this->data->caseData->vehicle->PLATE_NO}. The staff member would like to re-register the vehicle and change the plates from diplomatic to diplomatic.\r";
+                    }
+                }
 
-				$body .= "\rCopies of current logbook and insurance certificate are attached herewith.\r";
+			    if ($this->data->caseData->DOCUMENTS){
+			        $docsArray = json_decode($this->data->caseData->DOCUMENTS);
+			        $noDocs = (count($docsArray) > 1) ? "are" : "is";
+			        $body .= combined_string($docsArray) . " {$noDocs} attached herewith. \r";
+                }else{
+                    $body .= "\rCopies of current logbook and insurance certificate are attached herewith.\r";
+                }
+
 			}
 
 			else{
