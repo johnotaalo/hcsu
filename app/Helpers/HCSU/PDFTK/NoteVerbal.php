@@ -601,7 +601,7 @@ class NoteVerbal {
 			break;
 		case 'form_a':
 		    $vehicle_type = $this->data->caseData->vehicle->vehicle_type;
-		    dd($vehicle_type);
+		    dd($this->data->caseData->vehicle);
 			$body = "Vehicle details are as follows:\r";
 
 			$body .= "\r{$this->data->caseData->EXTRA_COMMENTS}\r";
