@@ -29,8 +29,4 @@ class Pro1BVehicles extends Model
     public function country(){
     	return $this->belongsTo(\App\Models\Country::class, 'COUNTRY_OF_ORIGIN', 'id');
     }
-
-    public function vehicleType(){
-        return $this->belongsTo(\App\Models\VehicleType::class, "VEHICLE_TYPE", "ID");
-    }
 }

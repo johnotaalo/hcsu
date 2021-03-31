@@ -600,7 +600,7 @@ class NoteVerbal {
 			$body .= "Duly completed Form VII in duplicate, two passport size photos, and copies of Diplomatic ID Card and Passport are attached herewith.\r";
 			break;
 		case 'form_a':
-		    $vehicle_type = $this->data->caseData->vehicle->vehicle_type;
+		    $vehicle_type = $this->data->caseData->vehicle->type;
 		    dd($vehicle_type);
 			$body = "Vehicle details are as follows:\r";
 
