@@ -701,7 +701,8 @@ class AppController extends Controller
 //            dd($ex);
             \Log::error("Error: {$ex->getMessage()}");
         }
-        }
+        return null;
+    }
 
     function uploadGeneratedForm($case_no, $task_id, $document, $localFile){
         $inputDocuments = $this->getGeneratedDocuments($case_no);
