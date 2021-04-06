@@ -176,7 +176,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../simbacourier" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -224,7 +224,8 @@
       <workItem from="1615880307283" duration="1260000" />
       <workItem from="1615976165388" duration="169000" />
       <workItem from="1616142038611" duration="4148000" />
-      <workItem from="1617197222319" duration="7402000" />
+      <workItem from="1617197222319" duration="9162000" />
+      <workItem from="1617541350603" duration="626000" />
     </task>
     <task id="LOCAL-00001" summary="Testing Vehicle Type">
       <created>1617203680302</created>

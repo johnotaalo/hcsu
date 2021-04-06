@@ -13,7 +13,7 @@ class Pro1A extends Model
 
     public function getClearingAgentAttribute(){
     	// return $this->hasOne(\App\Models\Ref\ClearingAgent::class, "CLEARING_AGENT", "ID");
-    	$agent = \App\Models\Ref\ClearingAgent::where('ID', $this->aCLEARING_AGENT)->first();
+    	$agent = \App\Models\Ref\ClearingAgent::where('ID', $this->CLEARING_AGENT)->first();
     	return $agent;
     }
 
