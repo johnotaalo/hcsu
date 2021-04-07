@@ -796,8 +796,11 @@
 					this.form.principal.residenceNo = this.principal.R_NO
 					this.form.principal.place_of_birth = this.principal.PLACE_OF_BIRTH
 					let principalNationality = _.find(this.countries, ["id", this.principal.NATIONALITY])
-					this.form.principal.nationality['label'] = principalNationality.official_name
-					this.form.principal.nationality['id'] = principalNationality.iso_3
+
+					this.form.principal.nationality = {
+						id: principalNationality.iso_3,
+						label: principalNationality.official_name
+					}
 					
 				})
 			},
