@@ -603,7 +603,7 @@ class NoteVerbal {
 		    $vehicle_type = $this->data->caseData->vehicle->type->VEH_TYPE;
 			$body = "{$vehicle_type} details are as follows:\r";
 
-			$body .= "\r{$this->data->caseData->EXTRA_COMMENTS}\r";
+			// $body .= "\r{$this->data->caseData->EXTRA_COMMENTS}\r";
 			$body .= str_pad("Make: ", $padding) . "{$this->data->caseData->vehicle->make->MAKE_MODEL}\r";
 			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->caseData->vehicle->CHASSIS_NO}\r";
 			$body .= str_pad("Engine No: ", $padding) . "{$this->data->caseData->vehicle->ENGINE_NO}\r";
@@ -634,15 +634,15 @@ class NoteVerbal {
                     $body .= "\rCopies of current logbook and insurance certificate are attached herewith.\r";
                 }
 
-                if ($this->data->caseData->COMMENTS) {
-                    $body .= "\r{$this->data->caseData->COMMENTS}\r";
-                }
-
 			}
 
 			else{
-				$body .= "\rA copies of duplicate Insurance Certificate and approved Pro 1B are attached herewith.";
+				$body .= "\rCopies of duplicate Insurance Certificate and approved Pro 1B are attached herewith.";
 			}
+
+			if ($this->data->caseData->COMMENTS) {
+                    $body .= "\r{$this->data->caseData->COMMENTS}\r";
+                }
 
 
 			break;
