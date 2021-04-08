@@ -608,6 +608,10 @@ class NoteVerbal {
 			$body .= str_pad("Chassis No: ", $padding) . "{$this->data->caseData->vehicle->CHASSIS_NO}\r";
 			$body .= str_pad("Engine No: ", $padding) . "{$this->data->caseData->vehicle->ENGINE_NO}\r";
 
+			if ($this->data->caseData->COMMENTS) {
+                $body .= "\r{$this->data->caseData->COMMENTS}\r";
+            }
+
 			if($this->data->caseData->DUTY_PAID == "YES"){
 			    if($this->data->caseData->vehicle->type->ID == 2){
 			        if ($this->data->caseData->MOTOR_BIKE_PLATES == "1"){
@@ -639,10 +643,6 @@ class NoteVerbal {
 			else{
 				$body .= "\rCopies of duplicate Insurance Certificate and approved Pro 1B are attached herewith.";
 			}
-
-			if ($this->data->caseData->COMMENTS) {
-                    $body .= "\r{$this->data->caseData->COMMENTS}\r";
-                }
 
 
 			break;
