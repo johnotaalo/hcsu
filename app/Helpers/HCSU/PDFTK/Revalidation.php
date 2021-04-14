@@ -30,6 +30,8 @@ class Revalidation{
 			}
 
 			$tabData = $class->getData($revalidationData->INITIAL_CASE_NO, $document);
+
+			$tabData['serial_no'] = $revalidationData->NV_SERIAL_NO;
 		}
 
 		return $tabData;
