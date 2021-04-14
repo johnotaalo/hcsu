@@ -660,7 +660,7 @@ class AppController extends Controller
                     ->flatten()
                     ->execute();
 
-                    dd($pdf);
+                    // dd($pdf);
 
             $content = file_get_contents($pdf->getTmpFile());
             $localFile = "note-verbals/{$request->process}/Note Verbal - {$case->app_number}.pdf";
