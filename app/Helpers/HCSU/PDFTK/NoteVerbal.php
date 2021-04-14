@@ -587,8 +587,6 @@ class NoteVerbal {
 				$body .= str_pad("Engine No: ", $padding) . "{$this->data->vehicle->engine_no}\r";
 				$body .= str_pad("Make: ", $padding) . "{$this->data->vehicle->make_model}\r\r";
 			}
-
-			dd($body);
 			break;
 
 		case 'form-7':

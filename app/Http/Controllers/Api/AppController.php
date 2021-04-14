@@ -635,6 +635,7 @@ class AppController extends Controller
         // dd($data);
 
         $noteVerbal = new \App\Helpers\HCSU\PDFTK\NoteVerbal($request->process, $data, $initials);
+        dd($noteVerbal);
 
         $config = [];
         if (env('PDFTK_COMMAND')) {
