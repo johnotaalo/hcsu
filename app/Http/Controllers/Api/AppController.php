@@ -466,6 +466,7 @@ class AppController extends Controller
         \Log::debug("Generate Document. Input Sent: " . json_encode($request->input()));
         $case = $this->getCaseInformation($request->case_no);
         $applicationType = ($request->query('type')) ? $request->query('type') : "";
+        $revalidationType = ($request->query('revalidation_type')) ? $request->query('revalidation_type') : null;
         // $variables = $this->getCaseVariables($request->case_no);
         $extraParams = $request->query();
 
@@ -526,13 +527,6 @@ class AppController extends Controller
                 \Storage::put($localFile, $content);
 
                 $stampedFile = "forms/{$process}/{$filename}-{$case->app_number}.pdf";
-
-                // $stampPdf = new Pdf(storage_path('app/' . $localFile), $config);
-                // $stampPdf->stamp(public_path() . '/documents/stamps/olago-edit.pdf')
-                //             ->saveAs(storage_path("app/{$stampedFile}"));
-                // $documentId = \App\Helpers\HCSU\AdobeSign\AdobeClient::uploadDocument($localFile, $filename);
-                // \Log::info("Document ID: {$documentId}");
-                // $agreementId = \App\Helpers\HCSU\AdobeSign\AdobeClient::sendDocumentForSigning($documentId, $case->app_name);
 
                 // Upload to processmaker
                 if ($document->input_document != null) {
