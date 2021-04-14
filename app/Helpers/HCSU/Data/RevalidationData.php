@@ -68,7 +68,6 @@ class RevalidationData{
 			$data->description = (\App\Helpers\HCSU\Data\Pro1BData::get($caseData->INITIAL_CASE_NO))->description;
 		}else{
 			$data->vehicle = (\App\Helpers\HCSU\Data\Pro1CData::get($caseData->INITIAL_CASE_NO))->vehicle;
-			dd($data);
 		}
 
 		return $data;
