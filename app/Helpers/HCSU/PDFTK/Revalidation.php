@@ -15,18 +15,21 @@ class Revalidation{
 		$tabData = [];
 
 		if ($revalidationData->INITIAL_SYSTEM == "new") {
+			$class = new \StdClass;
 			if ($revalidationData->APPLICATION_TYPE == "pro-1a") {
-				$tabData = Pro1A::getData($revalidationData->INITIAL_CASE_NO, $document);
+				$class = new Pro1A();
 			}else if ($revalidationData->APPLICATION_TYPE == "pro-1b") {
 				$clientType = identify_hcsu_client($revalidationData->HOST_COUNTRY_ID);
 				if($clientType == "agency"){
-					$tabData = Pro1BAgency::getData($revalidationData->INITIAL_CASE_NO, $document);
+					$class = new Pro1BAgency();
 				}else{
-					$tabData = Pro1BStaff::getData($revalidationData->INITIAL_CASE_NO, $document);
+					$class = new Pro1BStaff();
 				}
 			}else if ($revalidationData->APPLICATION_TYPE == "pro-1c") {
-				$tabData = Pro1C::getData($revalidationData->INITIAL_CASE_NO, $document);
+				$class = new Pro1C();
 			}
+
+			$tabData = $class->getData($revalidationData->INITIAL_CASE_NO, $document);
 		}
 
 		return $tabData;
