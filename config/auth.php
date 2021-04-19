@@ -71,12 +71,12 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'ldap',
+            'driver' => 'eloquent',
             'model' => App\User::class,
         ],
         'ldap'  =>  [
             'driver'    =>  'ldap',
-            'model'     =>  App\User::class  
+            'model'     =>  App\User::class
         ]
 
         // 'users' => [
