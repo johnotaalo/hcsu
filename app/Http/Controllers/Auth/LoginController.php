@@ -64,14 +64,16 @@ class LoginController extends Controller
     }
 
     protected function attemptLogin(Request $request){
-        // try {
-        //     Adldap::connect();
-        // } catch (\Exception $e) {
-        //     // \Log::error("AD is not connecting");
-        // }
+//         try {
+//             Adldap::connect();
+//         } catch (\Exception $e) {
+//              \Log::error("AD is not connecting");
+//              dd($e->getMessage());
+//         }
         // if (request()->input('location') == "client-portal") {
+//        dd(\Config::get('settings.ldap_enabled'));
             $credentials = request()->only($this->username, 'password');
-            Auth::attempt($credentials, true);
+            Auth::guard('web')->attempt($credentials, true);
         // }else{
         //     Auth::attempt(['email' => request($this->username), 'password' => request('password')]);
         // }

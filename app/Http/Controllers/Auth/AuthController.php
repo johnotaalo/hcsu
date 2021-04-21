@@ -11,23 +11,23 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
     public $successStatus = 200;
-    /** 
-     * login api 
-     * 
-     * @return \Illuminate\Http\Response 
+    /**
+     * login api
+     *
+     * @return \Illuminate\Http\Response
      */
     public function login(){
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('hcsu')-> accessToken; 
-            return response()->json(['success' => $success], $this-> successStatus); 
-        } 
-        else{ 
-            return response()->json(['error'=>'Unauthorised'], 401); 
-        } 
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+            $user = Auth::user();
+            $success['token'] =  $user->createToken('hcsu')-> accessToken;
+            return response()->json(['success' => $success], $this-> successStatus);
+        }
+        else{
+            return response()->json(['error'=>'Unauthorised'], 401);
+        }
     }
 
-    public function details(Request $request) 
+    public function details(Request $request)
     {
       if(isset($request->type)){
         $user_ip = $request->getClientIp();
@@ -45,7 +45,7 @@ class AuthController extends Controller
         dd("User not found");
         Auth::logout();
       }
-      return response()->json($user, $this->successStatus); 
+      return response()->json($user, $this->successStatus);
     }
   //   function login(Request $request){
   //   	$credentials = $request->only('email', 'password');

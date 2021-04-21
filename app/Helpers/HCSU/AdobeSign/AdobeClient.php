@@ -474,6 +474,8 @@ class AdobeClient{
 
 		$url = "{$auth->api_access_point}oauth/refresh?refresh_token={$auth->refresh_token}&grant_type=refresh_token&client_id=" . env('ADOBE_SIGN_APPLICATION_ID') . "&client_secret=" . env('ADOBE_SIGN_CLIENT_SECRET');
 
+		\Log::debug("Auth url: {$url}");
+
 		$client = new Client();
 
 		$res = $client->request('POST', $url, [
