@@ -134,6 +134,7 @@ Route::prefix('template')->group(function(){
 
 Route::prefix('client')->group(function(){
 	Route::post('/update', 'Api\AppController@updateHostCountryID');
+	Route::get("/search", 'Api\AppController@searchAllClients');
 });
 
 Route::prefix('agencies')->group(function(){

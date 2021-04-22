@@ -425,39 +425,10 @@ class VehicleController extends Controller
 
             if (!$formA) {
                 // No Form A. Finding data from old system
+                $formA = \App\Models\OLDPM\FormA::where('case_number', $case)->firstOrFail();
 
-                $sql = "SELECT
-                            form_a.case_number,
-                            sm.index_no,
-                            sm.last_name,
-                            sm.other_names,
-                            (
-                            CASE
-                                    WHEN veh.owner_code = '01' THEN
-                                    CONCAT( sm.last_name, ', ', sm.other_names ) ELSE CONCAT( 'Spouse of', ' ', sm.last_name, ', ', sm.other_names ) END) AS client_name,
-                                    veh.regt_no,
-                                    veh.chassis_no,
-                                    veh.engine_no 
-                                FROM
-                                    unon_sm_veh_duty_free_regt_approval_application form_a
-                                    JOIN unon_staff_member sm ON sm.index_no = form_a.index_no
-                                    JOIN unon_sm_vehicle veh ON veh.index_no = form_a.index_no 
-                                    AND veh.chassis_no = form_a.chassis_no 
-                                    AND veh.engine_no = form_a.engine_no 
-                                WHERE
-                                form_a.case_number = {$case} 
-                            LIMIT 1";
-
-                $data = \DB::connection('old_pm')->select($sql);
-
-                $formA = new \StdClass;
-
-                $formA->PLATE_NO = $data[0]->regt_no;
-                $formA->client_details = new \StdClass;
-                $formA->client_details->name = $data[0]->client_name;
-                $formA->PRO_1B_CASE_NO = $case;
-
-                return ['data'  =>  $formA];
+                $formA->PLATE_NO = $formA->vehicle->regt_no;
+                $formA->PRO_1B_CASE_NO = $formA->case_number;
             }
         }
 
@@ -469,7 +440,60 @@ class VehicleController extends Controller
 
         $assignedPlate = $request->input('assignedPlate');
 
-        $formA = \App\Models\FormA::where('CASE_NO', $form_a)->with('vehicle')->firstOrFail();
+        if($request->input('system') == "new"){
+            $formA = \App\Models\FormA::where('CASE_NO', $form_a)->with('vehicle')->firstOrFail();
+        }else{
+            $oldFormA = \App\Models\OLDPM\FormA::where('case_number', $form_a)->firstOrFail();
+            // dd(json_encode($oldFormA->vehicle));
+            // Add Form A Details to new PM Form A
+            $host_country_id = $request->input('client')['HOST_COUNTRY_ID'];
+            // dd($host_country_id);
+
+            $formA = \App\Models\FormA::updateOrCreate(
+                ['CASE_NO'  =>  $form_a],
+                [
+                    'PRO_1B_CASE_NO'    =>  $oldFormA->case_number,
+                    'HOST_COUNTRY_ID'   =>  $host_country_id,
+                    'SERIAL_NO'         =>  "REF OLD PM",
+                    'DUTY_PAID'         =>  ($oldFormA->vehicle_registered_as_duty_paid == 1) ? "YES" : "NO",
+                    'PLATE_TYPE'        =>  'diplomatic',
+                    'INSURANCE_COMPANY' =>  $oldFormA->insurance_company,
+                    'POLICY_NO'         =>  'N/A',
+                    'USE_ROAD'          =>  $oldFormA->vehicle_location_road,
+                    'USE_ESTATE'        =>  $oldFormA->vehicle_location_estate,
+                    'USE_TOWN'          =>  $oldFormA->vehicle_location_town,
+                    'USE_DISTRICT'      =>  $oldFormA->vehicle_location_district,
+                    'MANAGER_APPROVAL'  =>  1,
+                    'SUBMIT_TO_MOFA'    =>  1,
+                    'MOFA_APPROVAL'     =>  1,
+                    'PLATE_NO'          =>  $assignedPlate
+                ]
+            );
+            // Add Pro 1B Vehicle Details for Linking
+            $vehicle = \App\Models\Pro1BVehicles::updateOrCreate(
+                ['CASE_NO'  =>  $form_a],
+                [
+                    "ENGINE_NO"             =>  $oldFormA->vehicle->engine_no, 
+                    "CHASSIS_NO"            =>  $oldFormA->vehicle->chassis_no, 
+                    "MAKE_MODEL_ID"         =>  ($oldFormA->vehicle->new_make_model) ? $oldFormA->vehicle->new_make_model->MAKE_MODEL_ID : 0, 
+                    "COLOR_ID"              =>  ($oldFormA->new_color) ? $oldFormA->new_color->ID: 0, 
+                    "YOM"                   =>  $oldFormA->yom, 
+                    "FUEL"                  =>  ($oldFormA->new_fuel) ? $oldFormA->new_fuel->ID : 0, 
+                    "RATING"                =>  $oldFormA->rating, 
+                    "VEHICLE_CATEGORY"      =>  ($oldFormA->new_vehicle) ? "New" : "Old", 
+                    "VEHICLE_TYPE"          =>  ($oldFormA->new_vehicle_type) ? $oldFormA->new_vehicle_type->ID : 0, 
+                    "BODY_TYPE"             =>  ($oldFormA->new_body_type) ? $oldFormA->new_body_type->ID : 0, 
+                    "VEHICLE_WEIGHT"        =>  0, 
+                    "VEHICLE_VALUE"         =>  $oldFormA->vehicle_value, 
+                    "COUNTRY_OF_ORIGIN"     =>  ($oldFormA->country_of_origin) ? $oldFormA->country_of_origin->id : 0, 
+                    "ORIGINAL_REGISTRATION" =>  $oldFormA->previous_registration_no, 
+                    "VEHICLE_SEATING"       =>  $oldFormA->carrying_capacity_seats, 
+                    "CURRENCY"              =>  $oldFormA->vehicle_value_currency, 
+                    "VEHICLE_CARRYING"      =>  $oldFormA->carrying_capacity_kg, 
+                    "FORM_A_CASE_NO"        =>  $oldFormA->case_number
+                ]
+            );
+        }
 
         $variables = [[
             'host_country_id'   =>  $formA->HOST_COUNTRY_ID,
@@ -489,6 +513,7 @@ class VehicleController extends Controller
             'tas_uid'   =>  $task,
             'usr_uid'   =>  $user
         ];
+
         try{
             $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases";
 

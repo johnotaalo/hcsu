@@ -11,6 +11,8 @@ class FormA extends Model
 
     protected $appends = ["client_details"];
 
+    protected $fillable = ["CASE_NO", "PRO_1B_CASE_NO", 'HOST_COUNTRY_ID','SERIAL_NO','DUTY_PAID','PLATE_TYPE','INSURANCE_COMPANY','POLICY_NO','USE_ROAD','USE_ESTATE','USE_TOWN','USE_DISTRICT','MANAGER_APPROVAL','SUBMIT_TO_MOFA','MOFA_APPROVAL','PLATE_NO'];
+
     public function getClientDetailsAttribute(){
     	$clientType = identify_hcsu_client($this->attributes['HOST_COUNTRY_ID']);
     	$host_country_id = $this->attributes['HOST_COUNTRY_ID'];

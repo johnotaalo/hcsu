@@ -29,8 +29,24 @@
 				<h2>Required Variables</h2>
 				<b-row>
 					<b-col cols="4">
-						<b-form-group label="Client Name">
+						<b-form-group label="Client Name" v-if="form.system == 'new'">
 							<b-input v-model = "form.client_name" readonly/>
+						</b-form-group>
+
+						<b-form-group label="Client" v-else>
+							<v-select label = "CLIENT_NAME" :filterable="false" :options="clients" @search="onClientSearch" v-model="form.client">
+								<template slot="no-options">
+									Type to search for a dependent
+								</template>
+
+								<template slot="option" slot-scope="option">
+									{{ option.CLIENT_NAME }}
+								</template>
+
+								<template slot="selected-option" slot-scope="option">
+									{{ option.CLIENT_NAME }}
+								</template>
+							</v-select>
 						</b-form-group>
 					</b-col>
 
@@ -68,8 +84,10 @@
 					system: "",
 					assignedPlate: "",
 					client_name: "",
+					client: null,
 					pro_1b_case_no: ""
 				}),
+				clients: [],
 				systemOptions: [
 					{ value: "old", text: "Old Processmaker" },
 					{ value: "new", text: "New Processmaker" }
@@ -86,8 +104,11 @@
 					this.formADetails = res.data
 
 					this.form.assignedPlate = res.data.PLATE_NO
-					this.form.client_name = res.data.client_details.name
 					this.form.pro_1b_case_no = res.data.PRO_1B_CASE_NO
+
+					if (this.form.system == "new") {
+						this.form.client_name = res.data.client_details.name
+					}
 				})
 			},
 			submitDetails: function(){
@@ -108,7 +129,18 @@
 				.catch(error => {
 					this.$swal("Oops!", `${error.message}`, "error")
 				})
-			}
+			},
+			onClientSearch: function(search, loading){
+				loading(true)
+				this.clientSearch(loading, search, this)
+			},
+			clientSearch: _.debounce( (loading, search, vm) => {
+				axios(`/api/client/search?q=${escape(search)}`)
+				.then((res) => {
+					vm.clients = res.data
+					loading(false)
+				})
+			}, 350),
 		}
 	}
 </script>

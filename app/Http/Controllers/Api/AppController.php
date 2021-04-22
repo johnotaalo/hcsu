@@ -935,6 +935,14 @@ class AppController extends Controller
         die("The document has not been signed yet");
     }
 
+    function searchAllClients(Request $request){
+        $query = $request->q;
+
+        $data = \DB::table('VW_CLIENTS_AGGREGATED')->select('HOST_COUNTRY_ID', 'CLIENT_NAME', 'CLIENT_TYPE')->where('LAST_NAME', 'LIKE', "%{$query}%")->orWhere("OTHER_NAMES", "LIKE", "%{$query}%")->orWhere("CLIENT_NAME", "LIKE", "%{$query}%")->get();
+
+        return $data;
+    }
+
     function getRevalidationCases(Request $request){
         $host_country_id = $request->host_country_id;
         $formType = $request->form_type;

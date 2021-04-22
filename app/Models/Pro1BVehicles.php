@@ -10,6 +10,8 @@ class Pro1BVehicles extends Model
 
     protected $table = "DF_02_Vehicles";
 
+    protected $fillable = ["CASE_NO", "ENGINE_NO", "CHASSIS_NO", "MAKE_MODEL_ID", "COLOR_ID", "YOM", "FUEL", "RATING", "VEHICLE_CATEGORY", "VEHICLE_TYPE", "BODY_TYPE", "VEHICLE_WEIGHT", "VEHICLE_VALUE", "COUNTRY_OF_ORIGIN", "ORIGINAL_REGISTRATION", "VEHICLE_SEATING", "CURRENCY", "VEHICLE_CARRYING", "FORM_A_CASE_NO"];
+
     public function make(){
     	return $this->belongsTo(\App\Models\VehicleMakeModel::class, 'MAKE_MODEL_ID', 'MAKE_MODEL_ID');
     }
