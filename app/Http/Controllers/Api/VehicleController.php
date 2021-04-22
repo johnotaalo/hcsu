@@ -431,20 +431,31 @@ class VehicleController extends Controller
                             sm.index_no,
                             sm.last_name,
                             sm.other_names,
-                            veh.regt_no,
-                            veh.chassis_no,
-                            veh.engine_no
-                        FROM
-                            unon_sm_veh_duty_free_regt_approval_application form_a 
-                            JOIN unon_staff_member sm ON sm.index_no = form_a.index_no
-                            JOIN unon_sm_vehicle veh ON veh.index_no = form_a.index_no AND veh.chassis_no = form_a.chassis_no AND veh.engine_no = form_a.engine_no
-                        WHERE
-                            form_a.case_number = {$case} 
+                            (
+                            CASE
+                                    WHEN veh.owner_code = '01' THEN
+                                    CONCAT( sm.last_name, ', ', sm.other_names ) ELSE CONCAT( 'Spouse of', ' ', sm.last_name, ', ', sm.other_names ) END) AS client_name,
+                                    veh.regt_no,
+                                    veh.chassis_no,
+                                    veh.engine_no 
+                                FROM
+                                    unon_sm_veh_duty_free_regt_approval_application form_a
+                                    JOIN unon_staff_member sm ON sm.index_no = form_a.index_no
+                                    JOIN unon_sm_vehicle veh ON veh.index_no = form_a.index_no 
+                                    AND veh.chassis_no = form_a.chassis_no 
+                                    AND veh.engine_no = form_a.engine_no 
+                                WHERE
+                                form_a.case_number = {$case} 
                             LIMIT 1";
 
                 $data = \DB::connection('old_pm')->select($sql);
 
-                dd($data);
+                $formA = new StdClass;
+
+                $formA->PLATE_NO = $data[0]->regt_no;
+                $formA->client_details = new \StdClass;
+                $formA->client_details->name = $data[0]->client_name;
+                $formA->PRO_1B_CASE_NO = $case;
             }
         }
 
