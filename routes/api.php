@@ -181,6 +181,11 @@ Route::prefix('vehicle')->group(function(){
 		// Route::get('download/list/signed/{id}', 'Api\VehicleController@downloadSignedList');
 		Route::get('download/list/unsigned/{id}', 'Api\VehicleController@downloadUnsignedList');
 	});
+
+	Route::prefix("/form-a")->group(function(){
+		Route::post("search", "Api\VehicleController@searchFormA");
+		Route::post("create-logbook-case/{form_a}", "Api\VehicleController@createLogbookCase");
+	});
 });
 
 Route::prefix('data')->group(function(){

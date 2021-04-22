@@ -90,11 +90,7 @@ class ProcessMaker {
 	}
 
 	public static function routeCase($app_uid){
-		if (App::environment('local') || App::environment('staging')) {
-			$url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$app_uid}/route-case";
-		}else{
-			$url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/{$app_uid}/route-case";
-		}
+		$url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/{$app_uid}/route-case";
 		
 		$authenticationData = json_decode(\Storage::get("pmauthentication.json"));
 		return Self::executeREST($url, "PUT", [], $authenticationData->access_token);

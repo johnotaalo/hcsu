@@ -129,6 +129,7 @@ import TimsRegistration from './views/vehicle/tims/TimsRegistration'
 import RNPList from './views/vehicle/plates/rnp/RNPList'
 import RNPCreate from './views/vehicle/plates/rnp/RNPCreate'
 import RNPEdit from './views/vehicle/plates/rnp/RNPEdit'
+import FormAFix from './views/vehicle/FormAFix'
 
 // Data
 import DataManagement from './views/data/DataManagement'
@@ -334,6 +335,11 @@ Vue.component(
 	 						name: 'tims-registration'
 	 					}
 	 				]
+	 			},
+	 			{
+	 				path: "form-a-fix",
+	 				component: FormAFix,
+	 				name: 'form-a-fix',
 	 			}
 	 		]
 	 	},

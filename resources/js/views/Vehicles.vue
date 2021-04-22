@@ -93,6 +93,12 @@
 											<i class="fe fe-truck"></i> Vehicles Database
 										</a>
 									</li>
+
+									<li class="nav-item">
+										<router-link class="nav-link" :to="{ name: 'form-a-fix' }">
+											<i class="fe fe-settings"></i>&nbsp;Fixed Form A - Logbook issue
+										</router-link>
+									</li>
 								</ul>
 
 							</div> <!-- / .navbar-collapse -->

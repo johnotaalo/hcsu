@@ -412,4 +412,65 @@ class VehicleController extends Controller
             'data'  =>  $lists
         ];
     }
+
+    function searchFormA(Request $request){
+        $case = $request->input('case');
+
+        // Get details of Form A and Vehicle
+        $formA = \App\Models\FormA::where('CASE_NO', $case)->with('vehicle')->firstOrFail();
+
+        return $formA;
+    }
+
+    function createLogbookCase(Request $request){
+        $form_a = $request->form_a;
+
+        $assignedPlate = $request->input('assignedPlate');
+
+        $formA = \App\Models\FormA::where('CASE_NO', $form_a)->with('vehicle')->firstOrFail();
+
+        $variables = [[
+            'host_country_id'   =>  $formA->HOST_COUNTRY_ID,
+            'client_name'       =>  $formA->client_details->name,
+            'pro1b_case_no'     =>  $formA->PRO_1B_CASE_NO,
+            'form_a_case_no'    =>  $formA->CASE_NO,
+            'assigned_plate'    =>  $assignedPlate
+        ]];
+
+        $user = "00000000000000000000000000000001";
+        $task = "3392311385edf4544853db8009703611";
+        $pro_uid = "7279291495edf3a5356d477046323760";
+
+        $data = [
+            'variables' =>  $variables,
+            'pro_uid'   =>  $pro_uid,
+            'tas_uid'   =>  $task,
+            'usr_uid'   =>  $user
+        ];
+        try{
+            $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases";
+
+            $authenticationData = json_decode(\Storage::get("pmauthentication.json"));
+
+            $response = \Processmaker::executeREST($url, "POST", $data, $authenticationData->access_token);
+
+            if ($response->app_uid) {
+                $routeRes = \Processmaker::routeCase($response->app_uid);
+            }
+
+            $case_no = $response->app_number;
+
+            $formA->PLATE_NO = $assignedPlate;
+            $formA->LOGBOOK_CASE_NO = $case_no;
+
+            $formA->save();
+
+            return [
+                'logbook_case_no'   =>  $case_no
+            ];
+        }catch(\Exception $ex){
+            return response()->json([
+                'message'   =>  $ex->getMessage()], 400);
+        }
+    }
 }
