@@ -415,9 +415,38 @@ class VehicleController extends Controller
 
     function searchFormA(Request $request){
         $case = $request->input('case');
+        $system = $request->input('system');
 
-        // Get details of Form A and Vehicle
-        $formA = \App\Models\FormA::where('CASE_NO', $case)->with('vehicle')->firstOrFail();
+        if ("new" === $system) {
+            // Get details of Form A and Vehicle
+            $formA = \App\Models\FormA::where('CASE_NO', $case)->with('vehicle')->firstOrFail();
+        }else{
+            $formA = \App\Models\FormA::where('CASE_NO', $case)->with('vehicle')->first();
+
+            if (!$formA) {
+                // No Form A. Finding data from old system
+
+                $sql = "SELECT
+                            form_a.case_number,
+                            sm.index_no,
+                            sm.last_name,
+                            sm.other_names,
+                            veh.regt_no,
+                            veh.chassis_no,
+                            veh.engine_no
+                        FROM
+                            unon_sm_veh_duty_free_regt_approval_application form_a 
+                            JOIN unon_staff_member sm ON sm.index_no = form_a.index_no
+                            JOIN unon_sm_vehicle veh ON veh.index_no = form_a.index_no AND veh.chassis_no = form_a.chassis_no AND veh.engine_no = form_a.engine_no
+                        WHERE
+                            form_a.case_number = {$case} 
+                            LIMIT 1";
+
+                $data = \DB::connection('old_pm')->select($sql);
+
+                dd($data);
+            }
+        }
 
         return $formA;
     }

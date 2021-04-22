@@ -118,7 +118,7 @@ return [
 
         'old_pm' => [
             'driver' => 'mysql',
-            'host' => env('OLD_PM_DB_HOST', '10.100.95.52'),
+            'host' => env('OLD_PM_DB_HOST', '10.106.107.101'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('OLD_PM_DB_DATABASE', 'forge'),
             'username' => env('OLD_PM_DB_USERNAME', 'forge'),

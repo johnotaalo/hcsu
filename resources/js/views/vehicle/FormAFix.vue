@@ -1,10 +1,21 @@
 <template>
 	<div>
 		<b-card>
-			<b-form-group>
-				<label>Form A Case</label>
-				<b-input v-model="formACase" />
-			</b-form-group>
+			<b-row>
+				<b-col>
+					<b-form-group>
+						<label>System</label>
+						<b-select v-model="form.system" :options="systemOptions"></b-select>
+					</b-form-group>
+				</b-col>
+				<b-col>
+					<b-form-group>
+						<label>Form A Case</label>
+						<b-input v-model="formACase" />
+					</b-form-group>
+				</b-col>
+			</b-row>
+			
 			<b-button variant="primary" size="sm" @click="searchFormA">Search</b-button>
 
 			<hr>
@@ -51,12 +62,18 @@
 		data(){
 			return {
 				formACase: null,
+				formASystem: null,
 				formADetails: null,
 				form: new Form({
+					system: "",
 					assignedPlate: "",
 					client_name: "",
 					pro_1b_case_no: ""
-				})
+				}),
+				systemOptions: [
+					{ value: "old", text: "Old Processmaker" },
+					{ value: "new", text: "New Processmaker" }
+				]
 			}
 		},
 		mounted(){
@@ -64,7 +81,7 @@
 		},
 		methods: {
 			searchFormA: function(){
-				axios.post("/api/vehicle/form-a/search", { case: this.formACase })
+				axios.post("/api/vehicle/form-a/search", { case: this.formACase, system: this.form.system })
 				.then(res => {
 					this.formADetails = res.data
 
