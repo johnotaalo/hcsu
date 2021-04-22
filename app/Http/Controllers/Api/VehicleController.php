@@ -456,6 +456,8 @@ class VehicleController extends Controller
                 $formA->client_details = new \StdClass;
                 $formA->client_details->name = $data[0]->client_name;
                 $formA->PRO_1B_CASE_NO = $case;
+
+                return ['data'  =>  $formA];
             }
         }
 
