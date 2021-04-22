@@ -450,7 +450,7 @@ class VehicleController extends Controller
 
                 $data = \DB::connection('old_pm')->select($sql);
 
-                $formA = new StdClass;
+                $formA = new \StdClass;
 
                 $formA->PLATE_NO = $data[0]->regt_no;
                 $formA->client_details = new \StdClass;
