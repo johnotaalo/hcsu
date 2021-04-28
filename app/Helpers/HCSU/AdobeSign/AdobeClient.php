@@ -34,7 +34,10 @@ class AdobeClient{
 		}
 		$url = $auth->api_access_point . "api/rest/v5/transientDocuments";
 		$client = new Client([
-			'headers'	=>	[ 'Authorization'	=>	"Bearer {$auth->access_token}" ]
+			'headers'	=>	[ 
+				'Authorization'	=>	"Bearer {$auth->access_token}",
+				'x-api-user'	=>	"email: unon-hostcountry-helpdesk@un.org" 
+			]
 		]);
 
 		$options = [
@@ -65,7 +68,8 @@ class AdobeClient{
 		$client = new Client([
 			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
-				'Content-Type'	=>	"application/json"
+				'Content-Type'	=>	"application/json",
+				'x-api-user'	=>	"email: unon-hostcountry-helpdesk@un.org"
 			]
 		]);
 
