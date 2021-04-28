@@ -36,7 +36,7 @@ class AdobeClient{
 		$client = new Client([
 			'headers'	=>	[ 
 				'Authorization'	=>	"Bearer {$auth->access_token}",
-				'x-api-user'	=>	"email: unon-hostcountry-helpdesk@un.org" 
+				'x-api-user'	=>	"email:" . env("ADOBE_SIGN_API_USER") 
 			]
 		]);
 
@@ -69,7 +69,7 @@ class AdobeClient{
 			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
 				'Content-Type'	=>	"application/json",
-				'x-api-user'	=>	"email: unon-hostcountry-helpdesk@un.org"
+				'x-api-user'	=>	"email:" . env("ADOBE_SIGN_API_USER")
 			]
 		]);
 
@@ -131,7 +131,8 @@ class AdobeClient{
 		$client = new Client([
 			'headers'	=>	[
 				'Authorization'	=>	"Bearer {$auth->access_token}",
-				'Content-Type'	=>	"application/json"
+				'Content-Type'	=>	"application/json",
+				'x-api-user'	=>	"email:" . env("ADOBE_SIGN_API_USER")
 			]
 		]);
 
@@ -192,7 +193,8 @@ class AdobeClient{
         $client = new Client([
             'headers'	=>	[
                 'Authorization'	=>	"Bearer {$auth->access_token}",
-                'Content-Type'	=>	"application/json"
+                'Content-Type'	=>	"application/json",
+				'x-api-user'	=>	"email:" . env("ADOBE_SIGN_API_USER")
             ]
         ]);
 
