@@ -231,6 +231,9 @@ class AdobeSignApiController extends Controller
             case 'revalidation':
                 $data = \App\Helpers\HCSU\Data\RevalidationData::get($case->app_number);
                 break;
+            case 'staff-management':
+                $data = \App\Helpers\HCSU\Data\StaffManagementData::get($case->app_number);
+                break;
         }
 
         // dd($data);

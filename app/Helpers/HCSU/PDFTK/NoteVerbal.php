@@ -698,7 +698,7 @@ class NoteVerbal {
 			}
 			$body .= str_pad("Passport No: ", $padding) . "{$this->data->client->passport}\r";
 			if($this->data->staffRegistrationData->COMMENTS){
-				$body .= "{$this->data->staffRegistrationData->COMMENTS}";
+				$body .= "\n{$this->data->staffRegistrationData->COMMENTS}\n";
 			}
 			$body .= "\rThe Ministry's assistance in processing the application will be highly appreciated.";
 			break;
