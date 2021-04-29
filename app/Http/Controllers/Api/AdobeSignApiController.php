@@ -384,7 +384,7 @@ class AdobeSignApiController extends Controller
     }
 
     protected function getCaseInformation($case_no){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;

@@ -14,7 +14,7 @@ class ProcessMaker {
 		$tokenExpiry = $authenticationData->expiry;
 		\Log::debug("Checking token expiry...");
 		if($tokenExpiry < time()){
-			\Log::debug("Token has expired. Getting another token");
+			\Log::debug("Token ({$authenticationData->access_token}) has expired. Getting another token");
 			$accessToken = (new self)->refreshToken();
 			if (!$accessToken) {
 				\Log::error("Could not refresh token");
@@ -162,7 +162,7 @@ class ProcessMaker {
 		]);
 
 		if($res->getStatusCode() == 200){
-			\Log::debug("Token refreshed successfully");
+			\Log::debug("Token refreshed successfully: " . $res->getBody());
 			$response = json_decode($res->getBody());
 			$response->expiry = time() + $response->expires_in;
 			Storage::disk('local')->put('pmauthentication.json', json_encode($response));
