@@ -196,7 +196,7 @@ class AppController extends Controller
         $del_index = 1;
         $variable_name = "host_country_id";
 
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
         }else{
             $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
@@ -239,7 +239,7 @@ class AppController extends Controller
         $del_index = 1;
         $variable_name = $request->variable;
 
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://".env('PM_SERVER')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
         }else{
             $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/variable/{$case}/{$del_index}/variable/{$variable_name}";
@@ -394,7 +394,7 @@ class AppController extends Controller
     }
 
     function getProcessList(){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://".env('PM_SERVER')."/api/1.0/workflow/project";
         }else{
             $url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/project";
@@ -407,7 +407,7 @@ class AppController extends Controller
     }
 
     function getProcessTasks(Request $request){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process;
@@ -419,7 +419,7 @@ class AppController extends Controller
     }
 
     function getTaskSteps(Request $request){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/project/" . $request->process . "/activity/{$request->task}/steps";
@@ -630,6 +630,10 @@ class AppController extends Controller
             case 'revalidation':
                 $data = \App\Helpers\HCSU\Data\RevalidationData::get($case->app_number);
                 break;
+
+            case 'staff-management':
+                $data = \App\Helpers\HCSU\Data\StaffManagementData::get($case->app_number);
+                break;
         }
 
         // dd($data);
@@ -706,7 +710,7 @@ class AppController extends Controller
         //         $this->deleteDocument($case_no, $inputDocument->app_doc_uid, $inputDocument->app_doc_index);
         //     }
         // }
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
@@ -730,7 +734,7 @@ class AppController extends Controller
     }
 
     function getGeneratedDocuments($case_no){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-documents";
@@ -743,7 +747,7 @@ class AppController extends Controller
     }
 
     function deleteDocument($case_no, $doc_id, $index){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/2/input-document/{$doc_id}";
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/2/input-document/{$doc_id}";
@@ -768,7 +772,7 @@ class AppController extends Controller
     }
 
     function getCaseInformation($case_no){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
@@ -782,7 +786,7 @@ class AppController extends Controller
     }
 
     function getCaseVariables($case_no){
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
             $url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . '/variables';
         }else{
             $url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . '/variables';

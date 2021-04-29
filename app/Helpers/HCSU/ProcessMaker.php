@@ -97,7 +97,7 @@ class ProcessMaker {
 	}
 
 	public static function getCaseInformation($case_no){
-		if (App::environment('local') || App::environment('staging')) {
+		if (App::environment('staging')) {
         	$url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
         }else{
         	$url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no;
@@ -111,7 +111,7 @@ class ProcessMaker {
 
     public static function uploadGeneratedForm($case_no, $task_id, $input_document, $localFile){
         // $inputDocuments = $this->getGeneratedDocuments($case_no);
-        if (App::environment('local') || App::environment('staging')) {
+        if (App::environment('staging')) {
         	$url = "http://" . env("PM_SERVER") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
         }else{
         	$url = "https://" . env("PM_SERVER_DOMAIN") . "/api/1.0/" . env("PM_WORKSPACE") . "/cases/" . $case_no . "/input-document";
@@ -139,7 +139,7 @@ class ProcessMaker {
 
 	private function refreshToken(){
 		$authenticationData = json_decode(Storage::get("pmauthentication.json"));
-		$server = (App::environment('local') || App::environment('staging')) ? env('PM_SERVER') : env("PM_SERVER_DOMAIN");
+		$server = (App::environment('staging')) ? env('PM_SERVER') : "https://" . env("PM_SERVER_DOMAIN");
 		$workspace = env("PM_WORKSPACE");
 		$client_id = env("PM_CLIENT_ID");
 		$client_secret = env("PM_CLIENT_SECRET");
@@ -181,7 +181,7 @@ class ProcessMaker {
 	}
 
 	public static function updateCaseVariables($case, $data, $del_index = 1){
-		if (App::environment('local') || App::environment('staging')) {
+		if (App::environment('staging')) {
         	$url = "http://".env('PM_SERVER')."/api/1.0/workflow/cases/{$case}/variable";
         }else{
         	$url = "https://".env('PM_SERVER_DOMAIN')."/api/1.0/workflow/cases/{$case}/variable";

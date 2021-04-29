@@ -245,6 +245,25 @@ class NoteVerbal {
 			case 'airport-pass':
 				$connector = "request the esteemed Ministry's approval for the issuance of Annual Airport Passes for the year {$this->data->client->applicationYear} for the following staff member of {$this->data->client->organization} whose duties require them to visit the airport often to meet senior United Nations officials arriving at JKIA, Nairobi:";
 				break;
+
+			case 'staff-management':
+				$applicationtype = "";
+				if ($this->data->client->type == "staff") {
+					$applicationtype = "Staff";
+				}else if($this->data->client->type == "dependent"){
+					$applicationtype = "Dependent";
+				}
+
+				if ($this->data->staffRegistrationData->APPLICATION_TYPE == 'registration') {
+					$applicationtype = "{$applicationtype} Registration";
+				}else{
+					$applicationtype = "{$applicationtype} Modification";
+				}
+				$connector = "submit a {$applicationtype} for";
+
+				$end_header = (isset($this->data->client->relationship)) ? "the under mentioned {$this->data->client->relationship} of {$this->data->client->principal}" : "{$this->data->client->name}";
+				$end_header .= ", an internationally recruited staff member of {$this->data->client->organization}.";
+				break;
 		}
 
 		if($this->process == "logbook"){
@@ -664,6 +683,24 @@ class NoteVerbal {
 			$body .= str_pad("National ID: ", $padding) . "{$this->data->actual->IDENTIFICATION}\r";
 
 			$body .= "\n\nFollowing the implementation of IPMIS (Integrated Protocol Management Information System) by the Ministry of Foreign Affairs and International Trade, Kenya nationals are not required to seek approval through the ministry.";
+			break;
+
+		case 'staff-management':
+			$body .= "Details are as follows:\r";
+			if ($this->data->client->type == "staff") {
+				$body .= str_pad("Name: ", $padding) . "{$this->data->client->name}\r";
+				$body .= str_pad("Nationality: ", $padding) . "{$this->data->client->nationality}\r";
+				$body .= str_pad("Title: ", $padding) . "{$this->data->client->designation}/{$this->data->client->grade}\r";
+			}else{
+				// $body .= ucwords($this->data->client->relationship) . "\r";
+				$body .= str_pad("Name", $padding) . str_pad("Nationality", 25) . "Title\r";
+				$body .= str_pad($this->data->client->name, $padding) . str_pad($this->data->client->nationality, 25) . ucwords($this->data->client->relationship) . "\r";
+			}
+			$body .= str_pad("Passport No: ", $padding) . "{$this->data->client->passport}\r";
+			if($this->data->staffRegistrationData->COMMENTS){
+				$body .= "{$this->data->staffRegistrationData->COMMENTS}";
+			}
+			$body .= "\rThe Ministry's assistance in processing the application will be highly appreciated.";
 			break;
 
 		case 'logbook':
