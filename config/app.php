@@ -187,6 +187,7 @@ return [
         Adldap\Laravel\AdldapAuthServiceProvider::class,
 
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        Rollbar\Laravel\RollbarServiceProvider::class,
     ],
 
     /*
