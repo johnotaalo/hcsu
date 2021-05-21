@@ -54,7 +54,22 @@ class PINData{
                   $clientObj->organization = $mission;
                   $clientObj->contract_type = $contract->C_TYPE;
                   $clientObj->nationality = $dependent->COUNTRY;
-                  $clientObj->passport = ($dependent->latest_passport) ? $dependent->latest_passport->PASSPORT_NO : "N/A";;
+                  $clientObj->passport = ($dependent->latest_passport) ? $dependent->latest_passport->PASSPORT_NO : "N/A";
+            } else if ($clientType == "domestic-worker") {
+                  $domesticWorker = \App\Models\PrincipalDomesticWorker::where('HOST_COUNTRY_ID', $pinData->HOST_COUNTRY_ID)->first();
+
+                  $c_name = strtoupper($domesticWorker->LAST_NAME) . ", " . format_other_names($domesticWorker->OTHER_NAMES) . " domestic worker of {$domesticWorker->principal->fullname}";
+
+                  $name = "{$c_name}; {$domesticWorker->principal->latest_contract->DESIGNATION}";
+                  $mission = $domesticWorker->principal->latest_contract->ACRONYM;
+                  $contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$domesticWorker->principal->HOST_COUNTRY_ID})"))->first();
+
+                  $clientObj->name = $c_name;
+                  $clientObj->organization = $mission;
+                  $clientObj->contract_type = $contract->C_TYPE;
+                  $clientObj->nationality = ($domesticWorker->nationality) ? $domesticWorker->nationality->name : "N/A";
+                  $clientObj->passport = ($domesticWorker->latest_passport) ? $domesticWorker->latest_passport->PASSPORT_NO : "N/A";
+
             }
 
             $data->client = $clientObj;
