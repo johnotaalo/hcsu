@@ -326,7 +326,7 @@
                     //
                     // }
 					if(this.application === 'pin'){
-						if (newVal.PIN_NO != null && newVal.PIN_NO !== "null") {
+						if (newVal.PIN_NO != null && newVal.PIN_NO != "null") {
 							this.$swal({
 								title: "PIN Exists",
 								text: `This Organization already has a PIN (${newVal.PIN_NO}). If you proceed, the organization's PIN shall be cleared from the system. Proceed?`,
@@ -468,7 +468,7 @@
 							return obj.value == 'staff-member' || obj.value == 'domestic-worker'
 						})
 					}
-					else if (this.application == 'work-permit-renewal'){
+					else if (this.application == 'work-permit-renewal' || this.application == "pin"){
 						result = _.filter(list, (obj) => {
 							return obj.value == 'staff-member' || obj.value == 'dependent' || obj.value == 'domestic-worker'
 						})
