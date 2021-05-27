@@ -540,4 +540,34 @@ class VehicleController extends Controller
                 'message'   =>  $ex->getMessage()], 400);
         }
     }
+
+    public function getVehicleListing(Request $request){
+        $searchQueries = $request->get('normalSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $query =  \App\Models\OLDPM\StaffVehicle::with('staff');
+
+        if ($searchQueries) {
+            $query->where('regt_no', 'LIKE', "%{$searchQueries}%")
+                    ->orWhere('make_model', 'LIKE', "%{$searchQueries}%")
+                    ->orWhere('engine_no', 'LIKE', "%{$searchQueries}%")
+                    ->orWhere('chassis_no', 'LIKE', "%{$searchQueries}%")
+                    ->orWhere('log_book_no', 'LIKE', "%{$searchQueries}%")
+                    ->orWhere('index_no', 'LIKE', "%{$searchQueries}%")
+                    ->orWhereHas('staff', function($staffQuery) use ($searchQueries){
+                        $staffQuery->where('last_name', 'LIKE', "%{$searchQueries}%")
+                                    ->orWhere('other_names', 'LIKE', '%{$searchQueries}%');
+                    });
+        }
+
+        $count = $query->count();
+
+        $query = $query->limit($limit)->skip($limit * ($page - 1));
+        
+        return ['data'  => $query->get(), 'count'   =>  $count];
+    }
 }

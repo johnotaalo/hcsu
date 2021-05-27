@@ -89,9 +89,9 @@
 										</div>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="#">
+										<router-link class="nav-link" :to="{ name: 'vehicle-database' }">
 											<i class="fe fe-truck"></i> Vehicles Database
-										</a>
+										</router-link>
 									</li>
 
 									<li class="nav-item">
@@ -109,7 +109,7 @@
 			
 			</div>
 			<div class="col-md-10">
-				<router-view></router-view>
+				<router-view class="mt-2"></router-view>
 			</div>
 		</div>
 	</div>

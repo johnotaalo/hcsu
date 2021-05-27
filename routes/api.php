@@ -187,6 +187,10 @@ Route::prefix('vehicle')->group(function(){
 		Route::post("search", "Api\VehicleController@searchFormA");
 		Route::post("create-logbook-case/{form_a}", "Api\VehicleController@createLogbookCase");
 	});
+
+	Route::prefix('database')->group(function(){
+		Route::get('list', 'Api\VehicleController@getVehicleListing');
+	});
 });
 
 Route::prefix('data')->group(function(){

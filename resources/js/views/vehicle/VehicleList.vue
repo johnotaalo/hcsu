@@ -1,8 +1,10 @@
 <template>
-	<v-server-table
+	<div class="card">
+		<v-server-table
 		:url="apiUri"
 		:columns="columns"
 		:options="options"
+		class="table-sm table-nowrap card-table"
 		size="sm">
 			<template slot="MAKE_MODEL" slot-scope="data">
 				<p v-if="data.row.make_model">{{ data.row.make_model.MAKE_MODEL }}</p>
@@ -12,6 +14,7 @@
 				<b-link>{{ data.row.owners.length }} {{ "Owner" | pluralize(data.row.owners.length) }} </b-link>
 			</template>
 		</v-server-table>
+	</div>
 </template>
 
 <script type="text/javascript">
@@ -30,7 +33,7 @@
 				options: {
 					perPage: 20,
 					perPageValues: [10, 20, 50, 100],
-					filterable: true
+					filterable: false
 				}
 			}
 		},

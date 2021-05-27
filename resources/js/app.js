@@ -119,6 +119,7 @@ import NormalVAT from './views/vat/components/NormalVAT'
 // Vehicles
 import VehicleHome from './views/vehicle/VehicleHome'
 import VehicleList from './views/vehicle/VehicleList'
+import VehicleDatabase from './views/vehicle/VehicleDatabase'
 import Plates from './views/vehicle/Plates'
 import PlatesList from './views/vehicle/plates/PlatesList'
 import Prefix from './views/vehicle/plates/Prefix'
@@ -278,9 +279,9 @@ Vue.component(
 	 				name: 'vehicle-home'
 	 			},
 	 			{
-	 				path: '/list',
-	 				component: VehicleList,
-	 				name: 'vehicle-list'
+	 				path: 'database',
+	 				component: VehicleDatabase,
+	 				name: 'vehicle-database'
 	 			},
 	 			{
 	 				path: 'plates',
