@@ -587,7 +587,7 @@ class PrincipalController extends Controller
         $principalDependent->LAST_NAME = $request->lastName;
         $principalDependent->OTHER_NAMES = $request->otherNames;
         $principalDependent->RELATIONSHIP_ID = $request->relationshipType['id'];
-        $principalDependent->COUNTRY = $request->country['label'];
+        $principalDependent->COUNTRY = (\App\Models\Country::where('iso_3', $request->country['id'])->first())->pm_abbrev;
         $principalDependent->EMPLOYMENT_DETAILS = $request->employment;
         $principalDependent->PASSPORT_NO = $request->passport;
         $principalDependent->DATE_OF_BIRTH = \Carbon\Carbon::parse($request->dob);
