@@ -15,8 +15,8 @@ class FirearmsData{
 		$clientObj->type = $clientType;
 
 		if ($clientType == "staff") {
-			$principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
-			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$caseData->HOST_COUNTRY_ID})"))->first();
+			$principal = \App\Models\Principal::where('HOST_COUNTRY_ID', $firearmsData->HOST_COUNTRY_ID)->first();
+			$contract = collect(\DB::select("CALL GET_LATEST_PRINCIPAL_CONTRACT({$firearmsData->HOST_COUNTRY_ID})"))->first();
 
 			$mission = $contract->ACRONYM;
 			$name = format_other_names($principal->OTHER_NAMES) . " " . strtoupper($principal->LAST_NAME);
@@ -30,7 +30,7 @@ class FirearmsData{
 			$clientObj->contract_type = $contract->C_TYPE;
 			$clientObj->organization = $mission;
 		}elseif($clientType == "agency"){
-			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $caseData->HOST_COUNTRY_ID)->first();
+			$agency = \App\Models\Agency::where('HOST_COUNTRY_ID', $firearmsData->HOST_COUNTRY_ID)->first();
 			$clientObj->name = $agency->ACRONYM;
 			$clientObj->fullname = $agency->AGENCYNAME;
 			$clientObj->organization = $agency->ACRONYM;
@@ -39,7 +39,7 @@ class FirearmsData{
 		$data->client = $clientObj;
 		$data->firearmsData = $firearmsData;
 		$data->case_no = $case_no;
-		$data->ref = $caseData->NV_SERIAL_NO;
+		$data->ref = $firearmsData->NV_SERIAL_NO;
 		$data->date = date('F d, Y');
 
 		return $data;

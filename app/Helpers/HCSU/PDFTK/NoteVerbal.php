@@ -264,6 +264,11 @@ class NoteVerbal {
 				$end_header = (isset($this->data->client->relationship)) ? "the under mentioned {$this->data->client->relationship} of {$this->data->client->principal}" : "{$this->data->client->name}";
 				$end_header .= ", an internationally recruited staff member of {$this->data->client->organization}.";
 				break;
+
+			case 'firearms':
+				$your_ref = "Your Ref: \n";
+				$connector = "request for your assistance in securing approval and issuance of import/export permits for {$this->data->client->name} as per the following details: {$this->data->firearmsData->REQUEST_DETAILS}";
+				break;
 		}
 
 		if($this->process == "logbook"){
@@ -731,6 +736,22 @@ class NoteVerbal {
 				$body .= "{$count}. {$document}\n";
 				$count++;
 			}
+			break;
+
+		case 'firearms':
+			if (count($this->data->firearmsData->staff_details)) {
+				$body = str_pad("NAME OF OFFICER", $padding) . str_pad("WEAPON TYPE", $padding) . str_pad("SERIAL_NO", $padding) . str_pad("AMMUNITION_ROUNDS", $padding);
+
+				foreach($this->data->firearmsData->staff_details as $details){
+					$body .= str_pad("{$details->lastName} {$details->otherNames}", $padding) . str_pad(strtoupper($details->weaponType), $padding) . str_pad(strtoupper($details->serialNo), $padding) . str_pad(strtoupper($details->ammunitionRounds), $padding);
+				}
+			}
+
+			if ($this->data->firearmsData->EXTRA_COMMENTS) {
+				$body .= "\r{$this->data->firearmsData->EXTRA_COMMENTS}";
+			}
+			
+
 			break;
 		}
 

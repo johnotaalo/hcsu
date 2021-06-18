@@ -11,6 +11,6 @@ class FireArmsApplication extends Model
     protected $appends = ["staff_details"];
 
     public function getStaffDetailsAttribute(){
-        return json_decode($this->attributes['STAFF_MEMBER_DETAILS']);
+        return collect(json_decode($this->attributes['STAFF_MEMBER_DETAILS']))->toArray();
     }
 }

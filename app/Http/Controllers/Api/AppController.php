@@ -703,7 +703,7 @@ class AppController extends Controller
             }
             return response()->file(storage_path("app/{$localFile}"));
         }catch(\Exception $ex){
-//            dd($ex);
+           dd($ex);
             \Log::error("Error: {$ex->getMessage()}");
         }
         return null;
