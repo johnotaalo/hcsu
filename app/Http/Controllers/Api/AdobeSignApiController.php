@@ -121,7 +121,7 @@ class AdobeSignApiController extends Controller
                 $nvTemplate = \Storage::get('adobe-sign-nv.txt');
                 \Log::debug("NV Data: " . json_encode($data));
 
-                if ($processName == "driving-license-duplicate" || $processName == "internship-pass") {
+                if ($processName == "driving-license-duplicate" || $processName == "internship-pass" || $processName == "firearms") {
                     $nvTemplate = null;
                 }
                 if(($processName == "form_a" && !$nvOnly) || ($processName == "form-7" && !$nvOnly) || ($processName == "airport-pass" && !$nvOnly)){
@@ -233,6 +233,9 @@ class AdobeSignApiController extends Controller
                 break;
             case 'staff-management':
                 $data = \App\Helpers\HCSU\Data\StaffManagementData::get($case->app_number);
+                break;
+            case 'firearms':
+                $data = \App\Helpers\HCSU\Data\FirearmsData::get($case->app_number);
                 break;
         }
 
