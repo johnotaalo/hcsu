@@ -634,6 +634,10 @@ class AppController extends Controller
             case 'staff-management':
                 $data = \App\Helpers\HCSU\Data\StaffManagementData::get($case->app_number);
                 break;
+
+            case 'firearms':
+                $data = \App\Helpers\HCSU\Data\FirearmsData::get($case->app_number);
+                break;
         }
 
         // dd($data);
@@ -656,6 +660,9 @@ class AppController extends Controller
             }
             if ($request->process == "logbook") {
                 $pdf = new Pdf($mainPath . '/templates/General_Note_Verbal_Ntsa.pdf', $config);
+            }
+            else if($request->process == "firearms"){
+                $pdf = new Pdf($mainPath . '/templates/General_Note_Verbal_IG.pdf', $config);
             }
             else{
                 $pdf = new Pdf($mainPath . '/templates/NV.pdf', $config);
