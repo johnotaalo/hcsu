@@ -2,9 +2,6 @@
 	<div>
 		<div class="header">
 
-			<!-- Image -->
-			<!-- <img v-if="!iframe" src="../../../public/img/covers/profile-cover-1.jpg" class="header-img-top" alt="..."> -->
-
 			<div class="container-fluid">
 
 				<!-- Body -->
@@ -1126,31 +1123,6 @@
 			editDependent: function(index){
 				var dependent = this.principal.dependents[index]
 				var _this = this
-
-				// var countryObj = _.find(_this.options.countries, [ 'label', dependent.COUNTRY ]);
-				// var relationshipObj = _.find(_this.options.relationships, [ 'id', dependent.RELATIONSHIP_ID ]);
-
-				// countryObj = (typeof countryObj == "undefined") ? {} : countryObj
-				// relationshipObj = (typeof relationshipObj == "undefined") ? {} : relationshipObj
-
-				// _this.modal.dependent.id = dependent.ID
-				// _this.modal.dependent.lastName = dependent.LAST_NAME
-				// _this.modal.dependent.relationshipType  = relationshipObj
-				// _this.modal.dependent.passport  = dependent.PASSPORT_NO
-				// _this.modal.dependent.otherNames  = dependent.OTHER_NAMES
-				// _this.modal.dependent.country  = countryObj
-				// _this.modal.dependent.dob  = dependent.DATE_OF_BIRTH
-				// _this.modal.dependent.employment  = dependent.EMPLOYMENT_DETAILS
-				// _this.modal.dependent.imageURL = dependent.image_link
-				// _this.modal.dependent.imageFile = ""
-				// _this.modal.dependent.editIndex = index
-				// _this.dependents.editIndex = index
-
-				// if(dependent.image_link != ""){
-				// 	this.options.imageProps.blank = false
-				// }else{
-				// 	this.options.imageProps.blank = true
-				// }
 				window.open(`/#/dependent/edit/${dependent.HOST_COUNTRY_ID}?type=iframe`);
 			},
 

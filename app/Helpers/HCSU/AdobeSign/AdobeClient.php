@@ -154,6 +154,8 @@ class AdobeClient{
 			$files[] = ['libraryDocumentId'	=>	$template_id];
 		}
 
+		dd($files);
+
 		\Log::debug("Documents: " . json_encode($files));
 
 		$options = [
