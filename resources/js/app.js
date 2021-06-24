@@ -136,6 +136,7 @@ import FormAFix from './views/vehicle/FormAFix'
 import DataManagement from './views/data/DataManagement'
 
 import Subprocesses from './views/processes/Subprocesses'
+import CaseManagement from './views/processes/CaseManagement'
 
 // Exports
 import VATListExport from './views/exports/VATListExport'
@@ -469,6 +470,11 @@ Vue.component(
 	 		path: '/subprocesses/ipmis',
 	 		name: "subprocesses-ipmis",
 	 		component: Subprocesses
+	 	},
+	 	{
+	 		path: '/processes/case-management',
+	 		name: 'process-case-management',
+	 		component: CaseManagement
 	 	},
 	 	{
 	 		path: '*',

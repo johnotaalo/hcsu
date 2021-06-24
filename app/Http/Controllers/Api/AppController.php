@@ -1005,4 +1005,18 @@ class AppController extends Controller
             return \DB::connection('old_pm')->table($table)->select(\DB::raw('case_number AS CASE_NO'))->where('index_no', $index_no)->get();
         }
     }
+
+    function searchCasesList(Request $request){
+        $request->validate([
+            'user'      =>  'required',
+            'process'   =>  'required'
+        ]);
+
+        $user = $request->input('user');
+        $process = $request->input('process');
+
+        $processes = \App\Models\PM\Application::where('PRO_UID', $process)->where('APP_CUR_USER', $user)->where('APP_STATUS', 'TO_DO')->get();
+
+        return $processes;
+    }
 }

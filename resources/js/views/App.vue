@@ -117,6 +117,9 @@
 						<li>
 							<router-link class="dropdown-item" :to="{ name: 'subprocesses-ipmis' }">Subprocesses</router-link>
 						</li>
+						<li>
+							<router-link class="dropdown-item" :to="{ name: 'process-case-management' }">Case Management</router-link>
+						</li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">
