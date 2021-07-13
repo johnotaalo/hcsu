@@ -276,6 +276,12 @@ Route::prefix('data')->group(function(){
 		Route::get('/documents', 'Api\AdobeSignApiController@getDocuments');
 	});
 
+	Route::prefix('vehicles')->group(function(){
+		Route::get('/models', 'Api\VehicleController@getVehicleModels');
+		Route::post('/models', 'Api\VehicleController@storeVehicleModel');
+		Route::put('/models', 'Api\VehicleController@updateVehicleModel');
+	});
+
 
 	Route::prefix('revalidation')->group(function(){
 		Route::get("{host_country_id}/{form_type}/{system}", 'Api\AppController@getRevalidationCases');

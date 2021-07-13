@@ -10,6 +10,8 @@ use \App\Models\Ref\VehiclePlatePrefixAgency;
 
 use Illuminate\Validation\Rule;
 
+use App\Http\Requests\MakeModelRequest;
+
 class VehicleController extends Controller
 {
     function getVehicles(Request $request){
@@ -569,5 +571,59 @@ class VehicleController extends Controller
         $query = $query->limit($limit)->skip($limit * ($page - 1));
         
         return ['data'  => $query->get(), 'count'   =>  $count];
+    }
+
+    function getVehicleModels(Request $request){
+        $searchQueries = $request->get('modelSearch');
+        $limit = $request->get('limit');
+        $page = $request->get('page');
+        $ascending = $request->get('ascending');
+        $byColumn = $request->get('byColumn');
+        $orderBy = $request->get('orderBy');
+
+        $query =  \App\Models\VehicleMakeModel::select('MAKE_MODEL_ID', "MAKE_MODEL");
+
+        if ($searchQueries) {
+            $query->where('MAKE_MODEL', 'LIKE', "%{$searchQueries}%");
+        }
+
+        if (!$orderBy) {
+            $orderBy = "MAKE_MODEL";
+        }
+
+        $query->orderBy($orderBy, ($ascending) ? "ASC" : "DESC");
+
+        $count = $query->count();
+
+        $query = $query->limit($limit)->skip($limit * ($page - 1));
+        
+        return ['data'  => $query->get(), 'count'   =>  $count];
+    }
+
+    function storeVehicleModel(MakeModelRequest $request){
+        $makeModel = new \App\Models\VehicleMakeModel();
+
+        $makeModel->MAKE_MODEL = $request->input('MAKE_MODEL');
+
+        $makeModel->save();
+
+        return $makeModel;
+    }
+
+    function updateVehicleModel(Request $request){
+        $request->validate([
+            'MAKE_MODEL'    =>  [
+                'required',
+                Rule::unique('2019.ref_make_model', 'MAKE_MODEL')
+                        ->ignore($request->ID, 'MAKE_MODEL_ID')
+            ]
+        ]);
+        $makeModel = \App\Models\VehicleMakeModel::find($request->ID);
+
+        $makeModel->MAKE_MODEL = $request->input('MAKE_MODEL');
+
+        $makeModel->save();
+
+        return $makeModel;
     }
 }
