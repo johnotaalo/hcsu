@@ -87,6 +87,10 @@ class Principal extends Model
         return null;
     }
 
+    public function residence_number_tracking(){
+        return $this->hasMany(\App\Models\RNumber_Tracking::class, 'HOST_COUNTRY_ID', 'HOST_COUNTRY_ID');
+    }
+
     public function getLatestContractAttribute(){
         \DB::enableQueryLog();
       // $contract = \App\Models\PrincipalContract::where('PRINCIPAL_ID', $this->HOST_COUNTRY_ID)

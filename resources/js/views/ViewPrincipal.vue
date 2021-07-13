@@ -288,6 +288,20 @@
 									</template>
 									<vehicle-list v-if="typeof principal.HOST_COUNTRY_ID != 'undefined'" :host_country_id="principal.HOST_COUNTRY_ID"></vehicle-list>
 								</b-tab>
+
+								<b-tab title="Diplomatic Cards">
+									<template slot="title">
+										<i class="fe fe-credit-card mr-2"></i>Diplomatic Cards
+									</template>
+								</b-tab>
+
+								<b-tab title="Diplomatic Cards">
+									<template slot="title">
+										<i class="fe fe-calendar mr-2"></i>R Number Tracking
+									</template>
+
+									<r-number-tracking :dates="principal.residence_number_tracking"></r-number-tracking>
+								</b-tab>
 							</b-tabs>
 						</b-card>
 					</div>
@@ -411,6 +425,7 @@
 	import VehicleList from './vehicle/VehicleList'
 	import Passports from './dependent/Passports'
 	import DomesticWorker from '../components/domestic-worker/DomesticWorker'
+	import RNumberTracking from './principal/RNumberTracking'
 	import vUploader from 'v-uploader'
 
 	const uploaderConfig = {
@@ -428,7 +443,7 @@
 	// this.$root.app.use(vUploader, uploaderConfig);
 
 	export default {
-		components: { datetime: Datetime, ContractDetails, VehicleList, Passports, vUploader, DomesticWorker },
+		components: { datetime: Datetime, ContractDetails, VehicleList, Passports, vUploader, DomesticWorker, RNumberTracking },
 		data() {
 			return {
 				fetched: false,

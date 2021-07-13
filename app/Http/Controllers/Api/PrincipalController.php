@@ -463,7 +463,7 @@ class PrincipalController extends Controller
     }
 
     function get(Request $request){
-        $principal = Principal::where('HOST_COUNTRY_ID', $request->id)->with(['contracts', 'dependents', 'passports', 'vehicles', 'domesticWorkers'])->first();
+        $principal = Principal::where('HOST_COUNTRY_ID', $request->id)->with(['contracts', 'dependents', 'passports', 'vehicles', 'domesticWorkers', 'residence_number_tracking'])->first();
 
         return $principal;
     }
